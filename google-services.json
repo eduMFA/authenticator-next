@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1025987636042",
+    "project_id": "edumfa-5b429",
+    "storage_bucket": "edumfa-5b429.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025987636042:android:320f8e86764736a7316fb3",
+        "android_client_info": {
+          "package_name": "io.edumfa.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbT0s9c6-FSq9bfr4-glXvX8hDDJSxjug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1025987636042:android:a51b973d4b4cd8e3316fb3",
+        "android_client_info": {
+          "package_name": "io.edumfa.authenticator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbT0s9c6-FSq9bfr4-glXvX8hDDJSxjug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
