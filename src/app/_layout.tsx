@@ -5,6 +5,7 @@ import { useNotificationStore } from "@/store/notificationStore";
 import { useTokenStore } from "@/store/tokenStore";
 import { theme, useInterFonts } from "@/theme";
 import { activateCurrentLocale } from "@/utils/locale";
+import { isTokenEnrollmentUri } from "@/utils/tokenUtils";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
@@ -82,6 +83,10 @@ function RootLayoutContent() {
 
   useEffect(() => {
     const handleIncomingUrl = async (incomingUrl: string) => {
+      if (!isTokenEnrollmentUri(incomingUrl)) {
+        return;
+      }
+
       if (handledUrlsRef.current.has(incomingUrl)) {
         return;
       }

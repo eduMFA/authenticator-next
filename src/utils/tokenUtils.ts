@@ -88,6 +88,26 @@ export const getTokenVersionParseFunction = {
   2: parseTokenV2,
 };
 
+export const isTokenEnrollmentUri = (uri: string): boolean => {
+  try {
+    const url = new URL(uri);
+    if (url.protocol !== EDUMFA_PROTOCOL) {
+      return false;
+    }
+
+    const versionParam = url.searchParams.get("v");
+    const version = versionParam ? parseInt(versionParam, 10) : undefined;
+
+    return (
+      version !== undefined &&
+      !Number.isNaN(version) &&
+      version in getTokenVersionParseFunction
+    );
+  } catch {
+    return false;
+  }
+};
+
 export function parseTokenFromUri(uri: string): PushToken {
   let url: URL;
   try {
