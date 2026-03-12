@@ -106,18 +106,8 @@ export function ThemedPressable(
       : [{ backgroundColor }, style];
 
   if (animated) {
-    return (
-      <AnimatedPressable
-        style={themedStyle}
-        {...otherProps}
-      />
-    );
+    return <AnimatedPressable style={themedStyle} {...otherProps} />;
   }
 
-  return (
-    <Pressable
-      style={themedStyle}
-      {...otherProps}
-    />
-  );
+  return <Pressable style={themedStyle} {...otherProps} />;
 }
