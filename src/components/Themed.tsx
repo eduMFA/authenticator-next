@@ -3,6 +3,7 @@ import React from "react";
 import {
   Pressable,
   PressableProps,
+  PressableStateCallbackType,
   Text,
   TextStyle,
   View,
@@ -96,16 +97,18 @@ export function ThemedPressable(
   const backgroundColor = useThemeColor(
     props.backgroundColor ?? theme.color.background,
   );
+  const themedStyle =
+    typeof style === "function"
+      ? (state: PressableStateCallbackType) => [
+          { backgroundColor },
+          style(state),
+        ]
+      : [{ backgroundColor }, style];
 
   if (animated) {
     return (
       <AnimatedPressable
-        style={[
-          { backgroundColor },
-          typeof style === "function"
-            ? style({ pressed: false, hovered: false })
-            : style,
-        ]}
+        style={themedStyle}
         {...otherProps}
       />
     );
@@ -113,12 +116,7 @@ export function ThemedPressable(
 
   return (
     <Pressable
-      style={[
-        { backgroundColor },
-        typeof style === "function"
-          ? style({ pressed: false, hovered: false })
-          : style,
-      ]}
+      style={themedStyle}
       {...otherProps}
     />
   );
