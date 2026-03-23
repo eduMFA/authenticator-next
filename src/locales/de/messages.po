@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/app/index.tsx:292
+#: src/app/index.tsx:283
 msgid " to get started."
 msgstr " um loszulegen."
 
@@ -25,7 +25,7 @@ msgstr "Akzeptieren"
 #~ msgid "Add"
 #~ msgstr "Hinzufügen"
 
-#: src/app/index.tsx:84
+#: src/app/index.tsx:85
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
 
@@ -33,7 +33,7 @@ msgstr "Möchtest du diesen Token wirklich löschen?"
 msgid "Camera permission required"
 msgstr "Kamera-Berechtigung erforderlich"
 
-#: src/app/index.tsx:80
+#: src/app/index.tsx:88
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -42,12 +42,12 @@ msgstr "Abbrechen"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:80
-#: src/app/index.tsx:152
+#: src/app/index.tsx:92
+#: src/app/index.tsx:149
 msgid "Delete"
 msgstr "Löschen"
 
-#: src/app/index.tsx:83
+#: src/app/index.tsx:84
 msgid "Delete token"
 msgstr "Token löschen"
 
@@ -59,7 +59,7 @@ msgstr "Schließen"
 msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
-#: src/app/index.tsx:134
+#: src/app/index.tsx:131
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -77,11 +77,11 @@ msgstr "Berechtigungen erteilen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:328
+#: src/app/index.tsx:319
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:287
+#: src/app/index.tsx:278
 msgid "No Token setup"
 msgstr "Keine Token eingerichtet"
 
@@ -89,19 +89,19 @@ msgstr "Keine Token eingerichtet"
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
-#: src/app/token/add.tsx:74
+#: src/app/token/add.tsx:78
 msgid "OR"
 msgstr "ODER"
 
-#: src/app/token/add.tsx:53
+#: src/app/token/add.tsx:57
 msgid "Pair new Push Token"
 msgstr "Neues Push-Token koppeln"
 
-#: src/app/index.tsx:338
+#: src/app/index.tsx:329
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
-#: src/app/index.tsx:144
+#: src/app/index.tsx:141
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
@@ -113,7 +113,7 @@ msgstr "Rollout läuft..."
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
-#: src/app/token/add.tsx:60
+#: src/app/token/add.tsx:64
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
@@ -121,7 +121,7 @@ msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:182
+#: src/app/index.tsx:179
 msgid "Search tokens"
 msgstr "Token suchen"
 
@@ -129,7 +129,7 @@ msgstr "Token suchen"
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/app/index.tsx:290
+#: src/app/index.tsx:281
 msgid "Tap the "
 msgstr "Tippe auf "
 
