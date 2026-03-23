@@ -54,6 +54,18 @@ export const theme = {
       light: "rgba(220, 53, 69, 0.6)",
       dark: "rgba(220, 53, 69, 0.6)",
     },
+    errorBackground: {
+      light: "#FDECEC",
+      dark: "#3A1518",
+    },
+    errorForeground: {
+      light: "#B42318",
+      dark: "#FF8A80",
+    },
+    modalOverlay: {
+      light: "rgba(0, 0, 0, 0.72)",
+      dark: "rgba(0, 0, 0, 0.72)",
+    },
   },
 
   space2: spaceScale(2),

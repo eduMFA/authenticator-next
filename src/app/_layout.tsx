@@ -1,4 +1,5 @@
 import { ThemedText, useThemeColor } from "@/components/Themed";
+import { NotificationPermissionPopup } from "@/components/NotificationPermissionPopup";
 import { useChallengePolling } from "@/hooks/useChallengePolling";
 import { useHandleTokenUri } from "@/hooks/useHandleTokenUri";
 import { useNotificationStore } from "@/store/notificationStore";
@@ -112,64 +113,67 @@ function RootLayoutContent() {
   }, [handleTokenUri]);
 
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerTitle: () =>
-            Platform.OS === "android" ? (
-              <ThemedText fontSize={theme.fontSize20} fontWeight="bold">
-                Tokens
-              </ThemedText>
-            ) : undefined,
-        }}
-      />
-      <Stack.Screen
-        name="token/add"
-        options={{
-          headerTransparent: Platform.OS === "ios" ? true : false,
-          title: "",
-          presentation:
-            Platform.OS === "ios"
-              ? isLiquidGlassAvailable() && osName !== "iPadOS"
-                ? "formSheet"
-                : "modal"
-              : "modal",
-          sheetAllowedDetents: [0.8],
-          sheetInitialDetentIndex: 0,
-          gestureEnabled: false,
-          contentStyle: {
-            backgroundColor: isLiquidGlassAvailable()
-              ? "transparent"
-              : tabBarBackgroundColor,
-          },
-          headerBlurEffect: isLiquidGlassAvailable()
-            ? undefined
-            : colorScheme === "dark"
-              ? "dark"
-              : "light",
-        }}
-      />
-      <Stack.Screen
-        name="token/[tokenId]"
-        options={{
-          headerTransparent: Platform.OS === "ios" ? true : false,
-          title: "",
-          presentation:
-            Platform.OS === "ios"
-              ? isLiquidGlassAvailable() && osName !== "iPadOS"
-                ? "formSheet"
-                : "modal"
-              : "modal",
-          sheetAllowedDetents: [0.5],
-          sheetInitialDetentIndex: 0,
-          contentStyle: {
-            backgroundColor: isLiquidGlassAvailable()
-              ? "transparent"
-              : tabBarBackgroundColor,
-          },
-        }}
-      />
-    </Stack>
+    <>
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerTitle: () =>
+              Platform.OS === "android" ? (
+                <ThemedText fontSize={theme.fontSize20} fontWeight="bold">
+                  Tokens
+                </ThemedText>
+              ) : undefined,
+          }}
+        />
+        <Stack.Screen
+          name="token/add"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "",
+            presentation:
+              Platform.OS === "ios"
+                ? isLiquidGlassAvailable() && osName !== "iPadOS"
+                  ? "formSheet"
+                  : "modal"
+                : "modal",
+            sheetAllowedDetents: [0.8],
+            sheetInitialDetentIndex: 0,
+            gestureEnabled: false,
+            contentStyle: {
+              backgroundColor: isLiquidGlassAvailable()
+                ? "transparent"
+                : tabBarBackgroundColor,
+            },
+            headerBlurEffect: isLiquidGlassAvailable()
+              ? undefined
+              : colorScheme === "dark"
+                ? "dark"
+                : "light",
+          }}
+        />
+        <Stack.Screen
+          name="token/[tokenId]"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "",
+            presentation:
+              Platform.OS === "ios"
+                ? isLiquidGlassAvailable() && osName !== "iPadOS"
+                  ? "formSheet"
+                  : "modal"
+                : "modal",
+            sheetAllowedDetents: [0.5],
+            sheetInitialDetentIndex: 0,
+            contentStyle: {
+              backgroundColor: isLiquidGlassAvailable()
+                ? "transparent"
+                : tabBarBackgroundColor,
+            },
+          }}
+        />
+      </Stack>
+      <NotificationPermissionPopup />
+    </>
   );
 }
