@@ -17,6 +17,22 @@ msgstr ""
 msgid " to get started."
 msgstr " to get started."
 
+#: src/components/NotificationPermissionPopup.tsx:136
+msgid "1. Tap Open Settings"
+msgstr "1. Tap Open Settings"
+
+#: src/components/NotificationPermissionPopup.tsx:139
+msgid "2. Open Notifications"
+msgstr "2. Open Notifications"
+
+#: src/components/NotificationPermissionPopup.tsx:142
+msgid "3. Turn on Allow Notifications"
+msgstr "3. Turn on Allow Notifications"
+
+#: src/components/NotificationPermissionPopup.tsx:145
+msgid "4. Return to this app"
+msgstr "4. Return to this app"
+
 #: src/components/PushRequestPopup.tsx:229
 #: src/store/notificationStore.ts:48
 msgid "Accept"
@@ -91,6 +107,11 @@ msgstr "No results found for "
 msgid "No Token setup"
 msgstr "No Token setup"
 
+#: src/components/NotificationPermissionPopup.tsx:160
+msgid "Not now"
+msgstr "Not now"
+
+#: src/components/NotificationPermissionPopup.tsx:177
 #: src/components/QRCodeScanner.tsx:50
 msgid "Open Settings"
 msgstr "Open Settings"
@@ -102,6 +123,10 @@ msgstr "OR"
 #: src/app/token/add.tsx:57
 msgid "Pair new Push Token"
 msgstr "Pair new Push Token"
+
+#: src/components/NotificationPermissionPopup.tsx:133
+msgid "Quick steps"
+msgstr "Quick steps"
 
 #: src/app/index.tsx:329
 msgid "Refreshing..."
@@ -150,6 +175,14 @@ msgstr "The QR code isn't supported by this app. Please use a general Authentica
 #: src/hooks/useHandleTokenUri.ts:92
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
+
+#: src/components/NotificationPermissionPopup.tsx:119
+msgid "To approve sign-ins, we send you a notification. If notifications are off, requests will not arrive and sign-in will fail."
+msgstr "To approve sign-ins, we send you a notification. If notifications are off, requests will not arrive and sign-in will fail."
+
+#: src/components/NotificationPermissionPopup.tsx:111
+msgid "Turn on notifications"
+msgstr "Turn on notifications"
 
 #: src/components/UploadQRCodeButton.tsx:35
 msgid "Upload QR Code"

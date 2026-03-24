@@ -116,7 +116,7 @@ export function NotificationPermissionPopup() {
             color={theme.color.textSecondary}
             style={styles.message}
           >
-            {t`To approve sign-ins, we send you a notification. If notifications are off, approvals will not arrive and sign-in will fail.`}
+            {t`To approve sign-ins, we send you a notification. If notifications are off, requests will not arrive and sign-in will fail.`}
           </ThemedText>
 
           <View
