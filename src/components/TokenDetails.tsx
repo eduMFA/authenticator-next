@@ -1,8 +1,8 @@
 import { theme } from "@/theme";
 import { PushToken, PushTokenRolloutState } from "@/types";
-import { BlurView } from "expo-blur";
-import { memo, useEffect, useMemo, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { BlurTargetView, BlurView } from "expo-blur";
+import { createRef, memo, useEffect, useMemo, useState } from "react";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { useLingui } from "@lingui/react/macro";
 import Animated, {
@@ -14,7 +14,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { ThemedText, ThemedView, useThemeColor } from "./Themed";
+import { ThemedText, useThemeColor } from "./Themed";
 import { TokenImage } from "./TokenImage";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
@@ -44,6 +44,7 @@ export const TokenDetails = memo(function TokenDetails({
   const backgroundColor = useThemeColor(theme.color.backgroundSecondary);
   const successBarColor = useThemeColor(theme.color.successBar);
   const errorBarColor = useThemeColor(theme.color.errorBar);
+  const blurTargetRef = createRef<View | null>();
 
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
@@ -100,7 +101,7 @@ export const TokenDetails = memo(function TokenDetails({
 
   return (
     <>
-      <ThemedView style={tokenContainerStyle}>
+      <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
         {token.imageUrl && (
           <TokenImage imageUrl={token.imageUrl} animated size="small" />
         )}
@@ -116,12 +117,15 @@ export const TokenDetails = memo(function TokenDetails({
             </ThemedText>
           )}
         </View>
-      </ThemedView>
+      </BlurTargetView>
       {showProgress && (
         <AnimatedBlurView
           style={styles.progressBarBlur}
           role="progressbar"
-          intensity={20}
+          intensity={Platform.OS === "android" ? 3 : 20}
+          blurTarget={blurTargetRef}
+          blurReductionFactor={100}
+          blurMethod={"dimezisBlurView"}
           entering={FadeIn}
           exiting={FadeOut}
         >
