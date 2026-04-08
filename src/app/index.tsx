@@ -5,6 +5,12 @@ import { useChallengePolling } from "@/hooks/useChallengePolling";
 import { useToken } from "@/hooks/useToken";
 import { usePushRequestStore } from "@/store/pushRequestStore";
 import { PushToken, PushTokenRolloutState } from "@/types";
+import {
+  ExtendedFloatingActionButton,
+  Host,
+  Icon,
+  Text,
+} from "@expo/ui/jetpack-compose";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -43,6 +49,7 @@ export default function Tokens() {
   const transparentColor = useThemeColor(theme.color.transparent);
   const tabBarBackgroundColor = useThemeColor(theme.color.background);
   const refreshControlTintColor = useThemeColor(theme.color.text);
+  const addFabIcon = require("../../assets/icons/add_24.xml");
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -269,6 +276,30 @@ export default function Tokens() {
     </Stack.Toolbar>
   ) : null;
 
+  const androidAddFab =
+    Platform.OS === "android" ? (
+      <Host
+        matchContents
+        style={[styles.fabHost, { bottom: bottom + theme.space16 }]}
+      >
+        <ExtendedFloatingActionButton
+          expanded={tokens.length === 0}
+          onClick={() => {
+            router.navigate("/token/add");
+          }}
+        >
+          <ExtendedFloatingActionButton.Icon>
+            <Icon source={addFabIcon} />
+          </ExtendedFloatingActionButton.Icon>
+          <ExtendedFloatingActionButton.Text>
+            <Text>
+              {tokens.length === 0 ? t`Pair your first token` : t`Add token`}
+            </Text>
+          </ExtendedFloatingActionButton.Text>
+        </ExtendedFloatingActionButton>
+      </Host>
+    ) : null;
+
   if (!tokens.length) {
     return (
       <>
@@ -283,6 +314,7 @@ export default function Tokens() {
             <Trans> to get started.</Trans>
           </ThemedText>
         </ThemedView>
+        {androidAddFab}
         {footer}
       </>
     );
@@ -333,6 +365,7 @@ export default function Tokens() {
           />
         }
       />
+      {androidAddFab}
       {footer}
     </>
   );
@@ -341,6 +374,11 @@ export default function Tokens() {
 export const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: theme.space16,
+  },
+  fabHost: {
+    position: "absolute",
+    right: theme.space16,
+    zIndex: 10,
   },
   noResultsContainer: {
     padding: theme.space24,
