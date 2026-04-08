@@ -55,6 +55,7 @@ const config: ExpoConfig = {
     googleServicesFile: "./google-services.json",
   },
   plugins: [
+    "./plugins/ios/withFmtFix",
     "expo-font",
     "expo-image",
     "expo-notifications",
