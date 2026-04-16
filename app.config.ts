@@ -59,6 +59,7 @@ const config: ExpoConfig = {
     "expo-image",
     "expo-notifications",
     "expo-router",
+    "expo-dev-client",
     "@react-native-firebase/app",
     "@react-native-firebase/messaging",
     [
