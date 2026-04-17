@@ -28,7 +28,7 @@ const config: ExpoConfig = {
   scheme: "edumfa-push",
   assetBundlePatterns: ["**/*"],
   ios: {
-    //icon: "./assets/app-icons/edumfa.icon",
+    icon: "./assets/app-icons/edumfa.icon",
     supportsTablet: false,
     bundleIdentifier: getAppId(),
     userInterfaceStyle: "automatic",
@@ -46,7 +46,6 @@ const config: ExpoConfig = {
   android: {
     adaptiveIcon: {
       foregroundImage: "./assets/app-icons/icon-android.png",
-      backgroundImage: "./assets/app-icons/icon-android-background.png",
       monochromeImage: "./assets/app-icons/icon-monochrome-android.png",
     },
     userInterfaceStyle: "automatic",
@@ -60,6 +59,7 @@ const config: ExpoConfig = {
     "expo-image",
     "expo-notifications",
     "expo-router",
+    "expo-dev-client",
     "@react-native-firebase/app",
     "@react-native-firebase/messaging",
     [
@@ -70,6 +70,7 @@ const config: ExpoConfig = {
         resizeMode: "contain",
         backgroundColor: "#ffffff",
         dark: {
+          image: "./assets/splash-icon-dark.png",
           backgroundColor: "#000000",
         },
       },
