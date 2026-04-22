@@ -292,9 +292,7 @@ export default function Tokens() {
             <Icon source={addFabIcon} />
           </ExtendedFloatingActionButton.Icon>
           <ExtendedFloatingActionButton.Text>
-            <Text>
-              {tokens.length === 0 ? t`Pair your first token` : t`Add token`}
-            </Text>
+            <Text style={styles.fabText}>{t`Add token`}</Text>
           </ExtendedFloatingActionButton.Text>
         </ExtendedFloatingActionButton>
       </Host>
@@ -379,6 +377,9 @@ export const styles = StyleSheet.create({
     position: "absolute",
     right: theme.space16,
     zIndex: 10,
+  },
+  fabText: {
+    fontWeight: "bold",
   },
   noResultsContainer: {
     padding: theme.space24,
