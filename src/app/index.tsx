@@ -279,7 +279,7 @@ export default function Tokens() {
           </ThemedText>
           <ThemedText fontSize={theme.fontSize16} fontWeight="light">
             <Trans>Tap the </Trans>
-            <SymbolView name="plus" size={16} />
+            <SymbolView name={{ ios: "plus", android: "add" }} size={16} />
             <Trans> to get started.</Trans>
           </ThemedText>
         </ThemedView>
