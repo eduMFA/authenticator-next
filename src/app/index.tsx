@@ -8,7 +8,6 @@ import { PushToken, PushTokenRolloutState } from "@/types";
 import {
   ExtendedFloatingActionButton,
   Host,
-  Icon,
   Text,
 } from "@expo/ui/jetpack-compose";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -49,7 +48,6 @@ export default function Tokens() {
   const transparentColor = useThemeColor(theme.color.transparent);
   const tabBarBackgroundColor = useThemeColor(theme.color.background);
   const refreshControlTintColor = useThemeColor(theme.color.text);
-  const addFabIcon = require("../../assets/icons/add_24.xml");
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -289,7 +287,7 @@ export default function Tokens() {
           }}
         >
           <ExtendedFloatingActionButton.Icon>
-            <Icon source={addFabIcon} />
+            <SymbolView name={{ android: "add" }} />
           </ExtendedFloatingActionButton.Icon>
           <ExtendedFloatingActionButton.Text>
             <Text style={styles.fabText}>{t`Add token`}</Text>
