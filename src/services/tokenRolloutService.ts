@@ -1,7 +1,8 @@
 import { KEY_SIZE } from "@/consts";
 import { useNotificationStore } from "@/store/notificationStore";
 import { PushToken, PushTokenRolloutState } from "@/types";
-import { parseTokenResponse, stripPemArmor } from "@/utils/tokenUtils";
+import { stripPemArmor } from "@/utils/crypto";
+import { parseTokenResponse } from "@/utils/tokenUtils";
 import { RSAKeychain } from "react-native-rsa-native";
 
 // Map rollout states to their corresponding failed states

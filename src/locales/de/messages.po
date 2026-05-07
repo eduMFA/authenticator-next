@@ -149,7 +149,9 @@ msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie 
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
-#: src/components/UploadQRCodeButton.tsx:35
+#: src/components/upload-qr-code-button/upload-qr-code-button.android.tsx:30
+#: src/components/upload-qr-code-button/upload-qr-code-button.ios.tsx:29
+#: src/components/upload-qr-code-button/upload-qr-code-button.tsx:20
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 

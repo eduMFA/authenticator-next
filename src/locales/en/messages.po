@@ -155,7 +155,9 @@ msgstr "The QR code isn't supported by this app. Please use a general Authentica
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 
-#: src/components/UploadQRCodeButton.tsx:35
+#: src/components/upload-qr-code-button/upload-qr-code-button.android.tsx:30
+#: src/components/upload-qr-code-button/upload-qr-code-button.ios.tsx:29
+#: src/components/upload-qr-code-button/upload-qr-code-button.tsx:20
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
 

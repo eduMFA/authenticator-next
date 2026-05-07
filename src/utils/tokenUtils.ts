@@ -176,10 +176,3 @@ export const parseTokenResponse = async (response: Response) => {
   const key = data.detail.public_key.replaceAll("\n", "");
   return key;
 };
-
-export const stripPemArmor = (pem: string): string => {
-  return pem
-    .replace(/-----BEGIN [^-]+-----/g, "")
-    .replace(/-----END [^-]+-----/g, "")
-    .replace(/\s+/g, "");
-};

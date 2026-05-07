@@ -4,8 +4,8 @@ import {
   PushToken,
   PushTokenRolloutState,
 } from "@/types";
+import { base64ToBase32 } from "@/utils/crypto";
 import { buildPushRequestSignedData } from "@/utils/pushRequestUtils";
-import { base32, base64 } from "@scure/base";
 import { RSA, RSAKeychain } from "react-native-rsa-native";
 
 export interface ChallengePollingResult {
@@ -47,7 +47,7 @@ async function signPollingMessage(
     "SHA256withRSA",
   );
   // Convert base64 signature to base32 as required by the API
-  const signature = base32.encode(base64.decode(signatureBase64));
+  const signature = base64ToBase32(signatureBase64);
   return signature;
 }
 

@@ -306,11 +306,27 @@ export default function Tokens() {
           <ThemedText fontSize={theme.fontSize20} fontWeight="medium">
             <Trans>No Token setup</Trans>
           </ThemedText>
-          <ThemedText fontSize={theme.fontSize16} fontWeight="light">
-            <Trans>Tap the </Trans>
-            <SymbolView name="plus" size={16} />
-            <Trans> to get started.</Trans>
-          </ThemedText>
+          <ThemedView style={styles.noTokenHintContent}>
+            <ThemedText
+              fontSize={theme.fontSize16}
+              fontWeight="light"
+              style={styles.noTokenHint}
+            >
+              <Trans>Tap the</Trans>
+            </ThemedText>
+            <SymbolView
+              name={{ ios: "plus", android: "add" }}
+              size={16}
+              style={styles.noTokenHintIcon}
+            />
+            <ThemedText
+              fontSize={theme.fontSize16}
+              fontWeight="light"
+              style={styles.noTokenHint}
+            >
+              <Trans>to get started.</Trans>
+            </ThemedText>
+          </ThemedView>
         </ThemedView>
         {androidAddFab}
         {footer}
@@ -388,6 +404,18 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
+  },
+  noTokenHint: {
+    lineHeight: theme.fontSize16 * 1.2,
+  },
+  noTokenHintContent: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: theme.space4,
+    marginTop: theme.space8,
+  },
+  noTokenHintIcon: {
+    alignSelf: "center",
   },
   tokenCard: {
     borderRadius: theme.borderRadius20,
