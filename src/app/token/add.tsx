@@ -1,6 +1,6 @@
 import QRCodeScanner from "@/components/QRCodeScanner";
 import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
-import { UploadQRCodeButton } from "@/components/UploadQRCodeButton";
+import { UploadQRCodeButton } from "@/components/upload-qr-code-button";
 import { useHandleTokenUri } from "@/hooks/useHandleTokenUri";
 import { theme } from "@/theme";
 import { Trans } from "@lingui/react/macro";
