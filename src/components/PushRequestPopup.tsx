@@ -4,6 +4,7 @@ import { PushRequest, PushRequestStatus } from "@/types";
 import { useLingui } from "@lingui/react/macro";
 import { BlurView } from "expo-blur";
 import * as Haptics from "expo-haptics";
+import { Color } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Dimensions,
@@ -136,8 +137,12 @@ function PopupCard({
   onAction,
   isAnimatingOut,
 }: PopupCardProps) {
-  const backgroundColor = useThemeColor(theme.color.background);
-  const borderColor = useThemeColor(theme.color.border);
+  const backgroundColor = useThemeColor(theme.color.background, {
+    android: Color.android.dynamic.background,
+  });
+  const borderColor = useThemeColor(theme.color.border, {
+    android: Color.android.dynamic.outline,
+  });
   const { t } = useLingui();
 
   const scale = useSharedValue(0.9);
@@ -184,6 +189,7 @@ function PopupCard({
             <ThemedText
               fontSize={theme.fontSize12}
               color={theme.color.textSecondary}
+              platformColor={{ android: Color.android.dynamic.onBackground }}
             >
               {currentIndex + 1} of {totalPending}
             </ThemedText>

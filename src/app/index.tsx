@@ -12,7 +12,7 @@ import {
 } from "@expo/ui/jetpack-compose";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Color, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
@@ -39,15 +39,21 @@ export default function Tokens() {
   const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
-  const backgroundColor = useThemeColor(theme.color.background);
+  const backgroundColor = useThemeColor(theme.color.background, {
+    android: Color.android.dynamic.background,
+  });
   const { t } = useLingui();
   const tabBarTintColor = useThemeColor({
     light: theme.colorBlack,
     dark: theme.colorWhite,
   });
   const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
-  const refreshControlTintColor = useThemeColor(theme.color.text);
+  const tabBarBackgroundColor = useThemeColor(theme.color.background, {
+    android: Color.android.dynamic.background,
+  });
+  const refreshControlTintColor = useThemeColor(theme.color.text, {
+    android: Color.android.dynamic.text,
+  });
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -301,13 +307,18 @@ export default function Tokens() {
       <>
         {header}
         <ThemedView style={styles.noTokenContainer}>
-          <ThemedText fontSize={theme.fontSize20} fontWeight="medium">
+          <ThemedText
+            fontSize={theme.fontSize20}
+            fontWeight="medium"
+            platformColor={{ android: Color.android.dynamic.onBackground }}
+          >
             <Trans>No Token setup</Trans>
           </ThemedText>
           <ThemedView style={styles.noTokenHintContent}>
             <ThemedText
               fontSize={theme.fontSize16}
               fontWeight="light"
+              platformColor={{ android: Color.android.dynamic.onBackground }}
               style={styles.noTokenHint}
             >
               <Trans>Tap the</Trans>
@@ -321,6 +332,7 @@ export default function Tokens() {
               fontSize={theme.fontSize16}
               fontWeight="light"
               style={styles.noTokenHint}
+              platformColor={{ android: Color.android.dynamic.onBackground }}
             >
               <Trans>to get started.</Trans>
             </ThemedText>
@@ -359,9 +371,18 @@ export default function Tokens() {
         ListEmptyComponent={
           <Animated.View entering={FadeIn} exiting={FadeOut}>
             <ThemedView style={styles.noResultsContainer}>
-              <ThemedText>
+              <ThemedText
+                platformColor={{ android: Color.android.dynamic.onBackground }}
+              >
                 <Trans>No results found for </Trans>
-                <ThemedText fontWeight="bold">{searchText}</ThemedText>
+                <ThemedText
+                  fontWeight="bold"
+                  platformColor={{
+                    android: Color.android.dynamic.onBackground,
+                  }}
+                >
+                  {searchText}
+                </ThemedText>
               </ThemedText>
             </ThemedView>
           </Animated.View>
