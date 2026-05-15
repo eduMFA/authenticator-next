@@ -1,8 +1,8 @@
 import { SIGN_ALGORITHM } from "@/consts";
 import { PushRequest, PushRequestStatus, PushToken } from "@/types";
 import { base64ToBase32 } from "@/utils/crypto";
+import { signMessage } from "@/utils/rsa";
 import * as Haptics from "expo-haptics";
-import { RSAKeychain } from "react-native-rsa-native";
 
 export interface PushAuthResponse {
   success: boolean;
@@ -16,11 +16,7 @@ async function signPushAuthMessage(
   message: string,
   tokenId: string,
 ): Promise<string> {
-  const signatureBase64 = await RSAKeychain.signWithAlgorithm(
-    message,
-    tokenId,
-    SIGN_ALGORITHM,
-  );
+  const signatureBase64 = await signMessage(message, tokenId, SIGN_ALGORITHM);
   console.log("Generated Base 64 signature:", signatureBase64);
   // Convert base64 signature to base32 as required by the API
   const signature = base64ToBase32(signatureBase64);
