@@ -14,6 +14,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import ProgressText from "./ProgressText/ProgressText";
 import { ThemedText, useThemeColor } from "./Themed";
 import { TokenImage } from "./TokenImage";
 
@@ -49,13 +50,12 @@ export const TokenDetails = memo(function TokenDetails({
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
   const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
+  const rolloutProgress = PushTokenRolloutState.getProgress(token.rolloutState);
 
   const [showProgress, setShowProgress] = useState(!isCompleted);
 
   // Shared values for animations
-  const progress = useSharedValue(
-    PushTokenRolloutState.getProgress(token.rolloutState),
-  );
+  const progress = useSharedValue(rolloutProgress);
   const isFailed = useSharedValue(Number(isRolloutFailed));
 
   // Animated styles for progress bar
@@ -97,7 +97,9 @@ export const TokenDetails = memo(function TokenDetails({
   }, [token.rolloutState, progress, isFailed]);
 
   // Progress text based on rollout state
-  const progressText = isRolloutFailed ? t`Rollout Failed` : t`Rolling out...`;
+  const progressText = isRolloutFailed
+    ? t`Rollout Failed`
+    : t`Rolling out... ${Math.round(rolloutProgress)}%`;
 
   return (
     <>
@@ -133,7 +135,11 @@ export const TokenDetails = memo(function TokenDetails({
             style={[styles.progressBar, animatedStyles]}
             exiting={FadeOut}
           />
-          <ThemedText style={styles.progressText}>{progressText}</ThemedText>
+          <ProgressText
+            styles={styles.progressText}
+            value={progressText}
+            progress={rolloutProgress}
+          />
         </AnimatedBlurView>
       )}
     </>
