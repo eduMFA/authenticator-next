@@ -5,9 +5,20 @@ import { useChallengePolling } from "@/hooks/useChallengePolling";
 import { useToken } from "@/hooks/useToken";
 import { usePushRequestStore } from "@/store/pushRequestStore";
 import { PushToken, PushTokenRolloutState } from "@/types";
+import {
+  ExtendedFloatingActionButton,
+  Host,
+  Text,
+} from "@expo/ui/jetpack-compose";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  Color,
+  Link,
+  Stack,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
@@ -34,15 +45,21 @@ export default function Tokens() {
   const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
-  const backgroundColor = useThemeColor(theme.color.background);
+  const backgroundColor = useThemeColor(theme.color.background, {
+    android: Color.android.dynamic.background,
+  });
   const { t } = useLingui();
   const tabBarTintColor = useThemeColor({
     light: theme.colorBlack,
     dark: theme.colorWhite,
   });
   const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
-  const refreshControlTintColor = useThemeColor(theme.color.text);
+  const tabBarBackgroundColor = useThemeColor(theme.color.background, {
+    android: Color.android.dynamic.background,
+  });
+  const refreshControlTintColor = useThemeColor(theme.color.text, {
+    android: Color.android.dynamic.text,
+  });
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -269,18 +286,45 @@ export default function Tokens() {
     </Stack.Toolbar>
   ) : null;
 
+  const androidAddFab =
+    Platform.OS === "android" ? (
+      <Host
+        matchContents
+        style={[styles.fabHost, { bottom: bottom + theme.space16 }]}
+      >
+        <ExtendedFloatingActionButton
+          expanded={tokens.length === 0}
+          onClick={() => {
+            router.navigate("/token/add");
+          }}
+        >
+          <ExtendedFloatingActionButton.Icon>
+            <SymbolView name={{ android: "add" }} />
+          </ExtendedFloatingActionButton.Icon>
+          <ExtendedFloatingActionButton.Text>
+            <Text style={styles.fabText}>{t`Add token`}</Text>
+          </ExtendedFloatingActionButton.Text>
+        </ExtendedFloatingActionButton>
+      </Host>
+    ) : null;
+
   if (!tokens.length) {
     return (
       <>
         {header}
         <ThemedView style={styles.noTokenContainer}>
-          <ThemedText fontSize={theme.fontSize20} fontWeight="medium">
+          <ThemedText
+            fontSize={theme.fontSize20}
+            fontWeight="medium"
+            platformColor={{ android: Color.android.dynamic.onBackground }}
+          >
             <Trans>No Token setup</Trans>
           </ThemedText>
           <ThemedView style={styles.noTokenHintContent}>
             <ThemedText
               fontSize={theme.fontSize16}
               fontWeight="light"
+              platformColor={{ android: Color.android.dynamic.onBackground }}
               style={styles.noTokenHint}
             >
               <Trans>Tap the</Trans>
@@ -294,11 +338,13 @@ export default function Tokens() {
               fontSize={theme.fontSize16}
               fontWeight="light"
               style={styles.noTokenHint}
+              platformColor={{ android: Color.android.dynamic.onBackground }}
             >
               <Trans>to get started.</Trans>
             </ThemedText>
           </ThemedView>
         </ThemedView>
+        {androidAddFab}
         {footer}
       </>
     );
@@ -331,9 +377,18 @@ export default function Tokens() {
         ListEmptyComponent={
           <Animated.View entering={FadeIn} exiting={FadeOut}>
             <ThemedView style={styles.noResultsContainer}>
-              <ThemedText>
+              <ThemedText
+                platformColor={{ android: Color.android.dynamic.onBackground }}
+              >
                 <Trans>No results found for </Trans>
-                <ThemedText fontWeight="bold">{searchText}</ThemedText>
+                <ThemedText
+                  fontWeight="bold"
+                  platformColor={{
+                    android: Color.android.dynamic.onBackground,
+                  }}
+                >
+                  {searchText}
+                </ThemedText>
               </ThemedText>
             </ThemedView>
           </Animated.View>
@@ -349,6 +404,7 @@ export default function Tokens() {
           />
         }
       />
+      {androidAddFab}
       {footer}
     </>
   );
@@ -357,6 +413,14 @@ export default function Tokens() {
 export const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: theme.space16,
+  },
+  fabHost: {
+    position: "absolute",
+    right: theme.space16,
+    zIndex: 10,
+  },
+  fabText: {
+    fontWeight: "bold",
   },
   noResultsContainer: {
     padding: theme.space24,

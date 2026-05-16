@@ -11,7 +11,7 @@ import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import * as Linking from "expo-linking";
-import { Stack } from "expo-router";
+import { Color, Stack } from "expo-router";
 import { useEffect, useRef } from "react";
 import {
   AppState,
@@ -53,7 +53,9 @@ function RootLayoutContent() {
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
 
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
+  const tabBarBackgroundColor = useThemeColor(theme.color.background, {
+    android: Color.android.dynamic.background,
+  });
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
@@ -118,7 +120,11 @@ function RootLayoutContent() {
         options={{
           headerTitle: () =>
             Platform.OS === "android" ? (
-              <ThemedText fontSize={theme.fontSize20} fontWeight="bold">
+              <ThemedText
+                fontSize={theme.fontSize20}
+                fontWeight="bold"
+                platformColor={{ android: Color.android.dynamic.onBackground }}
+              >
                 Tokens
               </ThemedText>
             ) : undefined,

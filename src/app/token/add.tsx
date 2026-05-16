@@ -6,7 +6,7 @@ import { theme } from "@/theme";
 import { Trans } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import { Stack, useRouter } from "expo-router";
+import { Color, Stack, useRouter } from "expo-router";
 import { useMemo } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,9 +14,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function AddToken() {
   const router = useRouter();
   const handleTokenUri = useHandleTokenUri();
-  const borderColor = useThemeColor(theme.color.border);
+  const borderColor = useThemeColor(theme.color.border, {
+    android: Color.android.dynamic.outline,
+  });
   const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
+  const tabBarBackgroundColor = useThemeColor(theme.color.background, {
+    android: Color.android.dynamic.background,
+  });
   const headerStyle = useMemo(
     () => ({
       backgroundColor:

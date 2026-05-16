@@ -2,7 +2,7 @@ import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
 import { useToken } from "@/hooks/useToken";
 import { theme } from "@/theme";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Color, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo } from "react";
 import { Platform, StyleSheet, useColorScheme, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,7 +14,9 @@ export default function TokenDetails() {
   const router = useRouter();
   const colorScheme = useColorScheme() || "light";
   const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
+  const tabBarBackgroundColor = useThemeColor(theme.color.background, {
+    android: Color.android.dynamic.background,
+  });
   const headerStyle = useMemo(
     () => ({
       backgroundColor:

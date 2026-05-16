@@ -5,6 +5,7 @@ import { createRef, memo, useEffect, useMemo, useState } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 
 import { useLingui } from "@lingui/react/macro";
+import { Color } from "expo-router";
 import Animated, {
   Easing,
   FadeIn,
@@ -41,7 +42,9 @@ export const TokenDetails = memo(function TokenDetails({
   token: PushToken;
 }) {
   const { t } = useLingui();
-  const backgroundColor = useThemeColor(theme.color.backgroundSecondary);
+  const backgroundColor = useThemeColor(theme.color.backgroundSecondary, {
+    android: Color.android.dynamic.primaryContainer,
+  });
   const successBarColor = useThemeColor(theme.color.successBar);
   const errorBarColor = useThemeColor(theme.color.errorBar);
   const blurTargetRef = createRef<View | null>();

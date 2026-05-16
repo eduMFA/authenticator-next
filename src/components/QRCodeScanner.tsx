@@ -3,6 +3,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Linking from "expo-linking";
+import { Color } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, StyleSheet, View } from "react-native";
 import { ThemedText } from "./Themed";
@@ -55,10 +56,16 @@ export default function QRCodeScanner({ onQRCodeScanned }: Props) {
           style={styles.permissionText}
           fontWeight="bold"
           fontSize={20}
+          platformColor={{ android: Color.android.dynamic.onBackground }}
         >
           <Trans>Camera permission required</Trans>
         </ThemedText>
-        <ThemedText style={styles.permissionText}>{text}</ThemedText>
+        <ThemedText
+          style={styles.permissionText}
+          platformColor={{ android: Color.android.dynamic.onBackground }}
+        >
+          {text}
+        </ThemedText>
         <Button title={buttonTitle} onPress={handlePress} />
       </View>
     );
