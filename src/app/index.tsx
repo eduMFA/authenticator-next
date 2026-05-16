@@ -12,7 +12,13 @@ import {
 } from "@expo/ui/jetpack-compose";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import { Color, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  Color,
+  Link,
+  Stack,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
