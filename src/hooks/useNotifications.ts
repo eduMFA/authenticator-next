@@ -5,10 +5,11 @@ import {
   addBackgroundMessageHandler,
   addMessageListener,
 } from "@/utils/notificationService";
+import { base32ToBase64 } from "@/utils/crypto";
 import { buildPushRequestSignedData } from "@/utils/pushRequestUtils";
+import { verifyMessage } from "@/utils/rsa";
 import * as Notifications from "expo-notifications";
 import { useCallback, useEffect, useRef } from "react";
-import { RSA } from "react-native-rsa-native";
 import { useChallengePolling } from "./useChallengePolling";
 import { useToken } from "./useToken";
 
@@ -34,21 +35,33 @@ export function useNotifications(onAction?: NotificationActionHandler) {
   } = usePushRequestStore();
 
   const handlePushRequest = useCallback(
-    (pushRequest: PushRequest) => {
+    async (pushRequest: PushRequest) => {
       console.log("Received push request:", pushRequest.id);
 
       const token = tokens.find((t) => t.id === pushRequest.serial);
 
-      if (!token?.publicKey) {
+      if (!token?.serverPublicKey) {
         console.warn(
-          "Public key not found for token serial:",
+          "Server public key not found for token serial:",
           pushRequest.serial,
         );
         return;
       }
 
       const signedData = buildPushRequestSignedData(pushRequest);
-      if (!RSA.verify(signedData, pushRequest.signature, token.publicKey)) {
+      let isValid = false;
+      try {
+        isValid = await verifyMessage(
+          signedData,
+          base32ToBase64(pushRequest.signature),
+          token.serverPublicKey,
+        );
+      } catch (error) {
+        console.error("Error verifying push request signature:", error);
+        return;
+      }
+
+      if (!isValid) {
         console.warn(
           "Signature verification failed for push request:",
           pushRequest.id,
@@ -120,12 +133,12 @@ export function useNotifications(onAction?: NotificationActionHandler) {
   useEffect(() => {
     // Listen for foreground messages
     const unsubscribeMessage = addMessageListener((pushRequest) => {
-      pushRequestHandlerRef.current(pushRequest);
+      void pushRequestHandlerRef.current(pushRequest);
     });
 
     // Set up background message handler
     addBackgroundMessageHandler((pushRequest) => {
-      pushRequestHandlerRef.current(pushRequest);
+      void pushRequestHandlerRef.current(pushRequest);
     });
 
     // Listen for notification responses (taps and action button presses)

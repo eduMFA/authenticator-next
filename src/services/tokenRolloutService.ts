@@ -2,8 +2,8 @@ import { KEY_SIZE } from "@/consts";
 import { useNotificationStore } from "@/store/notificationStore";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { stripPemArmor } from "@/utils/crypto";
+import { deleteRsaKeyPair, generateRsaKeyPair } from "@/utils/rsa";
 import { parseTokenResponse } from "@/utils/tokenUtils";
-import { RSAKeychain } from "react-native-rsa-native";
 
 // Map rollout states to their corresponding failed states
 const ROLLOUT_STATE_TO_FAILED_STATE: Partial<
@@ -38,7 +38,7 @@ export function isTokenRollingOut(id: string): boolean {
  * Generate RSA key pair for a token
  */
 async function generateRSAKeys(tokenId: string): Promise<string> {
-  const { public: pubkey } = await RSAKeychain.generateKeys(tokenId, KEY_SIZE);
+  const { publicKey: pubkey } = await generateRsaKeyPair(tokenId, KEY_SIZE);
   console.log(`Generated RSA keys for token ${tokenId}. Public key:`, pubkey);
   return pubkey;
 }
@@ -210,7 +210,7 @@ export function startPendingRollouts(
  */
 export async function deleteTokenPrivateKey(tokenId: string): Promise<void> {
   try {
-    await RSAKeychain.deletePrivateKey(tokenId);
+    await deleteRsaKeyPair(tokenId);
   } catch (error) {
     console.error(`Failed to delete private key for token ${tokenId}:`, error);
     throw error;

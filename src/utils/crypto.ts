@@ -10,3 +10,7 @@ export const stripPemArmor = (pem: string): string => {
 export const base64ToBase32 = (base64Input: string): string => {
   return base32.encode(base64.decode(base64Input));
 };
+
+export const base32ToBase64 = (base32Input: string): string => {
+  return base64.encode(base32.decode(base32Input));
+};

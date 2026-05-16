@@ -4,9 +4,9 @@ import {
   PushToken,
   PushTokenRolloutState,
 } from "@/types";
-import { base64ToBase32 } from "@/utils/crypto";
+import { base32ToBase64, base64ToBase32 } from "@/utils/crypto";
 import { buildPushRequestSignedData } from "@/utils/pushRequestUtils";
-import { RSA, RSAKeychain } from "react-native-rsa-native";
+import { signMessage, verifyMessage } from "@/utils/rsa";
 
 export interface ChallengePollingResult {
   success: boolean;
@@ -41,11 +41,7 @@ async function signPollingMessage(
   tokenId: string,
 ): Promise<string> {
   const message = `${serial}|${timestamp}`;
-  const signatureBase64 = await RSAKeychain.signWithAlgorithm(
-    message,
-    tokenId,
-    "SHA256withRSA",
-  );
+  const signatureBase64 = await signMessage(message, tokenId, "SHA256");
   // Convert base64 signature to base32 as required by the API
   const signature = base64ToBase32(signatureBase64);
   return signature;
@@ -54,17 +50,17 @@ async function signPollingMessage(
 /**
  * Parse challenge response from server into PushRequest
  */
-function parseChallengeResponse(
+async function parseChallengeResponse(
   data: ChallengeResponse,
   token: PushToken,
-): PushRequest | null {
+): Promise<PushRequest | null> {
   // Verify the signature from the server using the token's server public key
   if (token.serverPublicKey) {
     const signedData = buildPushRequestSignedData(data);
     try {
-      const isValid = RSA.verify(
+      const isValid = await verifyMessage(
         signedData,
-        data.signature,
+        base32ToBase64(data.signature),
         token.serverPublicKey,
       );
       if (!isValid) {
@@ -139,7 +135,7 @@ export async function pollChallengesForToken(
 
     const challenges: PushRequest[] = [];
     for (const challengeData of data?.result?.value || []) {
-      const pushRequest = parseChallengeResponse(challengeData, token);
+      const pushRequest = await parseChallengeResponse(challengeData, token);
       if (pushRequest) {
         challenges.push(pushRequest);
       }
