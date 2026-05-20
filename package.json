@@ -9,7 +9,9 @@
     "ios": "expo run:ios",
     "extract": "lingui extract",
     "compile": "lingui compile",
-    "test": "jest",
+    "test": "jest --coverage --watchman=false",
+    "test:watch": "jest --watch --coverage=false --watchman=false",
+    "test:update-snapshots": "jest -u --coverage=false --watchman=false",
     "lint": "expo lint",
     "clean-ios": "watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache",
     "full-clean-ios": "rm -rf node_modules && bun pm cache rm && bun i && watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache"
@@ -64,6 +66,7 @@
     "@lingui/cli": "^5.9.5",
     "@lingui/macro": "^5.9.5",
     "@lingui/metro-transformer": "^5.9.5",
+    "@testing-library/react-native": "^13.3.3",
     "@types/jest": "29.5.14",
     "@types/react": "~19.2.14",
     "eslint": "^9.39.4",
@@ -71,13 +74,42 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react-native": "^5.0.0",
+    "jest-expo": "~56.0.3",
     "prettier": "^3.8.3",
     "typescript": "~6.0.3"
   },
   "jest": {
     "preset": "jest-expo",
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.ts"
+    ],
+    "moduleNameMapper": {
+      "^@/assets/(.*)$": "<rootDir>/assets/$1",
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@scure/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "modules/**/*.{ts,tsx}",
+      "!src/locales/**",
+      "!**/__tests__/**",
+      "!**/__snapshots__/**",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/expo-env.d.ts"
+    ],
+    "coverageReporters": [
+      "text",
+      "lcov"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/.expo/",
+      "/ios/",
+      "/android/"
     ]
   }
 }
