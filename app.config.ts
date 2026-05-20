@@ -54,7 +54,6 @@ const config: ExpoConfig = {
     googleServicesFile: "./google-services.json",
   },
   plugins: [
-    "./plugins/ios/withFmtFix",
     "expo-font",
     "expo-image",
     "expo-notifications",
@@ -95,8 +94,6 @@ const config: ExpoConfig = {
     [
       "expo-build-properties",
       {
-        buildReactNativeFromSource: true,
-        useHermesV1: true,
         ios: {
           useFrameworks: "static",
           forceStaticLinking: ["RNFBApp", "RNFBMessaging", "FastSquircle"],
