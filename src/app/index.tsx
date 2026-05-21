@@ -257,7 +257,7 @@ export default function Tokens() {
             </Stack.Toolbar.MenuAction>
           </Stack.Toolbar.Menu>
         )}
-        {Platform.OS == "ios" && !isLiquidGlassAvailable() && toolbarAddButton}
+        {Platform.OS === "ios" && !isLiquidGlassAvailable() && toolbarAddButton}
       </Stack.Toolbar>
     </>
   );
