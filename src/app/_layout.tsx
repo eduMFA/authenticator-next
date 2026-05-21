@@ -141,7 +141,7 @@ function RootLayoutContent() {
                 ? "formSheet"
                 : "modal"
               : "modal",
-          sheetAllowedDetents: [0.8],
+          sheetAllowedDetents: [0.75],
           sheetInitialDetentIndex: 0,
           gestureEnabled: false,
           contentStyle: {
