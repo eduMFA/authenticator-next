@@ -1,4 +1,5 @@
 import { theme } from "@/theme";
+import { Color } from "expo-router";
 import React from "react";
 import {
   ColorValue,
@@ -26,6 +27,42 @@ type ThemeProps = {
     ios?: ThemeValue<ColorValue>;
     android?: ThemeValue<ColorValue>;
   };
+};
+
+const getDefaultPlatformTextColor = (
+  color: ThemeValue<ColorValue>,
+): ThemeProps["platformColor"] | undefined => {
+  if (color === theme.color.text) {
+    return { android: Color.android.dynamic.onBackground };
+  }
+
+  if (color === theme.color.textSecondary) {
+    return { android: Color.android.dynamic.onSurfaceVariant };
+  }
+
+  if (color === theme.color.branding) {
+    return { android: Color.android.dynamic.primary };
+  }
+
+  return undefined;
+};
+
+const getDefaultPlatformBackgroundColor = (
+  color: ThemeValue<ColorValue>,
+): ThemeProps["platformColor"] | undefined => {
+  if (color === theme.color.background) {
+    return { android: Color.android.dynamic.background };
+  }
+
+  if (color === theme.color.backgroundSecondary) {
+    return { android: Color.android.dynamic.surfaceContainer };
+  }
+
+  if (color === theme.color.branding) {
+    return { android: Color.android.dynamic.primary };
+  }
+
+  return undefined;
 };
 
 export type TextProps = ThemeProps & {
@@ -87,7 +124,11 @@ export function ThemedText(props: TextProps) {
     ...otherProps
   } = props;
 
-  const color = useThemeColor(themeColor ?? theme.color.text, platformColor);
+  const defaultColor = themeColor ?? theme.color.text;
+  const color = useThemeColor(
+    defaultColor,
+    platformColor ?? getDefaultPlatformTextColor(defaultColor),
+  );
 
   const fontFamily = (() => {
     if (fontWeight === "light") {
@@ -120,9 +161,10 @@ export function ThemedText(props: TextProps) {
 
 export function ThemedView(props: ViewProps) {
   const { style, animated, color, platformColor, ...otherProps } = props;
+  const defaultColor = color ?? theme.color.background;
   const backgroundColor = useThemeColor(
-    color ?? theme.color.background,
-    platformColor,
+    defaultColor,
+    platformColor ?? getDefaultPlatformBackgroundColor(defaultColor),
   );
 
   if (animated) {
@@ -151,9 +193,12 @@ export function ThemedPressable(
     platformBackgroundColor,
     ...otherProps
   } = props;
+  const defaultBackgroundColor =
+    themedBackgroundColor ?? theme.color.background;
   const backgroundColor = useThemeColor(
-    themedBackgroundColor ?? theme.color.background,
-    platformBackgroundColor,
+    defaultBackgroundColor,
+    platformBackgroundColor ??
+      getDefaultPlatformBackgroundColor(defaultBackgroundColor),
   );
   const themedStyle =
     typeof style === "function"

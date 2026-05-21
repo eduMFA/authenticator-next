@@ -50,16 +50,21 @@ export default function Tokens() {
     android: Color.android.dynamic.background,
   });
   const { t } = useLingui();
-  const tabBarTintColor = useThemeColor({
-    light: theme.colorBlack,
-    dark: theme.colorWhite,
-  });
+  const tabBarTintColor = useThemeColor(
+    {
+      light: theme.colorBlack,
+      dark: theme.colorWhite,
+    },
+    {
+      android: Color.android.dynamic.onBackground,
+    },
+  );
   const transparentColor = useThemeColor(theme.color.transparent);
   const tabBarBackgroundColor = useThemeColor(theme.color.background, {
     android: Color.android.dynamic.background,
   });
   const refreshControlTintColor = useThemeColor(theme.color.text, {
-    android: Color.android.dynamic.text,
+    android: Color.android.dynamic.onBackground,
   });
 
   const params = useLocalSearchParams<{ q?: string }>();

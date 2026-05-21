@@ -1,4 +1,5 @@
 import { Image } from "expo-image";
+import { Color } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import SquircleView from "react-native-fast-squircle";
@@ -17,7 +18,12 @@ export function TokenImage({
   style?: ViewStyle;
   animated?: boolean;
 }) {
-  const borderColor = useThemeColor(theme.color.border);
+  const borderColor = useThemeColor(theme.color.border, {
+    android: Color.android.dynamic.outline,
+  });
+  const fallbackBackgroundColor = useThemeColor(theme.color.branding, {
+    android: Color.android.dynamic.primaryContainer,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const imageSize = (() => {
     switch (size) {
@@ -34,7 +40,15 @@ export function TokenImage({
   })();
   const imageStyles = [styles.profileImage, imageSize];
 
-  const placeholder = <View style={[imageStyles, styles.fallbackImage]} />;
+  const placeholder = (
+    <View
+      style={[
+        imageStyles,
+        styles.fallbackImage,
+        { backgroundColor: fallbackBackgroundColor },
+      ]}
+    />
+  );
 
   return (
     <SquircleView
@@ -59,7 +73,6 @@ export function TokenImage({
 const styles = StyleSheet.create({
   fallbackImage: {
     alignItems: "center",
-    backgroundColor: theme.color.branding.dark,
     justifyContent: "center",
   },
   imageContainer: {

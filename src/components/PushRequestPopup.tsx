@@ -269,8 +269,18 @@ function ActionButton({
   variant,
   disabled,
 }: ActionButtonProps) {
-  const brandingColor = useThemeColor(theme.color.branding);
-  const backgroundColor = useThemeColor(theme.color.backgroundSecondary);
+  const brandingColor = useThemeColor(theme.color.branding, {
+    android: Color.android.dynamic.primary,
+  });
+  const backgroundColor = useThemeColor(theme.color.backgroundSecondary, {
+    android: Color.android.dynamic.surfaceContainer,
+  });
+  const primaryButtonTextColor = useThemeColor(theme.colorWhite, {
+    android: Color.android.dynamic.onPrimary,
+  });
+  const secondaryButtonTextColor = useThemeColor(theme.color.branding, {
+    android: Color.android.dynamic.primary,
+  });
   const pressScale = useSharedValue(1);
   const primaryButtonStyle = useMemo(
     () => ({ backgroundColor: brandingColor }),
@@ -280,9 +290,13 @@ function ActionButton({
     () => ({ backgroundColor, borderColor: brandingColor }),
     [backgroundColor, brandingColor],
   );
+  const primaryButtonTextStyle = useMemo(
+    () => ({ color: primaryButtonTextColor }),
+    [primaryButtonTextColor],
+  );
   const secondaryButtonTextStyle = useMemo(
-    () => ({ color: brandingColor }),
-    [brandingColor],
+    () => ({ color: secondaryButtonTextColor }),
+    [secondaryButtonTextColor],
   );
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -319,7 +333,7 @@ function ActionButton({
         fontWeight="semiBold"
         style={[
           styles.buttonText,
-          isPrimary ? styles.buttonPrimaryText : secondaryButtonTextStyle,
+          isPrimary ? primaryButtonTextStyle : secondaryButtonTextStyle,
         ]}
       >
         {label}
@@ -344,9 +358,6 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.6,
-  },
-  buttonPrimaryText: {
-    color: theme.colorWhite,
   },
   buttonSecondary: {
     borderWidth: 1,

@@ -43,7 +43,7 @@ export const TokenDetails = memo(function TokenDetails({
 }) {
   const { t } = useLingui();
   const backgroundColor = useThemeColor(theme.color.backgroundSecondary, {
-    android: Color.android.dynamic.primaryContainer,
+    android: Color.android.dynamic.surfaceContainerHigh,
   });
   const successBarColor = useThemeColor(theme.color.successBar);
   const errorBarColor = useThemeColor(theme.color.errorBar);
@@ -109,12 +109,22 @@ export const TokenDetails = memo(function TokenDetails({
           <TokenImage imageUrl={token.imageUrl} animated size="small" />
         )}
         <View style={styles.tokenDetails}>
-          <ThemedText fontSize={theme.fontSize16}>{token.label}</ThemedText>
+          <ThemedText
+            fontSize={theme.fontSize16}
+            platformColor={{
+              android: Color.android.dynamic.onSurface,
+            }}
+          >
+            {token.label}
+          </ThemedText>
           {token.issuer && (
             <ThemedText
               fontSize={theme.fontSize14}
               fontWeight="medium"
               color={theme.color.textSecondary}
+              platformColor={{
+                android: Color.android.dynamic.onSurfaceVariant,
+              }}
             >
               {token.issuer}
             </ThemedText>
