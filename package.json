@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",
+    "@expo/material-symbols": "^0.1.1",
     "@expo/ui": "~56.0.10",
     "@formatjs/intl-locale": "^4.2.13",
     "@formatjs/intl-pluralrules": "^5.4.6",
