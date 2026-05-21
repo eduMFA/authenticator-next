@@ -8,6 +8,7 @@ import { PushToken, PushTokenRolloutState } from "@/types";
 import {
   ExtendedFloatingActionButton,
   Host,
+  Icon,
   Text,
 } from "@expo/ui/jetpack-compose";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -299,7 +300,7 @@ export default function Tokens() {
           }}
         >
           <ExtendedFloatingActionButton.Icon>
-            <SymbolView name={{ android: "add" }} />
+            <Icon source={require("@expo/material-symbols/add.xml")} />
           </ExtendedFloatingActionButton.Icon>
           <ExtendedFloatingActionButton.Text>
             <Text style={styles.fabText}>{t`Add token`}</Text>
