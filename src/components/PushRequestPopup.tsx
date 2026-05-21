@@ -38,7 +38,6 @@ export function PushRequestPopup({
   requests,
   onAction,
 }: PushRequestPopupProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const colorScheme = useColorScheme();
   const { updatePushRequestStatus } = usePushRequestStore();
@@ -48,18 +47,10 @@ export function PushRequestPopup({
     (r) => r.status === PushRequestStatus.Pending,
   );
 
+  const currentIndex = 0;
   const currentRequest = pendingRequests[currentIndex];
   const hasRequests = pendingRequests.length > 0;
   const totalPending = pendingRequests.length;
-
-  // Reset index if it's out of bounds
-  useEffect(() => {
-    if (currentIndex >= pendingRequests.length && pendingRequests.length > 0) {
-      setCurrentIndex(pendingRequests.length - 1);
-    } else if (pendingRequests.length === 0) {
-      setCurrentIndex(0);
-    }
-  }, [pendingRequests.length, currentIndex]);
 
   const handleAction = useCallback(
     (action: "accept" | "decline") => {
@@ -299,11 +290,11 @@ function ActionButton({
   }));
 
   const handlePressIn = () => {
-    pressScale.value = withTiming(0.95, { duration: 100 });
+    pressScale.set(withTiming(0.95, { duration: 100 }));
   };
 
   const handlePressOut = () => {
-    pressScale.value = withTiming(1, { duration: 100 });
+    pressScale.set(withTiming(1, { duration: 100 }));
   };
 
   const isPrimary = variant === "primary";

@@ -17,24 +17,6 @@ export function NotificationHandler() {
   const { tokens } = useToken();
   const { pushRequests, updatePushRequestStatus } = usePushRequestStore();
 
-  useNotifications(async (action, pushRequest) => {
-    console.log("User action:", action, pushRequest);
-
-    // Handle the user's response from notification quick actions
-    if (action === "ACCEPT") {
-      console.log("User accepted the push authentication");
-      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Accepted);
-      handleRequest({ ...pushRequest, status: PushRequestStatus.Accepted });
-    } else if (action === "DECLINE") {
-      console.log("User declined the push authentication");
-      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Declined);
-      handleRequest({ ...pushRequest, status: PushRequestStatus.Declined });
-    } else if (action === "TAP") {
-      console.log("User tapped the notification");
-      // Navigate to the appropriate screen or let the popup handle it
-    }
-  });
-
   const handleRequest = useCallback(
     async (request: PushRequest): Promise<boolean> => {
       const token = findTokenForPushRequest(request, tokens);
@@ -48,6 +30,30 @@ export function NotificationHandler() {
     },
     [tokens],
   );
+
+  useNotifications(async (action, pushRequest) => {
+    console.log("User action:", action, pushRequest);
+
+    // Handle the user's response from notification quick actions
+    if (action === "ACCEPT") {
+      console.log("User accepted the push authentication");
+      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Accepted);
+      void handleRequest({
+        ...pushRequest,
+        status: PushRequestStatus.Accepted,
+      });
+    } else if (action === "DECLINE") {
+      console.log("User declined the push authentication");
+      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Declined);
+      void handleRequest({
+        ...pushRequest,
+        status: PushRequestStatus.Declined,
+      });
+    } else if (action === "TAP") {
+      console.log("User tapped the notification");
+      // Navigate to the appropriate screen or let the popup handle it
+    }
+  });
 
   return <PushRequestPopup requests={pushRequests} onAction={handleRequest} />;
 }
