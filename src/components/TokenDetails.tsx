@@ -15,6 +15,11 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import {
+  TOKEN_ACTION_MENU_WIDTH,
+  TokenActionsMenu,
+  type TokenAction,
+} from "./TokenActionsMenu";
 import { ThemedText, useThemeColor } from "./Themed";
 import { TokenImage } from "./TokenImage";
 
@@ -37,8 +42,10 @@ const timingConfig = {
 } as const;
 
 export const TokenDetails = memo(function TokenDetails({
+  actions,
   token,
 }: {
+  actions: TokenAction[];
   token: PushToken;
 }) {
   const { t } = useLingui();
@@ -52,6 +59,10 @@ export const TokenDetails = memo(function TokenDetails({
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
   const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
+  const isRolloutFinished = PushTokenRolloutState.isFinished(
+    token.rolloutState,
+  );
+  const showActionsMenu = Platform.OS === "android" && isRolloutFinished;
 
   const [showProgress, setShowProgress] = useState(!isCompleted);
 
@@ -75,6 +86,13 @@ export const TokenDetails = memo(function TokenDetails({
   const tokenContainerStyle = useMemo(
     () => [styles.token, { backgroundColor }],
     [backgroundColor],
+  );
+  const tokenDetailsStyle = useMemo(
+    () => [
+      styles.tokenDetails,
+      showActionsMenu && styles.tokenDetailsWithActionMenu,
+    ],
+    [showActionsMenu],
   );
 
   useEffect(() => {
@@ -108,7 +126,7 @@ export const TokenDetails = memo(function TokenDetails({
         {token.imageUrl && (
           <TokenImage imageUrl={token.imageUrl} animated size="small" />
         )}
-        <View style={styles.tokenDetails}>
+        <View style={tokenDetailsStyle}>
           <ThemedText
             fontSize={theme.fontSize16}
             platformColor={{
@@ -149,6 +167,7 @@ export const TokenDetails = memo(function TokenDetails({
           <ThemedText style={styles.progressText}>{progressText}</ThemedText>
         </AnimatedBlurView>
       )}
+      {showActionsMenu && <TokenActionsMenu actions={actions} />}
     </>
   );
 });
@@ -180,5 +199,8 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: theme.space2,
     justifyContent: "center",
+  },
+  tokenDetailsWithActionMenu: {
+    paddingRight: TOKEN_ACTION_MENU_WIDTH,
   },
 });

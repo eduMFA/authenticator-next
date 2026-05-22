@@ -1,5 +1,9 @@
 import { NotificationHandler } from "@/components/NotificationHandler";
 import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
+import {
+  TOKEN_ACTION_MENU_WIDTH,
+  type TokenAction,
+} from "@/components/TokenActionsMenu";
 import { TokenDetails } from "@/components/TokenDetails";
 import { useChallengePolling } from "@/hooks/useChallengePolling";
 import { useToken } from "@/hooks/useToken";
@@ -30,6 +34,7 @@ import {
   RefreshControl,
   StyleSheet,
   useWindowDimensions,
+  View,
 } from "react-native";
 import Animated, {
   FadeIn,
@@ -119,6 +124,39 @@ export default function Tokens() {
           ],
         );
       };
+      const primaryTokenAction: TokenAction = PushTokenRolloutState.isFailed(
+        item.rolloutState,
+      )
+        ? {
+            iosIcon: "arrow.clockwise",
+            key: "refresh",
+            label: t`Retry Rollout`,
+            onPress: () => rolloutToken(item.id),
+          }
+        : {
+            disabled: true,
+            iosIcon: "square.and.pencil",
+            key: "edit",
+            label: t`Edit`,
+            onPress: () => {},
+          };
+      const tokenActions: TokenAction[] = [
+        primaryTokenAction,
+        {
+          destructive: true,
+          iosIcon: "trash",
+          key: "delete",
+          label: t`Delete`,
+          onPress: () => showDeleteConfirmation(item.id),
+        },
+      ];
+      const tokenDetails = (
+        <TokenDetails actions={tokenActions} token={item} key={item.id} />
+      );
+      const isRolloutFinished = PushTokenRolloutState.isFinished(
+        item.rolloutState,
+      );
+
       return (
         <Animated.View
           key={item.id}
@@ -126,57 +164,63 @@ export default function Tokens() {
           exiting={FadeOut}
           style={styles.tokenWrapper}
         >
-          <Link
-            push
-            key={item.id}
-            href={{
-              pathname: "/token/[tokenId]",
-              params: { tokenId: item.id },
-            }}
-            asChild
-          >
-            <Link.Trigger>
-              <Pressable
-                onLongPress={() => {}}
-                style={styles.tokenCard}
-                disabled={!PushTokenRolloutState.isFinished(item.rolloutState)}
-              >
-                <TokenDetails token={item} key={item.id} />
-              </Pressable>
-            </Link.Trigger>
-            <Link.Menu>
-              {!PushTokenRolloutState.isFailed(item.rolloutState) && (
-                <Link.MenuAction
-                  icon="square.and.pencil"
-                  onPress={() => {}}
-                  disabled={true}
-                >
-                  {t`Edit`}
-                </Link.MenuAction>
-              )}
-              {PushTokenRolloutState.isFailed(item.rolloutState) && (
-                <Link.MenuAction
-                  icon="arrow.clockwise"
+          {Platform.OS === "android" ? (
+            <View style={styles.tokenCard}>
+              {tokenDetails}
+              {isRolloutFinished && (
+                <Pressable
+                  accessibilityLabel={
+                    item.issuer ? `${item.label}, ${item.issuer}` : item.label
+                  }
+                  accessibilityRole="button"
                   onPress={() => {
-                    rolloutToken(item.id);
+                    router.push({
+                      pathname: "/token/[tokenId]",
+                      params: { tokenId: item.id },
+                    });
                   }}
-                >
-                  {t`Retry Rollout`}
-                </Link.MenuAction>
+                  style={styles.tokenLinkOverlay}
+                />
               )}
-              <Link.MenuAction
-                icon="trash"
-                destructive
-                onPress={() => showDeleteConfirmation(item.id)}
-              >
-                {t`Delete`}
-              </Link.MenuAction>
-            </Link.Menu>
-          </Link>
+            </View>
+          ) : (
+            <Link
+              push
+              key={item.id}
+              href={{
+                pathname: "/token/[tokenId]",
+                params: { tokenId: item.id },
+              }}
+              asChild
+            >
+              <Link.Trigger>
+                <Pressable
+                  onLongPress={() => {}}
+                  style={styles.tokenCard}
+                  disabled={!isRolloutFinished}
+                >
+                  {tokenDetails}
+                </Pressable>
+              </Link.Trigger>
+              <Link.Menu>
+                {tokenActions.map((action) => (
+                  <Link.MenuAction
+                    key={action.key}
+                    icon={action.iosIcon}
+                    onPress={action.onPress}
+                    disabled={action.disabled}
+                    destructive={action.destructive}
+                  >
+                    {action.label}
+                  </Link.MenuAction>
+                ))}
+              </Link.Menu>
+            </Link>
+          )}
         </Animated.View>
       );
     },
-    [deleteToken, rolloutToken, t],
+    [deleteToken, rolloutToken, router, t],
   );
 
   const toolbarAddButton = (
@@ -451,6 +495,15 @@ export const styles = StyleSheet.create({
   tokenCard: {
     borderRadius: theme.borderRadius20,
     overflow: "hidden",
+    position: "relative",
+  },
+  tokenLinkOverlay: {
+    bottom: 0,
+    left: 0,
+    position: "absolute",
+    right: TOKEN_ACTION_MENU_WIDTH,
+    top: 0,
+    zIndex: 2,
   },
   tokenWrapper: {
     marginVertical: theme.space8,
