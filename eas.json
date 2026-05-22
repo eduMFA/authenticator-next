@@ -16,12 +16,28 @@
       "extends": "base",
       "distribution": "internal"
     },
+    "beta": {
+      "extends": "base",
+      "distribution": "store",
+      "autoIncrement": true
+    },
     "production": {
       "extends": "base",
       "autoIncrement": true
     }
   },
   "submit": {
-    "production": {}
+    "beta": {
+      "android": {
+        "track": "beta"
+      },
+      "ios": {}
+    },
+    "production": {
+      "android": {
+        "track": "production"
+      },
+      "ios": {}
+    }
   }
 }
