@@ -102,9 +102,12 @@ export const TokenDetails = memo(function TokenDetails({
   return (
     <>
       <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
-        {token.imageUrl && (
-          <TokenImage imageUrl={token.imageUrl} animated size="small" />
-        )}
+        <TokenImage
+          imageUrl={token.imageUrl}
+          label={token.label}
+          animated
+          size="small"
+        />
         <View style={styles.tokenDetails}>
           <ThemedText fontSize={theme.fontSize16}>{token.label}</ThemedText>
           {token.issuer && (

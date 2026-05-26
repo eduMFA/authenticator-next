@@ -4,20 +4,41 @@ import { StyleSheet, View, ViewStyle } from "react-native";
 import SquircleView from "react-native-fast-squircle";
 
 import { theme } from "@/theme";
-import { useThemeColor } from "./Themed";
+import { ThemedText, useThemeColor } from "./Themed";
+
+function getInitials(label?: string | null) {
+  const source = label?.trim();
+
+  if (!source) {
+    return "?";
+  }
+
+  const words = source.split(/\s+/).filter(Boolean);
+  const initials =
+    words.length === 1
+      ? words[0].slice(0, 2)
+      : `${words[0][0]}${words[words.length - 1][0]}`;
+
+  return initials.toUpperCase();
+}
 
 export function TokenImage({
   imageUrl,
+  label,
   size,
   style,
   animated,
 }: {
   imageUrl?: string | null;
+  label?: string | null;
   size?: "small" | "medium" | "large" | "xlarge";
   style?: ViewStyle;
   animated?: boolean;
 }) {
   const borderColor = useThemeColor(theme.color.border);
+  const fallbackBackgroundColor = useThemeColor(
+    theme.color.backgroundSecondary,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const imageSize = (() => {
     switch (size) {
@@ -33,8 +54,33 @@ export function TokenImage({
     }
   })();
   const imageStyles = [styles.profileImage, imageSize];
+  const initialsFontSize = (() => {
+    switch (size) {
+      case "small":
+        return theme.fontSize14;
+      case "large":
+        return theme.fontSize32;
+      case "xlarge":
+        return theme.fontSize42;
+      case "medium":
+      default:
+        return theme.fontSize20;
+    }
+  })();
 
-  const placeholder = <View style={[imageStyles, styles.fallbackImage]} />;
+  const placeholder = (
+    <View
+      style={[
+        imageStyles,
+        styles.fallbackImage,
+        { backgroundColor: fallbackBackgroundColor },
+      ]}
+    >
+      <ThemedText fontSize={initialsFontSize} fontWeight="bold">
+        {getInitials(label)}
+      </ThemedText>
+    </View>
+  );
 
   return (
     <SquircleView
@@ -59,7 +105,6 @@ export function TokenImage({
 const styles = StyleSheet.create({
   fallbackImage: {
     alignItems: "center",
-    backgroundColor: theme.color.branding.dark,
     justifyContent: "center",
   },
   imageContainer: {
