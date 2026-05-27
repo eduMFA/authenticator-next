@@ -13,11 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/app/index.tsx:314
-msgid " to get started."
-msgstr " um loszulegen."
-
-#: src/components/PushRequestPopup.tsx:229
+#: src/components/PushRequestPopup.tsx:226
 #: src/store/notificationStore.ts:48
 msgid "Accept"
 msgstr "Akzeptieren"
@@ -25,33 +21,33 @@ msgstr "Akzeptieren"
 #~ msgid "Add"
 #~ msgstr "Hinzufügen"
 
-#: src/app/index.tsx:296
+#: src/app/index.tsx:339
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:92
+#: src/hooks/useDeleteTokenConfirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
 
-#: src/components/QRCodeScanner.tsx:59
+#: src/components/QRCodeScanner.tsx:61
 msgid "Camera permission required"
 msgstr "Kamera-Berechtigung erforderlich"
 
-#: src/app/index.tsx:95
+#: src/hooks/useDeleteTokenConfirmation.ts:20
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/components/PushRequestPopup.tsx:223
+#: src/components/PushRequestPopup.tsx:220
 #: src/store/notificationStore.ts:56
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:99
-#: src/app/index.tsx:156
+#: src/app/index.tsx:133
+#: src/hooks/useDeleteTokenConfirmation.ts:22
 msgid "Delete"
 msgstr "Löschen"
 
-#: src/app/index.tsx:91
+#: src/hooks/useDeleteTokenConfirmation.ts:17
 msgid "Delete token"
 msgstr "Token löschen"
 
@@ -63,7 +59,7 @@ msgstr "Schließen"
 msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
-#: src/app/index.tsx:138
+#: src/app/index.tsx:124
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -73,7 +69,7 @@ msgstr "Bearbeiten"
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
-#: src/components/QRCodeScanner.tsx:49
+#: src/components/QRCodeScanner.tsx:50
 msgid "Grant permission"
 msgstr "Berechtigungen erteilen"
 
@@ -81,43 +77,47 @@ msgstr "Berechtigungen erteilen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:351
+#: src/app/index.tsx:417
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:309
+#: src/app/index.tsx:355
 msgid "No Token setup"
 msgstr "Keine Token eingerichtet"
 
-#: src/components/QRCodeScanner.tsx:50
+#: src/components/QRCodeScanner.tsx:51
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
-#: src/app/token/add.tsx:78
+#: src/app/token/add.tsx:82
 msgid "OR"
 msgstr "ODER"
 
-#: src/app/token/add.tsx:57
+#: src/app/token/add.tsx:61
 msgid "Pair new Push Token"
 msgstr "Neues Push-Token koppeln"
 
-#: src/app/index.tsx:361
+#: src/components/upload-qr-code-button.tsx:73
+msgid "QR code scanner"
+msgstr "QR-Code-Scanner"
+
+#: src/app/index.tsx:434
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
-#: src/app/index.tsx:148
+#: src/app/index.tsx:117
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/components/TokenDetails.tsx:100
+#: src/components/TokenDetails.tsx:121
 msgid "Rolling out..."
 msgstr "Rollout läuft..."
 
-#: src/components/TokenDetails.tsx:100
+#: src/components/TokenDetails.tsx:121
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
-#: src/app/token/add.tsx:64
+#: src/app/token/add.tsx:68
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
@@ -125,17 +125,17 @@ msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:186
+#: src/app/index.tsx:230
 msgid "Search tokens"
 msgstr "Token suchen"
 
-#: src/components/PushRequestPopup.tsx:216
+#: src/components/PushRequestPopup.tsx:213
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/app/index.tsx:312
-msgid "Tap the "
-msgstr "Tippe auf "
+#: src/app/index.tsx:364
+msgid "Tap the"
+msgstr "Tippe auf"
 
 #: src/hooks/useHandleTokenUri.ts:63
 msgid "The provided QR code isn't a valid eduMFA token."
@@ -149,17 +149,19 @@ msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie 
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
-#: src/components/upload-qr-code-button/upload-qr-code-button.android.tsx:30
-#: src/components/upload-qr-code-button/upload-qr-code-button.ios.tsx:29
-#: src/components/upload-qr-code-button/upload-qr-code-button.tsx:20
+#: src/app/index.tsx:377
+msgid "to get started."
+msgstr "um loszulegen."
+
+#: src/components/upload-qr-code-button.tsx:76
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#: src/components/QRCodeScanner.tsx:43
+#: src/components/QRCodeScanner.tsx:44
 msgid "We need your permission to show the camera"
 msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
 
-#: src/components/QRCodeScanner.tsx:44
+#: src/components/QRCodeScanner.tsx:45
 msgid "You can enable camera permissions in your device settings"
 msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
 

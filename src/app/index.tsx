@@ -6,6 +6,7 @@ import {
 } from "@/components/TokenActionsMenu";
 import { TokenDetails } from "@/components/TokenDetails";
 import { useChallengePolling } from "@/hooks/useChallengePolling";
+import { useDeleteTokenConfirmation } from "@/hooks/useDeleteTokenConfirmation";
 import { useToken } from "@/hooks/useToken";
 import { usePushRequestStore } from "@/store/pushRequestStore";
 import { PushToken, PushTokenRolloutState } from "@/types";
@@ -27,7 +28,6 @@ import {
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
-  Alert,
   Keyboard,
   Platform,
   Pressable,
@@ -46,7 +46,8 @@ import { theme } from "../theme";
 
 export default function Tokens() {
   const router = useRouter();
-  const { tokens, deleteToken, updateToken, rolloutToken } = useToken();
+  const { tokens, updateToken, rolloutToken } = useToken();
+  const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
   const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
@@ -107,23 +108,6 @@ export default function Tokens() {
 
   const renderItem = useCallback(
     ({ item }: { item: PushToken }) => {
-      const showDeleteConfirmation = (id: string) => {
-        Alert.alert(
-          t`Delete token`,
-          t`Are you sure you want to delete this token?`,
-          [
-            {
-              text: t`Cancel`,
-              style: "cancel",
-            },
-            {
-              text: t`Delete`,
-              style: "destructive",
-              onPress: () => deleteToken(id),
-            },
-          ],
-        );
-      };
       const primaryTokenAction: TokenAction = PushTokenRolloutState.isFailed(
         item.rolloutState,
       )
@@ -220,7 +204,7 @@ export default function Tokens() {
         </Animated.View>
       );
     },
-    [deleteToken, rolloutToken, router, t],
+    [confirmDeleteToken, rolloutToken, router, t],
   );
 
   const toolbarAddButton = (

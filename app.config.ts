@@ -1,27 +1,12 @@
 import { ExpoConfig } from "expo/config";
 
-const APP_ID_PREFIX = "io.edumfa";
-
-const IS_DEV = process.env.APP_VARIANT === "development";
-const IS_PREVIEW = process.env.APP_VARIANT === "preview";
-
-const getName = () => {
-  if (IS_DEV) return "React Conf (Dev)";
-  if (IS_PREVIEW) return "React Conf (Preview)";
-  return "eduMFA";
-};
-
-const getAppId = () => {
-  if (IS_DEV) return `${APP_ID_PREFIX}.app`;
-  if (IS_PREVIEW) return `${APP_ID_PREFIX}.app`;
-  return `${APP_ID_PREFIX}.app`;
-};
+const APP_ID = "io.edumfa.app";
 
 const config: ExpoConfig = {
   owner: "edumfa",
-  name: getName(),
+  name: "eduMFA",
   slug: "edumfa",
-  version: "0.0.1",
+  version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/app-icons/icon-default.png",
   userInterfaceStyle: "automatic",
@@ -30,7 +15,7 @@ const config: ExpoConfig = {
   ios: {
     icon: "./assets/app-icons/edumfa.icon",
     supportsTablet: false,
-    bundleIdentifier: getAppId(),
+    bundleIdentifier: APP_ID,
     userInterfaceStyle: "automatic",
     config: {
       usesNonExemptEncryption: false,
@@ -49,7 +34,7 @@ const config: ExpoConfig = {
       monochromeImage: "./assets/app-icons/icon-monochrome-android.png",
     },
     userInterfaceStyle: "automatic",
-    package: getAppId(),
+    package: APP_ID,
     softwareKeyboardLayoutMode: "pan",
     googleServicesFile: "./google-services.json",
   },

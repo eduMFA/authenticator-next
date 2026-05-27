@@ -15,12 +15,12 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { ThemedText, useThemeColor } from "./Themed";
 import {
   TOKEN_ACTION_MENU_WIDTH,
   TokenActionsMenu,
   type TokenAction,
 } from "./TokenActionsMenu";
-import { ThemedText, useThemeColor } from "./Themed";
 import { TokenImage } from "./TokenImage";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
@@ -123,9 +123,12 @@ export const TokenDetails = memo(function TokenDetails({
   return (
     <>
       <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
-        {token.imageUrl && (
-          <TokenImage imageUrl={token.imageUrl} animated size="small" />
-        )}
+        <TokenImage
+          imageUrl={token.imageUrl}
+          label={token.label}
+          animated
+          size="small"
+        />
         <View style={tokenDetailsStyle}>
           <ThemedText
             fontSize={theme.fontSize16}
