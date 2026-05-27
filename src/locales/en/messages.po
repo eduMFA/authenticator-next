@@ -14,10 +14,10 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/app/index.tsx:283
-msgid " to get started."
-msgstr " to get started."
+#~ msgid " to get started."
+#~ msgstr " to get started."
 
-#: src/components/PushRequestPopup.tsx:229
+#: src/components/PushRequestPopup.tsx:220
 #: src/store/notificationStore.ts:48
 msgid "Accept"
 msgstr "Accept"
@@ -27,7 +27,7 @@ msgstr "Accept"
 #~ msgid "Add"
 #~ msgstr "Add"
 
-#: src/app/index.tsx:85
+#: src/hooks/useDeleteTokenConfirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Are you sure you want to delete this token?"
 
@@ -35,21 +35,21 @@ msgstr "Are you sure you want to delete this token?"
 msgid "Camera permission required"
 msgstr "Camera permission required"
 
-#: src/app/index.tsx:88
+#: src/hooks/useDeleteTokenConfirmation.ts:20
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/components/PushRequestPopup.tsx:223
+#: src/components/PushRequestPopup.tsx:214
 #: src/store/notificationStore.ts:56
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:92
-#: src/app/index.tsx:149
+#: src/app/index.tsx:133
+#: src/hooks/useDeleteTokenConfirmation.ts:22
 msgid "Delete"
 msgstr "Delete"
 
-#: src/app/index.tsx:84
+#: src/hooks/useDeleteTokenConfirmation.ts:17
 msgid "Delete token"
 msgstr "Delete token"
 
@@ -61,7 +61,7 @@ msgstr "Dismiss"
 msgid "Download 2FAS"
 msgstr "Download 2FAS"
 
-#: src/app/index.tsx:131
+#: src/app/index.tsx:115
 msgid "Edit"
 msgstr "Edit"
 
@@ -87,7 +87,7 @@ msgstr "No QR code found"
 msgid "No results found for "
 msgstr "No results found for "
 
-#: src/app/index.tsx:278
+#: src/app/index.tsx:262
 msgid "No Token setup"
 msgstr "No Token setup"
 
@@ -103,11 +103,15 @@ msgstr "OR"
 msgid "Pair new Push Token"
 msgstr "Pair new Push Token"
 
+#: src/components/upload-qr-code-button.tsx:73
+msgid "QR code scanner"
+msgstr "QR code scanner"
+
 #: src/app/index.tsx:329
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
-#: src/app/index.tsx:141
+#: src/app/index.tsx:125
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
@@ -127,17 +131,21 @@ msgstr "Scan the QR code to pair a new push token."
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:179
+#: src/app/index.tsx:163
 msgid "Search tokens"
 msgstr "Search tokens"
 
-#: src/components/PushRequestPopup.tsx:216
+#: src/components/PushRequestPopup.tsx:207
 msgid "Serial"
 msgstr "Serial"
 
+#: src/app/index.tsx:270
+msgid "Tap the"
+msgstr "Tap the"
+
 #: src/app/index.tsx:281
-msgid "Tap the "
-msgstr "Tap the "
+#~ msgid "Tap the "
+#~ msgstr "Tap the "
 
 #: src/hooks/useHandleTokenUri.ts:63
 msgid "The provided QR code isn't a valid eduMFA token."
@@ -151,9 +159,11 @@ msgstr "The QR code isn't supported by this app. Please use a general Authentica
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 
-#: src/components/upload-qr-code-button/upload-qr-code-button.android.tsx:30
-#: src/components/upload-qr-code-button/upload-qr-code-button.ios.tsx:29
-#: src/components/upload-qr-code-button/upload-qr-code-button.tsx:20
+#: src/app/index.tsx:282
+msgid "to get started."
+msgstr "to get started."
+
+#: src/components/upload-qr-code-button.tsx:76
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
 
