@@ -2,6 +2,7 @@ import { NotificationHandler } from "@/components/NotificationHandler";
 import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
 import { TokenDetails } from "@/components/TokenDetails";
 import { useChallengePolling } from "@/hooks/useChallengePolling";
+import { useDeleteTokenConfirmation } from "@/hooks/useDeleteTokenConfirmation";
 import { useToken } from "@/hooks/useToken";
 import { usePushRequestStore } from "@/store/pushRequestStore";
 import { PushToken, PushTokenRolloutState } from "@/types";
@@ -11,7 +12,6 @@ import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
-  Alert,
   Keyboard,
   Platform,
   Pressable,
@@ -29,7 +29,8 @@ import { theme } from "../theme";
 
 export default function Tokens() {
   const router = useRouter();
-  const { tokens, deleteToken, updateToken, rolloutToken } = useToken();
+  const { tokens, updateToken, rolloutToken } = useToken();
+  const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
   const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
@@ -79,23 +80,6 @@ export default function Tokens() {
 
   const renderItem = useCallback(
     ({ item }: { item: PushToken }) => {
-      const showDeleteConfirmation = (id: string) => {
-        Alert.alert(
-          t`Delete token`,
-          t`Are you sure you want to delete this token?`,
-          [
-            {
-              text: t`Cancel`,
-              style: "cancel",
-            },
-            {
-              text: t`Delete`,
-              style: "destructive",
-              onPress: () => deleteToken(id),
-            },
-          ],
-        );
-      };
       return (
         <Animated.View
           key={item.id}
@@ -144,7 +128,7 @@ export default function Tokens() {
               <Link.MenuAction
                 icon="trash"
                 destructive
-                onPress={() => showDeleteConfirmation(item.id)}
+                onPress={() => confirmDeleteToken(item.id)}
               >
                 {t`Delete`}
               </Link.MenuAction>
@@ -153,7 +137,7 @@ export default function Tokens() {
         </Animated.View>
       );
     },
-    [deleteToken, rolloutToken, t],
+    [confirmDeleteToken, rolloutToken, t],
   );
 
   const toolbarAddButton = (
