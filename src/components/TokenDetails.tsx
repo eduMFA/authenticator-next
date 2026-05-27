@@ -1,5 +1,9 @@
 import { theme } from "@/theme";
-import { PushToken, PushTokenRolloutState } from "@/types";
+import {
+  PushToken,
+  PushTokenRefreshStatus,
+  PushTokenRolloutState,
+} from "@/types";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { createRef, memo, useEffect, useMemo, useState } from "react";
 import { Platform, StyleSheet, View } from "react-native";
@@ -44,11 +48,14 @@ export const TokenDetails = memo(function TokenDetails({
   const backgroundColor = useThemeColor(theme.color.backgroundSecondary);
   const successBarColor = useThemeColor(theme.color.successBar);
   const errorBarColor = useThemeColor(theme.color.errorBar);
+  const errorTextColor = useThemeColor(theme.color.text);
   const blurTargetRef = createRef<View | null>();
 
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
   const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
+  const isRefreshFailed =
+    token.lastRefreshResult?.status === PushTokenRefreshStatus.Failed;
 
   const [showProgress, setShowProgress] = useState(!isCompleted);
 
@@ -109,7 +116,32 @@ export const TokenDetails = memo(function TokenDetails({
           size="small"
         />
         <View style={styles.tokenDetails}>
-          <ThemedText fontSize={theme.fontSize16}>{token.label}</ThemedText>
+          <View style={styles.titleRow}>
+            <ThemedText
+              fontSize={theme.fontSize16}
+              numberOfLines={1}
+              style={styles.tokenLabel}
+            >
+              {token.label}
+            </ThemedText>
+            {isRefreshFailed ? (
+              <View
+                accessibilityLabel={t`Refresh failed`}
+                style={[
+                  styles.refreshBadge,
+                  { backgroundColor: errorBarColor },
+                ]}
+              >
+                <ThemedText
+                  color={errorTextColor}
+                  fontSize={theme.fontSize10}
+                  fontWeight="bold"
+                >
+                  !
+                </ThemedText>
+              </View>
+            ) : null}
+          </View>
           {token.issuer && (
             <ThemedText
               fontSize={theme.fontSize14}
@@ -160,6 +192,18 @@ const styles = StyleSheet.create({
     top: theme.space24,
     zIndex: 2,
   },
+  refreshBadge: {
+    alignItems: "center",
+    borderRadius: 9,
+    height: 18,
+    justifyContent: "center",
+    marginLeft: theme.space8,
+    width: 18,
+  },
+  titleRow: {
+    alignItems: "center",
+    flexDirection: "row",
+  },
   token: {
     alignItems: "center",
     flexDirection: "row",
@@ -170,5 +214,8 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: theme.space2,
     justifyContent: "center",
+  },
+  tokenLabel: {
+    flexShrink: 1,
   },
 });

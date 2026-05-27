@@ -11,6 +11,13 @@ import { signMessage, verifyMessage } from "@/utils/rsa";
 export interface ChallengePollingResult {
   success: boolean;
   challenges: PushRequest[];
+  tokenResults?: TokenChallengePollingResult[];
+  error?: Error;
+}
+
+export interface TokenChallengePollingResult {
+  tokenId: string;
+  success: boolean;
   error?: Error;
 }
 
@@ -165,37 +172,51 @@ export async function pollAllChallenges(
   );
 
   if (completedTokens.length === 0) {
-    return { success: true, challenges: [] };
+    return { success: true, challenges: [], tokenResults: [] };
   }
 
   console.log(`Polling challenges for ${completedTokens.length} tokens`);
 
   const allChallenges: PushRequest[] = [];
   const errors: Error[] = [];
+  const tokenResults: TokenChallengePollingResult[] = [];
 
   // Poll all tokens in parallel
   const results = await Promise.allSettled(
     completedTokens.map((token) => pollChallengesForToken(token)),
   );
 
-  for (const result of results) {
+  for (const [index, result] of results.entries()) {
+    const token = completedTokens[index];
+
     if (result.status === "fulfilled") {
       allChallenges.push(...result.value.challenges);
       if (result.value.error) {
         errors.push(result.value.error);
       }
+      tokenResults.push({
+        tokenId: token.id,
+        success: result.value.success,
+        error: result.value.error,
+      });
     } else {
-      errors.push(
+      const error =
         result.reason instanceof Error
           ? result.reason
-          : new Error(String(result.reason)),
-      );
+          : new Error(String(result.reason));
+      errors.push(error);
+      tokenResults.push({
+        tokenId: token.id,
+        success: false,
+        error,
+      });
     }
   }
 
   return {
     success: errors.length === 0,
     challenges: allChallenges,
+    tokenResults,
     error:
       errors.length > 0
         ? new Error(`${errors.length} token(s) failed to poll`)

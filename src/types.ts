@@ -12,6 +12,13 @@ export type PushToken = {
   rolloutState: PushTokenRolloutState;
   publicKey?: string;
   serverPublicKey?: string;
+  lastRefreshResult?: PushTokenRefreshResult;
+};
+
+export type PushTokenRefreshResult = {
+  status: PushTokenRefreshStatus;
+  timestamp: number;
+  error?: string;
 };
 
 export type PushRequest = {
@@ -42,6 +49,11 @@ export enum PushRequestStatus {
   Accepted = "accepted",
   Declined = "declined",
   Expired = "expired",
+}
+
+export enum PushTokenRefreshStatus {
+  Success = "success",
+  Failed = "failed",
 }
 
 export enum PushTokenRolloutState {

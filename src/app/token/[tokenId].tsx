@@ -1,20 +1,71 @@
-import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
+import { useThemeColor } from "@/components/Themed";
+import { TokenEditContent } from "@/components/token-detail/TokenEditContent";
+import { TokenOverviewContent } from "@/components/token-detail/TokenOverviewContent";
+import {
+  EditableTokenFields,
+  getEditableTokenFields,
+  getParamValue,
+} from "@/components/token-detail/token-detail-utils";
+import { useDeleteTokenConfirmation } from "@/hooks/useDeleteTokenConfirmation";
 import { useToken } from "@/hooks/useToken";
 import { theme } from "@/theme";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo } from "react";
-import { Platform, StyleSheet, useColorScheme, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useLingui } from "@lingui/react/macro";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { Alert, Platform, StyleSheet, useColorScheme } from "react-native";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+} from "react-native-reanimated";
+
+function TokenScrollView({
+  animationKey,
+  backgroundColor,
+  children,
+  keyboardShouldPersistTaps,
+}: {
+  animationKey: string;
+  backgroundColor: string;
+  children: ReactNode;
+  keyboardShouldPersistTaps?: "always" | "handled" | "never";
+}) {
+  return (
+    <Animated.ScrollView
+      key={animationKey}
+      automaticallyAdjustContentInsets
+      contentContainerStyle={styles.content}
+      contentInsetAdjustmentBehavior="automatic"
+      entering={FadeIn.duration(180)}
+      exiting={FadeOut.duration(120)}
+      keyboardShouldPersistTaps={keyboardShouldPersistTaps}
+      layout={LinearTransition.springify().damping(18)}
+      showsVerticalScrollIndicator={false}
+      style={[styles.scroll, { backgroundColor }]}
+    >
+      {children}
+    </Animated.ScrollView>
+  );
+}
 
 export default function TokenDetails() {
-  const params = useLocalSearchParams();
-  const { tokens } = useToken();
-  const token = tokens.find((t) => t.id === params.tokenId);
+  const params = useLocalSearchParams<{
+    edit?: string | string[];
+    tokenId?: string | string[];
+  }>();
+  const { tokens, rolloutToken, updateToken } = useToken();
+  const tokenId = getParamValue(params.tokenId);
+  const token = tokens.find((item) => item.id === tokenId);
   const router = useRouter();
   const colorScheme = useColorScheme() || "light";
+  const { t } = useLingui();
   const transparentColor = useThemeColor(theme.color.transparent);
   const tabBarBackgroundColor = useThemeColor(theme.color.background);
+  const sheetColor = isLiquidGlassAvailable()
+    ? theme.color.transparent
+    : theme.color.background;
+  const scrollBackgroundColor = useThemeColor(sheetColor);
   const headerStyle = useMemo(
     () => ({
       backgroundColor:
@@ -22,6 +73,75 @@ export default function TokenDetails() {
     }),
     [tabBarBackgroundColor, transparentColor],
   );
+  const confirmDeleteToken = useDeleteTokenConfirmation({
+    onDeleted: router.back,
+  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableFields, setEditableFields] =
+    useState<EditableTokenFields | null>(null);
+  const shouldOpenEditing = getParamValue(params.edit) === "1";
+  const activeEditableFields =
+    editableFields ??
+    (shouldOpenEditing && token ? getEditableTokenFields(token) : null);
+  const isEditingActive = isEditing || activeEditableFields !== null;
+
+  useEffect(() => {
+    if (!token) {
+      router.back();
+    }
+  }, [router, token]);
+
+  const startEditing = useCallback(() => {
+    if (!token) {
+      return;
+    }
+
+    setEditableFields(getEditableTokenFields(token));
+    setIsEditing(true);
+  }, [setEditableFields, setIsEditing, token]);
+
+  const clearEditParam = useCallback(() => {
+    router.setParams({ edit: undefined });
+  }, [router]);
+
+  const cancelEditing = useCallback(() => {
+    setEditableFields(null);
+    setIsEditing(false);
+    clearEditParam();
+  }, [clearEditParam, setEditableFields, setIsEditing]);
+
+  const saveEditing = useCallback(() => {
+    if (!token || !activeEditableFields) {
+      return;
+    }
+
+    const label = activeEditableFields.label.trim();
+    if (!label) {
+      Alert.alert(t`Label required`, t`Enter a label for this token.`);
+      return;
+    }
+
+    updateToken(token.id, { label });
+    setEditableFields(null);
+    setIsEditing(false);
+    clearEditParam();
+  }, [
+    activeEditableFields,
+    clearEditParam,
+    setEditableFields,
+    setIsEditing,
+    t,
+    token,
+    updateToken,
+  ]);
+
+  const retryRollout = useCallback(() => {
+    if (!token) {
+      return;
+    }
+
+    void rolloutToken(token.id);
+  }, [rolloutToken, token]);
 
   return (
     <>
@@ -34,51 +154,77 @@ export default function TokenDetails() {
               : "light"
         }
         style={headerStyle}
-      ></Stack.Header>
+      />
       <Stack.Toolbar placement="left">
-        <Stack.Toolbar.Button icon="xmark" onPress={() => router.back()} />
+        <Stack.Toolbar.Button
+          icon="xmark"
+          onPress={isEditingActive ? cancelEditing : () => router.back()}
+        />
       </Stack.Toolbar>
-      <ThemedView
-        style={styles.sheet}
-        color={
-          isLiquidGlassAvailable()
-            ? theme.color.transparent
-            : theme.color.background
-        }
-      >
-        <SafeAreaView style={styles.container}>
-          <View style={styles.header}>
-            <ThemedText fontSize={theme.fontSize18} fontWeight="bold">
-              {token?.label}
-            </ThemedText>
-            {token?.issuer ? (
-              <ThemedText
-                fontSize={theme.fontSize14}
-                fontWeight="medium"
-                color={theme.color.textSecondary}
-              >
-                {token.issuer}
-              </ThemedText>
-            ) : null}
-          </View>
-        </SafeAreaView>
-      </ThemedView>
+      <Stack.Toolbar placement="right">
+        <Stack.Toolbar.Button
+          accessibilityLabel={t`Cancel`}
+          hidden={!token || !isEditingActive}
+          icon="arrow.uturn.backward"
+          onPress={cancelEditing}
+        />
+        <Stack.Toolbar.Button
+          accessibilityLabel={t`Save`}
+          hidden={!token || !isEditingActive}
+          icon="checkmark"
+          onPress={saveEditing}
+          variant="prominent"
+        />
+        <Stack.Toolbar.Button
+          accessibilityLabel={t`Edit`}
+          hidden={!token || isEditingActive}
+          icon="square.and.pencil"
+          onPress={startEditing}
+        />
+        <Stack.Toolbar.Button
+          accessibilityLabel={t`Delete`}
+          hidden={!token || isEditingActive}
+          icon="trash"
+          onPress={() => {
+            if (token) {
+              confirmDeleteToken(token.id);
+            }
+          }}
+          tintColor="#FF3B30"
+        />
+      </Stack.Toolbar>
+      {!token ? null : isEditingActive && activeEditableFields ? (
+        <TokenScrollView
+          animationKey="edit"
+          backgroundColor={scrollBackgroundColor}
+          keyboardShouldPersistTaps="handled"
+        >
+          <TokenEditContent
+            token={token}
+            fields={activeEditableFields}
+            onChange={setEditableFields}
+          />
+        </TokenScrollView>
+      ) : (
+        <TokenScrollView
+          animationKey="overview"
+          backgroundColor={scrollBackgroundColor}
+        >
+          <TokenOverviewContent token={token} onRetryRollout={retryRollout} />
+        </TokenScrollView>
+      )}
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    alignContent: "center",
-    flex: 1,
-    justifyContent: "center",
-    marginTop: Platform.select({ ios: 0, android: 30 }),
+  content: {
+    gap: theme.space24,
+    paddingBottom: theme.space24,
     paddingHorizontal: theme.space24,
+    paddingTop: Platform.select({ android: theme.space24, ios: theme.space16 }),
   },
-  header: {
-    alignItems: "center",
-  },
-  sheet: {
+  scroll: {
     flex: 1,
   },
 });

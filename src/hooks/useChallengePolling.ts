@@ -1,6 +1,7 @@
 import { pollAllChallenges } from "@/services/challengePollingService";
 import { usePushRequestStore } from "@/store/pushRequestStore";
 import { useTokenStore } from "@/store/tokenStore";
+import { PushTokenRefreshStatus } from "@/types";
 import { useCallback, useRef, useState } from "react";
 
 export interface UseChallengePollingResult {
@@ -20,7 +21,7 @@ export function useChallengePolling(): UseChallengePollingResult {
   const [error, setError] = useState<Error | null>(null);
   const pollingRef = useRef(false);
 
-  const tokens = useTokenStore((state) => state.tokens);
+  const updateToken = useTokenStore((state) => state.updateToken);
   const addPushRequest = usePushRequestStore((state) => state.addPushRequest);
 
   const pollChallenges = useCallback(async () => {
@@ -29,6 +30,8 @@ export function useChallengePolling(): UseChallengePollingResult {
       console.log("Polling already in progress, skipping...");
       return;
     }
+
+    const tokens = useTokenStore.getState().tokens;
 
     if (tokens.length === 0) {
       console.log("No tokens available to poll");
@@ -42,6 +45,19 @@ export function useChallengePolling(): UseChallengePollingResult {
     try {
       console.log(`Starting challenge polling for ${tokens.length} tokens`);
       const result = await pollAllChallenges(tokens);
+      const refreshTimestamp = Date.now();
+
+      for (const tokenResult of result.tokenResults ?? []) {
+        updateToken(tokenResult.tokenId, {
+          lastRefreshResult: {
+            status: tokenResult.success
+              ? PushTokenRefreshStatus.Success
+              : PushTokenRefreshStatus.Failed,
+            timestamp: refreshTimestamp,
+            error: tokenResult.error?.message,
+          },
+        });
+      }
 
       if (result.error) {
         console.warn("Polling completed with errors:", result.error);
@@ -67,7 +83,7 @@ export function useChallengePolling(): UseChallengePollingResult {
       pollingRef.current = false;
       setIsPolling(false);
     }
-  }, [tokens, addPushRequest]);
+  }, [addPushRequest, updateToken]);
 
   return {
     isPolling,

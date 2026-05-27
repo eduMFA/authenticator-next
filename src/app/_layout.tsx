@@ -161,7 +161,6 @@ function RootLayoutContent() {
                 ? "formSheet"
                 : "modal"
               : "modal",
-          sheetAllowedDetents: [0.5],
           sheetInitialDetentIndex: 0,
           contentStyle: {
             backgroundColor: isLiquidGlassAvailable()
