@@ -2,7 +2,7 @@ import { theme } from "@/theme";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { useLingui } from "@lingui/react/macro";
 import { Color } from "expo-router";
