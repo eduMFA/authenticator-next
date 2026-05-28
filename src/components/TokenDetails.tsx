@@ -1,8 +1,8 @@
 import { theme } from "@/theme";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { BlurTargetView, BlurView } from "expo-blur";
-import { createRef, memo, useEffect, useMemo, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 import { useLingui } from "@lingui/react/macro";
 import Animated, {
@@ -44,7 +44,7 @@ export const TokenDetails = memo(function TokenDetails({
   const backgroundColor = useThemeColor(theme.color.backgroundSecondary);
   const successBarColor = useThemeColor(theme.color.successBar);
   const errorBarColor = useThemeColor(theme.color.errorBar);
-  const blurTargetRef = createRef<View | null>();
+  const blurTargetRef = useRef<View | null>(null);
 
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
@@ -125,9 +125,8 @@ export const TokenDetails = memo(function TokenDetails({
         <AnimatedBlurView
           style={styles.progressBarBlur}
           role="progressbar"
-          intensity={Platform.OS === "android" ? 3 : 20}
+          intensity={20}
           blurTarget={blurTargetRef}
-          blurReductionFactor={100}
           blurMethod={"dimezisBlurView"}
           entering={FadeIn}
           exiting={FadeOut}
