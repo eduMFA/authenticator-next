@@ -42,7 +42,7 @@ export function TokenImage({
   const fallbackBackgroundColor = useThemeColor(
     theme.color.backgroundSecondary,
     {
-      android: Color.android.dynamic.primaryContainer,
+      android: Color.android.dynamic.surfaceVariant,
     },
   );
   const [isLoading, setIsLoading] = useState(false);
