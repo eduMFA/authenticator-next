@@ -131,7 +131,7 @@ export default function Tokens() {
           iosIcon: "trash",
           key: "delete",
           label: t`Delete`,
-          onPress: () => showDeleteConfirmation(item.id),
+          onPress: () => confirmDeleteToken(item.id),
         },
       ];
       const tokenDetails = (
