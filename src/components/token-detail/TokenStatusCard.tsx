@@ -3,6 +3,12 @@ import { theme } from "@/theme";
 import { SymbolView } from "expo-symbols";
 import { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
+import Animated, {
+  Easing,
+  FadeIn,
+  FadeOut,
+  LinearTransition,
+} from "react-native-reanimated";
 
 export function TokenStatusCard({
   tone,
@@ -28,7 +34,17 @@ export function TokenStatusCard({
   );
 
   return (
-    <View style={[styles.statusCard, { backgroundColor, borderColor }]}>
+    <Animated.View
+      entering={FadeIn.duration(160)
+        .easing(Easing.out(Easing.cubic))
+        .withInitialValues({
+          opacity: 0,
+          transform: [{ scale: 0.985 }],
+        })}
+      exiting={FadeOut.duration(120).easing(Easing.in(Easing.cubic))}
+      layout={LinearTransition.duration(180).easing(Easing.out(Easing.cubic))}
+      style={[styles.statusCard, { backgroundColor, borderColor }]}
+    >
       <View style={styles.statusTitleRow}>
         {tone === "danger" ? (
           <SymbolView
@@ -52,7 +68,7 @@ export function TokenStatusCard({
         {description}
       </ThemedText>
       {children}
-    </View>
+    </Animated.View>
   );
 }
 
