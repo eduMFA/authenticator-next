@@ -1,11 +1,11 @@
 import { useNotificationStore } from "@/store/notificationStore";
 import { usePushRequestStore } from "@/store/pushRequestStore";
 import { PushRequest, PushRequestStatus } from "@/types";
+import { base32ToBase64 } from "@/utils/crypto";
 import {
   addBackgroundMessageHandler,
   addMessageListener,
 } from "@/utils/notificationService";
-import { base32ToBase64 } from "@/utils/crypto";
 import { buildPushRequestSignedData } from "@/utils/pushRequestUtils";
 import { verifyMessage } from "@/utils/rsa";
 import * as Notifications from "expo-notifications";
@@ -150,7 +150,7 @@ export function useNotifications(onAction?: NotificationActionHandler) {
           any
         >;
 
-        console.log("Notification response received:", { actionId, data });
+        console.debug("Notification response received:", { actionId, data });
 
         if (actionId === "ACCEPT") {
           notificationActionHandlerRef.current("ACCEPT", data);

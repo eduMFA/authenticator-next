@@ -17,7 +17,7 @@ async function signPushAuthMessage(
   tokenId: string,
 ): Promise<string> {
   const signatureBase64 = await signMessage(message, tokenId, SIGN_ALGORITHM);
-  console.log("Generated Base 64 signature:", signatureBase64);
+  console.debug("Generated Base 64 signature:", signatureBase64);
   // Convert base64 signature to base32 as required by the API
   const signature = base64ToBase32(signatureBase64);
   return signature;
@@ -81,7 +81,7 @@ export async function handlePushAuthRequest(
       request.serial,
       isDeclined,
     );
-    console.log("Signing message:", message);
+    console.debug("Signing message:", message);
 
     const signature = await signPushAuthMessage(message, token.id);
 
