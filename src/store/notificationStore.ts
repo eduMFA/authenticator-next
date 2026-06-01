@@ -4,23 +4,33 @@ import {
   AuthorizationStatus,
   getMessaging,
   getToken,
+  hasPermission,
   onTokenRefresh,
-  requestPermission,
+  requestPermission as requestMessagingPermission,
 } from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { create } from "zustand";
 
+type FirebaseAuthorizationStatus =
+  (typeof AuthorizationStatus)[keyof typeof AuthorizationStatus];
+
+type NotificationPermissionResult = {
+  status: FirebaseAuthorizationStatus;
+  token: string | null;
+};
+
 type NotificationState = {
   fcmToken: string | null;
   isInitialized: boolean;
   isInitializing: boolean;
-  permissionStatus: number | null;
+  permissionStatus: FirebaseAuthorizationStatus | null;
 };
 
 type NotificationActions = {
   initialize: () => Promise<string | null>;
   getFcmToken: () => Promise<string | null>;
+  requestPermission: () => Promise<NotificationPermissionResult>;
   reset: () => void;
 };
 
@@ -28,6 +38,35 @@ type NotificationStore = NotificationState & NotificationActions;
 
 // Keep track of token refresh unsubscribe function
 let tokenRefreshUnsubscribe: (() => void) | null = null;
+
+function hasNotificationPermission(authStatus: FirebaseAuthorizationStatus) {
+  return (
+    authStatus === AuthorizationStatus.AUTHORIZED ||
+    authStatus === AuthorizationStatus.PROVISIONAL
+  );
+}
+
+async function getCurrentPermissionStatus() {
+  if (Platform.OS === "android") {
+    const permissions = await Notifications.getPermissionsAsync();
+    return permissions.granted
+      ? AuthorizationStatus.AUTHORIZED
+      : AuthorizationStatus.DENIED;
+  }
+
+  return await hasPermission(getMessaging());
+}
+
+async function requestSystemPermission() {
+  if (Platform.OS === "android") {
+    const permissions = await Notifications.requestPermissionsAsync();
+    return permissions.granted
+      ? AuthorizationStatus.AUTHORIZED
+      : AuthorizationStatus.DENIED;
+  }
+
+  return await requestMessagingPermission(getMessaging());
+}
 
 /**
  * Configure notification categories with quick actions
@@ -88,16 +127,14 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     try {
       const messaging = getMessaging();
 
-      // Request permission for iOS
-      const authStatus = await requestPermission(messaging);
-      const enabled =
-        authStatus === AuthorizationStatus.AUTHORIZED ||
-        authStatus === AuthorizationStatus.PROVISIONAL;
+      // Read current permissions without opening the native prompt.
+      const authStatus = await getCurrentPermissionStatus();
+      const enabled = hasNotificationPermission(authStatus);
 
       set({ permissionStatus: authStatus });
 
       if (!enabled) {
-        console.warn("Failed to get push notification permissions");
+        console.warn("Push notification permissions are not enabled");
         set({ isInitializing: false, isInitialized: true });
         return null;
       }
@@ -133,6 +170,57 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     }
   },
 
+  requestPermission: async () => {
+    set({ isInitializing: true });
+
+    try {
+      const messaging = getMessaging();
+      const authStatus = await requestSystemPermission();
+      const enabled = hasNotificationPermission(authStatus);
+
+      set({ permissionStatus: authStatus });
+
+      if (!enabled) {
+        set({
+          fcmToken: null,
+          isInitialized: true,
+          isInitializing: false,
+        });
+
+        return { status: authStatus, token: null };
+      }
+
+      // Setup notification categories
+      await setupNotificationCategories();
+
+      // Get the FCM token
+      const token = await getToken(messaging);
+      console.log("FCM Token:", token);
+
+      set({
+        fcmToken: token,
+        isInitialized: true,
+        isInitializing: false,
+      });
+
+      // Set up token refresh listener
+      if (tokenRefreshUnsubscribe) {
+        tokenRefreshUnsubscribe();
+      }
+
+      tokenRefreshUnsubscribe = onTokenRefresh(messaging, (newToken) => {
+        console.log("FCM Token refreshed:", newToken);
+        set({ fcmToken: newToken });
+      });
+
+      return { status: authStatus, token };
+    } catch (error) {
+      console.error("Error requesting notification permission:", error);
+      set({ isInitializing: false, isInitialized: true });
+      return { status: AuthorizationStatus.DENIED, token: null };
+    }
+  },
+
   /**
    * Get the FCM token, initializing if necessary
    * This is the primary method to use when you need the FCM token
@@ -150,8 +238,14 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       return await initialize();
     }
 
-    // If initialized but no token (permissions denied), try to get it anyway
-    // in case user granted permissions later
+    const authStatus = await getCurrentPermissionStatus();
+    set({ permissionStatus: authStatus });
+
+    if (!hasNotificationPermission(authStatus)) {
+      return null;
+    }
+
+    // If initialized but no token, try to get it in case permissions changed.
     try {
       const messaging = getMessaging();
       const token = await getToken(messaging);

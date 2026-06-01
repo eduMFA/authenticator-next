@@ -5,6 +5,7 @@ import { useChallengePolling } from "@/hooks/useChallengePolling";
 import { useDeleteTokenConfirmation } from "@/hooks/useDeleteTokenConfirmation";
 import { useToken } from "@/hooks/useToken";
 import { usePushRequestStore } from "@/store/pushRequestStore";
+import { useSettingsStore } from "@/store/settingsStore";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
@@ -33,6 +34,7 @@ export default function Tokens() {
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
   const { clearPushRequests } = usePushRequestStore();
+  const resetOnboarding = useSettingsStore((state) => state.resetOnboarding);
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
   const backgroundColor = useThemeColor(theme.color.background);
@@ -238,6 +240,13 @@ export default function Tokens() {
               }}
             >
               Clear Push Requests
+            </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction
+              onPress={() => {
+                resetOnboarding();
+              }}
+            >
+              Show Onboarding
             </Stack.Toolbar.MenuAction>
           </Stack.Toolbar.Menu>
         )}
