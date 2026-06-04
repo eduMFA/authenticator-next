@@ -55,23 +55,29 @@ export function PushRequestPopup({
     (action: "accept" | "decline") => {
       if (!currentRequest || isAnimatingOut) return;
 
-      Haptics.impactAsync(
-        action === "accept"
-          ? Haptics.ImpactFeedbackStyle.Medium
-          : Haptics.ImpactFeedbackStyle.Light,
-      );
+      let hapticStyle: Haptics.ImpactFeedbackStyle;
+      let pushRequestStatus: PushRequestStatus;
+      if (action === "accept") {
+        hapticStyle = Haptics.ImpactFeedbackStyle.Medium;
+        pushRequestStatus = PushRequestStatus.Accepted;
+      } else {
+        hapticStyle = Haptics.ImpactFeedbackStyle.Light;
+        pushRequestStatus = PushRequestStatus.Declined;
+      }
+
+      Haptics.impactAsync(hapticStyle);
 
       setIsAnimatingOut(true);
 
       // Delay the action to allow exit animation
       setTimeout(() => {
-        updatePushRequestStatus(
-          currentRequest.id,
-          action === "accept"
-            ? PushRequestStatus.Accepted
-            : PushRequestStatus.Declined,
-        );
-        onAction(currentRequest);
+        const updatedRequest = {
+          ...currentRequest,
+          status: pushRequestStatus,
+        };
+
+        updatePushRequestStatus(updatedRequest.id, updatedRequest.status);
+        onAction(updatedRequest);
         setIsAnimatingOut(false);
       }, 200);
     },
