@@ -15,7 +15,6 @@ import {
   Platform,
   Pressable,
   StyleSheet,
-  Switch,
   View,
   useColorScheme,
   useWindowDimensions,
@@ -139,7 +138,6 @@ export function OnboardingSequence() {
     [colorScheme],
   );
   const screenProgress = useSharedValue(0);
-  const isLastStep = stepIndex === steps.length - 1;
   const shouldBlockNotificationAdvance =
     stepIndex === 1 &&
     isNotificationPermissionPending(notificationPermissionStatus);
@@ -291,23 +289,30 @@ export function OnboardingSequence() {
   }));
 
   const handleContinue = useCallback(() => {
-    if (!isLastStep) {
-      playHaptic((presets) => presets.System.impactMedium());
-      goToStep(stepIndex + 1);
-      return;
-    }
+    playHaptic((presets) => presets.System.impactMedium());
+    goToStep(stepIndex + 1);
+  }, [goToStep, stepIndex]);
 
+  const finishOnboarding = useCallback(
+    (enableCrashReports: boolean) => {
+      playHaptic((presets) => presets.System.notificationSuccess());
+      setCrashReportsEnabled(enableCrashReports);
+      completeOnboarding();
+    },
+    [completeOnboarding, setCrashReportsEnabled],
+  );
+
+  const handleOptInCrashReports = useCallback(() => {
     playHaptic((presets) => presets.System.notificationSuccess());
-    setCrashReportsEnabled(crashReportsEnabled);
-    completeOnboarding();
-  }, [
-    completeOnboarding,
-    crashReportsEnabled,
-    goToStep,
-    isLastStep,
-    setCrashReportsEnabled,
-    stepIndex,
-  ]);
+    setLocalCrashReportsEnabled(true);
+    finishOnboarding(true);
+  }, [finishOnboarding]);
+
+  const handleDeclineCrashReports = useCallback(() => {
+    playHaptic((presets) => presets.System.impactLight());
+    setLocalCrashReportsEnabled(false);
+    finishOnboarding(false);
+  }, [finishOnboarding]);
 
   const handleEnableNotifications = useCallback(async () => {
     setIsRequestingPermission(true);
@@ -342,17 +347,6 @@ export function OnboardingSequence() {
     goToStep(2);
   }, [goToStep]);
 
-  const handleCrashReportsChange = useCallback((enabled: boolean) => {
-    playHaptic((presets) => {
-      if (enabled) {
-        presets.System.impactMedium();
-      } else {
-        presets.System.impactLight();
-      }
-    });
-    setLocalCrashReportsEnabled(enabled);
-  }, []);
-
   const renderStepActions = useCallback(
     (contentStepIndex: number) => {
       const contentAccentColor = stepAccentColors[contentStepIndex];
@@ -381,10 +375,10 @@ export function OnboardingSequence() {
             accentColor={contentAccentColor}
             borderColor={borderColor}
             cardColor={cardColor}
-            colorScheme={colorScheme}
             crashReportsEnabled={crashReportsEnabled}
-            onChange={handleCrashReportsChange}
-            onContinue={handleContinue}
+            onDecline={handleDeclineCrashReports}
+            onOptIn={handleOptInCrashReports}
+            textColor={textColor}
           />
         );
       }
@@ -406,9 +400,10 @@ export function OnboardingSequence() {
       colorScheme,
       crashReportsEnabled,
       handleContinue,
-      handleCrashReportsChange,
+      handleDeclineCrashReports,
       handleEnableNotifications,
       handleOpenNotificationSettings,
+      handleOptInCrashReports,
       handleSkipNotifications,
       isCheckingPermission,
       isRequestingPermission,
@@ -683,23 +678,21 @@ type CrashReportsStepActionsProps = {
   accentColor: string;
   borderColor: string;
   cardColor: string;
-  colorScheme: "light" | "dark";
   crashReportsEnabled: boolean;
-  onChange: (enabled: boolean) => void;
-  onContinue: () => void;
+  onDecline: () => void;
+  onOptIn: () => void;
+  textColor: string;
 };
 
 function CrashReportsStepActions({
   accentColor,
   borderColor,
   cardColor,
-  colorScheme,
   crashReportsEnabled,
-  onChange,
-  onContinue,
+  onDecline,
+  onOptIn,
+  textColor,
 }: CrashReportsStepActionsProps) {
-  const disabledTrackColor = colorScheme === "dark" ? "#3A3A3C" : "#D1D1D6";
-
   return (
     <View style={styles.buttonStack}>
       <View
@@ -720,26 +713,33 @@ function CrashReportsStepActions({
             fontSize={theme.fontSize14}
             style={styles.choiceDescription}
           >
-            No token secrets, passwords, or institution names. This choice is
-            yours.
+            Share anonymized crash and error reports to help improve
+            reliability. No token secrets, passwords, or institution names.
           </ThemedText>
         </View>
-        <Switch
-          ios_backgroundColor={disabledTrackColor}
-          onValueChange={onChange}
-          thumbColor={Platform.OS === "android" ? "#FFFFFF" : undefined}
-          trackColor={{
-            false: disabledTrackColor,
-            true: accentColor,
-          }}
-          value={crashReportsEnabled}
-        />
+        <View
+          style={[
+            styles.choiceIndicator,
+            crashReportsEnabled && { backgroundColor: accentColor },
+          ]}
+        >
+          <SymbolView
+            name={{ ios: "hand.raised.fill", android: "privacy_tip" }}
+            size={20}
+            tintColor={crashReportsEnabled ? theme.colorWhite : theme.colorGrey}
+          />
+        </View>
       </View>
       <ActionButton
         accentColor={accentColor}
-        icon={{ ios: "checkmark", android: "check" }}
-        label="Finish setup"
-        onPress={onContinue}
+        icon={{ ios: "checkmark.shield.fill", android: "verified_user" }}
+        label="Share anonymous reports"
+        onPress={onOptIn}
+      />
+      <TextButton
+        color={textColor}
+        label="Finish without reports"
+        onPress={onDecline}
       />
     </View>
   );
@@ -1005,6 +1005,16 @@ const styles = StyleSheet.create({
   },
   choiceDescription: {
     lineHeight: theme.fontSize14 * 1.4,
+  },
+  choiceIndicator: {
+    alignItems: "center",
+    borderColor: theme.colorGrey,
+    borderCurve: "continuous",
+    borderRadius: theme.borderRadius20,
+    borderWidth: 1,
+    height: 42,
+    justifyContent: "center",
+    width: 42,
   },
   choiceText: {
     flex: 1,
