@@ -3,13 +3,15 @@ import { useNotificationStore } from "@/store/notificationStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { theme } from "@/theme";
 import { AuthorizationStatus } from "@react-native-firebase/messaging";
+import { Image } from "expo-image";
 import { SymbolView } from "expo-symbols";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   AppState,
   Linking,
+  PanResponder,
   Platform,
   Pressable,
   StyleSheet,
@@ -21,24 +23,27 @@ import {
 import { Presets, Settings } from "react-native-pulsar";
 import Animated, {
   Easing,
-  FadeIn,
-  FadeOut,
+  Extrapolation,
   interpolate,
+  interpolateColor,
   useAnimatedStyle,
   useSharedValue,
-  withRepeat,
   withTiming,
+  type SharedValue,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+const PANEL_GAP = theme.space24 * 3;
+const logoSource = require("../../assets/app-icons/edumfa.icon/Assets/logo.svg");
 
 type IconName = ComponentProps<typeof SymbolView>["name"];
+type FirebaseAuthorizationStatus =
+  (typeof AuthorizationStatus)[keyof typeof AuthorizationStatus];
 
 type OnboardingStep = {
   accent: { light: string; dark: string };
   body: string;
-  icon: IconName;
   kicker: string;
   title: string;
 };
@@ -48,24 +53,23 @@ const steps: OnboardingStep[] = [
     kicker: "Welcome",
     title: "Welcome to eduMFA",
     body: "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage.",
-    icon: { ios: "shield.lefthalf.filled", android: "verified_user" },
     accent: { light: "#0066FF", dark: "#58A6FF" },
   },
   {
     kicker: "Notifications",
     title: "Approve sign-ins the moment they arrive",
     body: "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention.",
-    icon: { ios: "bell.badge.fill", android: "notifications" },
     accent: { light: "#0F9F6E", dark: "#47D7A0" },
   },
   {
     kicker: "Privacy choice",
     title: "Help improve reliability",
     body: "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way.",
-    icon: { ios: "heart.text.square.fill", android: "privacy_tip" },
     accent: { light: "#8A5CF6", dark: "#B49AFF" },
   },
 ];
+
+const progressInputRange = steps.map((_, index) => index);
 
 function configurePulsar() {
   try {
@@ -88,14 +92,35 @@ function playHaptic(selectPreset: (presets: typeof Presets) => void) {
   }
 }
 
+function hasNotificationPermission(status: FirebaseAuthorizationStatus | null) {
+  return (
+    status === AuthorizationStatus.AUTHORIZED ||
+    status === AuthorizationStatus.PROVISIONAL ||
+    status === AuthorizationStatus.EPHEMERAL
+  );
+}
+
+function isNotificationPermissionPending(
+  status: FirebaseAuthorizationStatus | null,
+) {
+  return status === null || status === AuthorizationStatus.NOT_DETERMINED;
+}
+
 export function OnboardingSequence() {
   const [stepIndex, setStepIndex] = useState(0);
   const [crashReportsEnabled, setLocalCrashReportsEnabled] = useState(false);
-  const [wasNotificationDeclined, setWasNotificationDeclined] = useState(false);
+  const [isCheckingPermission, setIsCheckingPermission] = useState(false);
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
+  const notificationPermissionStatus = useNotificationStore(
+    (state) => state.permissionStatus,
+  );
+  const checkNotificationPermission = useNotificationStore(
+    (state) => state.checkPermission,
+  );
   const requestNotificationPermission = useNotificationStore(
     (state) => state.requestPermission,
   );
+  const getFcmToken = useNotificationStore((state) => state.getFcmToken);
   const completeOnboarding = useSettingsStore(
     (state) => state.completeOnboarding,
   );
@@ -107,82 +132,163 @@ export function OnboardingSequence() {
   const textColor = useThemeColor(theme.color.text);
   const borderColor = useThemeColor(theme.color.border);
   const { bottom, top } = useSafeAreaInsets();
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
-  const step = steps[stepIndex];
-  const accentColor = useThemeColor(step.accent);
-  const progress = useSharedValue(0);
+  const stepAccentColors = useMemo(
+    () => steps.map((item) => item.accent[colorScheme]),
+    [colorScheme],
+  );
+  const screenProgress = useSharedValue(0);
   const isLastStep = stepIndex === steps.length - 1;
+  const shouldBlockNotificationAdvance =
+    stepIndex === 1 &&
+    isNotificationPermissionPending(notificationPermissionStatus);
+  const slideDistance = width + PANEL_GAP;
+  const panelWidthStyle = useMemo(() => ({ width }), [width]);
+  const progressTrackStyle = useMemo(
+    () => ({ backgroundColor: borderColor }),
+    [borderColor],
+  );
+  const trackWidthStyle = useMemo(
+    () => ({
+      columnGap: PANEL_GAP,
+      width: width * steps.length + PANEL_GAP * (steps.length - 1),
+    }),
+    [width],
+  );
 
-  const goToStep = useCallback((nextStepIndex: number) => {
-    setWasNotificationDeclined(false);
-    setStepIndex(nextStepIndex);
-  }, []);
+  const goToStep = useCallback(
+    (nextStepIndex: number) => {
+      const boundedStepIndex = Math.max(
+        0,
+        Math.min(nextStepIndex, steps.length - 1),
+      );
+
+      setStepIndex(boundedStepIndex);
+      screenProgress.set(
+        withTiming(boundedStepIndex, {
+          duration: 360,
+          easing: Easing.out(Easing.cubic),
+        }),
+      );
+    },
+    [screenProgress],
+  );
+
+  const refreshNotificationStatus = useCallback(async () => {
+    if (stepIndex !== 1) {
+      return;
+    }
+
+    setIsCheckingPermission(true);
+
+    try {
+      const status = await checkNotificationPermission();
+
+      if (hasNotificationPermission(status)) {
+        await getFcmToken();
+      }
+    } finally {
+      setIsCheckingPermission(false);
+    }
+  }, [checkNotificationPermission, getFcmToken, stepIndex]);
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponder: (_, gestureState) => {
+          const isHorizontalSwipe =
+            Math.abs(gestureState.dx) > theme.space8 &&
+            Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
+          const canSwipeBack = stepIndex > 0 && gestureState.dx > 0;
+          const canSwipeForward =
+            stepIndex < steps.length - 1 && gestureState.dx < 0;
+
+          return isHorizontalSwipe && (canSwipeBack || canSwipeForward);
+        },
+        onPanResponderMove: (_, gestureState) => {
+          const dragProgress = stepIndex - gestureState.dx / slideDistance;
+          const maxProgress = shouldBlockNotificationAdvance
+            ? stepIndex + 0.08
+            : steps.length - 1;
+          const boundedDragProgress = Math.min(
+            maxProgress,
+            Math.max(0, dragProgress),
+          );
+
+          screenProgress.set(boundedDragProgress);
+        },
+        onPanResponderRelease: (_, gestureState) => {
+          if (gestureState.dx > slideDistance * 0.25) {
+            playHaptic((presets) => presets.System.impactLight());
+            goToStep(stepIndex - 1);
+            return;
+          }
+
+          if (gestureState.dx < -slideDistance * 0.25) {
+            if (shouldBlockNotificationAdvance) {
+              playHaptic((presets) => presets.System.notificationError());
+              screenProgress.set(
+                withTiming(stepIndex, {
+                  duration: 260,
+                  easing: Easing.out(Easing.back(1.4)),
+                }),
+              );
+              return;
+            }
+
+            playHaptic((presets) => presets.System.impactMedium());
+            goToStep(stepIndex + 1);
+            return;
+          }
+
+          screenProgress.set(
+            withTiming(stepIndex, {
+              duration: 220,
+              easing: Easing.out(Easing.cubic),
+            }),
+          );
+        },
+      }),
+    [
+      goToStep,
+      screenProgress,
+      shouldBlockNotificationAdvance,
+      slideDistance,
+      stepIndex,
+    ],
+  );
 
   useEffect(() => {
     configurePulsar();
   }, []);
 
   useEffect(() => {
-    progress.value = withRepeat(
-      withTiming(1, {
-        duration: 2200,
-        easing: Easing.inOut(Easing.quad),
-      }),
-      -1,
-      true,
-    );
-  }, [progress]);
-
-  useEffect(() => {
-    if (!wasNotificationDeclined || stepIndex !== 1) {
+    if (stepIndex !== 1) {
       return;
     }
+
+    const refreshTimer = setTimeout(() => {
+      void refreshNotificationStatus();
+    }, 0);
 
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       if (nextAppState !== "active") {
         return;
       }
 
-      requestNotificationPermission().then((result) => {
-        if (
-          result.status === AuthorizationStatus.AUTHORIZED ||
-          result.status === AuthorizationStatus.PROVISIONAL
-        ) {
-          playHaptic((presets) => presets.System.notificationSuccess());
-          goToStep(2);
-        }
-      });
+      void refreshNotificationStatus();
     });
 
     return () => {
+      clearTimeout(refreshTimer);
       subscription.remove();
     };
-  }, [
-    goToStep,
-    requestNotificationPermission,
-    stepIndex,
-    wasNotificationDeclined,
-  ]);
+  }, [refreshNotificationStatus, stepIndex]);
 
-  const heroStyle = useAnimatedStyle(() => {
-    const scale = interpolate(progress.value, [0, 1], [0.96, 1.04]);
-    const rotate = interpolate(progress.value, [0, 1], [-2, 2]);
-
-    return {
-      transform: [{ scale }, { rotate: `${rotate}deg` }],
-    };
-  });
-
-  const haloStyle = useAnimatedStyle(() => {
-    const scale = interpolate(progress.value, [0, 1], [0.9, 1.18]);
-    const opacity = interpolate(progress.value, [0, 1], [0.22, 0.08]);
-
-    return {
-      opacity,
-      transform: [{ scale }],
-    };
-  });
+  const trackStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: -screenProgress.value * slideDistance }],
+  }));
 
   const handleContinue = useCallback(() => {
     if (!isLastStep) {
@@ -211,17 +317,16 @@ export function OnboardingSequence() {
 
     if (
       result.status === AuthorizationStatus.AUTHORIZED ||
-      result.status === AuthorizationStatus.PROVISIONAL
+      result.status === AuthorizationStatus.PROVISIONAL ||
+      result.status === AuthorizationStatus.EPHEMERAL
     ) {
       playHaptic((presets) => presets.System.notificationSuccess());
       setIsRequestingPermission(false);
-      goToStep(2);
     } else {
       playHaptic((presets) => presets.System.notificationError());
-      setWasNotificationDeclined(true);
       setIsRequestingPermission(false);
     }
-  }, [goToStep, requestNotificationPermission]);
+  }, [requestNotificationPermission]);
 
   const handleOpenNotificationSettings = useCallback(() => {
     playHaptic((presets) => presets.System.impactMedium());
@@ -248,138 +353,70 @@ export function OnboardingSequence() {
     setLocalCrashReportsEnabled(enabled);
   }, []);
 
-  const actionLabel = isLastStep ? "Finish setup" : "Get started";
+  const renderStepActions = useCallback(
+    (contentStepIndex: number) => {
+      const contentAccentColor = stepAccentColors[contentStepIndex];
 
-  const content = useMemo(() => {
-    if (stepIndex === 1) {
+      if (contentStepIndex === 1) {
+        return (
+          <NotificationStepActions
+            accentColor={contentAccentColor}
+            cardColor={cardColor}
+            colorScheme={colorScheme}
+            isCheckingPermission={isCheckingPermission}
+            isRequestingPermission={isRequestingPermission}
+            onContinue={handleContinue}
+            onEnableNotifications={handleEnableNotifications}
+            onOpenSettings={handleOpenNotificationSettings}
+            onSkip={handleSkipNotifications}
+            permissionStatus={notificationPermissionStatus}
+            textColor={textColor}
+          />
+        );
+      }
+
+      if (contentStepIndex === 2) {
+        return (
+          <CrashReportsStepActions
+            accentColor={contentAccentColor}
+            borderColor={borderColor}
+            cardColor={cardColor}
+            colorScheme={colorScheme}
+            crashReportsEnabled={crashReportsEnabled}
+            onChange={handleCrashReportsChange}
+            onContinue={handleContinue}
+          />
+        );
+      }
+
       return (
         <View style={styles.buttonStack}>
-          {wasNotificationDeclined ? (
-            <>
-              <View
-                style={[
-                  styles.permissionNotice,
-                  {
-                    backgroundColor: cardColor,
-                    borderColor,
-                  },
-                ]}
-              >
-                <ThemedText fontSize={theme.fontSize16} fontWeight="semiBold">
-                  Notifications are off
-                </ThemedText>
-                <ThemedText
-                  color={theme.color.textSecondary}
-                  fontSize={theme.fontSize14}
-                  style={styles.permissionNoticeText}
-                >
-                  You can enable them in system settings. Without notifications,
-                  push approvals may not arrive reliably.
-                </ThemedText>
-              </View>
-              <ActionButton
-                accentColor={accentColor}
-                icon={{ ios: "gearshape.fill", android: "settings" }}
-                label="Open Settings"
-                onPress={handleOpenNotificationSettings}
-              />
-              <ActionButton
-                borderColor={borderColor}
-                color={textColor}
-                icon={{ ios: "arrow.right", android: "arrow_forward" }}
-                label="Not now"
-                onPress={handleSkipNotifications}
-                variant="secondary"
-              />
-            </>
-          ) : (
-            <ActionButton
-              accentColor={accentColor}
-              icon={{ ios: "bell.fill", android: "notifications" }}
-              isLoading={isRequestingPermission}
-              label="Enable notifications"
-              onPress={handleEnableNotifications}
-            />
-          )}
-        </View>
-      );
-    }
-
-    if (stepIndex === 2) {
-      return (
-        <View style={styles.buttonStack}>
-          <View
-            style={[
-              styles.choiceCard,
-              {
-                backgroundColor: cardColor,
-                borderColor,
-              },
-            ]}
-          >
-            <View style={styles.choiceText}>
-              <ThemedText fontSize={theme.fontSize16} fontWeight="semiBold">
-                Anonymous reports
-              </ThemedText>
-              <ThemedText
-                color={theme.color.textSecondary}
-                fontSize={theme.fontSize14}
-                style={styles.choiceDescription}
-              >
-                No token secrets, passwords, or institution names. This choice
-                is yours.
-              </ThemedText>
-            </View>
-            <Switch
-              ios_backgroundColor={
-                colorScheme === "dark" ? "#3A3A3C" : "#D1D1D6"
-              }
-              onValueChange={handleCrashReportsChange}
-              thumbColor={Platform.OS === "android" ? "#FFFFFF" : undefined}
-              trackColor={{
-                false: colorScheme === "dark" ? "#3A3A3C" : "#D1D1D6",
-                true: accentColor,
-              }}
-              value={crashReportsEnabled}
-            />
-          </View>
           <ActionButton
-            accentColor={accentColor}
-            icon={{ ios: "checkmark", android: "check" }}
-            label={actionLabel}
+            accentColor={contentAccentColor}
+            icon={{ ios: "arrow.right", android: "arrow_forward" }}
+            label="Get started"
             onPress={handleContinue}
           />
         </View>
       );
-    }
-
-    return (
-      <View style={styles.buttonStack}>
-        <ActionButton
-          accentColor={accentColor}
-          icon={{ ios: "arrow.right", android: "arrow_forward" }}
-          label={actionLabel}
-          onPress={handleContinue}
-        />
-      </View>
-    );
-  }, [
-    accentColor,
-    actionLabel,
-    borderColor,
-    cardColor,
-    colorScheme,
-    crashReportsEnabled,
-    handleContinue,
-    handleCrashReportsChange,
-    handleEnableNotifications,
-    handleOpenNotificationSettings,
-    handleSkipNotifications,
-    isRequestingPermission,
-    stepIndex,
-    textColor,
-    wasNotificationDeclined,
-  ]);
+    },
+    [
+      borderColor,
+      cardColor,
+      colorScheme,
+      crashReportsEnabled,
+      handleContinue,
+      handleCrashReportsChange,
+      handleEnableNotifications,
+      handleOpenNotificationSettings,
+      handleSkipNotifications,
+      isCheckingPermission,
+      isRequestingPermission,
+      notificationPermissionStatus,
+      stepAccentColors,
+      textColor,
+    ],
+  );
 
   return (
     <View
@@ -388,125 +425,446 @@ export function OnboardingSequence() {
         {
           backgroundColor,
           height,
-          paddingBottom: bottom + theme.space24,
+          paddingBottom: bottom,
           paddingTop: top + theme.space24,
         },
       ]}
     >
-      <ProgressIndicator
-        activeColor={accentColor}
-        currentStep={stepIndex}
-        inactiveColor={borderColor}
-        stepCount={steps.length}
-      />
+      <View style={styles.progressWrap}>
+        {steps.map((contentStep, contentStepIndex) => (
+          <View
+            key={contentStep.title}
+            style={[styles.progressSegment, progressTrackStyle]}
+          >
+            <ProgressSegmentFill
+              index={contentStepIndex}
+              inputRange={progressInputRange}
+              progress={screenProgress}
+              stepAccentColors={stepAccentColors}
+            />
+          </View>
+        ))}
+      </View>
 
-      <Animated.View
-        key={stepIndex}
-        entering={FadeIn.duration(220).easing(Easing.out(Easing.cubic))}
-        exiting={FadeOut.duration(120).easing(Easing.in(Easing.cubic))}
-        style={styles.content}
-      >
-        <View style={styles.heroWrap}>
-          <Animated.View
-            style={[
-              styles.heroHalo,
-              {
-                backgroundColor: accentColor,
-              },
-              haloStyle,
-            ]}
-          />
-          <Animated.View
-            style={[
-              styles.heroBadge,
-              {
-                backgroundColor: cardColor,
-                borderColor,
-              },
-              heroStyle,
-            ]}
-          >
-            <SymbolView name={step.icon} size={54} tintColor={accentColor} />
-          </Animated.View>
-        </View>
+      <View style={styles.viewport} {...panResponder.panHandlers}>
+        <Animated.View style={[styles.track, trackWidthStyle, trackStyle]}>
+          {steps.map((contentStep, contentStepIndex) => {
+            const contentAccentColor = stepAccentColors[contentStepIndex];
 
-        <View style={styles.copy}>
-          <ThemedText
-            color={step.accent}
-            fontSize={theme.fontSize14}
-            fontWeight="semiBold"
-            style={styles.kicker}
-          >
-            {step.kicker}
-          </ThemedText>
-          <ThemedText
-            fontSize={theme.fontSize34}
-            fontWeight="bold"
-            style={styles.title}
-          >
-            {step.title}
-          </ThemedText>
-          <ThemedText
-            color={theme.color.textSecondary}
-            fontSize={theme.fontSize16}
-            style={styles.body}
-          >
-            {step.body}
-          </ThemedText>
-        </View>
+            return (
+              <View
+                key={contentStep.title}
+                style={[styles.panel, panelWidthStyle]}
+              >
+                <View style={styles.panelContent}>
+                  <View style={styles.panelBody}>
+                    <View style={styles.heroWrap}>
+                      <View
+                        style={[
+                          styles.visualCard,
+                          contentStepIndex === 0 && styles.welcomeVisualCard,
+                          {
+                            backgroundColor: cardColor,
+                            borderColor,
+                          },
+                        ]}
+                      >
+                        {contentStepIndex === 0 ? (
+                          <WelcomeVisualContent logoColor={textColor} />
+                        ) : (
+                          <VisualCardContent
+                            accentColor={contentAccentColor}
+                            index={contentStepIndex}
+                          />
+                        )}
+                      </View>
+                    </View>
 
-        {content}
-      </Animated.View>
+                    <View style={styles.copy}>
+                      <ThemedText
+                        color={contentStep.accent}
+                        fontSize={theme.fontSize14}
+                        fontWeight="semiBold"
+                        style={styles.kicker}
+                      >
+                        {contentStep.kicker}
+                      </ThemedText>
+                      <ThemedText
+                        fontSize={theme.fontSize34}
+                        fontWeight="bold"
+                        style={styles.title}
+                      >
+                        {contentStep.title}
+                      </ThemedText>
+                      <ThemedText
+                        color={theme.color.textSecondary}
+                        fontSize={theme.fontSize16}
+                        style={styles.body}
+                      >
+                        {contentStep.body}
+                      </ThemedText>
+                    </View>
+                  </View>
+
+                  {renderStepActions(contentStepIndex)}
+                </View>
+              </View>
+            );
+          })}
+        </Animated.View>
+      </View>
     </View>
   );
 }
 
-type ProgressIndicatorProps = {
-  activeColor: string;
-  currentStep: number;
-  inactiveColor: string;
-  stepCount: number;
+type NotificationStepActionsProps = {
+  accentColor: string;
+  cardColor: string;
+  colorScheme: "light" | "dark";
+  isCheckingPermission: boolean;
+  isRequestingPermission: boolean;
+  onContinue: () => void;
+  onEnableNotifications: () => void;
+  onOpenSettings: () => void;
+  onSkip: () => void;
+  permissionStatus: FirebaseAuthorizationStatus | null;
+  textColor: string;
 };
 
-function ProgressIndicator({
-  activeColor,
-  currentStep,
-  inactiveColor,
-  stepCount,
-}: ProgressIndicatorProps) {
-  const activeSegmentStyle = useMemo(
-    () => ({ backgroundColor: activeColor }),
-    [activeColor],
-  );
-  const inactiveSegmentStyle = useMemo(
-    () => ({ backgroundColor: inactiveColor }),
-    [inactiveColor],
-  );
+function NotificationStepActions({
+  accentColor,
+  cardColor,
+  colorScheme,
+  isCheckingPermission,
+  isRequestingPermission,
+  onContinue,
+  onEnableNotifications,
+  onOpenSettings,
+  onSkip,
+  permissionStatus,
+  textColor,
+}: NotificationStepActionsProps) {
+  const hasNotificationsEnabled = hasNotificationPermission(permissionStatus);
+  const hasNotificationDecision =
+    !isNotificationPermissionPending(permissionStatus);
+  const notificationSettingsGuidance =
+    Platform.OS === "ios"
+      ? "Settings -> eduMFA -> Notifications -> Allow Notifications."
+      : "Settings -> eduMFA -> Notifications or Permissions -> Allow.";
+
+  if (hasNotificationsEnabled) {
+    return (
+      <View style={styles.buttonStack}>
+        <NotificationStatusNotice
+          borderColor={accentColor}
+          cardColor={cardColor}
+          icon={{ ios: "checkmark.circle.fill", android: "check_circle" }}
+          iconColor={accentColor}
+          title="Notifications are enabled"
+        >
+          <ThemedText
+            color={theme.color.textSecondary}
+            fontSize={theme.fontSize14}
+            style={styles.permissionNoticeText}
+          >
+            eduMFA can receive push approvals and alert you when a sign-in needs
+            attention.
+          </ThemedText>
+        </NotificationStatusNotice>
+        <ActionButton
+          accentColor={accentColor}
+          icon={{ ios: "arrow.right", android: "arrow_forward" }}
+          label="Continue"
+          onPress={onContinue}
+        />
+      </View>
+    );
+  }
+
+  if (hasNotificationDecision) {
+    const errorColor = theme.color.errorBar[colorScheme];
+
+    return (
+      <View style={[styles.buttonStack, styles.buttonStackCompact]}>
+        <NotificationStatusNotice
+          borderColor={errorColor}
+          cardColor={cardColor}
+          icon={{ ios: "exclamationmark.circle.fill", android: "error" }}
+          iconColor={errorColor}
+          isCritical
+          title="Notifications are required"
+          titleColor={theme.color.errorBar}
+        >
+          <ThemedText
+            color={theme.color.textSecondary}
+            fontSize={theme.fontSize14}
+            style={styles.permissionNoticeTextCompact}
+          >
+            eduMFA cannot receive push approvals while notifications are
+            disabled. Enable them in system settings, then return here.
+          </ThemedText>
+          <ThemedText
+            color={theme.color.textSecondary}
+            fontSize={theme.fontSize12}
+            style={styles.permissionNoticePath}
+          >
+            {notificationSettingsGuidance}
+          </ThemedText>
+        </NotificationStatusNotice>
+        <ActionButton
+          accentColor={accentColor}
+          icon={{ ios: "gearshape.fill", android: "settings" }}
+          label="Open notification settings"
+          onPress={onOpenSettings}
+        />
+        <TextButton color={textColor} label="Not now" onPress={onSkip} />
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.progressWrap}>
-      {Array.from({ length: stepCount }, (_, index) => {
-        const isActive = index <= currentStep;
+    <View style={styles.buttonStack}>
+      <ActionButton
+        accentColor={accentColor}
+        icon={{ ios: "bell.fill", android: "notifications" }}
+        isLoading={isRequestingPermission || isCheckingPermission}
+        label="Enable notifications"
+        onPress={onEnableNotifications}
+      />
+    </View>
+  );
+}
 
-        return (
-          <Animated.View
-            key={index}
-            entering={FadeIn}
-            exiting={FadeOut}
-            style={styles.progressSegmentFrame}
+type NotificationStatusNoticeProps = {
+  borderColor: string;
+  cardColor: string;
+  children: ReactNode;
+  icon: IconName;
+  iconColor: string;
+  isCritical?: boolean;
+  title: string;
+  titleColor?: { light: string; dark: string };
+};
+
+function NotificationStatusNotice({
+  borderColor,
+  cardColor,
+  children,
+  icon,
+  iconColor,
+  isCritical = false,
+  title,
+  titleColor,
+}: NotificationStatusNoticeProps) {
+  return (
+    <View
+      style={[
+        styles.permissionNotice,
+        isCritical && styles.permissionNoticeCritical,
+        { backgroundColor: cardColor, borderColor },
+      ]}
+    >
+      <View style={styles.permissionNoticeHeader}>
+        <SymbolView name={icon} size={20} tintColor={iconColor} />
+        <ThemedText
+          color={titleColor}
+          fontSize={theme.fontSize16}
+          fontWeight={isCritical ? "bold" : "semiBold"}
+        >
+          {title}
+        </ThemedText>
+      </View>
+      {children}
+    </View>
+  );
+}
+
+type CrashReportsStepActionsProps = {
+  accentColor: string;
+  borderColor: string;
+  cardColor: string;
+  colorScheme: "light" | "dark";
+  crashReportsEnabled: boolean;
+  onChange: (enabled: boolean) => void;
+  onContinue: () => void;
+};
+
+function CrashReportsStepActions({
+  accentColor,
+  borderColor,
+  cardColor,
+  colorScheme,
+  crashReportsEnabled,
+  onChange,
+  onContinue,
+}: CrashReportsStepActionsProps) {
+  const disabledTrackColor = colorScheme === "dark" ? "#3A3A3C" : "#D1D1D6";
+
+  return (
+    <View style={styles.buttonStack}>
+      <View
+        style={[
+          styles.choiceCard,
+          {
+            backgroundColor: cardColor,
+            borderColor,
+          },
+        ]}
+      >
+        <View style={styles.choiceText}>
+          <ThemedText fontSize={theme.fontSize16} fontWeight="semiBold">
+            Anonymous reports
+          </ThemedText>
+          <ThemedText
+            color={theme.color.textSecondary}
+            fontSize={theme.fontSize14}
+            style={styles.choiceDescription}
           >
-            <View
-              style={[
-                styles.progressSegment,
-                isActive ? activeSegmentStyle : inactiveSegmentStyle,
-                isActive
-                  ? styles.progressSegmentActive
-                  : styles.progressSegmentInactive,
-              ]}
+            No token secrets, passwords, or institution names. This choice is
+            yours.
+          </ThemedText>
+        </View>
+        <Switch
+          ios_backgroundColor={disabledTrackColor}
+          onValueChange={onChange}
+          thumbColor={Platform.OS === "android" ? "#FFFFFF" : undefined}
+          trackColor={{
+            false: disabledTrackColor,
+            true: accentColor,
+          }}
+          value={crashReportsEnabled}
+        />
+      </View>
+      <ActionButton
+        accentColor={accentColor}
+        icon={{ ios: "checkmark", android: "check" }}
+        label="Finish setup"
+        onPress={onContinue}
+      />
+    </View>
+  );
+}
+
+type ProgressSegmentFillProps = {
+  index: number;
+  inputRange: number[];
+  progress: SharedValue<number>;
+  stepAccentColors: string[];
+};
+
+function ProgressSegmentFill({
+  index,
+  inputRange,
+  progress,
+  stepAccentColors,
+}: ProgressSegmentFillProps) {
+  const animatedStyle = useAnimatedStyle(() => {
+    const fillProgress = interpolate(
+      progress.value,
+      [index - 1, index],
+      [0, 1],
+      Extrapolation.CLAMP,
+    );
+
+    return {
+      backgroundColor: interpolateColor(
+        progress.value,
+        inputRange,
+        stepAccentColors,
+      ),
+      width: `${fillProgress * 100}%`,
+    };
+  });
+
+  return <Animated.View style={[styles.progressFill, animatedStyle]} />;
+}
+
+type VisualCardContentProps = {
+  accentColor: string;
+  index: number;
+};
+
+type WelcomeVisualContentProps = {
+  logoColor: string;
+};
+
+function WelcomeVisualContent({ logoColor }: WelcomeVisualContentProps) {
+  return (
+    <View style={styles.welcomeVisual}>
+      <Image
+        contentFit="contain"
+        source={logoSource}
+        style={styles.logo}
+        tintColor={logoColor}
+      />
+    </View>
+  );
+}
+
+function VisualCardContent({ accentColor, index }: VisualCardContentProps) {
+  const accentStyle = useMemo(
+    () => ({ backgroundColor: accentColor }),
+    [accentColor],
+  );
+  const borderStyle = useMemo(
+    () => ({ borderColor: accentColor }),
+    [accentColor],
+  );
+
+  if (index === 1) {
+    return (
+      <View style={styles.notificationVisual}>
+        <View style={[styles.notificationPhone, borderStyle]}>
+          <View style={styles.notificationPhoneTop} />
+          <View style={[styles.notificationBanner, borderStyle]}>
+            <View style={[styles.notificationIconPlate, accentStyle]}>
+              <SymbolView
+                name={{ ios: "bell.fill", android: "notifications" }}
+                size={22}
+                tintColor={theme.colorWhite}
+              />
+            </View>
+            <View style={styles.notificationCopy}>
+              <View style={[styles.notificationLineStrong, accentStyle]} />
+              <View style={styles.notificationLine} />
+            </View>
+          </View>
+          <View style={styles.notificationActions}>
+            <View style={[styles.notificationAction, accentStyle]} />
+            <View style={styles.notificationActionMuted} />
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={styles.privacyVisual}>
+      <View style={[styles.privacySheet, borderStyle]}>
+        <View style={styles.privacyHeader}>
+          <View style={[styles.privacyIconPlate, accentStyle]}>
+            <SymbolView
+              name={{ ios: "lock.shield.fill", android: "privacy_tip" }}
+              size={24}
+              tintColor={theme.colorWhite}
             />
-          </Animated.View>
-        );
-      })}
+          </View>
+          <View style={styles.privacyCopy}>
+            <View style={[styles.privacyLineStrong, accentStyle]} />
+            <View style={styles.privacyLine} />
+          </View>
+        </View>
+        <View style={styles.privacyRows}>
+          <View style={styles.privacyRow}>
+            <View style={styles.privacyDotMuted} />
+            <View style={styles.privacyLine} />
+          </View>
+          <View style={styles.privacyRow}>
+            <View style={[styles.privacyDot, accentStyle]} />
+            <View style={styles.privacyLineShort} />
+          </View>
+        </View>
+      </View>
     </View>
   );
 }
@@ -584,6 +942,27 @@ function ActionButton({
   );
 }
 
+type TextButtonProps = {
+  color: string;
+  label: string;
+  onPress: () => void;
+};
+
+function TextButton({ color, label, onPress }: TextButtonProps) {
+  return (
+    <Pressable onPress={onPress} style={styles.textButton}>
+      <ThemedText
+        color={color}
+        fontSize={theme.fontSize14}
+        fontWeight="semiBold"
+        style={styles.textButtonLabel}
+      >
+        {label}
+      </ThemedText>
+    </Pressable>
+  );
+}
+
 const styles = StyleSheet.create({
   actionButton: {
     alignItems: "center",
@@ -611,6 +990,9 @@ const styles = StyleSheet.create({
     gap: theme.space12,
     width: "100%",
   },
+  buttonStackCompact: {
+    gap: theme.space8,
+  },
   choiceCard: {
     alignItems: "center",
     borderCurve: "continuous",
@@ -631,43 +1013,116 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: theme.space24,
-  },
-  content: {
-    alignItems: "center",
-    gap: theme.space24,
-    maxWidth: 520,
-    width: "100%",
   },
   copy: {
     alignItems: "center",
     gap: theme.space12,
   },
-  heroBadge: {
-    alignItems: "center",
-    borderCurve: "continuous",
-    borderRadius: theme.borderRadius32,
-    borderWidth: 1,
-    height: 132,
-    justifyContent: "center",
-    width: 132,
-  },
-  heroHalo: {
-    borderRadius: theme.borderRadius80,
-    height: 172,
-    position: "absolute",
-    width: 172,
-  },
   heroWrap: {
     alignItems: "center",
     height: 188,
     justifyContent: "center",
-    width: 188,
+    width: "100%",
   },
   kicker: {
     letterSpacing: 0,
     textAlign: "center",
     textTransform: "uppercase",
+  },
+  logo: {
+    height: 128,
+    width: 128,
+  },
+  notificationAction: {
+    borderRadius: theme.borderRadius6,
+    flex: 1,
+    height: 18,
+  },
+  notificationActionMuted: {
+    backgroundColor: theme.colorGrey,
+    borderRadius: theme.borderRadius6,
+    flex: 1,
+    height: 18,
+    opacity: 0.24,
+  },
+  notificationActions: {
+    flexDirection: "row",
+    gap: theme.space8,
+    width: "100%",
+  },
+  notificationBanner: {
+    alignItems: "center",
+    borderCurve: "continuous",
+    borderRadius: theme.borderRadius12,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: theme.space12,
+    padding: theme.space12,
+    width: "100%",
+  },
+  notificationCopy: {
+    flex: 1,
+    gap: theme.space8,
+  },
+  notificationIconPlate: {
+    alignItems: "center",
+    borderCurve: "continuous",
+    borderRadius: theme.borderRadius12,
+    height: 42,
+    justifyContent: "center",
+    width: 42,
+  },
+  notificationLine: {
+    backgroundColor: theme.colorGrey,
+    borderRadius: theme.borderRadius4,
+    height: 7,
+    opacity: 0.28,
+    width: "68%",
+  },
+  notificationLineStrong: {
+    borderRadius: theme.borderRadius4,
+    height: 8,
+    width: "86%",
+  },
+  notificationPhone: {
+    borderCurve: "continuous",
+    borderRadius: theme.borderRadius20,
+    borderWidth: 1,
+    gap: theme.space12,
+    padding: theme.space16,
+    width: 220,
+  },
+  notificationPhoneTop: {
+    alignSelf: "center",
+    backgroundColor: theme.colorGrey,
+    borderRadius: theme.borderRadius4,
+    height: 5,
+    opacity: 0.28,
+    width: 48,
+  },
+  notificationVisual: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  panel: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  panelBody: {
+    alignItems: "center",
+    flex: 1,
+    gap: theme.space24,
+    justifyContent: "center",
+    width: "100%",
+  },
+  panelContent: {
+    alignItems: "center",
+    flex: 1,
+    gap: theme.space24,
+    justifyContent: "space-between",
+    maxWidth: 520,
+    paddingHorizontal: theme.space24,
+    width: "100%",
   },
   permissionNotice: {
     borderCurve: "continuous",
@@ -676,33 +1131,148 @@ const styles = StyleSheet.create({
     gap: theme.space8,
     padding: theme.space16,
   },
+  permissionNoticeCritical: {
+    borderWidth: 2,
+    gap: theme.space4,
+    padding: theme.space12,
+  },
+  permissionNoticeHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: theme.space8,
+  },
+  permissionNoticePath: {
+    lineHeight: theme.fontSize12 * 1.25,
+  },
   permissionNoticeText: {
     lineHeight: theme.fontSize14 * 1.4,
+  },
+  permissionNoticeTextCompact: {
+    lineHeight: theme.fontSize14 * 1.3,
+  },
+  privacyCopy: {
+    flex: 1,
+    gap: theme.space8,
+  },
+  privacyDot: {
+    borderRadius: theme.borderRadius20,
+    height: 10,
+    width: 10,
+  },
+  privacyDotMuted: {
+    backgroundColor: theme.colorGrey,
+    borderRadius: theme.borderRadius20,
+    height: 10,
+    opacity: 0.32,
+    width: 10,
+  },
+  privacyHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: theme.space12,
+  },
+  privacyIconPlate: {
+    alignItems: "center",
+    borderCurve: "continuous",
+    borderRadius: theme.borderRadius12,
+    height: 46,
+    justifyContent: "center",
+    width: 46,
+  },
+  privacyLine: {
+    backgroundColor: theme.colorGrey,
+    borderRadius: theme.borderRadius4,
+    flex: 1,
+    height: 7,
+    opacity: 0.28,
+  },
+  privacyLineShort: {
+    backgroundColor: theme.colorGrey,
+    borderRadius: theme.borderRadius4,
+    flex: 0.68,
+    height: 7,
+    opacity: 0.22,
+  },
+  privacyLineStrong: {
+    borderRadius: theme.borderRadius4,
+    height: 8,
+    width: "86%",
+  },
+  privacyRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: theme.space8,
+  },
+  privacyRows: {
+    gap: theme.space12,
+  },
+  privacySheet: {
+    borderCurve: "continuous",
+    borderRadius: theme.borderRadius20,
+    borderWidth: 1,
+    gap: theme.space16,
+    padding: theme.space16,
+    width: 220,
+  },
+  privacyVisual: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  progressFill: {
+    borderRadius: theme.borderRadius4,
+    height: 4,
   },
   progressSegment: {
     borderRadius: theme.borderRadius4,
     flex: 1,
     height: 4,
-  },
-  progressSegmentActive: {
-    opacity: 1,
-  },
-  progressSegmentFrame: {
-    flex: 1,
-    height: 4,
-  },
-  progressSegmentInactive: {
-    opacity: 0.45,
+    overflow: "hidden",
   },
   progressWrap: {
     flexDirection: "row",
     gap: theme.space8,
-    maxWidth: 520,
-    paddingBottom: theme.space24,
+    paddingHorizontal: theme.space24,
     width: "100%",
+  },
+  textButton: {
+    alignSelf: "center",
+    minHeight: 28,
+    paddingHorizontal: theme.space8,
+    paddingVertical: theme.space4,
+  },
+  textButtonLabel: {
+    lineHeight: theme.fontSize14 * 1.25,
+    textAlign: "center",
   },
   title: {
     lineHeight: theme.fontSize34 * 1.1,
     textAlign: "center",
+  },
+  track: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  viewport: {
+    flex: 1,
+    overflow: "hidden",
+    width: "100%",
+  },
+  visualCard: {
+    alignItems: "center",
+    borderCurve: "continuous",
+    borderRadius: theme.borderRadius10,
+    borderWidth: 1,
+    height: 172,
+    justifyContent: "center",
+    padding: theme.space16,
+    width: "100%",
+  },
+  welcomeVisual: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  welcomeVisualCard: {
+    borderWidth: 0,
+    paddingVertical: theme.space8,
   },
 });

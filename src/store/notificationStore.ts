@@ -8,6 +8,7 @@ import {
   onTokenRefresh,
   requestPermission as requestMessagingPermission,
 } from "@react-native-firebase/messaging";
+import { PermissionStatus } from "expo-modules-core";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { create } from "zustand";
@@ -29,6 +30,7 @@ type NotificationState = {
 
 type NotificationActions = {
   initialize: () => Promise<string | null>;
+  checkPermission: () => Promise<FirebaseAuthorizationStatus>;
   getFcmToken: () => Promise<string | null>;
   requestPermission: () => Promise<NotificationPermissionResult>;
   reset: () => void;
@@ -49,6 +51,11 @@ function hasNotificationPermission(authStatus: FirebaseAuthorizationStatus) {
 async function getCurrentPermissionStatus() {
   if (Platform.OS === "android") {
     const permissions = await Notifications.getPermissionsAsync();
+
+    if (permissions.status === PermissionStatus.UNDETERMINED) {
+      return AuthorizationStatus.NOT_DETERMINED;
+    }
+
     return permissions.granted
       ? AuthorizationStatus.AUTHORIZED
       : AuthorizationStatus.DENIED;
@@ -60,6 +67,11 @@ async function getCurrentPermissionStatus() {
 async function requestSystemPermission() {
   if (Platform.OS === "android") {
     const permissions = await Notifications.requestPermissionsAsync();
+
+    if (permissions.status === PermissionStatus.UNDETERMINED) {
+      return AuthorizationStatus.NOT_DETERMINED;
+    }
+
     return permissions.granted
       ? AuthorizationStatus.AUTHORIZED
       : AuthorizationStatus.DENIED;
@@ -106,6 +118,17 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   isInitialized: false,
   isInitializing: false,
   permissionStatus: null,
+
+  checkPermission: async () => {
+    const authStatus = await getCurrentPermissionStatus();
+    set({ permissionStatus: authStatus });
+
+    if (!hasNotificationPermission(authStatus)) {
+      set({ fcmToken: null });
+    }
+
+    return authStatus;
+  },
 
   /**
    * Initialize notification system - should only be called once at app startup
