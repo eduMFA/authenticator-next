@@ -31,16 +31,16 @@ msgstr "Accept"
 msgid "Are you sure you want to delete this token?"
 msgstr "Are you sure you want to delete this token?"
 
-#: src/components/token-detail/token-overview-content.tsx:156
+#: src/components/token-detail/token-overview-content.tsx:158
 msgid "Audit log"
 msgstr "Audit log"
 
-#: src/components/QRCodeScanner.tsx:59
+#: src/components/qr-code-scanner.tsx:59
 msgid "Camera permission required"
 msgstr "Camera permission required"
 
 #: src/app/token/[tokenId].tsx:166
-#: src/hooks/useDeleteTokenConfirmation.ts:20
+#: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Cancel"
 
@@ -51,7 +51,7 @@ msgstr "Decline"
 
 #: src/app/index.tsx:137
 #: src/app/token/[tokenId].tsx:185
-#: src/hooks/useDeleteTokenConfirmation.ts:22
+#: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Delete"
 
@@ -59,11 +59,11 @@ msgstr "Delete"
 msgid "Delete token"
 msgstr "Delete token"
 
-#: src/components/token-detail/token-overview-content.tsx:140
+#: src/components/token-detail/token-overview-content.tsx:145
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/useHandleTokenUri.ts:82
+#: src/hooks/use-handle-token-uri.ts:82
 msgid "Dismiss"
 msgstr "Dismiss"
 
@@ -84,9 +84,9 @@ msgstr "Edit token"
 msgid "Enter a label for this token."
 msgstr "Enter a label for this token."
 
-#: src/hooks/useHandleTokenUri.ts:62
-#: src/hooks/useHandleTokenUri.ts:70
-#: src/hooks/useHandleTokenUri.ts:91
+#: src/hooks/use-handle-token-uri.ts:62
+#: src/hooks/use-handle-token-uri.ts:70
+#: src/hooks/use-handle-token-uri.ts:91
 msgid "Failed to add token"
 msgstr "Failed to add token"
 
@@ -102,15 +102,15 @@ msgstr "Label"
 msgid "Label required"
 msgstr "Label required"
 
-#: src/components/token-detail/token-overview-content.tsx:132
+#: src/components/token-detail/token-overview-content.tsx:137
 msgid "Last failed"
 msgstr "Last failed"
 
-#: src/components/token-detail/token-overview-content.tsx:163
+#: src/components/token-detail/token-overview-content.tsx:162
 msgid "No interactions yet"
 msgstr "No interactions yet"
 
-#: src/hooks/useHandleTokenUri.ts:45
+#: src/hooks/use-handle-token-uri.ts:45
 msgid "No QR code found"
 msgstr "No QR code found"
 
@@ -134,7 +134,7 @@ msgstr "OR"
 #~ msgid "Overview"
 #~ msgstr "Overview"
 
-#: src/app/token/add.tsx:57
+#: src/app/token/add.tsx:56
 msgid "Pair new Push Token"
 msgstr "Pair new Push Token"
 
@@ -142,8 +142,8 @@ msgstr "Pair new Push Token"
 msgid "QR code scanner"
 msgstr "QR code scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:105
-#: src/components/TokenDetails.tsx:129
+#: src/components/token-detail/token-overview-content.tsx:108
+#: src/components/token-details.tsx:130
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
@@ -151,7 +151,7 @@ msgstr "Refresh failed"
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
-#: src/components/token-detail/token-overview-content.tsx:92
+#: src/components/token-detail/token-overview-content.tsx:95
 msgid "Retry rollout"
 msgstr "Retry rollout"
 
@@ -159,11 +159,11 @@ msgstr "Retry rollout"
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
-#: src/components/TokenDetails.tsx:107
+#: src/components/token-details.tsx:108
 msgid "Rolling out..."
 msgstr "Rolling out..."
 
-#: src/components/TokenDetails.tsx:107
+#: src/components/token-details.tsx:108
 msgid "Rollout Failed"
 msgstr "Rollout Failed"
 
@@ -171,7 +171,7 @@ msgstr "Rollout Failed"
 msgid "Save"
 msgstr "Save"
 
-#: src/app/token/add.tsx:64
+#: src/app/token/add.tsx:63
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scan the QR code to pair a new push token."
 
@@ -183,16 +183,16 @@ msgstr "Search Authenticator Apps"
 msgid "Search tokens"
 msgstr "Search tokens"
 
-#: src/components/PushRequestPopup.tsx:207
-#: src/components/token-detail/token-overview-content.tsx:150
+#: src/components/push-request-popup.tsx:215
+#: src/components/token-detail/token-overview-content.tsx:152
 msgid "Serial"
 msgstr "Serial"
 
-#: src/components/token-detail/token-overview-content.tsx:115
+#: src/components/token-detail/token-overview-content.tsx:120
 msgid "Server message"
 msgstr "Server message"
 
-#: src/components/token-detail/token-overview-content.tsx:147
+#: src/components/token-detail/token-overview-content.tsx:149
 msgid "Status"
 msgstr "Status"
 
@@ -224,7 +224,7 @@ msgstr "to get started."
 msgid "Token"
 msgstr "Token"
 
-#: src/components/token-detail/token-overview-content.tsx:170
+#: src/components/token-detail/token-overview-content.tsx:169
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token approvals, denials, refresh events, and enrollment activity will appear here."
 
