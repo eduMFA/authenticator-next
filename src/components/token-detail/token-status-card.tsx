@@ -1,5 +1,6 @@
-import { ThemedText, useThemeColor } from "@/components/Themed";
-import { theme } from "@/theme";
+import { ThemedText } from "@/components/themed-text";
+import { Radii, Spacing, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import { SymbolView } from "expo-symbols";
 import { ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
@@ -21,17 +22,13 @@ export function TokenStatusCard({
   description: string;
   children?: ReactNode;
 }) {
-  const backgroundColor = useThemeColor(
-    tone === "danger"
-      ? { light: "rgba(220, 53, 69, 0.10)", dark: "rgba(220, 53, 69, 0.18)" }
-      : theme.color.backgroundSecondary,
-  );
-  const borderColor = useThemeColor(
-    tone === "danger" ? theme.color.errorBar : theme.color.border,
-  );
-  const iconColor = useThemeColor(
-    tone === "danger" ? theme.color.errorBar : theme.color.textSecondary,
-  );
+  const theme = useTheme();
+  const isDanger = tone === "danger";
+  const backgroundColor = isDanger
+    ? theme.errorBackground
+    : theme.backgroundSecondary;
+  const borderColor = isDanger ? theme.errorBar : theme.border;
+  const iconColor = isDanger ? theme.errorBar : theme.textSecondary;
 
   return (
     <Animated.View
@@ -56,13 +53,13 @@ export function TokenStatusCard({
             tintColor={iconColor}
           />
         ) : null}
-        <ThemedText fontSize={theme.fontSize16} fontWeight="bold">
+        <ThemedText fontSize={Typography.fontSize16} fontWeight="bold">
           {title}
         </ThemedText>
       </View>
       <ThemedText
-        color={tone === "danger" ? theme.color.text : theme.color.textSecondary}
-        fontSize={theme.fontSize14}
+        themeColor={isDanger ? "text" : "textSecondary"}
+        fontSize={Typography.fontSize14}
         style={styles.statusDescription}
       >
         {description}
@@ -74,17 +71,17 @@ export function TokenStatusCard({
 
 const styles = StyleSheet.create({
   statusCard: {
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     borderWidth: 1,
-    padding: theme.space16,
+    padding: Spacing.lg,
   },
   statusDescription: {
     lineHeight: 20,
-    marginTop: theme.space8,
+    marginTop: Spacing.sm,
   },
   statusTitleRow: {
     alignItems: "center",
     flexDirection: "row",
-    gap: theme.space8,
+    gap: Spacing.sm,
   },
 });

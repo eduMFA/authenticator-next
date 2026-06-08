@@ -1,10 +1,10 @@
-import { ThemedText } from "@/components/Themed";
-import { TokenImage } from "@/components/TokenImage";
-import { theme } from "@/theme";
+import { ThemedText } from "@/components/themed-text";
+import { TokenImage } from "@/components/token-image";
+import { Spacing, Typography } from "@/constants/theme";
 import { PushToken } from "@/types";
 import { useLingui } from "@lingui/react/macro";
 import { StyleSheet, View } from "react-native";
-import { TokenEditForm } from "./TokenEditForm";
+import { TokenEditForm } from "./token-edit-form";
 import { EditableTokenFields } from "./token-detail-utils";
 
 export function TokenEditContent({
@@ -29,12 +29,12 @@ export function TokenEditContent({
           animated
         />
         <View style={styles.editHeaderText}>
-          <ThemedText fontSize={theme.fontSize24} fontWeight="bold">
+          <ThemedText fontSize={Typography.fontSize24} fontWeight="bold">
             {t`Edit token`}
           </ThemedText>
           <ThemedText
-            color={theme.color.textSecondary}
-            fontSize={theme.fontSize14}
+            themeColor="textSecondary"
+            fontSize={Typography.fontSize14}
             style={styles.editSubtitle}
           >
             {t`Update the display name for this token.`}
@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
   editHeader: {
     alignItems: "center",
     flexDirection: "row",
-    gap: theme.space16,
+    gap: Spacing.lg,
   },
   editHeaderText: {
     flex: 1,
-    gap: theme.space4,
+    gap: Spacing.xs,
   },
   editImage: {
     marginRight: 0,

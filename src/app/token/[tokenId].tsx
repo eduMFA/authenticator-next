@@ -1,5 +1,5 @@
-import { TokenEditContent } from "@/components/token-detail/TokenEditContent";
-import { TokenOverviewContent } from "@/components/token-detail/TokenOverviewContent";
+import { TokenEditContent } from "@/components/token-detail/token-edit-content";
+import { TokenOverviewContent } from "@/components/token-detail/token-overview-content";
 import {
   EditableTokenFields,
   getEditableTokenFields,

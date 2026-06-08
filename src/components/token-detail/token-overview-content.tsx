@@ -1,6 +1,8 @@
-import { ThemedText, ThemedView } from "@/components/Themed";
-import { TokenImage } from "@/components/TokenImage";
-import { theme } from "@/theme";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { TokenImage } from "@/components/token-image";
+import { Radii, Spacing, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import {
   PushToken,
   PushTokenRefreshStatus,
@@ -10,7 +12,7 @@ import { Button, Host } from "@expo/ui/swift-ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import { StyleSheet, View } from "react-native";
-import { TokenStatusCard } from "./TokenStatusCard";
+import { TokenStatusCard } from "./token-status-card";
 import {
   formatTimestamp,
   getRolloutFailureDetails,
@@ -21,11 +23,11 @@ import {
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.detailRow}>
-      <ThemedText color={theme.color.textSecondary} fontSize={theme.fontSize14}>
+      <ThemedText themeColor="textSecondary" fontSize={Typography.fontSize14}>
         {label}
       </ThemedText>
       <ThemedText
-        fontSize={theme.fontSize16}
+        fontSize={Typography.fontSize16}
         fontWeight="semiBold"
         style={styles.detailValue}
       >
@@ -43,6 +45,7 @@ export function TokenOverviewContent({
   onRetryRollout: () => void;
 }) {
   const { t } = useLingui();
+  const theme = useTheme();
   const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
   const rolloutFailureDetails = getRolloutFailureDetails(token.rolloutState);
   const refreshResult = token.lastRefreshResult;
@@ -62,7 +65,7 @@ export function TokenOverviewContent({
           animated
         />
         <ThemedText
-          fontSize={theme.fontSize28}
+          fontSize={Typography.fontSize28}
           fontWeight="bold"
           style={styles.heroTitle}
         >
@@ -70,8 +73,8 @@ export function TokenOverviewContent({
         </ThemedText>
         {token.issuer ? (
           <ThemedText
-            color={theme.color.textSecondary}
-            fontSize={theme.fontSize16}
+            themeColor="textSecondary"
+            fontSize={Typography.fontSize16}
             fontWeight="medium"
             style={styles.heroIssuer}
           >
@@ -106,17 +109,19 @@ export function TokenOverviewContent({
           description={refreshFailureDetails.message}
         >
           {refreshFailureDetails.serverMessage ? (
-            <View style={styles.serverError}>
+            <View
+              style={[styles.serverError, { borderLeftColor: theme.errorBar }]}
+            >
               <ThemedText
-                color={theme.color.textSecondary}
-                fontSize={theme.fontSize12}
+                themeColor="textSecondary"
+                fontSize={Typography.fontSize12}
                 fontWeight="semiBold"
               >
                 {t`Server message`}
               </ThemedText>
               <ThemedText
-                color={theme.color.text}
-                fontSize={theme.fontSize14}
+                themeColor="text"
+                fontSize={Typography.fontSize14}
                 style={styles.serverErrorMessage}
               >
                 {refreshFailureDetails.serverMessage}
@@ -125,8 +130,8 @@ export function TokenOverviewContent({
           ) : null}
           {refreshFailedAt ? (
             <ThemedText
-              color={theme.color.textSecondary}
-              fontSize={theme.fontSize12}
+              themeColor="textSecondary"
+              fontSize={Typography.fontSize12}
               style={styles.statusMeta}
             >
               {t`Last failed`} {refreshFailedAt}
@@ -136,13 +141,10 @@ export function TokenOverviewContent({
       ) : null}
 
       <View style={styles.section}>
-        <ThemedText fontSize={theme.fontSize18} fontWeight="bold">
+        <ThemedText fontSize={Typography.fontSize18} fontWeight="bold">
           {t`Details`}
         </ThemedText>
-        <ThemedView
-          color={theme.color.backgroundSecondary}
-          style={styles.detailsCard}
-        >
+        <ThemedView type="backgroundSecondary" style={styles.detailsCard}>
           <DetailRow
             label={t`Status`}
             value={getRolloutStateLabel(token.rolloutState)}
@@ -152,19 +154,16 @@ export function TokenOverviewContent({
       </View>
 
       <View style={styles.section}>
-        <ThemedText fontSize={theme.fontSize18} fontWeight="bold">
+        <ThemedText fontSize={Typography.fontSize18} fontWeight="bold">
           {t`Audit log`}
         </ThemedText>
-        <ThemedView
-          color={theme.color.backgroundSecondary}
-          style={styles.auditPlaceholder}
-        >
-          <ThemedText fontSize={theme.fontSize16} fontWeight="semiBold">
+        <ThemedView type="backgroundSecondary" style={styles.auditPlaceholder}>
+          <ThemedText fontSize={Typography.fontSize16} fontWeight="semiBold">
             {t`No interactions yet`}
           </ThemedText>
           <ThemedText
-            color={theme.color.textSecondary}
-            fontSize={theme.fontSize14}
+            themeColor="textSecondary"
+            fontSize={Typography.fontSize14}
             style={styles.auditDescription}
           >
             {t`Token approvals, denials, refresh events, and enrollment activity will appear here.`}
@@ -178,34 +177,34 @@ export function TokenOverviewContent({
 const styles = StyleSheet.create({
   auditDescription: {
     lineHeight: 20,
-    marginTop: theme.space4,
+    marginTop: Spacing.xs,
     textAlign: "center",
   },
   auditPlaceholder: {
     alignItems: "center",
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     justifyContent: "center",
     minHeight: 132,
-    padding: theme.space24,
+    padding: Spacing.xl,
   },
   detailRow: {
-    gap: theme.space4,
-    paddingVertical: theme.space12,
+    gap: Spacing.xs,
+    paddingVertical: Spacing.md,
   },
   detailValue: {
     lineHeight: 22,
   },
   detailsCard: {
-    borderRadius: theme.borderRadius20,
-    paddingHorizontal: theme.space16,
+    borderRadius: Radii.xl,
+    paddingHorizontal: Spacing.lg,
   },
   hero: {
     alignItems: "center",
-    gap: theme.space4,
-    paddingTop: theme.space12,
+    gap: Spacing.xs,
+    paddingTop: Spacing.md,
   },
   heroImage: {
-    marginBottom: theme.space16,
+    marginBottom: Spacing.lg,
     marginRight: 0,
   },
   heroIssuer: {
@@ -216,22 +215,21 @@ const styles = StyleSheet.create({
   },
   nativeButton: {
     alignItems: "flex-start",
-    marginTop: theme.space16,
+    marginTop: Spacing.lg,
   },
   section: {
-    gap: theme.space12,
+    gap: Spacing.md,
   },
   serverError: {
-    borderLeftColor: theme.color.errorBar.light,
     borderLeftWidth: 2,
-    gap: theme.space4,
-    marginTop: theme.space12,
-    paddingLeft: theme.space12,
+    gap: Spacing.xs,
+    marginTop: Spacing.md,
+    paddingLeft: Spacing.md,
   },
   serverErrorMessage: {
     lineHeight: 20,
   },
   statusMeta: {
-    marginTop: theme.space12,
+    marginTop: Spacing.md,
   },
 });
