@@ -8,6 +8,7 @@ import { Inter_600SemiBold_Italic } from "@expo-google-fonts/inter/600SemiBold_I
 import { Inter_700Bold } from "@expo-google-fonts/inter/700Bold";
 import { Inter_700Bold_Italic } from "@expo-google-fonts/inter/700Bold_Italic";
 import * as Device from "expo-device";
+import { Platform } from "react-native";
 
 const SPACE_SCALE = 1.33;
 const FONT_SCALE = 1.2;
@@ -31,38 +32,64 @@ export function useInterFonts() {
   });
 }
 
-export const theme = {
-  colorWhite: "#FFFFFF",
-  colorBlack: "#000000",
-  colorGrey: "#ADB5BD",
-  color: {
-    branding: { light: "#0066FF", dark: "#3399FF" },
-    transparent: {
-      light: "rgba(255,255,255,0)",
-      dark: "rgba(0,0,0,0)",
-    },
-    background: { light: "#FFFFFF", dark: "#000000" },
-    backgroundSecondary: {
-      light: "#f1f1f1",
-      dark: "#242424",
-    },
-    text: { light: "#121212", dark: "#FFFFFF" },
-    textSecondary: { light: "#606060", dark: "#CCCCCC" },
-    border: { light: "#D9D9D0", dark: "#363A3F" },
-    successBar: { light: "rgba(6, 64, 43, 0.6)", dark: "rgba(6, 64, 43, 0.6)" },
-    errorBar: {
-      light: "rgba(220, 53, 69, 0.6)",
-      dark: "rgba(220, 53, 69, 0.6)",
-    },
+export const Colors = {
+  light: {
+    branding: "#0066FF",
+    transparent: "rgba(255,255,255,0)",
+    background: "#FFFFFF",
+    backgroundSecondary: "#f1f1f1",
+    text: "#121212",
+    textSecondary: "#606060",
+    border: "#D9D9D0",
+    successBar: "rgba(6, 64, 43, 0.6)",
+    errorBar: "rgba(220, 53, 69, 0.6)",
   },
+  dark: {
+    branding: "#3399FF",
+    transparent: "rgba(0,0,0,0)",
+    background: "#000000",
+    backgroundSecondary: "#242424",
+    text: "#FFFFFF",
+    textSecondary: "#CCCCCC",
+    border: "#363A3F",
+    successBar: "rgba(6, 64, 43, 0.6)",
+    errorBar: "rgba(220, 53, 69, 0.6)",
+  },
+} as const;
 
-  space2: spaceScale(2),
-  space4: spaceScale(4),
-  space8: spaceScale(8),
-  space12: spaceScale(12),
-  space16: spaceScale(16),
-  space24: spaceScale(24),
+export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
+export const Fonts = Platform.select({
+  ios: {
+    sans: "system-ui",
+    serif: "ui-serif",
+    rounded: "ui-rounded",
+    mono: "ui-monospace",
+  },
+  default: {
+    sans: "normal",
+    serif: "serif",
+    rounded: "normal",
+    mono: "monospace",
+  },
+  web: {
+    sans: "system-ui",
+    serif: "serif",
+    rounded: "system-ui",
+    mono: "monospace",
+  },
+});
+
+export const Spacing = {
+  xxs: spaceScale(2),
+  xs: spaceScale(4),
+  sm: spaceScale(8),
+  md: spaceScale(12),
+  lg: spaceScale(16),
+  xl: spaceScale(24),
+} as const;
+
+export const Typography = {
   fontSize10: fontScale(10),
   fontSize12: fontScale(12),
   fontSize14: fontScale(14),
@@ -74,27 +101,31 @@ export const theme = {
   fontSize32: fontScale(32),
   fontSize34: fontScale(34),
   fontSize42: fontScale(42),
-
   fontFamilyLight: "Inter_300Light",
   fontFamilyLightItalic: "Inter_300Light_Italic",
-
   fontFamily: "Inter_500Medium",
   fontFamilyItalic: "Inter_500Medium_Italic",
-
   fontFamilySemiBold: "Inter_600SemiBold",
   fontFamilySemiBoldItalic: "Inter_600SemiBold_Italic",
-
   fontFamilyBold: "Inter_700Bold",
   fontFamilyBoldItalic: "Inter_700Bold_Italic",
+} as const;
 
-  borderRadius4: 4,
-  borderRadius6: 6,
-  borderRadius10: 10,
-  borderRadius12: 12,
-  borderRadius20: 20,
-  borderRadius32: 32,
-  borderRadius34: 34,
-  borderRadius40: 40,
-  borderRadius45: 45,
-  borderRadius80: 80,
-};
+export const Radii = {
+  four: 4,
+  six: 6,
+  ten: 10,
+  twelve: 12,
+  twenty: 20,
+  thirtyTwo: 32,
+  thirtyFour: 34,
+  forty: 40,
+  fortyFive: 45,
+  eighty: 80,
+} as const;
+
+export const StaticColors = {
+  white: "#FFFFFF",
+  black: "#000000",
+  grey: "#ADB5BD",
+} as const;

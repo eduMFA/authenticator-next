@@ -1,4 +1,4 @@
-import { SIGN_ALGORITHM } from "@/consts";
+import { SIGN_ALGORITHM } from "@/constants/auth";
 import { PushRequest, PushRequestStatus, PushToken } from "@/types";
 import { base64ToBase32 } from "@/utils/crypto";
 import { signMessage } from "@/utils/rsa";

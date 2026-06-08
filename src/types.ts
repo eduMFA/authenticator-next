@@ -1,3 +1,5 @@
+import { TOKEN_ROLLOUT_PROGRESS } from "@/constants/token";
+
 export type PushToken = {
   id: string;
   version: number;
@@ -75,17 +77,17 @@ export namespace PushTokenRolloutState {
   export function getProgress(state: PushTokenRolloutState): number {
     switch (state) {
       case PushTokenRolloutState.Pending:
-        return 0;
+        return TOKEN_ROLLOUT_PROGRESS.pending;
       case PushTokenRolloutState.RSAKeyGeneration:
-        return 40;
+        return TOKEN_ROLLOUT_PROGRESS.rsaKeyGeneration;
       case PushTokenRolloutState.SendRSAPublicKey:
-        return 70;
+        return TOKEN_ROLLOUT_PROGRESS.sendRsaPublicKey;
       case PushTokenRolloutState.ParsingResponse:
-        return 90;
+        return TOKEN_ROLLOUT_PROGRESS.parsingResponse;
       case PushTokenRolloutState.Completed:
-        return 100;
+        return TOKEN_ROLLOUT_PROGRESS.completed;
       default:
-        return 100;
+        return TOKEN_ROLLOUT_PROGRESS.completed;
     }
   }
 }
