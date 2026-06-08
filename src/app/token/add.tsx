@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   scanner: {
-    borderRadius: Radii.twenty,
+    borderRadius: Radii.xl,
     height: 300,
     overflow: "hidden",
     width: "100%",

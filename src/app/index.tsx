@@ -363,7 +363,7 @@ export const styles = StyleSheet.create({
     alignSelf: "center",
   },
   tokenCard: {
-    borderRadius: Radii.twenty,
+    borderRadius: Radii.xl,
     overflow: "hidden",
   },
   tokenWrapper: {

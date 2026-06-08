@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   progressBarBlur: {
-    borderRadius: Radii.thirtyTwo,
+    borderRadius: Radii.pill,
     height: "100%",
     position: "absolute",
     width: "100%",

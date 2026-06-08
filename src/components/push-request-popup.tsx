@@ -334,7 +334,7 @@ function ActionButton({
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    borderRadius: Radii.twelve,
+    borderRadius: Radii.lg,
     flex: 1,
     justifyContent: "center",
     paddingVertical: Spacing.md,
@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   detailsContainer: {
-    borderRadius: Radii.twelve,
+    borderRadius: Radii.lg,
     borderWidth: 1,
     padding: Spacing.md,
   },
@@ -389,7 +389,7 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.lg,
   },
   popup: {
-    borderRadius: Radii.twenty,
+    borderRadius: Radii.xl,
     borderWidth: 1,
     elevation: 12,
     overflow: "hidden",

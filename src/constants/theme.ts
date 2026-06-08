@@ -112,16 +112,11 @@ export const Typography = {
 } as const;
 
 export const Radii = {
-  four: 4,
-  six: 6,
-  ten: 10,
-  twelve: 12,
-  twenty: 20,
-  thirtyTwo: 32,
-  thirtyFour: 34,
-  forty: 40,
-  fortyFive: 45,
-  eighty: 80,
+  sm: 4,
+  md: 10,
+  lg: 12,
+  xl: 20,
+  pill: 32,
 } as const;
 
 export const StaticColors = {
