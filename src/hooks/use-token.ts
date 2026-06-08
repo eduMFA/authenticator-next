@@ -1,7 +1,7 @@
-import { deleteTokenPrivateKey } from "@/services/tokenRolloutService";
-import { useTokenStore } from "@/store/tokenStore";
+import { deleteTokenPrivateKey } from "@/services/token-rollout-service";
+import { useTokenStore } from "@/store/token-store";
 import { PushTokenRolloutState } from "@/types";
-import { parseTokenFromUri } from "@/utils/tokenUtils";
+import { parseTokenFromUri } from "@/utils/token-utils";
 import { useCallback } from "react";
 
 // Selectors for better performance - defined outside to maintain referential stability

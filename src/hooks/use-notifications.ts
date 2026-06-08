@@ -1,17 +1,17 @@
-import { useNotificationStore } from "@/store/notificationStore";
-import { usePushRequestStore } from "@/store/pushRequestStore";
+import { useNotificationStore } from "@/store/notification-store";
+import { usePushRequestStore } from "@/store/push-request-store";
 import { PushRequest, PushRequestStatus } from "@/types";
 import { base32ToBase64 } from "@/utils/crypto";
 import {
   addBackgroundMessageHandler,
   addMessageListener,
-} from "@/utils/notificationService";
-import { buildPushRequestSignedData } from "@/utils/pushRequestUtils";
+} from "@/utils/notification-service";
+import { buildPushRequestSignedData } from "@/utils/push-request-utils";
 import { verifyMessage } from "@/utils/rsa";
 import * as Notifications from "expo-notifications";
 import { useCallback, useEffect, useRef } from "react";
-import { useChallengePolling } from "./useChallengePolling";
-import { useToken } from "./useToken";
+import { useChallengePolling } from "./use-challenge-polling";
+import { useToken } from "./use-token";
 
 export type NotificationAction = "ACCEPT" | "DECLINE" | "TAP";
 

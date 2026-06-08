@@ -1,4 +1,3 @@
-import { theme } from "@/theme";
 import {
   PushToken,
   PushTokenRefreshStatus,
@@ -8,6 +7,8 @@ import { BlurTargetView, BlurView } from "expo-blur";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
+import { Radii, Spacing, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import { useLingui } from "@lingui/react/macro";
 import Animated, {
   Easing,
@@ -18,8 +19,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { ThemedText, useThemeColor } from "./Themed";
-import { TokenImage } from "./TokenImage";
+import { ThemedText } from "./themed-text";
+import { TokenImage } from "./token-image";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
@@ -45,10 +46,10 @@ export const TokenDetails = memo(function TokenDetails({
   token: PushToken;
 }) {
   const { t } = useLingui();
-  const backgroundColor = useThemeColor(theme.color.backgroundSecondary);
-  const successBarColor = useThemeColor(theme.color.successBar);
-  const errorBarColor = useThemeColor(theme.color.errorBar);
-  const errorTextColor = useThemeColor(theme.color.text);
+  const theme = useTheme();
+  const backgroundColor = theme.backgroundSecondary;
+  const successBarColor = theme.successBar;
+  const errorBarColor = theme.errorBar;
   const blurTargetRef = useRef<View | null>(null);
 
   // Derive initial states from token
@@ -118,7 +119,7 @@ export const TokenDetails = memo(function TokenDetails({
         <View style={styles.tokenDetails}>
           <View style={styles.titleRow}>
             <ThemedText
-              fontSize={theme.fontSize16}
+              fontSize={Typography.fontSize16}
               numberOfLines={1}
               style={styles.tokenLabel}
             >
@@ -133,8 +134,8 @@ export const TokenDetails = memo(function TokenDetails({
                 ]}
               >
                 <ThemedText
-                  color={errorTextColor}
-                  fontSize={theme.fontSize10}
+                  themeColor="text"
+                  fontSize={Typography.fontSize10}
                   fontWeight="bold"
                 >
                   !
@@ -144,9 +145,9 @@ export const TokenDetails = memo(function TokenDetails({
           </View>
           {token.issuer && (
             <ThemedText
-              fontSize={theme.fontSize14}
+              fontSize={Typography.fontSize14}
               fontWeight="medium"
-              color={theme.color.textSecondary}
+              themeColor="textSecondary"
             >
               {token.issuer}
             </ThemedText>
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   progressBarBlur: {
-    borderRadius: theme.borderRadius32,
+    borderRadius: Radii.pill,
     height: "100%",
     position: "absolute",
     width: "100%",
@@ -188,15 +189,15 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
     position: "absolute",
-    top: theme.space24,
+    top: Spacing.xl,
     zIndex: 2,
   },
   refreshBadge: {
     alignItems: "center",
-    borderRadius: 9,
+    borderRadius: Radii.md,
     height: 18,
     justifyContent: "center",
-    marginLeft: theme.space8,
+    marginLeft: Spacing.xs,
     width: 18,
   },
   titleRow: {
@@ -207,11 +208,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     height: 70,
-    padding: theme.space12,
+    padding: Spacing.md,
   },
   tokenDetails: {
     flex: 1,
-    gap: theme.space2,
+    gap: Spacing.xxs,
     justifyContent: "center",
   },
   tokenLabel: {

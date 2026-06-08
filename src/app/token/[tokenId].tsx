@@ -1,4 +1,3 @@
-import { useThemeColor } from "@/components/Themed";
 import { TokenEditContent } from "@/components/token-detail/TokenEditContent";
 import { TokenOverviewContent } from "@/components/token-detail/TokenOverviewContent";
 import {
@@ -6,12 +5,13 @@ import {
   getEditableTokenFields,
   getParamValue,
 } from "@/components/token-detail/token-detail-utils";
-import { useDeleteTokenConfirmation } from "@/hooks/useDeleteTokenConfirmation";
-import { useToken } from "@/hooks/useToken";
-import { theme } from "@/theme";
+import { Spacing } from "@/constants/theme";
+import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
+import { useTheme } from "@/hooks/use-theme";
+import { useToken } from "@/hooks/use-token";
+import { useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
-import { useLingui } from "@lingui/react/macro";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Platform, StyleSheet, useColorScheme } from "react-native";
 import Animated, {
@@ -60,12 +60,12 @@ export default function TokenDetails() {
   const router = useRouter();
   const colorScheme = useColorScheme() || "light";
   const { t } = useLingui();
-  const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
-  const sheetColor = isLiquidGlassAvailable()
-    ? theme.color.transparent
-    : theme.color.background;
-  const scrollBackgroundColor = useThemeColor(sheetColor);
+  const theme = useTheme();
+  const transparentColor = theme.transparent;
+  const tabBarBackgroundColor = theme.background;
+  const scrollBackgroundColor = isLiquidGlassAvailable()
+    ? theme.transparent
+    : theme.background;
   const headerStyle = useMemo(
     () => ({
       backgroundColor:
@@ -219,10 +219,10 @@ export default function TokenDetails() {
 
 const styles = StyleSheet.create({
   content: {
-    gap: theme.space24,
-    paddingBottom: theme.space24,
-    paddingHorizontal: theme.space24,
-    paddingTop: Platform.select({ android: theme.space24, ios: theme.space16 }),
+    gap: Spacing.xl,
+    paddingBottom: Spacing.xl,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Platform.select({ android: Spacing.xl, ios: Spacing.lg }),
   },
   scroll: {
     flex: 1,

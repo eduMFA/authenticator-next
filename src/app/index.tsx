@@ -1,10 +1,13 @@
-import { NotificationHandler } from "@/components/NotificationHandler";
-import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
-import { TokenDetails } from "@/components/TokenDetails";
-import { useChallengePolling } from "@/hooks/useChallengePolling";
-import { useDeleteTokenConfirmation } from "@/hooks/useDeleteTokenConfirmation";
-import { useToken } from "@/hooks/useToken";
-import { usePushRequestStore } from "@/store/pushRequestStore";
+import { NotificationHandler } from "@/components/notification-handler";
+import { TokenDetails } from "@/components/token-details";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Radii, Spacing, Typography } from "@/constants/theme";
+import { useChallengePolling } from "@/hooks/use-challenge-polling";
+import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
+import { useToken } from "@/hooks/use-token";
+import { useTheme } from "@/hooks/use-theme";
+import { usePushRequestStore } from "@/store/push-request-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
@@ -25,7 +28,6 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { theme } from "../theme";
 
 export default function Tokens() {
   const router = useRouter();
@@ -35,15 +37,13 @@ export default function Tokens() {
   const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
-  const backgroundColor = useThemeColor(theme.color.background);
+  const theme = useTheme();
+  const backgroundColor = theme.background;
   const { t } = useLingui();
-  const tabBarTintColor = useThemeColor({
-    light: theme.colorBlack,
-    dark: theme.colorWhite,
-  });
-  const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
-  const refreshControlTintColor = useThemeColor(theme.color.text);
+  const tabBarTintColor = theme.text;
+  const transparentColor = theme.transparent;
+  const tabBarBackgroundColor = theme.background;
+  const refreshControlTintColor = theme.text;
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -262,12 +262,12 @@ export default function Tokens() {
       <>
         {header}
         <ThemedView style={styles.noTokenContainer}>
-          <ThemedText fontSize={theme.fontSize20} fontWeight="medium">
+          <ThemedText fontSize={Typography.fontSize20} fontWeight="medium">
             <Trans>No Token setup</Trans>
           </ThemedText>
           <ThemedView style={styles.noTokenHintContent}>
             <ThemedText
-              fontSize={theme.fontSize16}
+              fontSize={Typography.fontSize16}
               fontWeight="light"
               style={styles.noTokenHint}
             >
@@ -279,7 +279,7 @@ export default function Tokens() {
               style={styles.noTokenHintIcon}
             />
             <ThemedText
-              fontSize={theme.fontSize16}
+              fontSize={Typography.fontSize16}
               fontWeight="light"
               style={styles.noTokenHint}
             >
@@ -344,10 +344,10 @@ export default function Tokens() {
 
 export const styles = StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: theme.space16,
+    paddingHorizontal: Spacing.lg,
   },
   noResultsContainer: {
-    padding: theme.space24,
+    padding: Spacing.xl,
   },
   noTokenContainer: {
     alignItems: "center",
@@ -355,22 +355,22 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   noTokenHint: {
-    lineHeight: theme.fontSize16 * 1.2,
+    lineHeight: Typography.fontSize16 * 1.2,
   },
   noTokenHintContent: {
     alignItems: "center",
     flexDirection: "row",
-    gap: theme.space4,
-    marginTop: theme.space8,
+    gap: Spacing.xs,
+    marginTop: Spacing.sm,
   },
   noTokenHintIcon: {
     alignSelf: "center",
   },
   tokenCard: {
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     overflow: "hidden",
   },
   tokenWrapper: {
-    marginVertical: theme.space8,
+    marginVertical: Spacing.sm,
   },
 });

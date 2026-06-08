@@ -17,8 +17,8 @@ msgstr ""
 #~ msgid " to get started."
 #~ msgstr " to get started."
 
-#: src/components/PushRequestPopup.tsx:220
-#: src/store/notificationStore.ts:48
+#: src/components/push-request-popup.tsx:228
+#: src/store/notification-store.ts:48
 msgid "Accept"
 msgstr "Accept"
 
@@ -27,7 +27,7 @@ msgstr "Accept"
 #~ msgid "Add"
 #~ msgstr "Add"
 
-#: src/hooks/useDeleteTokenConfirmation.ts:18
+#: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Are you sure you want to delete this token?"
 
@@ -44,8 +44,8 @@ msgstr "Camera permission required"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/components/PushRequestPopup.tsx:214
-#: src/store/notificationStore.ts:56
+#: src/components/push-request-popup.tsx:222
+#: src/store/notification-store.ts:56
 msgid "Decline"
 msgstr "Decline"
 
@@ -55,7 +55,7 @@ msgstr "Decline"
 msgid "Delete"
 msgstr "Delete"
 
-#: src/hooks/useDeleteTokenConfirmation.ts:17
+#: src/hooks/use-delete-token-confirmation.ts:17
 msgid "Delete token"
 msgstr "Delete token"
 
@@ -67,7 +67,7 @@ msgstr "Details"
 msgid "Dismiss"
 msgstr "Dismiss"
 
-#: src/hooks/useHandleTokenUri.ts:74
+#: src/hooks/use-handle-token-uri.ts:74
 msgid "Download 2FAS"
 msgstr "Download 2FAS"
 
@@ -90,7 +90,7 @@ msgstr "Enter a label for this token."
 msgid "Failed to add token"
 msgstr "Failed to add token"
 
-#: src/components/QRCodeScanner.tsx:49
+#: src/components/qr-code-scanner.tsx:49
 msgid "Grant permission"
 msgstr "Grant permission"
 
@@ -122,11 +122,11 @@ msgstr "No results found for "
 msgid "No Token setup"
 msgstr "No Token setup"
 
-#: src/components/QRCodeScanner.tsx:50
+#: src/components/qr-code-scanner.tsx:50
 msgid "Open Settings"
 msgstr "Open Settings"
 
-#: src/app/token/add.tsx:78
+#: src/app/token/add.tsx:77
 msgid "OR"
 msgstr "OR"
 
@@ -175,7 +175,7 @@ msgstr "Save"
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scan the QR code to pair a new push token."
 
-#: src/hooks/useHandleTokenUri.ts:79
+#: src/hooks/use-handle-token-uri.ts:79
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
@@ -204,15 +204,15 @@ msgstr "Tap the"
 #~ msgid "Tap the "
 #~ msgstr "Tap the "
 
-#: src/hooks/useHandleTokenUri.ts:63
+#: src/hooks/use-handle-token-uri.ts:63
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "The provided QR code isn't a valid eduMFA token."
 
-#: src/hooks/useHandleTokenUri.ts:71
+#: src/hooks/use-handle-token-uri.ts:71
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
 msgstr "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
 
-#: src/hooks/useHandleTokenUri.ts:92
+#: src/hooks/use-handle-token-uri.ts:92
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 
@@ -236,14 +236,14 @@ msgstr "Update the display name for this token."
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
 
-#: src/components/QRCodeScanner.tsx:43
+#: src/components/qr-code-scanner.tsx:43
 msgid "We need your permission to show the camera"
 msgstr "We need your permission to show the camera"
 
-#: src/components/QRCodeScanner.tsx:44
+#: src/components/qr-code-scanner.tsx:44
 msgid "You can enable camera permissions in your device settings"
 msgstr "You can enable camera permissions in your device settings"
 
-#: src/hooks/useHandleTokenUri.ts:46
+#: src/hooks/use-handle-token-uri.ts:46
 msgid "Your image did not contain a QR code."
 msgstr "Your image did not contain a QR code."
