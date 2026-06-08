@@ -1,4 +1,4 @@
-import { useToken } from "@/hooks/useToken";
+import { useToken } from "@/hooks/use-token";
 import { useLingui } from "@lingui/react/macro";
 import { useCallback } from "react";
 import { Alert } from "react-native";

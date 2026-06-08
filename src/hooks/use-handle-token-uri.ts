@@ -2,8 +2,8 @@ import {
   InvalidUrlError,
   OtpProtocolError,
   UnsupportedVersionError,
-} from "@/errors/tokenErrors";
-import { useToken } from "@/hooks/useToken";
+} from "@/errors/token-errors";
+import { useToken } from "@/hooks/use-token";
 import { useLingui } from "@lingui/react/macro";
 import * as Haptics from "expo-haptics";
 import { useCallback } from "react";

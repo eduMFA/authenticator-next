@@ -1,11 +1,12 @@
-import { ThemedText, useThemeColor } from "@/components/Themed";
-import { useChallengePolling } from "@/hooks/useChallengePolling";
-import { useHandleTokenUri } from "@/hooks/useHandleTokenUri";
-import { useNotificationStore } from "@/store/notificationStore";
-import { useTokenStore } from "@/store/tokenStore";
-import { theme, useInterFonts } from "@/theme";
+import { ThemedText } from "@/components/themed-text";
+import { Typography, useInterFonts } from "@/constants/theme";
+import { useChallengePolling } from "@/hooks/use-challenge-polling";
+import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
+import { useTheme } from "@/hooks/use-theme";
+import { useNotificationStore } from "@/store/notification-store";
+import { useTokenStore } from "@/store/token-store";
 import { activateCurrentLocale } from "@/utils/locale";
-import { isTokenEnrollmentUri } from "@/utils/tokenUtils";
+import { isTokenEnrollmentUri } from "@/utils/token-utils";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
@@ -53,7 +54,8 @@ function RootLayoutContent() {
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
 
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
+  const theme = useTheme();
+  const tabBarBackgroundColor = theme.background;
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
@@ -118,7 +120,7 @@ function RootLayoutContent() {
         options={{
           headerTitle: () =>
             Platform.OS === "android" ? (
-              <ThemedText fontSize={theme.fontSize20} fontWeight="bold">
+              <ThemedText fontSize={Typography.fontSize20} fontWeight="bold">
                 Tokens
               </ThemedText>
             ) : undefined,

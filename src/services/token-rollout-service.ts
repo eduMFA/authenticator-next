@@ -1,9 +1,9 @@
-import { KEY_SIZE } from "@/consts";
-import { useNotificationStore } from "@/store/notificationStore";
+import { KEY_SIZE } from "@/constants/auth";
+import { useNotificationStore } from "@/store/notification-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { stripPemArmor } from "@/utils/crypto";
 import { deleteRsaKeyPair, generateRsaKeyPair } from "@/utils/rsa";
-import { parseTokenResponse } from "@/utils/tokenUtils";
+import { parseTokenResponse } from "@/utils/token-utils";
 
 // Map rollout states to their corresponding failed states
 const ROLLOUT_STATE_TO_FAILED_STATE: Partial<
