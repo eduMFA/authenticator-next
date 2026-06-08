@@ -73,11 +73,11 @@ export namespace PushTokenRolloutState {
   }
 
   export function getProgress(state: PushTokenRolloutState): number {
-    return TOKEN_ROLLOUT_PROGRESS[state];
+    return rolloutProgressByState[state];
   }
 }
 
-const TOKEN_ROLLOUT_PROGRESS: Record<PushTokenRolloutState, number> = {
+const rolloutProgressByState = {
   [PushTokenRolloutState.Pending]: 0,
   [PushTokenRolloutState.RSAKeyGeneration]: 40,
   [PushTokenRolloutState.RSAKeyGenerationFailed]: 100,
@@ -86,4 +86,4 @@ const TOKEN_ROLLOUT_PROGRESS: Record<PushTokenRolloutState, number> = {
   [PushTokenRolloutState.ParsingResponse]: 90,
   [PushTokenRolloutState.ParsingResponseFailed]: 100,
   [PushTokenRolloutState.Completed]: 100,
-};
+} satisfies Record<PushTokenRolloutState, number>;
