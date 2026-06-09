@@ -38,7 +38,7 @@ export function TokenImage({
 }) {
   const theme = useTheme();
   const borderColor = theme.border;
-  const fallbackBackgroundColor = theme.backgroundSecondary;
+  const fallbackBackgroundColor = theme.fill;
   const [isLoading, setIsLoading] = useState(false);
   const imageSize = (() => {
     switch (size) {

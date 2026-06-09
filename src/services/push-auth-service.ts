@@ -2,7 +2,7 @@ import { SIGN_ALGORITHM } from "@/constants/auth";
 import { PushRequest, PushRequestStatus, PushToken } from "@/types";
 import { base64ToBase32 } from "@/utils/crypto";
 import { signMessage } from "@/utils/rsa";
-import * as Haptics from "expo-haptics";
+import { Presets } from "react-native-pulsar";
 
 export interface PushAuthResponse {
   success: boolean;
@@ -108,11 +108,11 @@ export async function handlePushAuthRequest(
     }
 
     // Provide haptic feedback
-    Haptics.notificationAsync(
-      isDeclined
-        ? Haptics.NotificationFeedbackType.Warning
-        : Haptics.NotificationFeedbackType.Success,
-    );
+    if (isDeclined) {
+      Presets.System.notificationWarning();
+    } else {
+      Presets.System.notificationSuccess();
+    }
 
     return { success: true };
   } catch (error) {
