@@ -1,19 +1,19 @@
 import { NotificationHandler } from "@/components/notification-handler";
-import { TokenDetails } from "@/components/token-details";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { TokenDetails } from "@/components/token-details";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
-import { useToken } from "@/hooks/use-token";
 import { useTheme } from "@/hooks/use-theme";
+import { useToken } from "@/hooks/use-token";
 import { usePushRequestStore } from "@/store/push-request-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   Keyboard,
   Platform,
@@ -23,23 +23,35 @@ import {
   useColorScheme,
   useWindowDimensions,
 } from "react-native";
+import { useRealtimeComposer } from "react-native-pulsar";
 import Animated, {
   FadeIn,
   FadeOut,
   LinearTransition,
+  useAnimatedScrollHandler,
+  useSharedValue,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+const refreshHapticThreshold = 200;
+const refreshHapticRippleDistances = [75, 110, 130, 135, 145, 150, 155, 160];
 
 export default function Tokens() {
   const router = useRouter();
   const { tokens, updateToken, rolloutToken } = useToken();
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
+  const [isManualRefreshPolling, setIsManualRefreshPolling] = useState(false);
   const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
   const colorScheme = useColorScheme();
   const theme = useTheme();
+  const refreshHaptics = useRealtimeComposer();
+  const didPopRefreshHaptic = useSharedValue(false);
+  const isRefreshPullActive = useSharedValue(false);
+  const refreshPullStartOffset = useSharedValue(0);
+  const refreshHapticRippleIndex = useSharedValue(-1);
   const backgroundColor = theme.background;
   const { t } = useLingui();
   const tabBarTintColor = theme.text;
@@ -78,8 +90,82 @@ export default function Tokens() {
   };
 
   const onRefresh = useCallback(() => {
-    pollChallenges();
-  }, [pollChallenges]);
+    if (isPolling || tokens.length === 0) {
+      return;
+    }
+
+    refreshHaptics.stop();
+    refreshHaptics.playDiscrete(1, 1);
+    setIsManualRefreshPolling(true);
+
+    pollChallenges().finally(() => {
+      setIsManualRefreshPolling(false);
+    });
+  }, [isPolling, pollChallenges, refreshHaptics, tokens.length]);
+
+  const onRefreshScroll = useAnimatedScrollHandler({
+    onBeginDrag: (event) => {
+      refreshPullStartOffset.value = event.contentOffset.y;
+      isRefreshPullActive.value = event.contentOffset.y <= 0;
+      didPopRefreshHaptic.value = false;
+      refreshHapticRippleIndex.value = -1;
+    },
+    onEndDrag: () => {
+      refreshHaptics.stop();
+      isRefreshPullActive.value = false;
+      didPopRefreshHaptic.value = false;
+      refreshHapticRippleIndex.value = -1;
+    },
+    onMomentumEnd: () => {
+      refreshHaptics.stop();
+      isRefreshPullActive.value = false;
+      didPopRefreshHaptic.value = false;
+      refreshHapticRippleIndex.value = -1;
+    },
+    onScroll: (event) => {
+      if (!isRefreshPullActive.value) {
+        return;
+      }
+
+      const pullDistance = Math.max(
+        refreshPullStartOffset.value - event.contentOffset.y,
+        0,
+      );
+
+      if (pullDistance <= 0) {
+        refreshHaptics.stop();
+        didPopRefreshHaptic.value = false;
+        refreshHapticRippleIndex.value = -1;
+        return;
+      }
+
+      const pullProgress = Math.min(pullDistance / refreshHapticThreshold, 1);
+
+      if (pullProgress >= 1 && !didPopRefreshHaptic.value) {
+        refreshHaptics.stop();
+        didPopRefreshHaptic.value = true;
+        return;
+      }
+
+      if (pullProgress < 1) {
+        didPopRefreshHaptic.value = false;
+        const rippleIndex = refreshHapticRippleDistances.findLastIndex(
+          (distance) => pullDistance >= distance,
+        );
+
+        if (rippleIndex >= 0 && rippleIndex > refreshHapticRippleIndex.value) {
+          const rippleElementProgress =
+            (rippleIndex + 1) / refreshHapticRippleDistances.length;
+
+          refreshHaptics.playDiscrete(
+            0.35 + rippleElementProgress * 0.35,
+            0.35 + rippleElementProgress * 0.4,
+          );
+          refreshHapticRippleIndex.value = rippleIndex;
+        }
+      }
+    },
+  });
 
   const renderItem = useCallback(
     ({ item }: { item: PushToken }) => {
@@ -298,7 +384,9 @@ export default function Tokens() {
       <Animated.FlatList
         scrollToOverflowEnabled
         contentInsetAdjustmentBehavior="automatic"
+        onScroll={onRefreshScroll}
         onScrollBeginDrag={dismissKeyboard}
+        scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled"
         style={{ backgroundColor }}
         contentContainerStyle={[
@@ -327,7 +415,7 @@ export default function Tokens() {
         }
         refreshControl={
           <RefreshControl
-            refreshing={isPolling}
+            refreshing={isPolling || isManualRefreshPolling}
             onRefresh={onRefresh}
             title={t`Refreshing...`}
             tintColor={refreshControlTintColor}
