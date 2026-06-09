@@ -273,7 +273,7 @@ function ActionButton({
 }: ActionButtonProps) {
   const theme = useTheme();
   const brandingColor = theme.branding;
-  const backgroundColor = theme.backgroundSecondary;
+  const backgroundColor = theme.fill;
   const pressScale = useSharedValue(1);
   const primaryButtonStyle = useMemo(
     () => ({ backgroundColor: brandingColor }),

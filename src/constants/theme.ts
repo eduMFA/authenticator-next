@@ -8,7 +8,8 @@ import { Inter_600SemiBold_Italic } from "@expo-google-fonts/inter/600SemiBold_I
 import { Inter_700Bold } from "@expo-google-fonts/inter/700Bold";
 import { Inter_700Bold_Italic } from "@expo-google-fonts/inter/700Bold_Italic";
 import * as Device from "expo-device";
-import { Platform } from "react-native";
+import { Color } from "expo-router";
+import { ColorValue, Platform } from "react-native";
 
 const SPACE_SCALE = 1.33;
 const FONT_SCALE = 1.2;
@@ -32,7 +33,20 @@ export function useInterFonts() {
   });
 }
 
-export const Colors = {
+type ThemeColors = {
+  branding: ColorValue;
+  transparent: ColorValue;
+  background: ColorValue;
+  backgroundSecondary: ColorValue;
+  text: ColorValue;
+  textSecondary: ColorValue;
+  border: ColorValue;
+  fill: ColorValue;
+  successBar: string;
+  errorBar: string;
+};
+
+const fallbackColors = {
   light: {
     branding: "#0066FF",
     transparent: "rgba(255,255,255,0)",
@@ -41,6 +55,7 @@ export const Colors = {
     text: "#121212",
     textSecondary: "#606060",
     border: "#D9D9D0",
+    fill: "#E5E5EA",
     successBar: "rgba(6, 64, 43, 0.6)",
     errorBar: "rgba(220, 53, 69, 0.6)",
   },
@@ -52,10 +67,34 @@ export const Colors = {
     text: "#FFFFFF",
     textSecondary: "#CCCCCC",
     border: "#363A3F",
+    fill: "#2C2C2E",
     successBar: "rgba(6, 64, 43, 0.6)",
     errorBar: "rgba(220, 53, 69, 0.6)",
   },
-} as const;
+} as const satisfies Record<"light" | "dark", ThemeColors>;
+
+const iosColors = Color.ios;
+
+const iosThemeColors =
+  Platform.OS === "ios" && iosColors
+    ? ({
+        branding: iosColors.systemBlue,
+        transparent: "transparent",
+        background: iosColors.systemGroupedBackground,
+        backgroundSecondary: iosColors.secondarySystemGroupedBackground,
+        text: iosColors.label,
+        textSecondary: iosColors.secondaryLabel,
+        border: iosColors.separator,
+        fill: iosColors.secondarySystemFill,
+        successBar: fallbackColors.light.successBar,
+        errorBar: fallbackColors.light.errorBar,
+      } satisfies ThemeColors)
+    : null;
+
+export const Colors = {
+  light: iosThemeColors ?? fallbackColors.light,
+  dark: iosThemeColors ?? fallbackColors.dark,
+} as const satisfies Record<"light" | "dark", ThemeColors>;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 

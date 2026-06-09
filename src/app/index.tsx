@@ -2,7 +2,7 @@ import { NotificationHandler } from "@/components/notification-handler";
 import { TokenDetails } from "@/components/token-details";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Radii, Spacing, Typography } from "@/constants/theme";
+import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
 import { useToken } from "@/hooks/use-token";
@@ -20,6 +20,7 @@ import {
   Pressable,
   RefreshControl,
   StyleSheet,
+  useColorScheme,
   useWindowDimensions,
 } from "react-native";
 import Animated, {
@@ -37,13 +38,15 @@ export default function Tokens() {
   const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
+  const colorScheme = useColorScheme();
   const theme = useTheme();
   const backgroundColor = theme.background;
   const { t } = useLingui();
   const tabBarTintColor = theme.text;
   const transparentColor = theme.transparent;
   const tabBarBackgroundColor = theme.background;
-  const refreshControlTintColor = theme.text;
+  const refreshControlTintColor =
+    colorScheme === "dark" ? StaticColors.white : StaticColors.black;
 
   const params = useLocalSearchParams<{ q?: string }>();
 
