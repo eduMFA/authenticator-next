@@ -3,7 +3,7 @@ import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { SymbolView } from "expo-symbols";
 import { ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { ColorValue, StyleSheet, View } from "react-native";
 import Animated, {
   Easing,
   FadeIn,
@@ -11,24 +11,36 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 
-export function TokenStatusCard({
-  tone,
+export type StatusCardVariant = "error" | "danger" | "success";
+
+const variantIcons = {
+  danger: {
+    ios: "exclamationmark.triangle.fill",
+    android: "warning",
+  },
+  error: {
+    ios: "xmark.octagon.fill",
+    android: "error",
+  },
+  success: {
+    ios: "checkmark.circle.fill",
+    android: "check_circle",
+  },
+} as const;
+
+export function StatusCard({
+  variant,
   title,
   description,
   children,
 }: {
-  tone: "warning" | "danger" | "neutral";
+  variant: StatusCardVariant;
   title: string;
   description: string;
   children?: ReactNode;
 }) {
   const theme = useTheme();
-  const isDanger = tone === "danger";
-  const backgroundColor = isDanger
-    ? theme.errorBackground
-    : theme.backgroundSecondary;
-  const borderColor = isDanger ? theme.errorBar : theme.border;
-  const iconColor = isDanger ? theme.errorBar : theme.textSecondary;
+  const colors = getVariantColors(variant, theme);
 
   return (
     <Animated.View
@@ -40,25 +52,25 @@ export function TokenStatusCard({
         })}
       exiting={FadeOut.duration(120).easing(Easing.in(Easing.cubic))}
       layout={LinearTransition.duration(180).easing(Easing.out(Easing.cubic))}
-      style={[styles.statusCard, { backgroundColor, borderColor }]}
+      style={[
+        styles.statusCard,
+        {
+          backgroundColor: colors.background,
+          borderColor: colors.accent,
+        },
+      ]}
     >
       <View style={styles.statusTitleRow}>
-        {tone === "danger" ? (
-          <SymbolView
-            name={{
-              ios: "exclamationmark.triangle.fill",
-              android: "warning",
-            }}
-            size={18}
-            tintColor={iconColor}
-          />
-        ) : null}
+        <SymbolView
+          name={variantIcons[variant]}
+          size={18}
+          tintColor={colors.accent}
+        />
         <ThemedText fontSize={Typography.fontSize16} fontWeight="bold">
           {title}
         </ThemedText>
       </View>
       <ThemedText
-        themeColor={isDanger ? "text" : "textSecondary"}
         fontSize={Typography.fontSize14}
         style={styles.statusDescription}
       >
@@ -67,6 +79,29 @@ export function TokenStatusCard({
       {children}
     </Animated.View>
   );
+}
+
+function getVariantColors(
+  variant: StatusCardVariant,
+  theme: ReturnType<typeof useTheme>,
+): { accent: ColorValue; background: ColorValue } {
+  switch (variant) {
+    case "danger":
+      return {
+        accent: theme.dangerBar,
+        background: theme.dangerBackground,
+      };
+    case "error":
+      return {
+        accent: theme.errorBar,
+        background: theme.errorBackground,
+      };
+    case "success":
+      return {
+        accent: theme.successBar,
+        background: theme.successBackground,
+      };
+  }
 }
 
 const styles = StyleSheet.create({

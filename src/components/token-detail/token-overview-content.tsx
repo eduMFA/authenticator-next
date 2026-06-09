@@ -1,3 +1,4 @@
+import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenImage } from "@/components/token-image";
@@ -12,7 +13,6 @@ import { Button, Host } from "@expo/ui/swift-ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import { StyleSheet, View } from "react-native";
-import { TokenStatusCard } from "./token-status-card";
 import {
   formatTimestamp,
   getRolloutFailureDetails,
@@ -84,8 +84,8 @@ export function TokenOverviewContent({
       </View>
 
       {isRolloutFailed ? (
-        <TokenStatusCard
-          tone="danger"
+        <StatusCard
+          variant="error"
           title={rolloutFailureDetails.title}
           description={rolloutFailureDetails.description}
         >
@@ -99,12 +99,12 @@ export function TokenOverviewContent({
               />
             </Host>
           </View>
-        </TokenStatusCard>
+        </StatusCard>
       ) : null}
 
       {hasRefreshFailure ? (
-        <TokenStatusCard
-          tone="danger"
+        <StatusCard
+          variant="error"
           title={t`Refresh failed`}
           description={refreshFailureDetails.message}
         >
@@ -137,7 +137,7 @@ export function TokenOverviewContent({
               {t`Last failed`} {refreshFailedAt}
             </ThemedText>
           ) : null}
-        </TokenStatusCard>
+        </StatusCard>
       ) : null}
 
       <View style={styles.section}>
