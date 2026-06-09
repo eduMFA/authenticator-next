@@ -18,9 +18,6 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#~ msgid "Add"
-#~ msgstr "Hinzufügen"
-
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
@@ -33,7 +30,7 @@ msgstr "Prüfprotokoll"
 msgid "Camera permission required"
 msgstr "Kamera-Berechtigung erforderlich"
 
-#: src/app/token/[tokenId].tsx:161
+#: src/app/token/[tokenId].tsx:167
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -44,7 +41,7 @@ msgid "Decline"
 msgstr "Ablehnen"
 
 #: src/app/index.tsx:140
-#: src/app/token/[tokenId].tsx:180
+#: src/app/token/[tokenId].tsx:186
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Löschen"
@@ -66,7 +63,7 @@ msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
 #: src/app/index.tsx:122
-#: src/app/token/[tokenId].tsx:174
+#: src/app/token/[tokenId].tsx:180
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -74,7 +71,7 @@ msgstr "Bearbeiten"
 msgid "Edit token"
 msgstr "Token bearbeiten"
 
-#: src/app/token/[tokenId].tsx:115
+#: src/app/token/[tokenId].tsx:121
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
@@ -92,7 +89,7 @@ msgstr "Berechtigungen erteilen"
 msgid "Label"
 msgstr "Bezeichnung"
 
-#: src/app/token/[tokenId].tsx:115
+#: src/app/token/[tokenId].tsx:121
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
@@ -161,7 +158,7 @@ msgstr "Rollout läuft..."
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
-#: src/app/token/[tokenId].tsx:167
+#: src/app/token/[tokenId].tsx:173
 msgid "Save"
 msgstr "Speichern"
 
