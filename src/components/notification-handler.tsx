@@ -1,13 +1,13 @@
-import { useNotifications } from "@/hooks/useNotifications";
-import { useToken } from "@/hooks/useToken";
+import { useNotifications } from "@/hooks/use-notifications";
+import { useToken } from "@/hooks/use-token";
 import {
   findTokenForPushRequest,
   handlePushAuthRequest,
-} from "@/services/pushAuthService";
-import { usePushRequestStore } from "@/store/pushRequestStore";
+} from "@/services/push-auth-service";
+import { usePushRequestStore } from "@/store/push-request-store";
 import { PushRequest, PushRequestStatus } from "@/types";
 import { useCallback } from "react";
-import { PushRequestPopup } from "./PushRequestPopup";
+import { PushRequestPopup } from "./push-request-popup";
 
 /**
  * Component that handles push notifications and displays a popup for pending requests.

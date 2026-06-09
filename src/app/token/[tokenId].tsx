@@ -1,6 +1,8 @@
-import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
-import { useToken } from "@/hooks/useToken";
-import { theme } from "@/theme";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Spacing, Typography } from "@/constants/theme";
+import { useToken } from "@/hooks/use-token";
+import { useTheme } from "@/hooks/use-theme";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { useMemo } from "react";
@@ -13,8 +15,9 @@ export default function TokenDetails() {
   const token = tokens.find((t) => t.id === params.tokenId);
   const router = useRouter();
   const colorScheme = useColorScheme() || "light";
-  const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
+  const theme = useTheme();
+  const transparentColor = theme.transparent;
+  const tabBarBackgroundColor = theme.background;
   const headerStyle = useMemo(
     () => ({
       backgroundColor:
@@ -40,22 +43,18 @@ export default function TokenDetails() {
       </Stack.Toolbar>
       <ThemedView
         style={styles.sheet}
-        color={
-          isLiquidGlassAvailable()
-            ? theme.color.transparent
-            : theme.color.background
-        }
+        type={isLiquidGlassAvailable() ? "transparent" : "background"}
       >
         <SafeAreaView style={styles.container}>
           <View style={styles.header}>
-            <ThemedText fontSize={theme.fontSize18} fontWeight="bold">
+            <ThemedText fontSize={Typography.fontSize18} fontWeight="bold">
               {token?.label}
             </ThemedText>
             {token?.issuer ? (
               <ThemedText
-                fontSize={theme.fontSize14}
+                fontSize={Typography.fontSize14}
                 fontWeight="medium"
-                color={theme.color.textSecondary}
+                themeColor="textSecondary"
               >
                 {token.issuer}
               </ThemedText>
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginTop: Platform.select({ ios: 0, android: 30 }),
-    paddingHorizontal: theme.space24,
+    paddingHorizontal: Spacing.xl,
   },
   header: {
     alignItems: "center",

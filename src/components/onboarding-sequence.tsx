@@ -1,7 +1,8 @@
-import { ThemedText, useThemeColor } from "@/components/Themed";
-import { useNotificationStore } from "@/store/notificationStore";
-import { useSettingsStore } from "@/store/settingsStore";
-import { theme } from "@/theme";
+import { ThemedText } from "@/components/themed-text";
+import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
+import { useNotificationStore } from "@/store/notification-store";
+import { useSettingsStore } from "@/store/settings-store";
 import { AuthorizationStatus } from "@react-native-firebase/messaging";
 import { Image } from "expo-image";
 import { SymbolView } from "expo-symbols";
@@ -16,6 +17,7 @@ import {
   Pressable,
   StyleSheet,
   View,
+  type ColorValue,
   useColorScheme,
   useWindowDimensions,
 } from "react-native";
@@ -33,7 +35,7 @@ import Animated, {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-const PANEL_GAP = theme.space24 * 3;
+const PANEL_GAP = Spacing.xl * 3;
 const logoSource = require("../../assets/app-icons/edumfa.icon/Assets/logo.svg");
 
 type IconName = ComponentProps<typeof SymbolView>["name"];
@@ -126,10 +128,11 @@ export function OnboardingSequence() {
   const setCrashReportsEnabled = useSettingsStore(
     (state) => state.setCrashReportsEnabled,
   );
-  const backgroundColor = useThemeColor(theme.color.background);
-  const cardColor = useThemeColor(theme.color.backgroundSecondary);
-  const textColor = useThemeColor(theme.color.text);
-  const borderColor = useThemeColor(theme.color.border);
+  const theme = useTheme();
+  const backgroundColor = theme.background;
+  const cardColor = theme.backgroundSecondary;
+  const textColor = theme.text;
+  const borderColor = theme.border;
   const { bottom, top } = useSafeAreaInsets();
   const { height, width } = useWindowDimensions();
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
@@ -137,6 +140,8 @@ export function OnboardingSequence() {
     () => steps.map((item) => item.accent[colorScheme]),
     [colorScheme],
   );
+  const logoColor =
+    colorScheme === "dark" ? StaticColors.white : StaticColors.black;
   const screenProgress = useSharedValue(0);
   const shouldBlockNotificationAdvance =
     stepIndex === 1 &&
@@ -196,7 +201,7 @@ export function OnboardingSequence() {
       PanResponder.create({
         onMoveShouldSetPanResponder: (_, gestureState) => {
           const isHorizontalSwipe =
-            Math.abs(gestureState.dx) > theme.space8 &&
+            Math.abs(gestureState.dx) > Spacing.sm &&
             Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
           const canSwipeBack = stepIndex > 0 && gestureState.dx > 0;
           const canSwipeForward =
@@ -356,7 +361,6 @@ export function OnboardingSequence() {
           <NotificationStepActions
             accentColor={contentAccentColor}
             cardColor={cardColor}
-            colorScheme={colorScheme}
             isCheckingPermission={isCheckingPermission}
             isRequestingPermission={isRequestingPermission}
             onContinue={handleContinue}
@@ -397,7 +401,6 @@ export function OnboardingSequence() {
     [
       borderColor,
       cardColor,
-      colorScheme,
       crashReportsEnabled,
       handleContinue,
       handleDeclineCrashReports,
@@ -421,7 +424,7 @@ export function OnboardingSequence() {
           backgroundColor,
           height,
           paddingBottom: bottom,
-          paddingTop: top + theme.space24,
+          paddingTop: top + Spacing.xl,
         },
       ]}
     >
@@ -465,7 +468,7 @@ export function OnboardingSequence() {
                         ]}
                       >
                         {contentStepIndex === 0 ? (
-                          <WelcomeVisualContent logoColor={textColor} />
+                          <WelcomeVisualContent logoColor={logoColor} />
                         ) : (
                           <VisualCardContent
                             accentColor={contentAccentColor}
@@ -477,23 +480,22 @@ export function OnboardingSequence() {
 
                     <View style={styles.copy}>
                       <ThemedText
-                        color={contentStep.accent}
-                        fontSize={theme.fontSize14}
+                        fontSize={Typography.fontSize14}
                         fontWeight="semiBold"
-                        style={styles.kicker}
+                        style={[styles.kicker, { color: contentAccentColor }]}
                       >
                         {contentStep.kicker}
                       </ThemedText>
                       <ThemedText
-                        fontSize={theme.fontSize34}
+                        fontSize={Typography.fontSize34}
                         fontWeight="bold"
                         style={styles.title}
                       >
                         {contentStep.title}
                       </ThemedText>
                       <ThemedText
-                        color={theme.color.textSecondary}
-                        fontSize={theme.fontSize16}
+                        themeColor="textSecondary"
+                        fontSize={Typography.fontSize16}
                         style={styles.body}
                       >
                         {contentStep.body}
@@ -514,8 +516,7 @@ export function OnboardingSequence() {
 
 type NotificationStepActionsProps = {
   accentColor: string;
-  cardColor: string;
-  colorScheme: "light" | "dark";
+  cardColor: ColorValue;
   isCheckingPermission: boolean;
   isRequestingPermission: boolean;
   onContinue: () => void;
@@ -523,13 +524,12 @@ type NotificationStepActionsProps = {
   onOpenSettings: () => void;
   onSkip: () => void;
   permissionStatus: FirebaseAuthorizationStatus | null;
-  textColor: string;
+  textColor: ColorValue;
 };
 
 function NotificationStepActions({
   accentColor,
   cardColor,
-  colorScheme,
   isCheckingPermission,
   isRequestingPermission,
   onContinue,
@@ -539,6 +539,7 @@ function NotificationStepActions({
   permissionStatus,
   textColor,
 }: NotificationStepActionsProps) {
+  const theme = useTheme();
   const hasNotificationsEnabled = hasNotificationPermission(permissionStatus);
   const hasNotificationDecision =
     !isNotificationPermissionPending(permissionStatus);
@@ -558,8 +559,8 @@ function NotificationStepActions({
           title="Notifications are enabled"
         >
           <ThemedText
-            color={theme.color.textSecondary}
-            fontSize={theme.fontSize14}
+            themeColor="textSecondary"
+            fontSize={Typography.fontSize14}
             style={styles.permissionNoticeText}
           >
             eduMFA can receive push approvals and alert you when a sign-in needs
@@ -577,7 +578,7 @@ function NotificationStepActions({
   }
 
   if (hasNotificationDecision) {
-    const errorColor = theme.color.errorBar[colorScheme];
+    const errorColor = theme.errorBar;
 
     return (
       <View style={[styles.buttonStack, styles.buttonStackCompact]}>
@@ -588,19 +589,19 @@ function NotificationStepActions({
           iconColor={errorColor}
           isCritical
           title="Notifications are required"
-          titleColor={theme.color.errorBar}
+          titleColor={errorColor}
         >
           <ThemedText
-            color={theme.color.textSecondary}
-            fontSize={theme.fontSize14}
+            themeColor="textSecondary"
+            fontSize={Typography.fontSize14}
             style={styles.permissionNoticeTextCompact}
           >
             eduMFA cannot receive push approvals while notifications are
             disabled. Enable them in system settings, then return here.
           </ThemedText>
           <ThemedText
-            color={theme.color.textSecondary}
-            fontSize={theme.fontSize12}
+            themeColor="textSecondary"
+            fontSize={Typography.fontSize12}
             style={styles.permissionNoticePath}
           >
             {notificationSettingsGuidance}
@@ -631,14 +632,14 @@ function NotificationStepActions({
 }
 
 type NotificationStatusNoticeProps = {
-  borderColor: string;
-  cardColor: string;
+  borderColor: ColorValue;
+  cardColor: ColorValue;
   children: ReactNode;
   icon: IconName;
-  iconColor: string;
+  iconColor: ColorValue;
   isCritical?: boolean;
   title: string;
-  titleColor?: { light: string; dark: string };
+  titleColor?: ColorValue;
 };
 
 function NotificationStatusNotice({
@@ -662,9 +663,9 @@ function NotificationStatusNotice({
       <View style={styles.permissionNoticeHeader}>
         <SymbolView name={icon} size={20} tintColor={iconColor} />
         <ThemedText
-          color={titleColor}
-          fontSize={theme.fontSize16}
+          fontSize={Typography.fontSize16}
           fontWeight={isCritical ? "bold" : "semiBold"}
+          style={titleColor ? { color: titleColor } : undefined}
         >
           {title}
         </ThemedText>
@@ -676,12 +677,12 @@ function NotificationStatusNotice({
 
 type CrashReportsStepActionsProps = {
   accentColor: string;
-  borderColor: string;
-  cardColor: string;
+  borderColor: ColorValue;
+  cardColor: ColorValue;
   crashReportsEnabled: boolean;
   onDecline: () => void;
   onOptIn: () => void;
-  textColor: string;
+  textColor: ColorValue;
 };
 
 function CrashReportsStepActions({
@@ -705,12 +706,12 @@ function CrashReportsStepActions({
         ]}
       >
         <View style={styles.choiceText}>
-          <ThemedText fontSize={theme.fontSize16} fontWeight="semiBold">
+          <ThemedText fontSize={Typography.fontSize16} fontWeight="semiBold">
             Anonymous reports
           </ThemedText>
           <ThemedText
-            color={theme.color.textSecondary}
-            fontSize={theme.fontSize14}
+            themeColor="textSecondary"
+            fontSize={Typography.fontSize14}
             style={styles.choiceDescription}
           >
             Share anonymized crash and error reports to help improve
@@ -726,7 +727,9 @@ function CrashReportsStepActions({
           <SymbolView
             name={{ ios: "hand.raised.fill", android: "privacy_tip" }}
             size={20}
-            tintColor={crashReportsEnabled ? theme.colorWhite : theme.colorGrey}
+            tintColor={
+              crashReportsEnabled ? StaticColors.white : StaticColors.grey
+            }
           />
         </View>
       </View>
@@ -821,7 +824,7 @@ function VisualCardContent({ accentColor, index }: VisualCardContentProps) {
               <SymbolView
                 name={{ ios: "bell.fill", android: "notifications" }}
                 size={22}
-                tintColor={theme.colorWhite}
+                tintColor={StaticColors.white}
               />
             </View>
             <View style={styles.notificationCopy}>
@@ -846,7 +849,7 @@ function VisualCardContent({ accentColor, index }: VisualCardContentProps) {
             <SymbolView
               name={{ ios: "lock.shield.fill", android: "privacy_tip" }}
               size={24}
-              tintColor={theme.colorWhite}
+              tintColor={StaticColors.white}
             />
           </View>
           <View style={styles.privacyCopy}>
@@ -871,8 +874,8 @@ function VisualCardContent({ accentColor, index }: VisualCardContentProps) {
 
 type ActionButtonProps = {
   accentColor?: string;
-  borderColor?: string;
-  color?: string;
+  borderColor?: ColorValue;
+  color?: ColorValue;
   icon: IconName;
   isLoading?: boolean;
   label: string;
@@ -890,9 +893,12 @@ function ActionButton({
   onPress,
   variant = "primary",
 }: ActionButtonProps) {
+  const theme = useTheme();
   const isPrimary = variant === "primary";
-  const foregroundColor = isPrimary ? theme.colorWhite : color;
-  const transparentColor = useThemeColor(theme.color.transparent);
+  const foregroundColor = isPrimary
+    ? StaticColors.white
+    : (color ?? theme.text);
+  const transparentColor = theme.transparent;
   const pressScale = useSharedValue(1);
   const primaryButtonStyle = useMemo(
     () => ({ backgroundColor: accentColor, borderColor: accentColor }),
@@ -931,10 +937,9 @@ function ActionButton({
         <SymbolView name={icon} size={18} tintColor={foregroundColor} />
       )}
       <ThemedText
-        color={foregroundColor}
-        fontSize={theme.fontSize16}
+        fontSize={Typography.fontSize16}
         fontWeight="semiBold"
-        style={styles.actionLabel}
+        style={[styles.actionLabel, { color: foregroundColor }]}
       >
         {label}
       </ThemedText>
@@ -943,7 +948,7 @@ function ActionButton({
 }
 
 type TextButtonProps = {
-  color: string;
+  color: ColorValue;
   label: string;
   onPress: () => void;
 };
@@ -952,10 +957,9 @@ function TextButton({ color, label, onPress }: TextButtonProps) {
   return (
     <Pressable onPress={onPress} style={styles.textButton}>
       <ThemedText
-        color={color}
-        fontSize={theme.fontSize14}
+        fontSize={Typography.fontSize14}
         fontWeight="semiBold"
-        style={styles.textButtonLabel}
+        style={[styles.textButtonLabel, { color }]}
       >
         {label}
       </ThemedText>
@@ -967,50 +971,50 @@ const styles = StyleSheet.create({
   actionButton: {
     alignItems: "center",
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     borderWidth: 1,
     flexDirection: "row",
-    gap: theme.space8,
+    gap: Spacing.sm,
     justifyContent: "center",
     minHeight: 56,
-    paddingHorizontal: theme.space16,
+    paddingHorizontal: Spacing.lg,
   },
   actionButtonLoading: {
     opacity: 0.72,
   },
   actionLabel: {
-    lineHeight: theme.fontSize16 * 1.25,
+    lineHeight: Typography.fontSize16 * 1.25,
     textAlign: "center",
   },
   body: {
-    lineHeight: theme.fontSize16 * 1.45,
+    lineHeight: Typography.fontSize16 * 1.45,
     textAlign: "center",
   },
   buttonStack: {
-    gap: theme.space12,
+    gap: Spacing.md,
     width: "100%",
   },
   buttonStackCompact: {
-    gap: theme.space8,
+    gap: Spacing.sm,
   },
   choiceCard: {
     alignItems: "center",
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     borderWidth: 1,
     flexDirection: "row",
-    gap: theme.space16,
+    gap: Spacing.lg,
     justifyContent: "space-between",
-    padding: theme.space16,
+    padding: Spacing.lg,
   },
   choiceDescription: {
-    lineHeight: theme.fontSize14 * 1.4,
+    lineHeight: Typography.fontSize14 * 1.4,
   },
   choiceIndicator: {
     alignItems: "center",
-    borderColor: theme.colorGrey,
+    borderColor: StaticColors.grey,
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     borderWidth: 1,
     height: 42,
     justifyContent: "center",
@@ -1018,7 +1022,7 @@ const styles = StyleSheet.create({
   },
   choiceText: {
     flex: 1,
-    gap: theme.space4,
+    gap: Spacing.xs,
   },
   container: {
     alignItems: "center",
@@ -1026,7 +1030,7 @@ const styles = StyleSheet.create({
   },
   copy: {
     alignItems: "center",
-    gap: theme.space12,
+    gap: Spacing.md,
   },
   heroWrap: {
     alignItems: "center",
@@ -1044,68 +1048,68 @@ const styles = StyleSheet.create({
     width: 128,
   },
   notificationAction: {
-    borderRadius: theme.borderRadius6,
+    borderRadius: Radii.xs,
     flex: 1,
     height: 18,
   },
   notificationActionMuted: {
-    backgroundColor: theme.colorGrey,
-    borderRadius: theme.borderRadius6,
+    backgroundColor: StaticColors.grey,
+    borderRadius: Radii.xs,
     flex: 1,
     height: 18,
     opacity: 0.24,
   },
   notificationActions: {
     flexDirection: "row",
-    gap: theme.space8,
+    gap: Spacing.sm,
     width: "100%",
   },
   notificationBanner: {
     alignItems: "center",
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius12,
+    borderRadius: Radii.lg,
     borderWidth: 1,
     flexDirection: "row",
-    gap: theme.space12,
-    padding: theme.space12,
+    gap: Spacing.md,
+    padding: Spacing.md,
     width: "100%",
   },
   notificationCopy: {
     flex: 1,
-    gap: theme.space8,
+    gap: Spacing.sm,
   },
   notificationIconPlate: {
     alignItems: "center",
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius12,
+    borderRadius: Radii.lg,
     height: 42,
     justifyContent: "center",
     width: 42,
   },
   notificationLine: {
-    backgroundColor: theme.colorGrey,
-    borderRadius: theme.borderRadius4,
+    backgroundColor: StaticColors.grey,
+    borderRadius: Radii.sm,
     height: 7,
     opacity: 0.28,
     width: "68%",
   },
   notificationLineStrong: {
-    borderRadius: theme.borderRadius4,
+    borderRadius: Radii.sm,
     height: 8,
     width: "86%",
   },
   notificationPhone: {
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     borderWidth: 1,
-    gap: theme.space12,
-    padding: theme.space16,
+    gap: Spacing.md,
+    padding: Spacing.lg,
     width: 220,
   },
   notificationPhoneTop: {
     alignSelf: "center",
-    backgroundColor: theme.colorGrey,
-    borderRadius: theme.borderRadius4,
+    backgroundColor: StaticColors.grey,
+    borderRadius: Radii.sm,
     height: 5,
     opacity: 0.28,
     width: 48,
@@ -1121,57 +1125,57 @@ const styles = StyleSheet.create({
   panelBody: {
     alignItems: "center",
     flex: 1,
-    gap: theme.space24,
+    gap: Spacing.xl,
     justifyContent: "center",
     width: "100%",
   },
   panelContent: {
     alignItems: "center",
     flex: 1,
-    gap: theme.space24,
+    gap: Spacing.xl,
     justifyContent: "space-between",
     maxWidth: 520,
-    paddingHorizontal: theme.space24,
+    paddingHorizontal: Spacing.xl,
     width: "100%",
   },
   permissionNotice: {
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     borderWidth: 1,
-    gap: theme.space8,
-    padding: theme.space16,
+    gap: Spacing.sm,
+    padding: Spacing.lg,
   },
   permissionNoticeCritical: {
     borderWidth: 2,
-    gap: theme.space4,
-    padding: theme.space12,
+    gap: Spacing.xs,
+    padding: Spacing.md,
   },
   permissionNoticeHeader: {
     alignItems: "center",
     flexDirection: "row",
-    gap: theme.space8,
+    gap: Spacing.sm,
   },
   permissionNoticePath: {
-    lineHeight: theme.fontSize12 * 1.25,
+    lineHeight: Typography.fontSize12 * 1.25,
   },
   permissionNoticeText: {
-    lineHeight: theme.fontSize14 * 1.4,
+    lineHeight: Typography.fontSize14 * 1.4,
   },
   permissionNoticeTextCompact: {
-    lineHeight: theme.fontSize14 * 1.3,
+    lineHeight: Typography.fontSize14 * 1.3,
   },
   privacyCopy: {
     flex: 1,
-    gap: theme.space8,
+    gap: Spacing.sm,
   },
   privacyDot: {
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     height: 10,
     width: 10,
   },
   privacyDotMuted: {
-    backgroundColor: theme.colorGrey,
-    borderRadius: theme.borderRadius20,
+    backgroundColor: StaticColors.grey,
+    borderRadius: Radii.xl,
     height: 10,
     opacity: 0.32,
     width: 10,
@@ -1179,49 +1183,49 @@ const styles = StyleSheet.create({
   privacyHeader: {
     alignItems: "center",
     flexDirection: "row",
-    gap: theme.space12,
+    gap: Spacing.md,
   },
   privacyIconPlate: {
     alignItems: "center",
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius12,
+    borderRadius: Radii.lg,
     height: 46,
     justifyContent: "center",
     width: 46,
   },
   privacyLine: {
-    backgroundColor: theme.colorGrey,
-    borderRadius: theme.borderRadius4,
+    backgroundColor: StaticColors.grey,
+    borderRadius: Radii.sm,
     flex: 1,
     height: 7,
     opacity: 0.28,
   },
   privacyLineShort: {
-    backgroundColor: theme.colorGrey,
-    borderRadius: theme.borderRadius4,
+    backgroundColor: StaticColors.grey,
+    borderRadius: Radii.sm,
     flex: 0.68,
     height: 7,
     opacity: 0.22,
   },
   privacyLineStrong: {
-    borderRadius: theme.borderRadius4,
+    borderRadius: Radii.sm,
     height: 8,
     width: "86%",
   },
   privacyRow: {
     alignItems: "center",
     flexDirection: "row",
-    gap: theme.space8,
+    gap: Spacing.sm,
   },
   privacyRows: {
-    gap: theme.space12,
+    gap: Spacing.md,
   },
   privacySheet: {
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     borderWidth: 1,
-    gap: theme.space16,
-    padding: theme.space16,
+    gap: Spacing.lg,
+    padding: Spacing.lg,
     width: 220,
   },
   privacyVisual: {
@@ -1229,33 +1233,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   progressFill: {
-    borderRadius: theme.borderRadius4,
+    borderRadius: Radii.sm,
     height: 4,
   },
   progressSegment: {
-    borderRadius: theme.borderRadius4,
+    borderRadius: Radii.sm,
     flex: 1,
     height: 4,
     overflow: "hidden",
   },
   progressWrap: {
     flexDirection: "row",
-    gap: theme.space8,
-    paddingHorizontal: theme.space24,
+    gap: Spacing.sm,
+    paddingHorizontal: Spacing.xl,
     width: "100%",
   },
   textButton: {
     alignSelf: "center",
     minHeight: 28,
-    paddingHorizontal: theme.space8,
-    paddingVertical: theme.space4,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.xs,
   },
   textButtonLabel: {
-    lineHeight: theme.fontSize14 * 1.25,
+    lineHeight: Typography.fontSize14 * 1.25,
     textAlign: "center",
   },
   title: {
-    lineHeight: theme.fontSize34 * 1.1,
+    lineHeight: Typography.fontSize34 * 1.1,
     textAlign: "center",
   },
   track: {
@@ -1270,11 +1274,11 @@ const styles = StyleSheet.create({
   visualCard: {
     alignItems: "center",
     borderCurve: "continuous",
-    borderRadius: theme.borderRadius10,
+    borderRadius: Radii.md,
     borderWidth: 1,
     height: 172,
     justifyContent: "center",
-    padding: theme.space16,
+    padding: Spacing.lg,
     width: "100%",
   },
   welcomeVisual: {
@@ -1283,6 +1287,6 @@ const styles = StyleSheet.create({
   },
   welcomeVisualCard: {
     borderWidth: 0,
-    paddingVertical: theme.space8,
+    paddingVertical: Spacing.sm,
   },
 });

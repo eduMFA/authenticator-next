@@ -1,6 +1,6 @@
-import { pollAllChallenges } from "@/services/challengePollingService";
-import { usePushRequestStore } from "@/store/pushRequestStore";
-import { useTokenStore } from "@/store/tokenStore";
+import { pollAllChallenges } from "@/services/challenge-polling-service";
+import { usePushRequestStore } from "@/store/push-request-store";
+import { useTokenStore } from "@/store/token-store";
 import { useCallback, useRef, useState } from "react";
 
 export interface UseChallengePollingResult {
