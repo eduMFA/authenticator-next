@@ -109,11 +109,11 @@ msgstr "Aktualisiere..."
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/components/token-details.tsx:120
+#: src/components/token-list-item.tsx:120
 msgid "Rolling out..."
 msgstr "Rollout läuft..."
 
-#: src/components/token-details.tsx:120
+#: src/components/token-list-item.tsx:120
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 

@@ -3,7 +3,7 @@ import {
   TOKEN_ACTION_MENU_WIDTH,
   type TokenAction,
 } from "@/components/TokenActionsMenu";
-import { TokenDetails } from "@/components/token-details";
+import { TokenListItem } from "@/components/token-list-item";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
@@ -120,8 +120,8 @@ export default function Tokens() {
           onPress: () => confirmDeleteToken(item.id),
         },
       ];
-      const tokenDetails = (
-        <TokenDetails actions={tokenActions} token={item} key={item.id} />
+      const tokenListItem = (
+        <TokenListItem actions={tokenActions} token={item} key={item.id} />
       );
       const isRolloutFinished = PushTokenRolloutState.isFinished(
         item.rolloutState,
@@ -136,7 +136,7 @@ export default function Tokens() {
         >
           {Platform.OS === "android" ? (
             <View style={styles.tokenCard}>
-              {tokenDetails}
+              {tokenListItem}
               {isRolloutFinished && (
                 <Pressable
                   accessibilityLabel={
@@ -169,7 +169,7 @@ export default function Tokens() {
                   style={styles.tokenCard}
                   disabled={!isRolloutFinished}
                 >
-                  {tokenDetails}
+                  {tokenListItem}
                 </Pressable>
               </Link.Trigger>
               <Link.Menu>
