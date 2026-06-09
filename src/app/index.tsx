@@ -1,16 +1,16 @@
 import { NotificationHandler } from "@/components/notification-handler";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { TokenListItem } from "@/components/token-list-item";
 import {
   TOKEN_ACTION_MENU_WIDTH,
   type TokenAction,
 } from "@/components/TokenActionsMenu";
-import { TokenListItem } from "@/components/token-list-item";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
-import { useToken } from "@/hooks/use-token";
 import { useTheme } from "@/hooks/use-theme";
+import { useToken } from "@/hooks/use-token";
 import { usePushRequestStore } from "@/store/push-request-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import {
