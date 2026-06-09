@@ -18,9 +18,6 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#~ msgid "Add"
-#~ msgstr "Hinzufügen"
-
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
