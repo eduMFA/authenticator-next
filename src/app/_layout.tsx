@@ -157,13 +157,6 @@ function RootLayoutContent() {
         options={{
           headerTransparent: Platform.OS === "ios" ? true : false,
           title: "",
-          presentation:
-            Platform.OS === "ios"
-              ? isLiquidGlassAvailable() && osName !== "iPadOS"
-                ? "formSheet"
-                : "modal"
-              : "modal",
-          sheetInitialDetentIndex: 0,
           contentStyle: {
             backgroundColor: isLiquidGlassAvailable()
               ? "transparent"

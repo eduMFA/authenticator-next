@@ -157,7 +157,7 @@ export default function TokenDetails() {
       />
       <Stack.Toolbar placement="left">
         <Stack.Toolbar.Button
-          icon="xmark"
+          icon={isEditingActive ? "xmark" : "chevron.left"}
           onPress={isEditingActive ? cancelEditing : () => router.back()}
         />
       </Stack.Toolbar>
