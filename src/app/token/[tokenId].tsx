@@ -13,7 +13,13 @@ import { useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, Platform, StyleSheet, useColorScheme } from "react-native";
+import {
+  Alert,
+  ColorValue,
+  Platform,
+  StyleSheet,
+  useColorScheme,
+} from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 function TokenScrollView({
@@ -23,7 +29,7 @@ function TokenScrollView({
   keyboardShouldPersistTaps,
 }: {
   animationKey: string;
-  backgroundColor: string;
+  backgroundColor: ColorValue;
   children: ReactNode;
   keyboardShouldPersistTaps?: "always" | "handled" | "never";
 }) {

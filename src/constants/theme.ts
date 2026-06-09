@@ -42,6 +42,7 @@ type ThemeColors = {
   textSecondary: ColorValue;
   border: ColorValue;
   fill: ColorValue;
+  errorBackground: ColorValue;
   successBar: string;
   errorBar: string;
 };
@@ -88,6 +89,7 @@ const iosThemeColors =
         textSecondary: iosColors.secondaryLabel,
         border: iosColors.separator,
         fill: iosColors.secondarySystemFill,
+        errorBackground: fallbackColors.light.errorBackground,
         successBar: fallbackColors.light.successBar,
         errorBar: fallbackColors.light.errorBar,
       } satisfies ThemeColors)
