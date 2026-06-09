@@ -14,11 +14,7 @@ import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Platform, StyleSheet, useColorScheme } from "react-native";
-import Animated, {
-  FadeIn,
-  FadeOut,
-  LinearTransition,
-} from "react-native-reanimated";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 function TokenScrollView({
   animationKey,
@@ -40,7 +36,6 @@ function TokenScrollView({
       entering={FadeIn.duration(180)}
       exiting={FadeOut.duration(120)}
       keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-      layout={LinearTransition.springify().damping(18)}
       showsVerticalScrollIndicator={false}
       style={[styles.scroll, { backgroundColor }]}
     >
