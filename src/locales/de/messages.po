@@ -29,7 +29,7 @@ msgstr "Token hinzufügen"
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
 
-#: src/components/qr-code-scanner.tsx:61
+#: src/components/qr-code-scanner.tsx:59
 msgid "Camera permission required"
 msgstr "Kamera-Berechtigung erforderlich"
 
@@ -69,7 +69,7 @@ msgstr "Bearbeiten"
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
-#: src/components/qr-code-scanner.tsx:50
+#: src/components/qr-code-scanner.tsx:49
 msgid "Grant permission"
 msgstr "Berechtigungen erteilen"
 
@@ -85,7 +85,7 @@ msgstr "Keine Ergebnisse gefunden für "
 msgid "No Token setup"
 msgstr "Keine Token eingerichtet"
 
-#: src/components/qr-code-scanner.tsx:51
+#: src/components/qr-code-scanner.tsx:50
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
@@ -101,7 +101,7 @@ msgstr "Neues Push-Token koppeln"
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/app/index.tsx:407
+#: src/app/index.tsx:405
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -157,11 +157,11 @@ msgstr "um loszulegen."
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#: src/components/qr-code-scanner.tsx:44
+#: src/components/qr-code-scanner.tsx:43
 msgid "We need your permission to show the camera"
 msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
 
-#: src/components/qr-code-scanner.tsx:45
+#: src/components/qr-code-scanner.tsx:44
 msgid "You can enable camera permissions in your device settings"
 msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
 
