@@ -135,12 +135,16 @@ msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "The provided QR code isn't a valid eduMFA token."
 
 #: src/hooks/use-handle-token-uri.ts:69
-msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
-msgstr "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
+msgid "The QR code isn't supported by this app. Please use a general "
+"Authenticator app. We recommend 2FAS."
+msgstr "The QR code isn't supported by this app. Please use a general "
+"Authenticator app. We recommend 2FAS."
 
 #: src/hooks/use-handle-token-uri.ts:90
-msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
-msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
+msgid "The token version is not supported by this app. Please update the app to "
+"the latest version or contact your institution for assistance."
+msgstr "The token version is not supported by this app. Please update the app "
+"to the latest version or contact your institution for assistance."
 
 #: src/app/index.tsx:285
 msgid "to get started."

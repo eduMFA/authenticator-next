@@ -135,12 +135,17 @@ msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
 #: src/hooks/use-handle-token-uri.ts:69
-msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
-msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
+msgid "The QR code isn't supported by this app. Please use a general "
+"Authenticator app. We recommend 2FAS."
+msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie "
+"eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
 
 #: src/hooks/use-handle-token-uri.ts:90
-msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
-msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
+msgid "The token version is not supported by this app. Please update the app to "
+"the latest version or contact your institution for assistance."
+msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte "
+"aktualisiere die App auf die neueste Version oder kontaktiere deine "
+"Institution für Unterstützung."
 
 #: src/app/index.tsx:285
 msgid "to get started."
@@ -156,7 +161,8 @@ msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
 
 #: src/components/qr-code-scanner.tsx:44
 msgid "You can enable camera permissions in your device settings"
-msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
+msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen "
+"aktivieren"
 
 #: src/hooks/use-handle-token-uri.ts:46
 msgid "Your image did not contain a QR code."
