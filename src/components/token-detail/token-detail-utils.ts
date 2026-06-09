@@ -127,7 +127,9 @@ export function prettifyRefreshError(
     try {
       const parsedBody: unknown = JSON.parse(trimmedBody);
       const serverMessage =
+        getNestedStringProperty(parsedBody, ["result", "error", "message"]) ??
         getNestedStringProperty(parsedBody, ["result", "message"]) ??
+        getNestedStringProperty(parsedBody, ["error", "message"]) ??
         getStringProperty(parsedBody, "message") ??
         getStringProperty(parsedBody, "detail") ??
         getStringProperty(parsedBody, "error");
