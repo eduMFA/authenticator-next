@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:228
+#: src/components/push-request-popup.tsx:225
 #: src/store/notification-store.ts:48
 msgid "Accept"
 msgstr "Akzeptieren"
@@ -33,18 +33,18 @@ msgstr "Prüfprotokoll"
 msgid "Camera permission required"
 msgstr "Kamera-Berechtigung erforderlich"
 
-#: src/app/token/[tokenId].tsx:166
+#: src/app/token/[tokenId].tsx:161
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/components/push-request-popup.tsx:222
+#: src/components/push-request-popup.tsx:219
 #: src/store/notification-store.ts:56
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:137
-#: src/app/token/[tokenId].tsx:185
+#: src/app/index.tsx:140
+#: src/app/token/[tokenId].tsx:180
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Löschen"
@@ -57,16 +57,16 @@ msgstr "Token löschen"
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/use-handle-token-uri.ts:82
+#: src/hooks/use-handle-token-uri.ts:80
 msgid "Dismiss"
 msgstr "Schließen"
 
-#: src/hooks/use-handle-token-uri.ts:74
+#: src/hooks/use-handle-token-uri.ts:72
 msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
-#: src/app/index.tsx:119
-#: src/app/token/[tokenId].tsx:179
+#: src/app/index.tsx:122
+#: src/app/token/[tokenId].tsx:174
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -74,13 +74,13 @@ msgstr "Bearbeiten"
 msgid "Edit token"
 msgstr "Token bearbeiten"
 
-#: src/app/token/[tokenId].tsx:120
+#: src/app/token/[tokenId].tsx:115
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
-#: src/hooks/use-handle-token-uri.ts:62
-#: src/hooks/use-handle-token-uri.ts:70
-#: src/hooks/use-handle-token-uri.ts:91
+#: src/hooks/use-handle-token-uri.ts:60
+#: src/hooks/use-handle-token-uri.ts:68
+#: src/hooks/use-handle-token-uri.ts:89
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
@@ -92,7 +92,7 @@ msgstr "Berechtigungen erteilen"
 msgid "Label"
 msgstr "Bezeichnung"
 
-#: src/app/token/[tokenId].tsx:120
+#: src/app/token/[tokenId].tsx:115
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
@@ -108,11 +108,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:323
+#: src/app/index.tsx:326
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:266
+#: src/app/index.tsx:269
 msgid "No Token setup"
 msgstr "Keine Token eingerichtet"
 
@@ -137,11 +137,11 @@ msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
 #: src/components/token-detail/token-overview-content.tsx:108
-#: src/components/token-details.tsx:130
+#: src/components/token-list-item.tsx:130
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:333
+#: src/app/index.tsx:336
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -149,19 +149,19 @@ msgstr "Aktualisiere..."
 msgid "Retry rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/app/index.tsx:129
+#: src/app/index.tsx:132
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/components/token-details.tsx:108
+#: src/components/token-list-item.tsx:108
 msgid "Rolling out..."
 msgstr "Rollout läuft..."
 
-#: src/components/token-details.tsx:108
+#: src/components/token-list-item.tsx:108
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
-#: src/app/token/[tokenId].tsx:172
+#: src/app/token/[tokenId].tsx:167
 msgid "Save"
 msgstr "Speichern"
 
@@ -169,15 +169,15 @@ msgstr "Speichern"
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
-#: src/hooks/use-handle-token-uri.ts:79
+#: src/hooks/use-handle-token-uri.ts:77
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:167
+#: src/app/index.tsx:170
 msgid "Search tokens"
 msgstr "Token suchen"
 
-#: src/components/push-request-popup.tsx:215
+#: src/components/push-request-popup.tsx:212
 #: src/components/token-detail/token-overview-content.tsx:152
 msgid "Serial"
 msgstr "Seriennummer"
@@ -190,23 +190,23 @@ msgstr "Servernachricht"
 msgid "Status"
 msgstr "Status"
 
-#: src/app/index.tsx:274
+#: src/app/index.tsx:277
 msgid "Tap the"
 msgstr "Tippe auf"
 
-#: src/hooks/use-handle-token-uri.ts:63
+#: src/hooks/use-handle-token-uri.ts:61
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
-#: src/hooks/use-handle-token-uri.ts:71
+#: src/hooks/use-handle-token-uri.ts:69
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
 msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
 
-#: src/hooks/use-handle-token-uri.ts:92
+#: src/hooks/use-handle-token-uri.ts:90
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
-#: src/app/index.tsx:286
+#: src/app/index.tsx:289
 msgid "to get started."
 msgstr "um loszulegen."
 

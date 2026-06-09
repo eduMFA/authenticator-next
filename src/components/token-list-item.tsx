@@ -40,7 +40,7 @@ const timingConfig = {
   },
 } as const;
 
-export const TokenDetails = memo(function TokenDetails({
+export const TokenListItem = memo(function TokenListItem({
   token,
 }: {
   token: PushToken;

@@ -1,12 +1,12 @@
 import { NotificationHandler } from "@/components/notification-handler";
-import { TokenDetails } from "@/components/token-details";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { TokenListItem } from "@/components/token-list-item";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
-import { useToken } from "@/hooks/use-token";
 import { useTheme } from "@/hooks/use-theme";
+import { useToken } from "@/hooks/use-token";
 import { usePushRequestStore } from "@/store/push-request-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -105,7 +105,7 @@ export default function Tokens() {
                 style={styles.tokenCard}
                 disabled={!PushTokenRolloutState.isFinished(item.rolloutState)}
               >
-                <TokenDetails token={item} key={item.id} />
+                <TokenListItem token={item} key={item.id} />
               </Pressable>
             </Link.Trigger>
             <Link.Menu>
