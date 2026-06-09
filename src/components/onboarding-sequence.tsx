@@ -36,9 +36,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 const PANEL_GAP = Spacing.xl * 3;
+const BUTTON_SLIDE_EASING = Easing.inOut(Easing.cubic);
+const SWIPE_SLIDE_EASING = Easing.out(Easing.cubic);
 const logoSource = require("../../assets/app-icons/edumfa.icon/Assets/logo.svg");
 
 type IconName = ComponentProps<typeof SymbolView>["name"];
+type EasingFunction = (value: number) => number;
 type FirebaseAuthorizationStatus =
   (typeof AuthorizationStatus)[keyof typeof AuthorizationStatus];
 
@@ -161,7 +164,7 @@ export function OnboardingSequence() {
   );
 
   const goToStep = useCallback(
-    (nextStepIndex: number) => {
+    (nextStepIndex: number, easing: EasingFunction = BUTTON_SLIDE_EASING) => {
       const boundedStepIndex = Math.max(
         0,
         Math.min(nextStepIndex, steps.length - 1),
@@ -171,7 +174,7 @@ export function OnboardingSequence() {
       screenProgress.set(
         withTiming(boundedStepIndex, {
           duration: 360,
-          easing: Easing.out(Easing.cubic),
+          easing,
         }),
       );
     },
@@ -224,7 +227,7 @@ export function OnboardingSequence() {
         onPanResponderRelease: (_, gestureState) => {
           if (gestureState.dx > slideDistance * 0.25) {
             playHaptic((presets) => presets.System.impactLight());
-            goToStep(stepIndex - 1);
+            goToStep(stepIndex - 1, SWIPE_SLIDE_EASING);
             return;
           }
 
@@ -241,14 +244,14 @@ export function OnboardingSequence() {
             }
 
             playHaptic((presets) => presets.System.impactMedium());
-            goToStep(stepIndex + 1);
+            goToStep(stepIndex + 1, SWIPE_SLIDE_EASING);
             return;
           }
 
           screenProgress.set(
             withTiming(stepIndex, {
               duration: 220,
-              easing: Easing.out(Easing.cubic),
+              easing: SWIPE_SLIDE_EASING,
             }),
           );
         },
