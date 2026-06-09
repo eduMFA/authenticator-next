@@ -1,12 +1,14 @@
-import QRCodeScanner from "@/components/QRCodeScanner";
-import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
+import QRCodeScanner from "@/components/qr-code-scanner";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 import { UploadQRCodeButton } from "@/components/upload-qr-code-button";
-import { useHandleTokenUri } from "@/hooks/useHandleTokenUri";
-import { theme } from "@/theme";
+import { Radii, Spacing, Typography } from "@/constants/theme";
+import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
+import { useTheme } from "@/hooks/use-theme";
 import { Trans } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import { Color, Stack, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useMemo } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -14,13 +16,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function AddToken() {
   const router = useRouter();
   const handleTokenUri = useHandleTokenUri();
-  const borderColor = useThemeColor(theme.color.border, {
-    android: Color.android.dynamic.outline,
-  });
-  const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background, {
-    android: Color.android.dynamic.background,
-  });
+  const theme = useTheme();
+  const borderColor = theme.border;
+  const transparentColor = theme.transparent;
+  const tabBarBackgroundColor = theme.background;
   const headerStyle = useMemo(
     () => ({
       backgroundColor:
@@ -45,24 +44,20 @@ export default function AddToken() {
       </Stack.Toolbar>
       <ThemedView
         style={styles.sheet}
-        color={
-          isLiquidGlassAvailable()
-            ? theme.color.transparent
-            : theme.color.background
-        }
+        type={isLiquidGlassAvailable() ? "transparent" : "background"}
       >
         <SafeAreaView style={styles.container}>
           <View style={styles.header} collapsable={false}>
             <ThemedText
               fontWeight="bold"
-              fontSize={theme.fontSize28}
+              fontSize={Typography.fontSize28}
               style={styles.title}
             >
               <Trans>Pair new Push Token</Trans>
             </ThemedText>
             <ThemedText
               fontWeight="light"
-              fontSize={theme.fontSize16}
+              fontSize={Typography.fontSize16}
               style={styles.subtitle}
             >
               <Trans>Scan the QR code to pair a new push token.</Trans>
@@ -98,13 +93,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginTop: Platform.select({ ios: 0, android: 30 }),
-    paddingHorizontal: theme.space24,
+    paddingHorizontal: Spacing.xl,
   },
   header: {
-    marginBottom: theme.space24,
+    marginBottom: Spacing.xl,
   },
   scanner: {
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     height: 300,
     overflow: "hidden",
     width: "100%",
@@ -122,13 +117,13 @@ const styles = StyleSheet.create({
     height: 1,
   },
   splitterText: {
-    marginHorizontal: theme.space16,
+    marginHorizontal: Spacing.lg,
   },
   subtitle: {
     textAlign: "center",
   },
   title: {
-    marginBottom: theme.space12,
+    marginBottom: Spacing.md,
     textAlign: "center",
   },
 });

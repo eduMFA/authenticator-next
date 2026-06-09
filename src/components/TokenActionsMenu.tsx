@@ -7,7 +7,7 @@ import {
   Text,
 } from "@expo/ui/jetpack-compose";
 import { size as composeSize } from "@expo/ui/jetpack-compose/modifiers";
-import { Color } from "expo-router";
+import { useTheme } from "@/hooks/use-theme";
 import { useState } from "react";
 import { type ImageSourcePropType, StyleSheet, View } from "react-native";
 import type { SFSymbol } from "sf-symbols-typescript";
@@ -36,6 +36,7 @@ export type TokenAction = {
 
 export function TokenActionsMenu({ actions }: { actions: TokenAction[] }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const theme = useTheme();
   const close = () => setIsExpanded(false);
 
   return (
@@ -45,7 +46,7 @@ export function TokenActionsMenu({ actions }: { actions: TokenAction[] }) {
           <DropdownMenu.Trigger>
             <IconButton
               colors={{
-                contentColor: Color.android.dynamic.onSurfaceVariant,
+                contentColor: theme.textSecondary,
               }}
               modifiers={[
                 composeSize(ACTION_MENU_BUTTON_SIZE, ACTION_MENU_BUTTON_SIZE),
@@ -55,24 +56,22 @@ export function TokenActionsMenu({ actions }: { actions: TokenAction[] }) {
               <Icon
                 source={ACTION_MENU_ICONS.menu}
                 size={ACTION_MENU_ICON_SIZE}
-                tint={Color.android.dynamic.onSurfaceVariant}
+                tint={theme.textSecondary}
               />
             </IconButton>
           </DropdownMenu.Trigger>
           <DropdownMenu.Items>
             {actions.map((action) => {
               const iconTint = action.destructive
-                ? Color.android.dynamic.error
-                : Color.android.dynamic.onSurfaceVariant;
+                ? theme.error
+                : theme.textSecondary;
 
               return (
                 <DropdownMenuItem
                   key={action.key}
                   enabled={!action.disabled}
                   elementColors={
-                    action.destructive
-                      ? { textColor: Color.android.dynamic.error }
-                      : undefined
+                    action.destructive ? { textColor: theme.error } : undefined
                   }
                   onClick={() => {
                     close();

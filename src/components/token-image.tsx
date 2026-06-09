@@ -1,11 +1,11 @@
 import { Image } from "expo-image";
-import { Color } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, View, ViewStyle } from "react-native";
 import SquircleView from "react-native-fast-squircle";
 
-import { theme } from "@/theme";
-import { ThemedText, useThemeColor } from "./Themed";
+import { Spacing, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
+import { ThemedText } from "./themed-text";
 
 function getInitials(label?: string | null) {
   const source = label?.trim();
@@ -36,15 +36,9 @@ export function TokenImage({
   style?: ViewStyle;
   animated?: boolean;
 }) {
-  const borderColor = useThemeColor(theme.color.border, {
-    android: Color.android.dynamic.outline,
-  });
-  const fallbackBackgroundColor = useThemeColor(
-    theme.color.backgroundSecondary,
-    {
-      android: Color.android.dynamic.surfaceVariant,
-    },
-  );
+  const theme = useTheme();
+  const borderColor = theme.border;
+  const fallbackBackgroundColor = theme.fill;
   const [isLoading, setIsLoading] = useState(false);
   const imageSize = (() => {
     switch (size) {
@@ -63,14 +57,14 @@ export function TokenImage({
   const initialsFontSize = (() => {
     switch (size) {
       case "small":
-        return theme.fontSize14;
+        return Typography.fontSize14;
       case "large":
-        return theme.fontSize32;
+        return Typography.fontSize32;
       case "xlarge":
-        return theme.fontSize42;
+        return Typography.fontSize42;
       case "medium":
       default:
-        return theme.fontSize20;
+        return Typography.fontSize20;
     }
   })();
 
@@ -115,7 +109,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     borderWidth: 1,
-    marginRight: theme.space12,
+    marginRight: Spacing.md,
     overflow: "hidden",
   },
   imageSizeExtraLarge: {

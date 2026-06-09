@@ -1,5 +1,6 @@
 type PushRequestSignaturePayload = {
   nonce: string;
+  question: string;
   serial: string;
   sslverify: string | boolean;
   title: string;
@@ -19,5 +20,5 @@ function normalizeSslVerify(
 export function buildPushRequestSignedData(
   payload: PushRequestSignaturePayload,
 ) {
-  return `${payload.nonce}|${payload.url}|${payload.serial}|${payload.title}|${normalizeSslVerify(payload.sslverify)}`;
+  return `${payload.nonce}|${payload.url}|${payload.serial}|${payload.question}|${payload.title}|${normalizeSslVerify(payload.sslverify)}`;
 }

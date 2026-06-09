@@ -1,12 +1,11 @@
-import { theme } from "@/theme";
+import { Spacing, StaticColors } from "@/constants/theme";
 import { Trans, useLingui } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Linking from "expo-linking";
-import { Color } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Button, StyleSheet, View } from "react-native";
-import { ThemedText } from "./Themed";
+import { ThemedText } from "./themed-text";
 
 export type Props = {
   onQRCodeScanned: (result: Camera.BarcodeScanningResult) => void;
@@ -56,16 +55,10 @@ export default function QRCodeScanner({ onQRCodeScanned }: Props) {
           style={styles.permissionText}
           fontWeight="bold"
           fontSize={20}
-          platformColor={{ android: Color.android.dynamic.onBackground }}
         >
           <Trans>Camera permission required</Trans>
         </ThemedText>
-        <ThemedText
-          style={styles.permissionText}
-          platformColor={{ android: Color.android.dynamic.onBackground }}
-        >
-          {text}
-        </ThemedText>
+        <ThemedText style={styles.permissionText}>{text}</ThemedText>
         <Button title={buttonTitle} onPress={handlePress} />
       </View>
     );
@@ -93,15 +86,15 @@ const styles = StyleSheet.create({
   },
   permissionText: {
     alignContent: "center",
-    color: theme.colorWhite,
-    marginBottom: theme.space12,
+    color: StaticColors.white,
+    marginBottom: Spacing.md,
     textAlign: "center",
   },
   placeholder: {
     alignItems: "center",
-    backgroundColor: theme.colorBlack,
+    backgroundColor: StaticColors.black,
     flex: 1,
     justifyContent: "center",
-    padding: theme.space16,
+    padding: Spacing.lg,
   },
 });

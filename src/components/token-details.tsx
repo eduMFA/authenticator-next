@@ -1,11 +1,11 @@
-import { theme } from "@/theme";
+import { Radii, Spacing, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 
 import { useLingui } from "@lingui/react/macro";
-import { Color } from "expo-router";
 import Animated, {
   Easing,
   FadeIn,
@@ -15,13 +15,13 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { ThemedText, useThemeColor } from "./Themed";
 import {
   TOKEN_ACTION_MENU_WIDTH,
   TokenActionsMenu,
   type TokenAction,
 } from "./TokenActionsMenu";
-import { TokenImage } from "./TokenImage";
+import { ThemedText } from "./themed-text";
+import { TokenImage } from "./token-image";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
@@ -49,11 +49,10 @@ export const TokenDetails = memo(function TokenDetails({
   token: PushToken;
 }) {
   const { t } = useLingui();
-  const backgroundColor = useThemeColor(theme.color.backgroundSecondary, {
-    android: Color.android.dynamic.surfaceContainerHigh,
-  });
-  const successBarColor = useThemeColor(theme.color.successBar);
-  const errorBarColor = useThemeColor(theme.color.errorBar);
+  const theme = useTheme();
+  const backgroundColor = theme.backgroundSecondary;
+  const successBarColor = theme.successBar;
+  const errorBarColor = theme.errorBar;
   const blurTargetRef = useRef<View | null>(null);
 
   // Derive initial states from token
@@ -130,22 +129,14 @@ export const TokenDetails = memo(function TokenDetails({
           size="small"
         />
         <View style={tokenDetailsStyle}>
-          <ThemedText
-            fontSize={theme.fontSize16}
-            platformColor={{
-              android: Color.android.dynamic.onSurface,
-            }}
-          >
+          <ThemedText fontSize={Typography.fontSize16}>
             {token.label}
           </ThemedText>
           {token.issuer && (
             <ThemedText
-              fontSize={theme.fontSize14}
+              fontSize={Typography.fontSize14}
               fontWeight="medium"
-              color={theme.color.textSecondary}
-              platformColor={{
-                android: Color.android.dynamic.onSurfaceVariant,
-              }}
+              themeColor="textSecondary"
             >
               {token.issuer}
             </ThemedText>
@@ -179,7 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   progressBarBlur: {
-    borderRadius: theme.borderRadius32,
+    borderRadius: Radii.pill,
     height: "100%",
     position: "absolute",
     width: "100%",
@@ -188,18 +179,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
     position: "absolute",
-    top: theme.space24,
+    top: Spacing.xl,
     zIndex: 2,
   },
   token: {
     alignItems: "center",
     flexDirection: "row",
     height: 70,
-    padding: theme.space12,
+    padding: Spacing.md,
   },
   tokenDetails: {
     flex: 1,
-    gap: theme.space2,
+    gap: Spacing.xxs,
     justifyContent: "center",
   },
   tokenDetailsWithActionMenu: {

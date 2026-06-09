@@ -1,10 +1,9 @@
-import { usePushRequestStore } from "@/store/pushRequestStore";
-import { theme } from "@/theme";
+import { usePushRequestStore } from "@/store/push-request-store";
+import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import { PushRequest, PushRequestStatus } from "@/types";
 import { useLingui } from "@lingui/react/macro";
 import { BlurView } from "expo-blur";
-import * as Haptics from "expo-haptics";
-import { Color } from "expo-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Dimensions,
@@ -14,6 +13,7 @@ import {
   View,
   useColorScheme,
 } from "react-native";
+import { Presets } from "react-native-pulsar";
 import Animated, {
   Easing,
   FadeIn,
@@ -22,7 +22,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { ThemedText, useThemeColor } from "./Themed";
+import { ThemedText } from "./themed-text";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
@@ -56,23 +56,26 @@ export function PushRequestPopup({
     (action: "accept" | "decline") => {
       if (!currentRequest || isAnimatingOut) return;
 
-      Haptics.impactAsync(
-        action === "accept"
-          ? Haptics.ImpactFeedbackStyle.Medium
-          : Haptics.ImpactFeedbackStyle.Light,
-      );
+      let pushRequestStatus: PushRequestStatus;
+      if (action === "accept") {
+        Presets.System.impactMedium();
+        pushRequestStatus = PushRequestStatus.Accepted;
+      } else {
+        Presets.System.impactLight();
+        pushRequestStatus = PushRequestStatus.Declined;
+      }
 
       setIsAnimatingOut(true);
 
       // Delay the action to allow exit animation
       setTimeout(() => {
-        updatePushRequestStatus(
-          currentRequest.id,
-          action === "accept"
-            ? PushRequestStatus.Accepted
-            : PushRequestStatus.Declined,
-        );
-        onAction(currentRequest);
+        const updatedRequest = {
+          ...currentRequest,
+          status: pushRequestStatus,
+        };
+
+        updatePushRequestStatus(updatedRequest.id, updatedRequest.status);
+        onAction(updatedRequest);
         setIsAnimatingOut(false);
       }, 200);
     },
@@ -128,12 +131,9 @@ function PopupCard({
   onAction,
   isAnimatingOut,
 }: PopupCardProps) {
-  const backgroundColor = useThemeColor(theme.color.background, {
-    android: Color.android.dynamic.background,
-  });
-  const borderColor = useThemeColor(theme.color.border, {
-    android: Color.android.dynamic.outline,
-  });
+  const theme = useTheme();
+  const backgroundColor = theme.background;
+  const borderColor = theme.border;
   const { t } = useLingui();
 
   const scale = useSharedValue(0.9);
@@ -178,9 +178,8 @@ function PopupCard({
             entering={FadeIn.delay(200)}
           >
             <ThemedText
-              fontSize={theme.fontSize12}
-              color={theme.color.textSecondary}
-              platformColor={{ android: Color.android.dynamic.onBackground }}
+              fontSize={Typography.fontSize12}
+              themeColor="textSecondary"
             >
               {currentIndex + 1} of {totalPending}
             </ThemedText>
@@ -190,7 +189,7 @@ function PopupCard({
         {/* Header */}
         <View style={styles.header}>
           <ThemedText
-            fontSize={theme.fontSize20}
+            fontSize={Typography.fontSize20}
             fontWeight="semiBold"
             style={styles.title}
           >
@@ -201,8 +200,8 @@ function PopupCard({
         {/* Content */}
         <View style={styles.content}>
           <ThemedText
-            fontSize={theme.fontSize16}
-            color={theme.color.textSecondary}
+            fontSize={Typography.fontSize16}
+            themeColor="textSecondary"
             style={styles.question}
           >
             {request.question || "Do you want to confirm this authentication?"}
@@ -238,14 +237,14 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <View style={styles.detailRow}>
       <ThemedText
-        fontSize={theme.fontSize14}
-        color={theme.color.textSecondary}
+        fontSize={Typography.fontSize14}
+        themeColor="textSecondary"
         style={styles.detailLabel}
       >
         {label}
       </ThemedText>
       <ThemedText
-        fontSize={theme.fontSize14}
+        fontSize={Typography.fontSize14}
         fontWeight="medium"
         style={styles.detailValue}
         numberOfLines={1}
@@ -269,18 +268,11 @@ function ActionButton({
   variant,
   disabled,
 }: ActionButtonProps) {
-  const brandingColor = useThemeColor(theme.color.branding, {
-    android: Color.android.dynamic.primary,
-  });
-  const backgroundColor = useThemeColor(theme.color.backgroundSecondary, {
-    android: Color.android.dynamic.surfaceContainer,
-  });
-  const primaryButtonTextColor = useThemeColor(theme.colorWhite, {
-    android: Color.android.dynamic.onPrimary,
-  });
-  const secondaryButtonTextColor = useThemeColor(theme.color.branding, {
-    android: Color.android.dynamic.primary,
-  });
+  const theme = useTheme();
+  const brandingColor = theme.branding;
+  const backgroundColor = theme.fill;
+  const primaryButtonTextColor = theme.textOnBranding;
+  const secondaryButtonTextColor = theme.branding;
   const pressScale = useSharedValue(1);
   const primaryButtonStyle = useMemo(
     () => ({ backgroundColor: brandingColor }),
@@ -329,7 +321,7 @@ function ActionButton({
       disabled={disabled}
     >
       <ThemedText
-        fontSize={theme.fontSize16}
+        fontSize={Typography.fontSize16}
         fontWeight="semiBold"
         style={[
           styles.buttonText,
@@ -345,16 +337,16 @@ function ActionButton({
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    borderRadius: theme.borderRadius12,
+    borderRadius: Radii.lg,
     flex: 1,
     justifyContent: "center",
-    paddingVertical: theme.space12,
+    paddingVertical: Spacing.md,
   },
   buttonContainer: {
     flexDirection: "row",
-    gap: theme.space12,
-    padding: theme.space16,
-    paddingTop: theme.space8,
+    gap: Spacing.md,
+    padding: Spacing.lg,
+    paddingTop: Spacing.sm,
   },
   buttonDisabled: {
     opacity: 0.6,
@@ -371,8 +363,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   content: {
-    paddingHorizontal: theme.space24,
-    paddingVertical: theme.space16,
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.lg,
   },
   detailLabel: {
     flex: 1,
@@ -387,32 +379,32 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   detailsContainer: {
-    borderRadius: theme.borderRadius12,
+    borderRadius: Radii.lg,
     borderWidth: 1,
-    padding: theme.space12,
+    padding: Spacing.md,
   },
   header: {
     alignItems: "center",
-    paddingHorizontal: theme.space24,
-    paddingTop: theme.space16,
+    paddingHorizontal: Spacing.xl,
+    paddingTop: Spacing.lg,
   },
   popup: {
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     borderWidth: 1,
     elevation: 12,
     overflow: "hidden",
-    shadowColor: theme.colorBlack,
+    shadowColor: StaticColors.black,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.25,
     shadowRadius: 24,
   },
   question: {
-    marginBottom: theme.space16,
+    marginBottom: Spacing.lg,
     textAlign: "center",
   },
   queueIndicator: {
     alignItems: "center",
-    paddingTop: theme.space12,
+    paddingTop: Spacing.md,
   },
   title: {
     textAlign: "center",

@@ -1,14 +1,17 @@
-import { NotificationHandler } from "@/components/NotificationHandler";
-import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
+import { NotificationHandler } from "@/components/notification-handler";
 import {
   TOKEN_ACTION_MENU_WIDTH,
   type TokenAction,
 } from "@/components/TokenActionsMenu";
-import { TokenDetails } from "@/components/TokenDetails";
-import { useChallengePolling } from "@/hooks/useChallengePolling";
-import { useDeleteTokenConfirmation } from "@/hooks/useDeleteTokenConfirmation";
-import { useToken } from "@/hooks/useToken";
-import { usePushRequestStore } from "@/store/pushRequestStore";
+import { TokenDetails } from "@/components/token-details";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import { useChallengePolling } from "@/hooks/use-challenge-polling";
+import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
+import { useToken } from "@/hooks/use-token";
+import { useTheme } from "@/hooks/use-theme";
+import { usePushRequestStore } from "@/store/push-request-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import {
   ExtendedFloatingActionButton,
@@ -18,13 +21,7 @@ import {
 } from "@expo/ui/jetpack-compose";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import {
-  Color,
-  Link,
-  Stack,
-  useLocalSearchParams,
-  useRouter,
-} from "expo-router";
+import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
@@ -33,6 +30,7 @@ import {
   Pressable,
   RefreshControl,
   StyleSheet,
+  useColorScheme,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -42,7 +40,6 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { theme } from "../theme";
 
 export default function Tokens() {
   const router = useRouter();
@@ -52,26 +49,15 @@ export default function Tokens() {
   const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
-  const backgroundColor = useThemeColor(theme.color.background, {
-    android: Color.android.dynamic.background,
-  });
+  const colorScheme = useColorScheme();
+  const theme = useTheme();
+  const backgroundColor = theme.background;
   const { t } = useLingui();
-  const tabBarTintColor = useThemeColor(
-    {
-      light: theme.colorBlack,
-      dark: theme.colorWhite,
-    },
-    {
-      android: Color.android.dynamic.onBackground,
-    },
-  );
-  const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background, {
-    android: Color.android.dynamic.background,
-  });
-  const refreshControlTintColor = useThemeColor(theme.color.text, {
-    android: Color.android.dynamic.onBackground,
-  });
+  const tabBarTintColor = theme.text;
+  const transparentColor = theme.transparent;
+  const tabBarBackgroundColor = theme.background;
+  const refreshControlTintColor =
+    colorScheme === "dark" ? StaticColors.white : StaticColors.black;
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -324,7 +310,7 @@ export default function Tokens() {
     Platform.OS === "android" ? (
       <Host
         matchContents
-        style={[styles.fabHost, { bottom: bottom + theme.space16 }]}
+        style={[styles.fabHost, { bottom: bottom + Spacing.lg }]}
       >
         <ExtendedFloatingActionButton
           expanded={tokens.length === 0}
@@ -347,18 +333,13 @@ export default function Tokens() {
       <>
         {header}
         <ThemedView style={styles.noTokenContainer}>
-          <ThemedText
-            fontSize={theme.fontSize20}
-            fontWeight="medium"
-            platformColor={{ android: Color.android.dynamic.onBackground }}
-          >
+          <ThemedText fontSize={Typography.fontSize20} fontWeight="medium">
             <Trans>No Token setup</Trans>
           </ThemedText>
           <ThemedView style={styles.noTokenHintContent}>
             <ThemedText
-              fontSize={theme.fontSize16}
+              fontSize={Typography.fontSize16}
               fontWeight="light"
-              platformColor={{ android: Color.android.dynamic.onBackground }}
               style={styles.noTokenHint}
             >
               <Trans>Tap the</Trans>
@@ -369,10 +350,9 @@ export default function Tokens() {
               style={styles.noTokenHintIcon}
             />
             <ThemedText
-              fontSize={theme.fontSize16}
+              fontSize={Typography.fontSize16}
               fontWeight="light"
               style={styles.noTokenHint}
-              platformColor={{ android: Color.android.dynamic.onBackground }}
             >
               <Trans>to get started.</Trans>
             </ThemedText>
@@ -411,18 +391,9 @@ export default function Tokens() {
         ListEmptyComponent={
           <Animated.View entering={FadeIn} exiting={FadeOut}>
             <ThemedView style={styles.noResultsContainer}>
-              <ThemedText
-                platformColor={{ android: Color.android.dynamic.onBackground }}
-              >
+              <ThemedText>
                 <Trans>No results found for </Trans>
-                <ThemedText
-                  fontWeight="bold"
-                  platformColor={{
-                    android: Color.android.dynamic.onBackground,
-                  }}
-                >
-                  {searchText}
-                </ThemedText>
+                <ThemedText fontWeight="bold">{searchText}</ThemedText>
               </ThemedText>
             </ThemedView>
           </Animated.View>
@@ -446,18 +417,18 @@ export default function Tokens() {
 
 export const styles = StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: theme.space16,
+    paddingHorizontal: Spacing.lg,
   },
   fabHost: {
     position: "absolute",
-    right: theme.space16,
+    right: Spacing.lg,
     zIndex: 10,
   },
   fabText: {
     fontWeight: "bold",
   },
   noResultsContainer: {
-    padding: theme.space24,
+    padding: Spacing.xl,
   },
   noTokenContainer: {
     alignItems: "center",
@@ -465,19 +436,19 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
   },
   noTokenHint: {
-    lineHeight: theme.fontSize16 * 1.2,
+    lineHeight: Typography.fontSize16 * 1.2,
   },
   noTokenHintContent: {
     alignItems: "center",
     flexDirection: "row",
-    gap: theme.space4,
-    marginTop: theme.space8,
+    gap: Spacing.xs,
+    marginTop: Spacing.sm,
   },
   noTokenHintIcon: {
     alignSelf: "center",
   },
   tokenCard: {
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     overflow: "hidden",
     position: "relative",
   },
@@ -490,6 +461,6 @@ export const styles = StyleSheet.create({
     zIndex: 2,
   },
   tokenWrapper: {
-    marginVertical: theme.space8,
+    marginVertical: Spacing.sm,
   },
 });

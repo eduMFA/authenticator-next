@@ -2,7 +2,7 @@ import EduMfaRsaModule, {
   type RsaPublicKey,
   type RsaSignatureAlgorithm,
 } from "../../modules/edumfa-rsa";
-import { SIGN_ALGORITHM } from "@/consts";
+import { SIGN_ALGORITHM } from "@/constants/auth";
 
 export type { RsaPublicKey, RsaSignatureAlgorithm };
 
