@@ -4,7 +4,6 @@ import { useTheme } from "@/hooks/use-theme";
 import { PushRequest, PushRequestStatus } from "@/types";
 import { useLingui } from "@lingui/react/macro";
 import { BlurView } from "expo-blur";
-import * as Haptics from "expo-haptics";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Dimensions,
@@ -14,6 +13,7 @@ import {
   View,
   useColorScheme,
 } from "react-native";
+import { Presets } from "react-native-pulsar";
 import Animated, {
   Easing,
   FadeIn,
@@ -56,17 +56,14 @@ export function PushRequestPopup({
     (action: "accept" | "decline") => {
       if (!currentRequest || isAnimatingOut) return;
 
-      let hapticStyle: Haptics.ImpactFeedbackStyle;
       let pushRequestStatus: PushRequestStatus;
       if (action === "accept") {
-        hapticStyle = Haptics.ImpactFeedbackStyle.Medium;
+        Presets.System.impactMedium();
         pushRequestStatus = PushRequestStatus.Accepted;
       } else {
-        hapticStyle = Haptics.ImpactFeedbackStyle.Light;
+        Presets.System.impactLight();
         pushRequestStatus = PushRequestStatus.Declined;
       }
-
-      Haptics.impactAsync(hapticStyle);
 
       setIsAnimatingOut(true);
 
