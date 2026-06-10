@@ -1,4 +1,5 @@
 import { NotificationHandler } from "@/components/notification-handler";
+import { DevMenu } from "@/components/dev-menu";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
@@ -7,7 +8,6 @@ import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
-import { usePushRequestStore } from "@/store/push-request-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
@@ -32,10 +32,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function Tokens() {
   const router = useRouter();
-  const { tokens, updateToken, rolloutToken } = useToken();
+  const { tokens, rolloutToken } = useToken();
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
-  const { clearPushRequests } = usePushRequestStore();
   const { height } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -172,78 +171,7 @@ export default function Tokens() {
       />
       <Stack.Header style={stackHeaderStyle} />
       <Stack.Toolbar placement="right">
-        {__DEV__ && (
-          <Stack.Toolbar.Menu>
-            <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
-            <Stack.Toolbar.MenuAction
-              onPress={() => {
-                rolloutToken(tokens[0].id);
-              }}
-            >
-              Rollout
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction
-              onPress={() => {
-                updateToken(tokens[0].id, {
-                  rolloutState: PushTokenRolloutState.Pending,
-                });
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.RSAKeyGeneration,
-                  });
-                }, 1000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.SendRSAPublicKey,
-                  });
-                }, 2000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.SendRSAPublicKeyFailed,
-                  });
-                }, 4000);
-              }}
-            >
-              Demo Rollout Failure
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction
-              onPress={() => {
-                updateToken(tokens[0].id, {
-                  rolloutState: PushTokenRolloutState.Pending,
-                });
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.RSAKeyGeneration,
-                  });
-                }, 1000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.SendRSAPublicKey,
-                  });
-                }, 2000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.ParsingResponse,
-                  });
-                }, 4000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.Completed,
-                  });
-                }, 5000);
-              }}
-            >
-              Demo Rollout Success
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction
-              onPress={() => {
-                clearPushRequests();
-              }}
-            >
-              Clear Push Requests
-            </Stack.Toolbar.MenuAction>
-          </Stack.Toolbar.Menu>
-        )}
+        {__DEV__ && <DevMenu />}
         {Platform.OS === "ios" && !isLiquidGlassAvailable() && toolbarAddButton}
       </Stack.Toolbar>
     </>
