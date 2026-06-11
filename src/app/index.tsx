@@ -1,11 +1,11 @@
 import { NotificationHandler } from "@/components/notification-handler";
-import { DevMenu } from "@/components/dev-menu";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
+import { useDevMenu } from "@/hooks/use-dev-menu";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
 import { PushToken, PushTokenRolloutState } from "@/types";
@@ -33,6 +33,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function Tokens() {
   const router = useRouter();
   const { tokens, rolloutToken } = useToken();
+  const devMenu = useDevMenu();
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
   const { height } = useWindowDimensions();
@@ -171,7 +172,32 @@ export default function Tokens() {
       />
       <Stack.Header style={stackHeaderStyle} />
       <Stack.Toolbar placement="right">
-        {__DEV__ && <DevMenu />}
+        {__DEV__ && (
+          <Stack.Toolbar.Menu>
+            <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
+            <Stack.Toolbar.MenuAction
+              disabled={devMenu.tokenActionDisabled}
+              onPress={devMenu.rolloutFirstToken}
+            >
+              Rollout
+            </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction
+              disabled={devMenu.tokenActionDisabled}
+              onPress={devMenu.demoRolloutFailure}
+            >
+              Demo Rollout Failure
+            </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction
+              disabled={devMenu.tokenActionDisabled}
+              onPress={devMenu.demoRolloutSuccess}
+            >
+              Demo Rollout Success
+            </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction onPress={devMenu.clearPushRequests}>
+              Clear Push Requests
+            </Stack.Toolbar.MenuAction>
+          </Stack.Toolbar.Menu>
+        )}
         {Platform.OS === "ios" && !isLiquidGlassAvailable() && toolbarAddButton}
       </Stack.Toolbar>
     </>

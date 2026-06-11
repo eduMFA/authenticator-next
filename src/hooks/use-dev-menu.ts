@@ -1,9 +1,8 @@
 import { useToken } from "@/hooks/use-token";
 import { usePushRequestStore } from "@/store/push-request-store";
 import { PushTokenRolloutState } from "@/types";
-import { Stack } from "expo-router";
 
-export function DevMenu() {
+export function useDevMenu() {
   const { tokens, updateToken, rolloutToken } = useToken();
   const { clearPushRequests } = usePushRequestStore();
   const token = tokens[0];
@@ -56,38 +55,17 @@ export function DevMenu() {
     }, 5000);
   };
 
-  return (
-    <Stack.Toolbar.Menu>
-      <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
-      <Stack.Toolbar.MenuAction
-        disabled={tokenActionDisabled}
-        onPress={() => {
-          if (token) {
-            rolloutToken(token.id);
-          }
-        }}
-      >
-        Rollout
-      </Stack.Toolbar.MenuAction>
-      <Stack.Toolbar.MenuAction
-        disabled={tokenActionDisabled}
-        onPress={demoRolloutFailure}
-      >
-        Demo Rollout Failure
-      </Stack.Toolbar.MenuAction>
-      <Stack.Toolbar.MenuAction
-        disabled={tokenActionDisabled}
-        onPress={demoRolloutSuccess}
-      >
-        Demo Rollout Success
-      </Stack.Toolbar.MenuAction>
-      <Stack.Toolbar.MenuAction
-        onPress={() => {
-          clearPushRequests();
-        }}
-      >
-        Clear Push Requests
-      </Stack.Toolbar.MenuAction>
-    </Stack.Toolbar.Menu>
-  );
+  const rolloutFirstToken = () => {
+    if (token) {
+      rolloutToken(token.id);
+    }
+  };
+
+  return {
+    clearPushRequests,
+    demoRolloutFailure,
+    demoRolloutSuccess,
+    rolloutFirstToken,
+    tokenActionDisabled,
+  };
 }
