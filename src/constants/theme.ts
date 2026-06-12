@@ -152,6 +152,7 @@ export const Typography = {
 
 export const Radii = {
   sm: 4,
+  xs: 6,
   md: 10,
   lg: 12,
   xl: 20,

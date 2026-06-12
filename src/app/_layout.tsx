@@ -1,9 +1,11 @@
+import { OnboardingSequence } from "@/components/onboarding-sequence";
 import { ThemedText } from "@/components/themed-text";
 import { Typography, useInterFonts } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useTheme } from "@/hooks/use-theme";
 import { useNotificationStore } from "@/store/notification-store";
+import { useSettingsStore } from "@/store/settings-store";
 import { useTokenStore } from "@/store/token-store";
 import { activateCurrentLocale } from "@/utils/locale";
 import { isTokenEnrollmentUri } from "@/utils/token-utils";
@@ -54,6 +56,10 @@ function RootLayoutContent() {
   const startPendingRollouts = useTokenStore(
     (state) => state.startPendingRollouts,
   );
+  const hasCompletedOnboarding = useSettingsStore(
+    (state) => state.hasCompletedOnboarding,
+  );
+  const hasHydratedSettings = useSettingsStore((state) => state.hasHydrated);
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
 
@@ -62,15 +68,30 @@ function RootLayoutContent() {
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
-    initializeNotifications().then(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
+    initializeNotifications().then((fcmToken) => {
       // Start pending rollouts after notifications are initialized
-      startPendingRollouts();
+      if (fcmToken) {
+        startPendingRollouts();
+      }
       // Poll for any pending challenges when the app opens
       pollChallenges();
     });
-  }, [initializeNotifications, startPendingRollouts, pollChallenges]);
+  }, [
+    hasCompletedOnboarding,
+    initializeNotifications,
+    startPendingRollouts,
+    pollChallenges,
+  ]);
 
   useEffect(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       const wasInactive = /inactive|background/.test(appState.current);
       if (wasInactive && nextAppState === "active") {
@@ -84,9 +105,13 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [pollChallenges]);
+  }, [hasCompletedOnboarding, pollChallenges]);
 
   useEffect(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
     const handleIncomingUrl = async (incomingUrl: string) => {
       if (!isTokenEnrollmentUri(incomingUrl)) {
         return;
@@ -114,7 +139,15 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [handleTokenUri]);
+  }, [handleTokenUri, hasCompletedOnboarding]);
+
+  if (!hasHydratedSettings) {
+    return null;
+  }
+
+  if (!hasCompletedOnboarding) {
+    return <OnboardingSequence />;
+  }
 
   return (
     <Stack>
