@@ -15,11 +15,11 @@ import { useToken } from "@/hooks/use-token";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
-import { Button, Text as ExpoText, Row } from "@expo/ui";
+import { Button, Text as ExpoText, Icon, Row } from "@expo/ui";
 import {
+  Icon as AndroidIcon,
   ExtendedFloatingActionButton,
   Host,
-  Icon,
   Text,
 } from "@expo/ui/jetpack-compose";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
@@ -289,7 +289,7 @@ export default function Tokens() {
           }}
         >
           <ExtendedFloatingActionButton.Icon>
-            <Icon source={require("@expo/material-symbols/add.xml")} />
+            <AndroidIcon source={AddSymbol} />
           </ExtendedFloatingActionButton.Icon>
           <ExtendedFloatingActionButton.Text>
             <Text style={styles.fabText}>{t`Add token`}</Text>
