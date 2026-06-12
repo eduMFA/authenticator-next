@@ -1,8 +1,8 @@
-import { SIGN_ALGORITHM } from "@/consts";
+import { SIGN_ALGORITHM } from "@/constants/auth";
 import { PushRequest, PushRequestStatus, PushToken } from "@/types";
 import { base64ToBase32 } from "@/utils/crypto";
 import { signMessage } from "@/utils/rsa";
-import * as Haptics from "expo-haptics";
+import { Presets } from "react-native-pulsar";
 
 export interface PushAuthResponse {
   success: boolean;
@@ -17,7 +17,7 @@ async function signPushAuthMessage(
   tokenId: string,
 ): Promise<string> {
   const signatureBase64 = await signMessage(message, tokenId, SIGN_ALGORITHM);
-  console.log("Generated Base 64 signature:", signatureBase64);
+  console.debug("Generated Base 64 signature:", signatureBase64);
   // Convert base64 signature to base32 as required by the API
   const signature = base64ToBase32(signatureBase64);
   return signature;
@@ -81,7 +81,7 @@ export async function handlePushAuthRequest(
       request.serial,
       isDeclined,
     );
-    console.log("Signing message:", message);
+    console.debug("Signing message:", message);
 
     const signature = await signPushAuthMessage(message, token.id);
 
@@ -108,11 +108,11 @@ export async function handlePushAuthRequest(
     }
 
     // Provide haptic feedback
-    Haptics.notificationAsync(
-      isDeclined
-        ? Haptics.NotificationFeedbackType.Warning
-        : Haptics.NotificationFeedbackType.Success,
-    );
+    if (isDeclined) {
+      Presets.System.notificationWarning();
+    } else {
+      Presets.System.notificationSuccess();
+    }
 
     return { success: true };
   } catch (error) {

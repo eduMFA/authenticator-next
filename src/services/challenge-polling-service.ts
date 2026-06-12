@@ -1,3 +1,4 @@
+import { SIGN_ALGORITHM } from "@/constants/auth";
 import {
   PushRequest,
   PushRequestStatus,
@@ -5,7 +6,7 @@ import {
   PushTokenRolloutState,
 } from "@/types";
 import { base32ToBase64, base64ToBase32 } from "@/utils/crypto";
-import { buildPushRequestSignedData } from "@/utils/pushRequestUtils";
+import { buildPushRequestSignedData } from "@/utils/push-request-utils";
 import { signMessage, verifyMessage } from "@/utils/rsa";
 
 export interface ChallengePollingResult {
@@ -41,7 +42,7 @@ async function signPollingMessage(
   tokenId: string,
 ): Promise<string> {
   const message = `${serial}|${timestamp}`;
-  const signatureBase64 = await signMessage(message, tokenId, "SHA256");
+  const signatureBase64 = await signMessage(message, tokenId, SIGN_ALGORITHM);
   // Convert base64 signature to base32 as required by the API
   const signature = base64ToBase32(signatureBase64);
   return signature;

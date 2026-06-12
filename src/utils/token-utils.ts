@@ -1,9 +1,10 @@
-import { EDUMFA_PROTOCOL, OTP_PROTOCOL } from "@/consts";
+import { EDUMFA_PROTOCOL, OTP_PROTOCOL } from "@/constants/auth";
+import { DEFAULT_TOKEN_TTL } from "@/constants/token";
 import {
   InvalidUrlError,
   OtpProtocolError,
   UnsupportedVersionError,
-} from "@/errors/tokenErrors";
+} from "@/errors/token-errors";
 import { PushToken, PushTokenRolloutState } from "@/types";
 
 const parseTokenV1 = (url: URL) => {
@@ -39,7 +40,7 @@ const parseTokenV1 = (url: URL) => {
 
   const ttlParam = url.searchParams.get("ttl");
   try {
-    pushToken["ttl"] = ttlParam ? parseInt(ttlParam) : 10;
+    pushToken["ttl"] = ttlParam ? parseInt(ttlParam, 10) : DEFAULT_TOKEN_TTL;
   } catch {
     throw new InvalidUrlError(`Invalid ttl: ${ttlParam}`);
   }

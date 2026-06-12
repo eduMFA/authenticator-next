@@ -2,12 +2,12 @@ import {
   InvalidUrlError,
   OtpProtocolError,
   UnsupportedVersionError,
-} from "@/errors/tokenErrors";
-import { useToken } from "@/hooks/useToken";
+} from "@/errors/token-errors";
+import { useToken } from "@/hooks/use-token";
 import { useLingui } from "@lingui/react/macro";
-import * as Haptics from "expo-haptics";
 import { useCallback } from "react";
 import { Alert, Linking, Platform } from "react-native";
+import { Presets } from "react-native-pulsar";
 
 type TokenUriSource = "qr" | "deepLink";
 
@@ -40,7 +40,7 @@ export const useHandleTokenUri = () => {
   return useCallback(
     async (uri: string | null, source: TokenUriSource = "qr") => {
       if (uri === null) {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        Presets.System.notificationError();
         Alert.alert(
           t`No QR code found`,
           t`Your image did not contain a QR code.`,
@@ -50,12 +50,10 @@ export const useHandleTokenUri = () => {
 
       try {
         await createTokenFromURI(uri);
-        await Haptics.notificationAsync(
-          Haptics.NotificationFeedbackType.Success,
-        );
+        Presets.System.notificationSuccess();
         return true;
       } catch (error) {
-        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+        Presets.System.notificationError();
 
         if (error instanceof InvalidUrlError) {
           Alert.alert(
