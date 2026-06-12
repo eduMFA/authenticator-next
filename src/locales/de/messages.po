@@ -18,12 +18,15 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#~ msgid "Add"
-#~ msgstr "Hinzufügen"
-
-#: src/app/index.tsx:325
+#: src/app/index.tsx:295
+#: src/app/index.tsx:349
+#: src/app/index.tsx:351
 msgid "Add token"
 msgstr "Token hinzufügen"
+
+#: src/app/index.tsx:326
+msgid "Add your first eduMFA token to approve sign-ins securely from this device."
+msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
@@ -42,7 +45,7 @@ msgstr "Abbrechen"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:119
+#: src/app/index.tsx:125
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Löschen"
@@ -59,7 +62,7 @@ msgstr "Schließen"
 msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
-#: src/app/index.tsx:110
+#: src/app/index.tsx:116
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -77,13 +80,13 @@ msgstr "Berechtigungen erteilen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:395
+#: src/app/index.tsx:390
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:337
-msgid "No Token setup"
-msgstr "Keine Token eingerichtet"
+#: src/app/index.tsx:318
+msgid "No tokens yet"
+msgstr "Noch keine Token vorhanden"
 
 #: src/components/qr-code-scanner.tsx:50
 msgid "Open Settings"
@@ -97,15 +100,15 @@ msgstr "ODER"
 msgid "Pair new Push Token"
 msgstr "Neues Push-Token koppeln"
 
-#: src/components/upload-qr-code-button.tsx:73
+#: src/components/upload-qr-code-button.tsx:71
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/app/index.tsx:405
+#: src/app/index.tsx:400
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
-#: src/app/index.tsx:103
+#: src/app/index.tsx:109
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
@@ -125,17 +128,13 @@ msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:216
+#: src/app/index.tsx:225
 msgid "Search tokens"
 msgstr "Token suchen"
 
 #: src/components/push-request-popup.tsx:212
 msgid "Serial"
 msgstr "Seriennummer"
-
-#: src/app/index.tsx:345
-msgid "Tap the"
-msgstr "Tippe auf"
 
 #: src/hooks/use-handle-token-uri.ts:61
 msgid "The provided QR code isn't a valid eduMFA token."
@@ -149,11 +148,7 @@ msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie 
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
-#: src/app/index.tsx:357
-msgid "to get started."
-msgstr "um loszulegen."
-
-#: src/components/upload-qr-code-button.tsx:76
+#: src/components/upload-qr-code-button.tsx:74
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
