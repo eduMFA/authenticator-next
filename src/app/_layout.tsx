@@ -4,6 +4,7 @@ import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useTheme } from "@/hooks/use-theme";
 import { useNotificationStore } from "@/store/notification-store";
+import { useSettingsStore } from "@/store/settings-store";
 import { useTokenStore } from "@/store/token-store";
 import { activateCurrentLocale } from "@/utils/locale";
 import { isTokenEnrollmentUri } from "@/utils/token-utils";
@@ -20,6 +21,7 @@ import {
   Platform,
   useColorScheme,
 } from "react-native";
+import { Settings } from "react-native-pulsar";
 
 activateCurrentLocale();
 
@@ -37,7 +39,7 @@ export default function RootLayout() {
 
   return (
     <I18nProvider i18n={i18n}>
-      <ThemeProvider value={colorScheme == "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <RootLayoutContent />
       </ThemeProvider>
     </I18nProvider>
@@ -54,11 +56,16 @@ function RootLayoutContent() {
   const startPendingRollouts = useTokenStore(
     (state) => state.startPendingRollouts,
   );
+  const hapticsEnabled = useSettingsStore((state) => state.hapticsEnabled);
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
 
   const theme = useTheme();
   const tabBarBackgroundColor = theme.background;
+
+  useEffect(() => {
+    Settings.enableHaptics(hapticsEnabled);
+  }, [hapticsEnabled]);
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
