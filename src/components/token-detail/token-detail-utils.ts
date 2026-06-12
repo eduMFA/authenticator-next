@@ -1,4 +1,4 @@
-import { PushToken, PushTokenRolloutState } from "@/types";
+import { PushToken } from "@/types";
 
 export type EditableTokenFields = {
   label: string;
@@ -15,56 +15,6 @@ export function getParamValue(value: string | string[] | undefined) {
 
 export function getEditableTokenFields(token: PushToken): EditableTokenFields {
   return { label: token.label };
-}
-
-export function getRolloutFailureDetails(state: PushTokenRolloutState) {
-  switch (state) {
-    case PushTokenRolloutState.RSAKeyGenerationFailed:
-      return {
-        description:
-          "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs.",
-        title: "Key generation failed",
-      };
-    case PushTokenRolloutState.SendRSAPublicKeyFailed:
-      return {
-        description:
-          "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying.",
-        title: "Server registration failed",
-      };
-    case PushTokenRolloutState.ParsingResponseFailed:
-      return {
-        description:
-          "The server response could not be parsed or did not include the expected token material.",
-        title: "Enrollment response failed",
-      };
-    default:
-      return {
-        description:
-          "This token did not finish enrollment and cannot receive push requests until rollout succeeds.",
-        title: "Rollout failed",
-      };
-  }
-}
-
-export function getRolloutStateLabel(state: PushTokenRolloutState) {
-  switch (state) {
-    case PushTokenRolloutState.Pending:
-      return "Pending";
-    case PushTokenRolloutState.RSAKeyGeneration:
-      return "Generating keys";
-    case PushTokenRolloutState.RSAKeyGenerationFailed:
-      return "Key generation failed";
-    case PushTokenRolloutState.SendRSAPublicKey:
-      return "Registering public key";
-    case PushTokenRolloutState.SendRSAPublicKeyFailed:
-      return "Registration failed";
-    case PushTokenRolloutState.ParsingResponse:
-      return "Finalizing enrollment";
-    case PushTokenRolloutState.ParsingResponseFailed:
-      return "Response parsing failed";
-    case PushTokenRolloutState.Completed:
-      return "Enrolled";
-  }
 }
 
 export function formatTimestamp(timestamp: number | undefined) {
@@ -107,12 +57,13 @@ function getNestedStringProperty(value: unknown, path: string[]) {
 
 export function prettifyRefreshError(
   error: string | undefined,
+  messages: {
+    defaultMessage: string;
+    networkMessage: string;
+  },
 ): RefreshErrorDetails {
-  const defaultMessage =
-    "This token could not be refreshed. It may have been removed on the server, your connection may be unavailable, or the institution hosting the push service may be having a technical issue.";
-
   if (!error) {
-    return { message: defaultMessage };
+    return { message: messages.defaultMessage };
   }
 
   const serverError = error.match(/^Server returned (\d+):\s*(.*)$/s);
@@ -121,7 +72,7 @@ export function prettifyRefreshError(
     const trimmedBody = responseBody.trim();
 
     if (!trimmedBody) {
-      return { message: defaultMessage };
+      return { message: messages.defaultMessage };
     }
 
     try {
@@ -134,18 +85,15 @@ export function prettifyRefreshError(
         getStringProperty(parsedBody, "detail") ??
         getStringProperty(parsedBody, "error");
 
-      return { message: defaultMessage, serverMessage };
+      return { message: messages.defaultMessage, serverMessage };
     } catch {
-      return { message: defaultMessage, serverMessage: trimmedBody };
+      return { message: messages.defaultMessage, serverMessage: trimmedBody };
     }
   }
 
   if (error === "Network request failed") {
-    return {
-      message:
-        "This token could not be refreshed because the network request failed. Check your connection and try again.",
-    };
+    return { message: messages.networkMessage };
   }
 
-  return { message: defaultMessage, serverMessage: error };
+  return { message: messages.defaultMessage, serverMessage: error };
 }

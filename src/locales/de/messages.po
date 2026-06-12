@@ -18,12 +18,12 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
+#: src/app/index.tsx:279
 #: src/app/index.tsx:281
-#: src/app/index.tsx:283
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:258
+#: src/app/index.tsx:256
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -31,7 +31,7 @@ msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
 
-#: src/components/token-detail/token-overview-content.tsx:158
+#: src/components/token-detail/token-overview-content.tsx:202
 msgid "Audit log"
 msgstr "Prüfprotokoll"
 
@@ -49,7 +49,7 @@ msgstr "Abbrechen"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:148
+#: src/app/index.tsx:146
 #: src/app/token/[tokenId].tsx:186
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -59,7 +59,7 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/components/token-detail/token-overview-content.tsx:145
+#: src/components/token-detail/token-overview-content.tsx:189
 msgid "Details"
 msgstr "Details"
 
@@ -71,7 +71,7 @@ msgstr "Schließen"
 msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
-#: src/app/index.tsx:130
+#: src/app/index.tsx:128
 #: src/app/token/[tokenId].tsx:180
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -79,6 +79,14 @@ msgstr "Bearbeiten"
 #: src/components/token-detail/token-edit-content.tsx:33
 msgid "Edit token"
 msgstr "Token bearbeiten"
+
+#: src/components/token-detail/token-overview-content.tsx:89
+msgid "Enrolled"
+msgstr "Registriert"
+
+#: src/components/token-detail/token-overview-content.tsx:63
+msgid "Enrollment response failed"
+msgstr "Registrierungsantwort fehlgeschlagen"
 
 #: src/app/token/[tokenId].tsx:121
 msgid "Enter a label for this token."
@@ -90,9 +98,22 @@ msgstr "Gib eine Bezeichnung für dieses Token ein."
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
+#: src/components/token-detail/token-overview-content.tsx:85
+msgid "Finalizing enrollment"
+msgstr "Registrierung wird abgeschlossen"
+
+#: src/components/token-detail/token-overview-content.tsx:77
+msgid "Generating keys"
+msgstr "Schlüssel werden generiert"
+
 #: src/components/qr-code-scanner.tsx:49
 msgid "Grant permission"
 msgstr "Berechtigungen erteilen"
+
+#: src/components/token-detail/token-overview-content.tsx:53
+#: src/components/token-detail/token-overview-content.tsx:79
+msgid "Key generation failed"
+msgstr "Schlüsselgenerierung fehlgeschlagen"
 
 #: src/components/token-detail/token-edit-form.tsx:42
 msgid "Label"
@@ -102,11 +123,11 @@ msgstr "Bezeichnung"
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
-#: src/components/token-detail/token-overview-content.tsx:137
+#: src/components/token-detail/token-overview-content.tsx:181
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
 
-#: src/components/token-detail/token-overview-content.tsx:162
+#: src/components/token-detail/token-overview-content.tsx:206
 msgid "No interactions yet"
 msgstr "Noch keine Interaktionen"
 
@@ -114,11 +135,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:321
+#: src/app/index.tsx:319
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:250
+#: src/app/index.tsx:248
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -138,30 +159,50 @@ msgstr "ODER"
 msgid "Pair new Push Token"
 msgstr "Neues Push-Token koppeln"
 
+#: src/components/token-detail/token-overview-content.tsx:75
+msgid "Pending"
+msgstr "Ausstehend"
+
 #: src/components/upload-qr-code-button.tsx:71
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:108
+#: src/components/token-detail/token-overview-content.tsx:152
 #: src/components/token-list-item.tsx:130
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:331
+#: src/app/index.tsx:329
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
-#: src/components/token-detail/token-overview-content.tsx:95
+#: src/components/token-detail/token-overview-content.tsx:81
+msgid "Registering public key"
+msgstr "Öffentlicher Schlüssel wird registriert"
+
+#: src/components/token-detail/token-overview-content.tsx:83
+msgid "Registration failed"
+msgstr "Registrierung fehlgeschlagen"
+
+#: src/components/token-detail/token-overview-content.tsx:87
+msgid "Response parsing failed"
+msgstr "Antwortverarbeitung fehlgeschlagen"
+
+#: src/components/token-detail/token-overview-content.tsx:139
 msgid "Retry rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/app/index.tsx:140
+#: src/app/index.tsx:138
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
 #: src/components/token-list-item.tsx:108
 msgid "Rolling out..."
 msgstr "Rollout läuft..."
+
+#: src/components/token-detail/token-overview-content.tsx:68
+msgid "Rollout failed"
+msgstr "Rollout fehlgeschlagen"
 
 #: src/components/token-list-item.tsx:108
 msgid "Rollout Failed"
@@ -179,20 +220,24 @@ msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:179
+#: src/app/index.tsx:177
 msgid "Search tokens"
 msgstr "Token suchen"
 
 #: src/components/push-request-popup.tsx:212
-#: src/components/token-detail/token-overview-content.tsx:152
+#: src/components/token-detail/token-overview-content.tsx:196
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/components/token-detail/token-overview-content.tsx:120
+#: src/components/token-detail/token-overview-content.tsx:164
 msgid "Server message"
 msgstr "Servernachricht"
 
-#: src/components/token-detail/token-overview-content.tsx:149
+#: src/components/token-detail/token-overview-content.tsx:58
+msgid "Server registration failed"
+msgstr "Serverregistrierung fehlgeschlagen"
+
+#: src/components/token-detail/token-overview-content.tsx:193
 msgid "Status"
 msgstr "Status"
 
@@ -200,17 +245,41 @@ msgstr "Status"
 #~ msgid "Tap the"
 #~ msgstr "Tippe auf"
 
+#: src/components/token-detail/token-overview-content.tsx:52
+msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
+msgstr "Das Gerät konnte das für diesen Token erforderliche RSA-Schlüsselpaar nicht erstellen. Versuche den Rollout erneut und lasse die App währenddessen geöffnet."
+
 #: src/hooks/use-handle-token-uri.ts:61
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
+
+#: src/components/token-detail/token-overview-content.tsx:57
+msgid "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
+msgstr "Der öffentliche Schlüssel konnte nicht an den Registrierungsserver gesendet werden. Prüfe die Verbindung und die Token-Callback-URL, bevor du es erneut versuchst."
 
 #: src/hooks/use-handle-token-uri.ts:69
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
 msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
 
+#: src/components/token-detail/token-overview-content.tsx:62
+msgid "The server response could not be parsed or did not include the expected token material."
+msgstr "Die Serverantwort konnte nicht verarbeitet werden oder enthielt nicht das erwartete Tokenmaterial."
+
 #: src/hooks/use-handle-token-uri.ts:90
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
+
+#: src/components/token-detail/token-overview-content.tsx:98
+msgid "This token could not be refreshed because the network request failed. Check your connection and try again."
+msgstr "Dieses Token konnte nicht aktualisiert werden, weil die Netzwerkanfrage fehlgeschlagen ist. Prüfe deine Verbindung und versuche es erneut."
+
+#: src/components/token-detail/token-overview-content.tsx:97
+msgid "This token could not be refreshed. It may have been removed on the server, your connection may be unavailable, or the institution hosting the push service may be having a technical issue."
+msgstr "Dieses Token konnte nicht aktualisiert werden. Es wurde möglicherweise auf dem Server entfernt, deine Verbindung ist eventuell nicht verfügbar oder die Institution, die den Push-Dienst betreibt, hat ein technisches Problem."
+
+#: src/components/token-detail/token-overview-content.tsx:67
+msgid "This token did not finish enrollment and cannot receive push requests until rollout succeeds."
+msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Push-Anfragen empfangen, bis der Rollout erfolgreich ist."
 
 #: src/app/index.tsx:289
 #~ msgid "to get started."
@@ -220,7 +289,7 @@ msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualis
 msgid "Token"
 msgstr "Token"
 
-#: src/components/token-detail/token-overview-content.tsx:169
+#: src/components/token-detail/token-overview-content.tsx:213
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldeaktivitäten werden hier angezeigt."
 
