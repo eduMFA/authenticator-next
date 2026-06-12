@@ -6,6 +6,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { useNotificationStore } from "@/store/notification-store";
 import { useTokenStore } from "@/store/token-store";
 import { activateCurrentLocale } from "@/utils/locale";
+import { initSentry, withSentryRoot } from "@/utils/sentry";
 import { isTokenEnrollmentUri } from "@/utils/token-utils";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -21,9 +22,10 @@ import {
   useColorScheme,
 } from "react-native";
 
+initSentry();
 activateCurrentLocale();
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded] = useInterFonts();
   const colorScheme = useColorScheme();
 
@@ -178,3 +180,5 @@ function RootLayoutContent() {
     </Stack>
   );
 }
+
+export default withSentryRoot(RootLayout);
