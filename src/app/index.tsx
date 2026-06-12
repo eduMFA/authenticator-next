@@ -9,6 +9,8 @@ import { useDevMenu } from "@/hooks/use-dev-menu";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
 import { PushToken, PushTokenRolloutState } from "@/types";
+import AddSymbol from "@expo/material-symbols/add.xml";
+import CodeSymbol from "@expo/material-symbols/code.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -31,20 +33,6 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-const ADD_TOKEN_ICON = Icon.select({
-  ios: "plus",
-  android: require("@expo/material-symbols/add.xml"),
-});
-
-const DEV_MENU_ICON = Icon.select({
-  ios: "ellipsis.circle",
-  android: require("@expo/material-symbols/code.xml"),
-});
-
-const EMPTY_STATE_BUTTON_MODIFIERS = Platform.select({
-  ios: [controlSize("large"), buttonStyle("glassProminent")],
-});
 
 export default function Tokens() {
   const router = useRouter();
@@ -196,7 +184,12 @@ export default function Tokens() {
       <Stack.Header style={stackHeaderStyle} />
       <Stack.Toolbar placement="right">
         {__DEV__ && (
-          <Stack.Toolbar.Menu icon={DEV_MENU_ICON}>
+          <Stack.Toolbar.Menu
+            icon={Icon.select({
+              ios: "ellipsis.circle",
+              android: CodeSymbol,
+            })}
+          >
             <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
             <Stack.Toolbar.MenuAction
               disabled={devMenu.tokenActionDisabled}
@@ -269,14 +262,20 @@ export default function Tokens() {
           >
             <Button
               variant="filled"
-              modifiers={EMPTY_STATE_BUTTON_MODIFIERS}
+              modifiers={[controlSize("large"), buttonStyle("glassProminent")]}
               onPress={() => {
                 router.navigate("/token/add");
               }}
               style={{ width: emptyStateButtonWidth }}
             >
               <Row alignment="center" spacing={6}>
-                <Icon name={ADD_TOKEN_ICON} accessibilityLabel={t`Add token`} />
+                <Icon
+                  name={Icon.select({
+                    ios: "plus",
+                    android: AddSymbol,
+                  })}
+                  accessibilityLabel={t`Add token`}
+                />
                 <ExpoText numberOfLines={1}>{t`Add token`}</ExpoText>
               </Row>
             </Button>
