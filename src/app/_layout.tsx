@@ -14,7 +14,7 @@ import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import * as Linking from "expo-linking";
-import { Stack } from "expo-router";
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { useEffect, useRef } from "react";
 import {
   AppState,
@@ -27,6 +27,7 @@ activateCurrentLocale();
 
 export default function RootLayout() {
   const [fontsLoaded] = useInterFonts();
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     activateCurrentLocale();
@@ -38,7 +39,9 @@ export default function RootLayout() {
 
   return (
     <I18nProvider i18n={i18n}>
-      <RootLayoutContent />
+      <ThemeProvider value={colorScheme == "dark" ? DarkTheme : DefaultTheme}>
+        <RootLayoutContent />
+      </ThemeProvider>
     </I18nProvider>
   );
 }

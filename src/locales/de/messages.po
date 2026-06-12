@@ -13,13 +13,19 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:228
+#: src/components/push-request-popup.tsx:225
 #: src/store/notification-store.ts:48
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#~ msgid "Add"
-#~ msgstr "Hinzufügen"
+#: src/app/index.tsx:274
+#: src/app/index.tsx:275
+msgid "Add token"
+msgstr "Token hinzufügen"
+
+#: src/app/index.tsx:256
+msgid "Add your first eduMFA token to approve sign-ins securely from this device."
+msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
@@ -33,12 +39,12 @@ msgstr "Kamera-Berechtigung erforderlich"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/components/push-request-popup.tsx:222
+#: src/components/push-request-popup.tsx:219
 #: src/store/notification-store.ts:56
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:133
+#: src/app/index.tsx:151
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Löschen"
@@ -47,21 +53,21 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/hooks/use-handle-token-uri.ts:82
+#: src/hooks/use-handle-token-uri.ts:80
 msgid "Dismiss"
 msgstr "Schließen"
 
-#: src/hooks/use-handle-token-uri.ts:74
+#: src/hooks/use-handle-token-uri.ts:72
 msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
-#: src/app/index.tsx:115
+#: src/app/index.tsx:133
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: src/hooks/use-handle-token-uri.ts:62
-#: src/hooks/use-handle-token-uri.ts:70
-#: src/hooks/use-handle-token-uri.ts:91
+#: src/hooks/use-handle-token-uri.ts:60
+#: src/hooks/use-handle-token-uri.ts:68
+#: src/hooks/use-handle-token-uri.ts:89
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
@@ -73,13 +79,13 @@ msgstr "Berechtigungen erteilen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:319
+#: src/app/index.tsx:313
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:262
-msgid "No Token setup"
-msgstr "Keine Token eingerichtet"
+#: src/app/index.tsx:248
+msgid "No tokens yet"
+msgstr "Noch keine Token vorhanden"
 
 #: src/components/qr-code-scanner.tsx:50
 msgid "Open Settings"
@@ -97,19 +103,19 @@ msgstr "Neues Push-Token koppeln"
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/app/index.tsx:329
+#: src/app/index.tsx:323
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
-#: src/app/index.tsx:125
+#: src/app/index.tsx:143
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/components/token-details.tsx:102
+#: src/components/token-list-item.tsx:102
 msgid "Rolling out..."
 msgstr "Rollout läuft..."
 
-#: src/components/token-details.tsx:102
+#: src/components/token-list-item.tsx:102
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
@@ -117,37 +123,29 @@ msgstr "Rollout fehlgeschlagen"
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
-#: src/hooks/use-handle-token-uri.ts:79
+#: src/hooks/use-handle-token-uri.ts:77
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:163
+#: src/app/index.tsx:182
 msgid "Search tokens"
 msgstr "Token suchen"
 
-#: src/components/push-request-popup.tsx:215
+#: src/components/push-request-popup.tsx:212
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/app/index.tsx:270
-msgid "Tap the"
-msgstr "Tippe auf"
-
-#: src/hooks/use-handle-token-uri.ts:63
+#: src/hooks/use-handle-token-uri.ts:61
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
-#: src/hooks/use-handle-token-uri.ts:71
+#: src/hooks/use-handle-token-uri.ts:69
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
 msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
 
-#: src/hooks/use-handle-token-uri.ts:92
+#: src/hooks/use-handle-token-uri.ts:90
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
-
-#: src/app/index.tsx:282
-msgid "to get started."
-msgstr "um loszulegen."
 
 #: src/components/upload-qr-code-button.tsx:76
 msgid "Upload QR Code"
