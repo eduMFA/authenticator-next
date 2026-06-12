@@ -3,7 +3,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { useLingui } from "@lingui/react/macro";
 import Animated, {
@@ -15,6 +15,11 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import {
+  TOKEN_ACTION_MENU_WIDTH,
+  TokenActionsMenu,
+  type TokenAction,
+} from "./TokenActionsMenu";
 import { ThemedText } from "./themed-text";
 import { TokenImage } from "./token-image";
 
@@ -37,8 +42,10 @@ const timingConfig = {
 } as const;
 
 export const TokenListItem = memo(function TokenListItem({
+  actions,
   token,
 }: {
+  actions: TokenAction[];
   token: PushToken;
 }) {
   const { t } = useLingui();
@@ -51,6 +58,10 @@ export const TokenListItem = memo(function TokenListItem({
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
   const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
+  const isRolloutFinished = PushTokenRolloutState.isFinished(
+    token.rolloutState,
+  );
+  const showActionsMenu = Platform.OS === "android" && isRolloutFinished;
 
   const [showProgress, setShowProgress] = useState(!isCompleted);
 
@@ -74,6 +85,13 @@ export const TokenListItem = memo(function TokenListItem({
   const tokenContainerStyle = useMemo(
     () => [styles.token, { backgroundColor }],
     [backgroundColor],
+  );
+  const tokenDetailsStyle = useMemo(
+    () => [
+      styles.tokenDetails,
+      showActionsMenu && styles.tokenDetailsWithActionMenu,
+    ],
+    [showActionsMenu],
   );
 
   useEffect(() => {
@@ -110,7 +128,7 @@ export const TokenListItem = memo(function TokenListItem({
           animated
           size="small"
         />
-        <View style={styles.tokenDetails}>
+        <View style={tokenDetailsStyle}>
           <ThemedText fontSize={Typography.fontSize16}>
             {token.label}
           </ThemedText>
@@ -142,6 +160,7 @@ export const TokenListItem = memo(function TokenListItem({
           <ThemedText style={styles.progressText}>{progressText}</ThemedText>
         </AnimatedBlurView>
       )}
+      {showActionsMenu && <TokenActionsMenu actions={actions} />}
     </>
   );
 });
@@ -173,5 +192,8 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: Spacing.xxs,
     justifyContent: "center",
+  },
+  tokenDetailsWithActionMenu: {
+    paddingRight: TOKEN_ACTION_MENU_WIDTH,
   },
 });

@@ -2,6 +2,10 @@ import { NotificationHandler } from "@/components/notification-handler";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
+import {
+  TOKEN_ACTION_MENU_WIDTH,
+  type TokenAction,
+} from "@/components/TokenActionsMenu";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
@@ -11,7 +15,13 @@ import { useToken } from "@/hooks/use-token";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
-import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
+import { Button, Text as ExpoText, Icon, Row } from "@expo/ui";
+import {
+  Icon as AndroidIcon,
+  ExtendedFloatingActionButton,
+  Host,
+  Text,
+} from "@expo/ui/jetpack-compose";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
@@ -26,6 +36,7 @@ import {
   StyleSheet,
   useColorScheme,
   useWindowDimensions,
+  View,
 } from "react-native";
 import Animated, {
   FadeIn,
@@ -89,6 +100,39 @@ export default function Tokens() {
 
   const renderItem = useCallback(
     ({ item }: { item: PushToken }) => {
+      const primaryTokenAction: TokenAction = PushTokenRolloutState.isFailed(
+        item.rolloutState,
+      )
+        ? {
+            iosIcon: "arrow.clockwise",
+            key: "refresh",
+            label: t`Retry Rollout`,
+            onPress: () => rolloutToken(item.id),
+          }
+        : {
+            disabled: true,
+            iosIcon: "square.and.pencil",
+            key: "edit",
+            label: t`Edit`,
+            onPress: () => {},
+          };
+      const tokenActions: TokenAction[] = [
+        primaryTokenAction,
+        {
+          destructive: true,
+          iosIcon: "trash",
+          key: "delete",
+          label: t`Delete`,
+          onPress: () => confirmDeleteToken(item.id),
+        },
+      ];
+      const tokenListItem = (
+        <TokenListItem actions={tokenActions} token={item} key={item.id} />
+      );
+      const isRolloutFinished = PushTokenRolloutState.isFinished(
+        item.rolloutState,
+      );
+
       return (
         <Animated.View
           key={item.id}
@@ -96,59 +140,65 @@ export default function Tokens() {
           exiting={FadeOut}
           style={styles.tokenWrapper}
         >
-          <Link
-            push
-            key={item.id}
-            href={{
-              pathname: "/token/[tokenId]",
-              params: { tokenId: item.id },
-            }}
-            asChild
-          >
-            <Link.Trigger>
-              <Pressable
-                onLongPress={() => {
-                  confirmDeleteToken(item.id);
-                }}
-                style={styles.tokenCard}
-                disabled={!PushTokenRolloutState.isFinished(item.rolloutState)}
-              >
-                <TokenListItem token={item} key={item.id} />
-              </Pressable>
-            </Link.Trigger>
-            <Link.Menu>
-              {!PushTokenRolloutState.isFailed(item.rolloutState) && (
-                <Link.MenuAction
-                  icon="square.and.pencil"
-                  onPress={() => {}}
-                  disabled={true}
-                >
-                  {t`Edit`}
-                </Link.MenuAction>
-              )}
-              {PushTokenRolloutState.isFailed(item.rolloutState) && (
-                <Link.MenuAction
-                  icon="arrow.clockwise"
+          {Platform.OS === "android" ? (
+            <View style={styles.tokenCard}>
+              {tokenListItem}
+              {isRolloutFinished && (
+                <Pressable
+                  accessibilityLabel={
+                    item.issuer ? `${item.label}, ${item.issuer}` : item.label
+                  }
+                  accessibilityRole="button"
                   onPress={() => {
-                    rolloutToken(item.id);
+                    router.push({
+                      pathname: "/token/[tokenId]",
+                      params: { tokenId: item.id },
+                    });
                   }}
-                >
-                  {t`Retry Rollout`}
-                </Link.MenuAction>
+                  style={styles.tokenLinkOverlay}
+                />
               )}
-              <Link.MenuAction
-                icon="trash"
-                destructive
-                onPress={() => confirmDeleteToken(item.id)}
-              >
-                {t`Delete`}
-              </Link.MenuAction>
-            </Link.Menu>
-          </Link>
+            </View>
+          ) : (
+            <Link
+              push
+              key={item.id}
+              href={{
+                pathname: "/token/[tokenId]",
+                params: { tokenId: item.id },
+              }}
+              asChild
+            >
+              <Link.Trigger>
+                <Pressable
+                  onLongPress={() => {
+                    confirmDeleteToken(item.id);
+                  }}
+                  style={styles.tokenCard}
+                  disabled={!isRolloutFinished}
+                >
+                  {tokenListItem}
+                </Pressable>
+              </Link.Trigger>
+              <Link.Menu>
+                {tokenActions.map((action) => (
+                  <Link.MenuAction
+                    key={action.key}
+                    icon={action.iosIcon}
+                    onPress={action.onPress}
+                    disabled={action.disabled}
+                    destructive={action.destructive}
+                  >
+                    {action.label}
+                  </Link.MenuAction>
+                ))}
+              </Link.Menu>
+            </Link>
+          )}
         </Animated.View>
       );
     },
-    [confirmDeleteToken, rolloutToken, t],
+    [confirmDeleteToken, rolloutToken, router, t],
   );
 
   const toolbarAddButton = (
@@ -226,6 +276,28 @@ export default function Tokens() {
     </Stack.Toolbar>
   ) : null;
 
+  const androidAddFab =
+    Platform.OS === "android" ? (
+      <Host
+        matchContents
+        style={[styles.fabHost, { bottom: bottom + Spacing.lg }]}
+      >
+        <ExtendedFloatingActionButton
+          expanded={tokens.length === 0}
+          onClick={() => {
+            router.navigate("/token/add");
+          }}
+        >
+          <ExtendedFloatingActionButton.Icon>
+            <AndroidIcon source={AddSymbol} />
+          </ExtendedFloatingActionButton.Icon>
+          <ExtendedFloatingActionButton.Text>
+            <Text style={styles.fabText}>{t`Add token`}</Text>
+          </ExtendedFloatingActionButton.Text>
+        </ExtendedFloatingActionButton>
+      </Host>
+    ) : null;
+
   if (!tokens.length) {
     return (
       <>
@@ -281,6 +353,7 @@ export default function Tokens() {
             </Button>
           </Host>
         </ThemedView>
+        {androidAddFab}
         {footer}
       </>
     );
@@ -331,6 +404,7 @@ export default function Tokens() {
           />
         }
       />
+      {androidAddFab}
       {footer}
     </>
   );
@@ -339,6 +413,14 @@ export default function Tokens() {
 export const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: Spacing.lg,
+  },
+  fabHost: {
+    position: "absolute",
+    right: Spacing.lg,
+    zIndex: 10,
+  },
+  fabText: {
+    fontWeight: "bold",
   },
   noResultsContainer: {
     padding: Spacing.xl,
@@ -373,6 +455,15 @@ export const styles = StyleSheet.create({
   tokenCard: {
     borderRadius: Radii.xl,
     overflow: "hidden",
+    position: "relative",
+  },
+  tokenLinkOverlay: {
+    bottom: 0,
+    left: 0,
+    position: "absolute",
+    right: TOKEN_ACTION_MENU_WIDTH,
+    top: 0,
+    zIndex: 2,
   },
   tokenWrapper: {
     marginVertical: Spacing.sm,
