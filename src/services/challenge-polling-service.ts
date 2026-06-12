@@ -22,6 +22,23 @@ export interface TokenChallengePollingResult {
   error?: Error;
 }
 
+export class ChallengePollingNetworkError extends Error {
+  constructor(cause: Error) {
+    super(cause.message, { cause });
+    this.name = "ChallengePollingNetworkError";
+  }
+}
+
+export class ChallengePollingServerError extends Error {
+  constructor(
+    public readonly status: number,
+    public readonly responseBody: string,
+  ) {
+    super(`Server returned ${status}: ${responseBody}`);
+    this.name = "ChallengePollingServerError";
+  }
+}
+
 interface ChallengeResponse {
   nonce: string;
   question: string;
@@ -113,12 +130,24 @@ export async function pollChallengesForToken(
 
     console.log(`Polling challenges for token ${token.id}.`);
 
-    const response = await fetch(url.toString(), {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    let response: Response;
+    try {
+      response = await fetch(url.toString(), {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+    } catch (error) {
+      console.error(`Network error polling token ${token.id}:`, error);
+      return {
+        success: false,
+        challenges: [],
+        error: new ChallengePollingNetworkError(
+          error instanceof Error ? error : new Error(String(error)),
+        ),
+      };
+    }
 
     if (response.status === 204 || response.status === 404) {
       // No challenges available
@@ -135,7 +164,7 @@ export async function pollChallengesForToken(
       return {
         success: false,
         challenges: [],
-        error: new Error(`Server returned ${response.status}: ${errorText}`),
+        error: new ChallengePollingServerError(response.status, errorText),
       };
     }
 

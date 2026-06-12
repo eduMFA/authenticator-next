@@ -1,4 +1,8 @@
-import { PushToken, PushTokenRolloutState } from "@/types";
+import {
+  PushToken,
+  PushTokenRefreshErrorType,
+  PushTokenRolloutState,
+} from "@/types";
 import { type MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 
@@ -11,14 +15,19 @@ export type RefreshErrorDetails = {
   serverMessage?: string;
 };
 
+type RefreshErrorMessages = {
+  defaultMessage: string;
+  networkMessage: string;
+};
+
 export type RolloutFailureDetails = {
   title: MessageDescriptor;
   description: MessageDescriptor;
 };
 
 export const refreshErrorMessages = {
-  defaultMessage: msg`This token could not be refreshed. It may have been removed on the server, your connection may be unavailable, or the institution hosting the push service may be having a technical issue.`,
-  networkMessage: msg`This token could not be refreshed because the network request failed. Check your connection and try again.`,
+  defaultMessage: msg`This token could not be refreshed. It may have been removed on the server or the institution hosting the push service may be having a technical issue.`,
+  networkMessage: msg`This token could not be refreshed because the push service could not be reached. Check your connection or try again later.`,
 };
 
 export function getParamValue(value: string | string[] | undefined) {
@@ -119,11 +128,13 @@ function getNestedStringProperty(value: unknown, path: string[]) {
 
 export function prettifyRefreshError(
   error: string | undefined,
-  messages: {
-    defaultMessage: string;
-    networkMessage: string;
-  },
+  errorType: PushTokenRefreshErrorType | undefined,
+  messages: RefreshErrorMessages,
 ): RefreshErrorDetails {
+  if (errorType === PushTokenRefreshErrorType.Network) {
+    return { message: messages.networkMessage };
+  }
+
   if (!error) {
     return { message: messages.defaultMessage };
   }
@@ -151,10 +162,6 @@ export function prettifyRefreshError(
     } catch {
       return { message: messages.defaultMessage, serverMessage: trimmedBody };
     }
-  }
-
-  if (error === "Network request failed") {
-    return { message: messages.networkMessage };
   }
 
   return { message: messages.defaultMessage, serverMessage: error };

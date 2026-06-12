@@ -54,10 +54,14 @@ export function TokenOverviewContent({
   const hasRefreshFailure =
     refreshResult?.status === PushTokenRefreshStatus.Failed;
   const refreshFailedAt = formatTimestamp(refreshResult?.timestamp);
-  const refreshFailureDetails = prettifyRefreshError(refreshResult?.error, {
-    defaultMessage: i18n._(refreshErrorMessages.defaultMessage),
-    networkMessage: i18n._(refreshErrorMessages.networkMessage),
-  });
+  const refreshFailureDetails = prettifyRefreshError(
+    refreshResult?.error,
+    refreshResult?.errorType,
+    {
+      defaultMessage: i18n._(refreshErrorMessages.defaultMessage),
+      networkMessage: i18n._(refreshErrorMessages.networkMessage),
+    },
+  );
 
   return (
     <>

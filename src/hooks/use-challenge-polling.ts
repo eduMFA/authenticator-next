@@ -1,7 +1,11 @@
-import { pollAllChallenges } from "@/services/challenge-polling-service";
+import {
+  ChallengePollingNetworkError,
+  ChallengePollingServerError,
+  pollAllChallenges,
+} from "@/services/challenge-polling-service";
 import { usePushRequestStore } from "@/store/push-request-store";
 import { useTokenStore } from "@/store/token-store";
-import { PushTokenRefreshStatus } from "@/types";
+import { PushTokenRefreshErrorType, PushTokenRefreshStatus } from "@/types";
 import { useCallback, useRef, useState } from "react";
 
 export interface UseChallengePollingResult {
@@ -9,6 +13,18 @@ export interface UseChallengePollingResult {
   lastPollTime: number | null;
   pollChallenges: () => Promise<void>;
   error: Error | null;
+}
+
+function getRefreshErrorType(error: Error | undefined) {
+  if (error instanceof ChallengePollingNetworkError) {
+    return PushTokenRefreshErrorType.Network;
+  }
+
+  if (error instanceof ChallengePollingServerError) {
+    return PushTokenRefreshErrorType.Server;
+  }
+
+  return error ? PushTokenRefreshErrorType.Unknown : undefined;
 }
 
 /**
@@ -55,6 +71,7 @@ export function useChallengePolling(): UseChallengePollingResult {
               : PushTokenRefreshStatus.Failed,
             timestamp: refreshTimestamp,
             error: tokenResult.error?.message,
+            errorType: getRefreshErrorType(tokenResult.error),
           },
         });
       }
