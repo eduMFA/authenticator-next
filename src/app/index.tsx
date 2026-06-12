@@ -186,7 +186,7 @@ export default function Tokens() {
         {__DEV__ && (
           <Stack.Toolbar.Menu
             icon={Icon.select({
-              ios: "ellipsis.circle",
+              ios: "hammer.fill",
               android: CodeSymbol,
             })}
           >
