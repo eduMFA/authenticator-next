@@ -27,7 +27,7 @@ import {
   useColorScheme,
   useWindowDimensions,
 } from "react-native";
-import { useRealtimeComposer } from "react-native-pulsar";
+import { Presets, useRealtimeComposer } from "react-native-pulsar";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -94,6 +94,11 @@ export default function Tokens() {
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
+
+  const handleOpenAddToken = useCallback(() => {
+    Presets.System.impactSoft();
+    router.navigate("/token/add");
+  }, [router]);
 
   const onRefresh = useCallback(() => {
     if (isPolling || tokens.length === 0) {
@@ -241,9 +246,7 @@ export default function Tokens() {
     <Stack.Toolbar.Button
       icon="plus"
       variant="prominent"
-      onPress={() => {
-        router.navigate("/token/add");
-      }}
+      onPress={handleOpenAddToken}
     />
   );
 
@@ -349,9 +352,7 @@ export default function Tokens() {
             <Button
               variant="filled"
               modifiers={[controlSize("large"), buttonStyle("glassProminent")]}
-              onPress={() => {
-                router.navigate("/token/add");
-              }}
+              onPress={handleOpenAddToken}
               style={{ width: emptyStateButtonWidth }}
             >
               <Row alignment="center" spacing={6}>
