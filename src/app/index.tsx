@@ -107,9 +107,7 @@ export default function Tokens() {
           >
             <Link.Trigger>
               <Pressable
-                onLongPress={() => {
-                  confirmDeleteToken(item.id);
-                }}
+                onLongPress={() => {}}
                 style={styles.tokenCard}
                 disabled={!PushTokenRolloutState.isFinished(item.rolloutState)}
               >
