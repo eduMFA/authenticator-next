@@ -1,4 +1,6 @@
-import { PushToken } from "@/types";
+import { PushToken, PushTokenRolloutState } from "@/types";
+import { type MessageDescriptor } from "@lingui/core";
+import { msg } from "@lingui/core/macro";
 
 export type EditableTokenFields = {
   label: string;
@@ -7,6 +9,16 @@ export type EditableTokenFields = {
 export type RefreshErrorDetails = {
   message: string;
   serverMessage?: string;
+};
+
+export type RolloutFailureDetails = {
+  title: MessageDescriptor;
+  description: MessageDescriptor;
+};
+
+export const refreshErrorMessages = {
+  defaultMessage: msg`This token could not be refreshed. It may have been removed on the server, your connection may be unavailable, or the institution hosting the push service may be having a technical issue.`,
+  networkMessage: msg`This token could not be refreshed because the network request failed. Check your connection and try again.`,
 };
 
 export function getParamValue(value: string | string[] | undefined) {
@@ -26,6 +38,56 @@ export function formatTimestamp(timestamp: number | undefined) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(timestamp));
+}
+
+export function getRolloutFailureDetails(
+  state: PushTokenRolloutState,
+): RolloutFailureDetails {
+  switch (state) {
+    case PushTokenRolloutState.RSAKeyGenerationFailed:
+      return {
+        description: msg`The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs.`,
+        title: msg`Key generation failed`,
+      };
+    case PushTokenRolloutState.SendRSAPublicKeyFailed:
+      return {
+        description: msg`The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying.`,
+        title: msg`Server registration failed`,
+      };
+    case PushTokenRolloutState.ParsingResponseFailed:
+      return {
+        description: msg`The server response could not be parsed or did not include the expected token material.`,
+        title: msg`Enrollment response failed`,
+      };
+    default:
+      return {
+        description: msg`This token did not finish enrollment and cannot receive push requests until rollout succeeds.`,
+        title: msg`Rollout failed`,
+      };
+  }
+}
+
+export function getRolloutStateLabel(
+  state: PushTokenRolloutState,
+): MessageDescriptor {
+  switch (state) {
+    case PushTokenRolloutState.Pending:
+      return msg`Pending`;
+    case PushTokenRolloutState.RSAKeyGeneration:
+      return msg`Generating keys`;
+    case PushTokenRolloutState.RSAKeyGenerationFailed:
+      return msg`Key generation failed`;
+    case PushTokenRolloutState.SendRSAPublicKey:
+      return msg`Registering public key`;
+    case PushTokenRolloutState.SendRSAPublicKeyFailed:
+      return msg`Registration failed`;
+    case PushTokenRolloutState.ParsingResponse:
+      return msg`Finalizing enrollment`;
+    case PushTokenRolloutState.ParsingResponseFailed:
+      return msg`Response parsing failed`;
+    case PushTokenRolloutState.Completed:
+      return msg`Enrolled`;
+  }
 }
 
 function getStringProperty(value: unknown, key: string) {

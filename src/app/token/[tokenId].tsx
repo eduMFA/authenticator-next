@@ -1,10 +1,10 @@
-import { TokenEditContent } from "@/components/token-detail/token-edit-content";
-import { TokenOverviewContent } from "@/components/token-detail/token-overview-content";
 import {
   EditableTokenFields,
   getEditableTokenFields,
   getParamValue,
 } from "@/components/token-detail/token-detail-utils";
+import { TokenEditContent } from "@/components/token-detail/token-edit-content";
+import { TokenOverviewContent } from "@/components/token-detail/token-overview-content";
 import { Spacing } from "@/constants/theme";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
 import { useTheme } from "@/hooks/use-theme";

@@ -13,7 +13,13 @@ import { Button, Host } from "@expo/ui/swift-ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import { StyleSheet, View } from "react-native";
-import { formatTimestamp, prettifyRefreshError } from "./token-detail-utils";
+import {
+  formatTimestamp,
+  getRolloutFailureDetails,
+  getRolloutStateLabel,
+  prettifyRefreshError,
+  refreshErrorMessages,
+} from "./token-detail-utils";
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
@@ -39,60 +45,18 @@ export function TokenOverviewContent({
   token: PushToken;
   onRetryRollout: () => void;
 }) {
-  const { t } = useLingui();
+  const { i18n, t } = useLingui();
   const theme = useTheme();
   const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
-  const rolloutFailureDetails = (() => {
-    switch (token.rolloutState) {
-      case PushTokenRolloutState.RSAKeyGenerationFailed:
-        return {
-          description: t`The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs.`,
-          title: t`Key generation failed`,
-        };
-      case PushTokenRolloutState.SendRSAPublicKeyFailed:
-        return {
-          description: t`The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying.`,
-          title: t`Server registration failed`,
-        };
-      case PushTokenRolloutState.ParsingResponseFailed:
-        return {
-          description: t`The server response could not be parsed or did not include the expected token material.`,
-          title: t`Enrollment response failed`,
-        };
-      default:
-        return {
-          description: t`This token did not finish enrollment and cannot receive push requests until rollout succeeds.`,
-          title: t`Rollout failed`,
-        };
-    }
-  })();
-  const rolloutStateLabel = (() => {
-    switch (token.rolloutState) {
-      case PushTokenRolloutState.Pending:
-        return t`Pending`;
-      case PushTokenRolloutState.RSAKeyGeneration:
-        return t`Generating keys`;
-      case PushTokenRolloutState.RSAKeyGenerationFailed:
-        return t`Key generation failed`;
-      case PushTokenRolloutState.SendRSAPublicKey:
-        return t`Registering public key`;
-      case PushTokenRolloutState.SendRSAPublicKeyFailed:
-        return t`Registration failed`;
-      case PushTokenRolloutState.ParsingResponse:
-        return t`Finalizing enrollment`;
-      case PushTokenRolloutState.ParsingResponseFailed:
-        return t`Response parsing failed`;
-      case PushTokenRolloutState.Completed:
-        return t`Enrolled`;
-    }
-  })();
+  const rolloutFailureDetails = getRolloutFailureDetails(token.rolloutState);
+  const rolloutStateLabel = getRolloutStateLabel(token.rolloutState);
   const refreshResult = token.lastRefreshResult;
   const hasRefreshFailure =
     refreshResult?.status === PushTokenRefreshStatus.Failed;
   const refreshFailedAt = formatTimestamp(refreshResult?.timestamp);
   const refreshFailureDetails = prettifyRefreshError(refreshResult?.error, {
-    defaultMessage: t`This token could not be refreshed. It may have been removed on the server, your connection may be unavailable, or the institution hosting the push service may be having a technical issue.`,
-    networkMessage: t`This token could not be refreshed because the network request failed. Check your connection and try again.`,
+    defaultMessage: i18n._(refreshErrorMessages.defaultMessage),
+    networkMessage: i18n._(refreshErrorMessages.networkMessage),
   });
 
   return (
@@ -127,8 +91,8 @@ export function TokenOverviewContent({
       {isRolloutFailed ? (
         <StatusCard
           variant="error"
-          title={rolloutFailureDetails.title}
-          description={rolloutFailureDetails.description}
+          title={i18n._(rolloutFailureDetails.title)}
+          description={i18n._(rolloutFailureDetails.description)}
         >
           <View style={styles.nativeButton}>
             <Host matchContents>
@@ -186,7 +150,7 @@ export function TokenOverviewContent({
           {t`Details`}
         </ThemedText>
         <ThemedView type="backgroundSecondary" style={styles.detailsCard}>
-          <DetailRow label={t`Status`} value={rolloutStateLabel} />
+          <DetailRow label={t`Status`} value={i18n._(rolloutStateLabel)} />
           <DetailRow label={t`Serial`} value={token.id} />
         </ThemedView>
       </View>
