@@ -1,3 +1,4 @@
+import QRCodeScannerSymbol from "@expo/material-symbols/qr_code_scanner.xml";
 import { Button, Host, Icon, Row, Spacer, Text } from "@expo/ui";
 import { height as composeHeight } from "@expo/ui/jetpack-compose/modifiers";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
@@ -6,16 +7,6 @@ import * as Camera from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { Platform } from "react-native";
-
-const BUTTON_MODIFIERS = Platform.select({
-  android: [composeHeight(100)],
-  ios: [controlSize("large"), buttonStyle("glassProminent")],
-});
-
-const QR_CODE_SCANNER_ICON = Icon.select({
-  ios: "qrcode.viewfinder",
-  android: require("@expo/material-symbols/qr_code_scanner.xml"),
-});
 
 const ANDROID_TEXT_STYLE = Platform.select({
   android: { fontSize: 20 },
@@ -58,7 +49,11 @@ export function UploadQRCodeButton({
       }}
     >
       <Button
-        modifiers={BUTTON_MODIFIERS}
+        modifiers={[
+          composeHeight(100),
+          controlSize("large"),
+          buttonStyle("glassProminent"),
+        ]}
         onPress={() => {
           void pickAndScanQRCode(onQRCodeScanned);
         }}
@@ -69,7 +64,10 @@ export function UploadQRCodeButton({
         <Row alignment="center" spacing={6}>
           <Spacer flexible />
           <Icon
-            name={QR_CODE_SCANNER_ICON}
+            name={Icon.select({
+              ios: "qrcode.viewfinder",
+              android: QRCodeScannerSymbol,
+            })}
             accessibilityLabel={t`QR code scanner`}
           />
           <Text numberOfLines={1} textStyle={ANDROID_TEXT_STYLE}>
