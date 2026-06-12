@@ -37,6 +37,11 @@ const ADD_TOKEN_ICON = Icon.select({
   android: require("@expo/material-symbols/add.xml"),
 });
 
+const DEV_MENU_ICON = Icon.select({
+  ios: "ellipsis.circle",
+  android: require("@expo/material-symbols/code.xml"),
+});
+
 const EMPTY_STATE_BUTTON_MODIFIERS = Platform.select({
   ios: [controlSize("large"), buttonStyle("glassProminent")],
 });
@@ -191,7 +196,7 @@ export default function Tokens() {
       <Stack.Header style={stackHeaderStyle} />
       <Stack.Toolbar placement="right">
         {__DEV__ && (
-          <Stack.Toolbar.Menu>
+          <Stack.Toolbar.Menu icon={DEV_MENU_ICON}>
             <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
             <Stack.Toolbar.MenuAction
               disabled={devMenu.tokenActionDisabled}
