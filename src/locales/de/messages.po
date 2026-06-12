@@ -18,6 +18,15 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
+#: src/app/index.tsx:274
+#: src/app/index.tsx:275
+msgid "Add token"
+msgstr "Token hinzufügen"
+
+#: src/app/index.tsx:256
+msgid "Add your first eduMFA token to approve sign-ins securely from this device."
+msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
+
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
@@ -35,7 +44,7 @@ msgstr "Abbrechen"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:136
+#: src/app/index.tsx:151
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Löschen"
@@ -52,7 +61,7 @@ msgstr "Schließen"
 msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
-#: src/app/index.tsx:118
+#: src/app/index.tsx:133
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -70,13 +79,13 @@ msgstr "Berechtigungen erteilen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:322
+#: src/app/index.tsx:313
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:265
-msgid "No Token setup"
-msgstr "Keine Token eingerichtet"
+#: src/app/index.tsx:248
+msgid "No tokens yet"
+msgstr "Noch keine Token vorhanden"
 
 #: src/components/qr-code-scanner.tsx:50
 msgid "Open Settings"
@@ -94,11 +103,11 @@ msgstr "Neues Push-Token koppeln"
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/app/index.tsx:332
+#: src/app/index.tsx:323
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
-#: src/app/index.tsx:128
+#: src/app/index.tsx:143
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
@@ -118,7 +127,7 @@ msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:166
+#: src/app/index.tsx:182
 msgid "Search tokens"
 msgstr "Token suchen"
 
@@ -126,30 +135,17 @@ msgstr "Token suchen"
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/app/index.tsx:273
-msgid "Tap the"
-msgstr "Tippe auf"
-
 #: src/hooks/use-handle-token-uri.ts:61
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
 #: src/hooks/use-handle-token-uri.ts:69
-msgid "The QR code isn't supported by this app. Please use a general "
-"Authenticator app. We recommend 2FAS."
-msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie "
-"eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
+msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
+msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
 
 #: src/hooks/use-handle-token-uri.ts:90
-msgid "The token version is not supported by this app. Please update the app to "
-"the latest version or contact your institution for assistance."
-msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte "
-"aktualisiere die App auf die neueste Version oder kontaktiere deine "
-"Institution für Unterstützung."
-
-#: src/app/index.tsx:285
-msgid "to get started."
-msgstr "um loszulegen."
+msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
+msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
 #: src/components/upload-qr-code-button.tsx:76
 msgid "Upload QR Code"
@@ -161,8 +157,7 @@ msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
 
 #: src/components/qr-code-scanner.tsx:44
 msgid "You can enable camera permissions in your device settings"
-msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen "
-"aktivieren"
+msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
 
 #: src/hooks/use-handle-token-uri.ts:46
 msgid "Your image did not contain a QR code."
