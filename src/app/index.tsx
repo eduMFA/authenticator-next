@@ -107,9 +107,7 @@ export default function Tokens() {
           >
             <Link.Trigger>
               <Pressable
-                onLongPress={() => {
-                  confirmDeleteToken(item.id);
-                }}
+                onLongPress={() => {}}
                 style={styles.tokenCard}
                 disabled={!PushTokenRolloutState.isFinished(item.rolloutState)}
               >
@@ -186,7 +184,7 @@ export default function Tokens() {
         {__DEV__ && (
           <Stack.Toolbar.Menu
             icon={Icon.select({
-              ios: "ellipsis.circle",
+              ios: "hammer.fill",
               android: CodeSymbol,
             })}
           >

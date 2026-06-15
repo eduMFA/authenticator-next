@@ -39,7 +39,7 @@ function RootLayout() {
 
   return (
     <I18nProvider i18n={i18n}>
-      <ThemeProvider value={colorScheme == "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <RootLayoutContent />
       </ThemeProvider>
     </I18nProvider>
