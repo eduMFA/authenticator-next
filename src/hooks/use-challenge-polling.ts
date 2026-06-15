@@ -1,8 +1,8 @@
 import {
   ChallengePollingNetworkError,
   ChallengePollingServerError,
-  pollAllChallenges,
-} from "@/services/challenge-polling-service";
+} from "@/errors/challenge-polling-errors";
+import { pollAllChallenges } from "@/services/challenge-polling-service";
 import { usePushRequestStore } from "@/store/push-request-store";
 import { useTokenStore } from "@/store/token-store";
 import { PushTokenRefreshErrorType, PushTokenRefreshStatus } from "@/types";
