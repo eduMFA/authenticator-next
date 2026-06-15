@@ -1,13 +1,13 @@
-import { useNotifications } from "@/hooks/useNotifications";
-import { useToken } from "@/hooks/useToken";
+import { useNotifications } from "@/hooks/use-notifications";
+import { useToken } from "@/hooks/use-token";
 import {
   findTokenForPushRequest,
   handlePushAuthRequest,
-} from "@/services/pushAuthService";
-import { usePushRequestStore } from "@/store/pushRequestStore";
+} from "@/services/push-auth-service";
+import { usePushRequestStore } from "@/store/push-request-store";
 import { PushRequest, PushRequestStatus } from "@/types";
 import { useCallback } from "react";
-import { PushRequestPopup } from "./PushRequestPopup";
+import { PushRequestPopup } from "./push-request-popup";
 
 /**
  * Component that handles push notifications and displays a popup for pending requests.
@@ -16,24 +16,6 @@ import { PushRequestPopup } from "./PushRequestPopup";
 export function NotificationHandler() {
   const { tokens } = useToken();
   const { pushRequests, updatePushRequestStatus } = usePushRequestStore();
-
-  useNotifications(async (action, pushRequest) => {
-    console.log("User action:", action, pushRequest);
-
-    // Handle the user's response from notification quick actions
-    if (action === "ACCEPT") {
-      console.log("User accepted the push authentication");
-      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Accepted);
-      handleRequest({ ...pushRequest, status: PushRequestStatus.Accepted });
-    } else if (action === "DECLINE") {
-      console.log("User declined the push authentication");
-      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Declined);
-      handleRequest({ ...pushRequest, status: PushRequestStatus.Declined });
-    } else if (action === "TAP") {
-      console.log("User tapped the notification");
-      // Navigate to the appropriate screen or let the popup handle it
-    }
-  });
 
   const handleRequest = useCallback(
     async (request: PushRequest): Promise<boolean> => {
@@ -48,6 +30,30 @@ export function NotificationHandler() {
     },
     [tokens],
   );
+
+  useNotifications(async (action, pushRequest) => {
+    console.log("User action:", action, pushRequest);
+
+    // Handle the user's response from notification quick actions
+    if (action === "ACCEPT") {
+      console.log("User accepted the push authentication");
+      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Accepted);
+      void handleRequest({
+        ...pushRequest,
+        status: PushRequestStatus.Accepted,
+      });
+    } else if (action === "DECLINE") {
+      console.log("User declined the push authentication");
+      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Declined);
+      void handleRequest({
+        ...pushRequest,
+        status: PushRequestStatus.Declined,
+      });
+    } else if (action === "TAP") {
+      console.log("User tapped the notification");
+      // Navigate to the appropriate screen or let the popup handle it
+    }
+  });
 
   return <PushRequestPopup requests={pushRequests} onAction={handleRequest} />;
 }

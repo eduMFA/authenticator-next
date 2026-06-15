@@ -1,17 +1,18 @@
-import { ThemedText, useThemeColor } from "@/components/Themed";
-import { useChallengePolling } from "@/hooks/useChallengePolling";
-import { useHandleTokenUri } from "@/hooks/useHandleTokenUri";
-import { useNotificationStore } from "@/store/notificationStore";
-import { useTokenStore } from "@/store/tokenStore";
-import { theme, useInterFonts } from "@/theme";
+import { ThemedText } from "@/components/themed-text";
+import { Typography, useInterFonts } from "@/constants/theme";
+import { useChallengePolling } from "@/hooks/use-challenge-polling";
+import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
+import { useTheme } from "@/hooks/use-theme";
+import { useNotificationStore } from "@/store/notification-store";
+import { useTokenStore } from "@/store/token-store";
 import { activateCurrentLocale } from "@/utils/locale";
-import { isTokenEnrollmentUri } from "@/utils/tokenUtils";
+import { isTokenEnrollmentUri } from "@/utils/token-utils";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import * as Linking from "expo-linking";
-import { Stack } from "expo-router";
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { useEffect, useRef } from "react";
 import {
   AppState,
@@ -24,6 +25,7 @@ activateCurrentLocale();
 
 export default function RootLayout() {
   const [fontsLoaded] = useInterFonts();
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     activateCurrentLocale();
@@ -35,7 +37,9 @@ export default function RootLayout() {
 
   return (
     <I18nProvider i18n={i18n}>
-      <RootLayoutContent />
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <RootLayoutContent />
+      </ThemeProvider>
     </I18nProvider>
   );
 }
@@ -53,7 +57,8 @@ function RootLayoutContent() {
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
 
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
+  const theme = useTheme();
+  const tabBarBackgroundColor = theme.background;
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
@@ -118,7 +123,7 @@ function RootLayoutContent() {
         options={{
           headerTitle: () =>
             Platform.OS === "android" ? (
-              <ThemedText fontSize={theme.fontSize20} fontWeight="bold">
+              <ThemedText fontSize={Typography.fontSize20} fontWeight="bold">
                 Tokens
               </ThemedText>
             ) : undefined,
@@ -135,7 +140,7 @@ function RootLayoutContent() {
                 ? "formSheet"
                 : "modal"
               : "modal",
-          sheetAllowedDetents: [0.8],
+          sheetAllowedDetents: [0.75],
           sheetInitialDetentIndex: 0,
           gestureEnabled: false,
           contentStyle: {

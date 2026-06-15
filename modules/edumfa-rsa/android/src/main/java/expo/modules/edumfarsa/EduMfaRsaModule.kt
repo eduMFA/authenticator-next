@@ -10,6 +10,7 @@ import java.security.KeyPairGenerator
 import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.PublicKey
+import java.security.Security
 import java.security.Signature
 import java.security.spec.X509EncodedKeySpec
 
@@ -145,12 +146,25 @@ class EduMfaRsaModule : Module() {
 
   private fun parsePublicKey(publicKey: String): PublicKey {
     val der = decodePemBody(publicKey)
-    val keyFactory = KeyFactory.getInstance(RSA_ALGORITHM)
+    val keyFactory = rsaKeyFactory()
 
     return try {
       keyFactory.generatePublic(X509EncodedKeySpec(der))
     } catch (_: Exception) {
       keyFactory.generatePublic(X509EncodedKeySpec(wrapPkcs1PublicKeyInSubjectPublicKeyInfo(der)))
+    }
+  }
+
+  private fun rsaKeyFactory(): KeyFactory {
+    val provider = Security.getProviders()
+      .firstOrNull { provider ->
+        provider.name != ANDROID_KEYSTORE && provider.getService("KeyFactory", RSA_ALGORITHM) != null
+      }
+
+    return if (provider != null) {
+      KeyFactory.getInstance(RSA_ALGORITHM, provider)
+    } else {
+      KeyFactory.getInstance(RSA_ALGORITHM)
     }
   }
 

@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# eduMFA Authenticator
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is the Expo app for the eduMFA authenticator.
 
 ## Get started
 
@@ -25,16 +25,34 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Learn more
+## Releases
 
-To learn more about developing your project with Expo, look at the following resources:
+Releases are tag-driven through EAS Workflows. The `main` branch is the development branch and does not publish store builds by itself.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Beta releases use pre-release tags:
 
-## Join the community
+```bash
+git tag beta/0.1.0-beta.1
+git push origin beta/0.1.0-beta.1
 
-Join our community of developers creating universal apps.
+git tag beta/0.1.0-beta.2
+git push origin beta/0.1.0-beta.2
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Production releases use final version tags:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The beta workflow builds Android and iOS store binaries. Android is submitted to the Google Play open testing track. iOS is distributed to the TestFlight external group `External Testers`.
+
+The production workflow builds Android and iOS store binaries, then waits for approval in EAS before submitting to Google Play production and App Store Connect.
+
+Required setup:
+
+- Connect this GitHub repository to EAS Workflows.
+- Configure EAS credentials for iOS and Android.
+- Configure Android Google Play submission credentials in EAS.
+- Configure iOS App Store Connect submission credentials in EAS.

@@ -1,8 +1,9 @@
-import { theme } from "@/theme";
+import { Radii, Spacing, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { BlurTargetView, BlurView } from "expo-blur";
-import { createRef, memo, useEffect, useMemo, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { StyleSheet, View } from "react-native";
 
 import { useLingui } from "@lingui/react/macro";
 import Animated, {
@@ -14,8 +15,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { ThemedText, useThemeColor } from "./Themed";
-import { TokenImage } from "./TokenImage";
+import { ThemedText } from "./themed-text";
+import { TokenImage } from "./token-image";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
@@ -35,16 +36,17 @@ const timingConfig = {
   },
 } as const;
 
-export const TokenDetails = memo(function TokenDetails({
+export const TokenListItem = memo(function TokenListItem({
   token,
 }: {
   token: PushToken;
 }) {
   const { t } = useLingui();
-  const backgroundColor = useThemeColor(theme.color.backgroundSecondary);
-  const successBarColor = useThemeColor(theme.color.successBar);
-  const errorBarColor = useThemeColor(theme.color.errorBar);
-  const blurTargetRef = createRef<View | null>();
+  const theme = useTheme();
+  const backgroundColor = theme.backgroundSecondary;
+  const successBarColor = theme.successBar;
+  const errorBarColor = theme.errorBar;
+  const blurTargetRef = useRef<View | null>(null);
 
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
@@ -102,16 +104,21 @@ export const TokenDetails = memo(function TokenDetails({
   return (
     <>
       <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
-        {token.imageUrl && (
-          <TokenImage imageUrl={token.imageUrl} animated size="small" />
-        )}
+        <TokenImage
+          imageUrl={token.imageUrl}
+          label={token.label}
+          animated
+          size="small"
+        />
         <View style={styles.tokenDetails}>
-          <ThemedText fontSize={theme.fontSize16}>{token.label}</ThemedText>
+          <ThemedText fontSize={Typography.fontSize16}>
+            {token.label}
+          </ThemedText>
           {token.issuer && (
             <ThemedText
-              fontSize={theme.fontSize14}
+              fontSize={Typography.fontSize14}
               fontWeight="medium"
-              color={theme.color.textSecondary}
+              themeColor="textSecondary"
             >
               {token.issuer}
             </ThemedText>
@@ -122,9 +129,8 @@ export const TokenDetails = memo(function TokenDetails({
         <AnimatedBlurView
           style={styles.progressBarBlur}
           role="progressbar"
-          intensity={Platform.OS === "android" ? 3 : 20}
+          intensity={20}
           blurTarget={blurTargetRef}
-          blurReductionFactor={100}
           blurMethod={"dimezisBlurView"}
           entering={FadeIn}
           exiting={FadeOut}
@@ -145,7 +151,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   progressBarBlur: {
-    borderRadius: theme.borderRadius32,
+    borderRadius: Radii.pill,
     height: "100%",
     position: "absolute",
     width: "100%",
@@ -154,18 +160,18 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
     position: "absolute",
-    top: theme.space24,
+    top: Spacing.xl,
     zIndex: 2,
   },
   token: {
     alignItems: "center",
     flexDirection: "row",
     height: 70,
-    padding: theme.space12,
+    padding: Spacing.md,
   },
   tokenDetails: {
     flex: 1,
-    gap: theme.space2,
+    gap: Spacing.xxs,
     justifyContent: "center",
   },
 });

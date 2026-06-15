@@ -1,22 +1,30 @@
-import { NotificationHandler } from "@/components/NotificationHandler";
-import { ThemedText, ThemedView, useThemeColor } from "@/components/Themed";
-import { TokenDetails } from "@/components/TokenDetails";
-import { useChallengePolling } from "@/hooks/useChallengePolling";
-import { useToken } from "@/hooks/useToken";
-import { usePushRequestStore } from "@/store/pushRequestStore";
+import { NotificationHandler } from "@/components/notification-handler";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { TokenListItem } from "@/components/token-list-item";
+import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import { useChallengePolling } from "@/hooks/use-challenge-polling";
+import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
+import { useDevMenu } from "@/hooks/use-dev-menu";
+import { useTheme } from "@/hooks/use-theme";
+import { useToken } from "@/hooks/use-token";
 import { PushToken, PushTokenRolloutState } from "@/types";
+import AddSymbol from "@expo/material-symbols/add.xml";
+import CodeSymbol from "@expo/material-symbols/code.xml";
+import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
+import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
-  Alert,
   Keyboard,
   Platform,
   Pressable,
   RefreshControl,
   StyleSheet,
+  useColorScheme,
   useWindowDimensions,
 } from "react-native";
 import Animated, {
@@ -25,29 +33,31 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { theme } from "../theme";
 
 export default function Tokens() {
   const router = useRouter();
-  const { tokens, deleteToken, updateToken, rolloutToken } = useToken();
+  const { tokens, rolloutToken } = useToken();
+  const devMenu = useDevMenu();
+  const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
-  const { clearPushRequests } = usePushRequestStore();
-  const { height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
-  const backgroundColor = useThemeColor(theme.color.background);
+  const colorScheme = useColorScheme();
+  const theme = useTheme();
+  const backgroundColor = theme.background;
   const { t } = useLingui();
-  const tabBarTintColor = useThemeColor({
-    light: theme.colorBlack,
-    dark: theme.colorWhite,
-  });
-  const transparentColor = useThemeColor(theme.color.transparent);
-  const tabBarBackgroundColor = useThemeColor(theme.color.background);
-  const refreshControlTintColor = useThemeColor(theme.color.text);
+  const tabBarTintColor = theme.text;
+  const transparentColor = theme.transparent;
+  const tabBarBackgroundColor = theme.background;
+  const refreshControlTintColor =
+    colorScheme === "dark" ? StaticColors.white : StaticColors.black;
 
   const params = useLocalSearchParams<{ q?: string }>();
 
   const searchText = params?.q?.trim() || "";
   const searchQuery = searchText.toLowerCase();
+  const emptyStateButtonWidth = Math.min(320, width - Spacing.xl * 2);
+  const showToolbarAddButton = tokens.length > 0;
   const stackHeaderStyle = useMemo(
     () => ({
       backgroundColor: isLiquidGlassAvailable()
@@ -79,23 +89,6 @@ export default function Tokens() {
 
   const renderItem = useCallback(
     ({ item }: { item: PushToken }) => {
-      const showDeleteConfirmation = (id: string) => {
-        Alert.alert(
-          t`Delete token`,
-          t`Are you sure you want to delete this token?`,
-          [
-            {
-              text: t`Cancel`,
-              style: "cancel",
-            },
-            {
-              text: t`Delete`,
-              style: "destructive",
-              onPress: () => deleteToken(id),
-            },
-          ],
-        );
-      };
       return (
         <Animated.View
           key={item.id}
@@ -118,7 +111,7 @@ export default function Tokens() {
                 style={styles.tokenCard}
                 disabled={!PushTokenRolloutState.isFinished(item.rolloutState)}
               >
-                <TokenDetails token={item} key={item.id} />
+                <TokenListItem token={item} key={item.id} />
               </Pressable>
             </Link.Trigger>
             <Link.Menu>
@@ -144,7 +137,7 @@ export default function Tokens() {
               <Link.MenuAction
                 icon="trash"
                 destructive
-                onPress={() => showDeleteConfirmation(item.id)}
+                onPress={() => confirmDeleteToken(item.id)}
               >
                 {t`Delete`}
               </Link.MenuAction>
@@ -153,7 +146,7 @@ export default function Tokens() {
         </Animated.View>
       );
     },
-    [deleteToken, rolloutToken, t],
+    [confirmDeleteToken, rolloutToken, t],
   );
 
   const toolbarAddButton = (
@@ -171,93 +164,55 @@ export default function Tokens() {
       <Stack.Screen.Title large style={{ color: tabBarTintColor }}>
         Tokens
       </Stack.Screen.Title>
-      <Stack.SearchBar
-        placement={isLiquidGlassAvailable() ? "integrated" : "stacked"}
-        headerIconColor={tabBarTintColor}
-        tintColor={tabBarTintColor}
-        textColor={tabBarTintColor}
-        placeholder={t`Search tokens`}
-        onChangeText={(event) => {
-          router.setParams({
-            q: event.nativeEvent.text,
-          });
-        }}
-      />
+      {showToolbarAddButton ? (
+        <Stack.SearchBar
+          placement={isLiquidGlassAvailable() ? "integrated" : "stacked"}
+          headerIconColor={tabBarTintColor}
+          tintColor={tabBarTintColor}
+          textColor={tabBarTintColor}
+          placeholder={t`Search tokens`}
+          onChangeText={(event) => {
+            router.setParams({
+              q: event.nativeEvent.text,
+            });
+          }}
+        />
+      ) : null}
+
       <Stack.Header style={stackHeaderStyle} />
       <Stack.Toolbar placement="right">
         {__DEV__ && (
-          <Stack.Toolbar.Menu>
+          <Stack.Toolbar.Menu
+            icon={Icon.select({
+              ios: "hammer.fill",
+              android: CodeSymbol,
+            })}
+          >
             <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
             <Stack.Toolbar.MenuAction
-              onPress={() => {
-                rolloutToken(tokens[0].id);
-              }}
+              disabled={devMenu.tokenActionDisabled}
+              onPress={devMenu.rolloutFirstToken}
             >
               Rollout
             </Stack.Toolbar.MenuAction>
             <Stack.Toolbar.MenuAction
-              onPress={() => {
-                updateToken(tokens[0].id, {
-                  rolloutState: PushTokenRolloutState.Pending,
-                });
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.RSAKeyGeneration,
-                  });
-                }, 1000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.SendRSAPublicKey,
-                  });
-                }, 2000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.SendRSAPublicKeyFailed,
-                  });
-                }, 4000);
-              }}
+              disabled={devMenu.tokenActionDisabled}
+              onPress={devMenu.demoRolloutFailure}
             >
               Demo Rollout Failure
             </Stack.Toolbar.MenuAction>
             <Stack.Toolbar.MenuAction
-              onPress={() => {
-                updateToken(tokens[0].id, {
-                  rolloutState: PushTokenRolloutState.Pending,
-                });
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.RSAKeyGeneration,
-                  });
-                }, 1000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.SendRSAPublicKey,
-                  });
-                }, 2000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.ParsingResponse,
-                  });
-                }, 4000);
-                setTimeout(() => {
-                  updateToken(tokens[0].id, {
-                    rolloutState: PushTokenRolloutState.Completed,
-                  });
-                }, 5000);
-              }}
+              disabled={devMenu.tokenActionDisabled}
+              onPress={devMenu.demoRolloutSuccess}
             >
               Demo Rollout Success
             </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction
-              onPress={() => {
-                clearPushRequests();
-              }}
-            >
+            <Stack.Toolbar.MenuAction onPress={devMenu.clearPushRequests}>
               Clear Push Requests
             </Stack.Toolbar.MenuAction>
           </Stack.Toolbar.Menu>
         )}
-        {!isLiquidGlassAvailable() && toolbarAddButton}
+        {Platform.OS === "ios" && !isLiquidGlassAvailable() && toolbarAddButton}
       </Stack.Toolbar>
     </>
   );
@@ -265,7 +220,7 @@ export default function Tokens() {
   const footer = isLiquidGlassAvailable() ? (
     <Stack.Toolbar placement="bottom">
       <Stack.Toolbar.SearchBarSlot />
-      {toolbarAddButton}
+      {showToolbarAddButton && toolbarAddButton}
     </Stack.Toolbar>
   ) : null;
 
@@ -274,30 +229,55 @@ export default function Tokens() {
       <>
         {header}
         <ThemedView style={styles.noTokenContainer}>
-          <ThemedText fontSize={theme.fontSize20} fontWeight="medium">
-            <Trans>No Token setup</Trans>
-          </ThemedText>
-          <ThemedView style={styles.noTokenHintContent}>
-            <ThemedText
-              fontSize={theme.fontSize16}
-              fontWeight="light"
-              style={styles.noTokenHint}
-            >
-              <Trans>Tap the</Trans>
-            </ThemedText>
+          <ThemedView type="backgroundSecondary" style={styles.noTokenIcon}>
             <SymbolView
-              name={{ ios: "plus", android: "add" }}
-              size={16}
-              style={styles.noTokenHintIcon}
+              name={{ ios: "lock.shield", android: "shield_lock" }}
+              size={36}
+              tintColor={StaticColors.grey}
             />
-            <ThemedText
-              fontSize={theme.fontSize16}
-              fontWeight="light"
-              style={styles.noTokenHint}
-            >
-              <Trans>to get started.</Trans>
-            </ThemedText>
           </ThemedView>
+          <ThemedText
+            fontSize={Typography.fontSize24}
+            fontWeight="semiBold"
+            style={styles.noTokenTitle}
+          >
+            <Trans>No tokens yet</Trans>
+          </ThemedText>
+          <ThemedText
+            fontSize={Typography.fontSize16}
+            fontWeight="light"
+            style={styles.noTokenDescription}
+            themeColor="textSecondary"
+          >
+            <Trans>
+              Add your first eduMFA token to approve sign-ins securely from this
+              device.
+            </Trans>
+          </ThemedText>
+          <Host
+            matchContents={{ vertical: true }}
+            style={[styles.noTokenButton, { width: emptyStateButtonWidth }]}
+          >
+            <Button
+              variant="filled"
+              modifiers={[controlSize("large"), buttonStyle("glassProminent")]}
+              onPress={() => {
+                router.navigate("/token/add");
+              }}
+              style={{ width: emptyStateButtonWidth }}
+            >
+              <Row alignment="center" spacing={6}>
+                <Icon
+                  name={Icon.select({
+                    ios: "plus",
+                    android: AddSymbol,
+                  })}
+                  accessibilityLabel={t`Add token`}
+                />
+                <ExpoText numberOfLines={1}>{t`Add token`}</ExpoText>
+              </Row>
+            </Button>
+          </Host>
         </ThemedView>
         {footer}
       </>
@@ -356,33 +336,43 @@ export default function Tokens() {
 
 export const styles = StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: theme.space16,
+    paddingHorizontal: Spacing.lg,
   },
   noResultsContainer: {
-    padding: theme.space24,
+    padding: Spacing.xl,
+  },
+  noTokenButton: {
+    marginTop: Spacing.xl,
   },
   noTokenContainer: {
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
+    paddingHorizontal: Spacing.xl,
   },
-  noTokenHint: {
-    lineHeight: theme.fontSize16 * 1.2,
+  noTokenDescription: {
+    lineHeight: Typography.fontSize16 * 1.4,
+    maxWidth: 320,
+    textAlign: "center",
   },
-  noTokenHintContent: {
+  noTokenIcon: {
     alignItems: "center",
-    flexDirection: "row",
-    gap: theme.space4,
-    marginTop: theme.space8,
+    borderRadius: Radii.pill,
+    height: 80,
+    justifyContent: "center",
+    marginBottom: Spacing.xl,
+    width: 80,
   },
-  noTokenHintIcon: {
-    alignSelf: "center",
+  noTokenTitle: {
+    lineHeight: Typography.fontSize24 * 1.2,
+    marginBottom: Spacing.sm,
+    textAlign: "center",
   },
   tokenCard: {
-    borderRadius: theme.borderRadius20,
+    borderRadius: Radii.xl,
     overflow: "hidden",
   },
   tokenWrapper: {
-    marginVertical: theme.space8,
+    marginVertical: Spacing.sm,
   },
 });
