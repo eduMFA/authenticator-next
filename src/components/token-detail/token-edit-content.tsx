@@ -4,8 +4,8 @@ import { Spacing, Typography } from "@/constants/theme";
 import { PushToken } from "@/types";
 import { useLingui } from "@lingui/react/macro";
 import { StyleSheet, View } from "react-native";
-import { TokenEditForm } from "./token-edit-form";
 import { EditableTokenFields } from "./token-detail-utils";
+import { TokenEditForm } from "./token-edit-form";
 
 export function TokenEditContent({
   token,

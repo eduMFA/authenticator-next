@@ -13,26 +13,21 @@ import { useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Alert,
-  ColorValue,
-  Platform,
-  StyleSheet,
-  useColorScheme,
-} from "react-native";
+import { Alert, Platform, StyleSheet, useColorScheme } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 function TokenScrollView({
   animationKey,
-  backgroundColor,
   children,
   keyboardShouldPersistTaps,
 }: {
   animationKey: string;
-  backgroundColor: ColorValue;
   children: ReactNode;
   keyboardShouldPersistTaps?: "always" | "handled" | "never";
 }) {
+  const theme = useTheme();
+  const backgroundColor = theme.background;
+
   return (
     <Animated.ScrollView
       key={animationKey}
@@ -64,9 +59,6 @@ export default function TokenDetails() {
   const theme = useTheme();
   const transparentColor = theme.transparent;
   const tabBarBackgroundColor = theme.background;
-  const scrollBackgroundColor = isLiquidGlassAvailable()
-    ? theme.transparent
-    : theme.background;
   const headerStyle = useMemo(
     () => ({
       backgroundColor:
@@ -197,7 +189,6 @@ export default function TokenDetails() {
       {!token ? null : isEditingActive && activeEditableFields ? (
         <TokenScrollView
           animationKey="edit"
-          backgroundColor={scrollBackgroundColor}
           keyboardShouldPersistTaps="handled"
         >
           <TokenEditContent
@@ -207,10 +198,7 @@ export default function TokenDetails() {
           />
         </TokenScrollView>
       ) : (
-        <TokenScrollView
-          animationKey="overview"
-          backgroundColor={scrollBackgroundColor}
-        >
+        <TokenScrollView animationKey="overview">
           <TokenOverviewContent token={token} onRetryRollout={retryRollout} />
         </TokenScrollView>
       )}
