@@ -39,7 +39,6 @@ msgstr "Audit log"
 msgid "Camera permission required"
 msgstr "Camera permission required"
 
-#: src/app/token/[tokenId].tsx:159
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Cancel"

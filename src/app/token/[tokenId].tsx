@@ -156,12 +156,6 @@ export default function TokenDetails() {
       </Stack.Toolbar>
       <Stack.Toolbar placement="right">
         <Stack.Toolbar.Button
-          accessibilityLabel={t`Cancel`}
-          hidden={!token || !isEditingActive}
-          icon="arrow.uturn.backward"
-          onPress={cancelEditing}
-        />
-        <Stack.Toolbar.Button
           accessibilityLabel={t`Save`}
           hidden={!token || !isEditingActive}
           icon="checkmark"
