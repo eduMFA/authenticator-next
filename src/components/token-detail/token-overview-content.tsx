@@ -9,7 +9,8 @@ import {
   PushTokenRefreshStatus,
   PushTokenRolloutState,
 } from "@/types";
-import { Button, Host } from "@expo/ui/swift-ui";
+import ForwardMediaSymbol from "@expo/material-symbols/forward_media.xml";
+import { Button, Host, Icon, Row, Text } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import { StyleSheet, View } from "react-native";
@@ -102,10 +103,20 @@ export function TokenOverviewContent({
             <Host matchContents>
               <Button
                 label={t`Retry Rollout`}
-                systemImage="arrow.clockwise"
                 onPress={onRetryRollout}
-                modifiers={[controlSize("large"), buttonStyle("glass")]}
-              />
+                modifiers={[controlSize("regular"), buttonStyle("glass")]}
+              >
+                <Row alignment="center" spacing={6}>
+                  <Icon
+                    name={Icon.select({
+                      ios: "arrow.clockwise",
+                      android: ForwardMediaSymbol,
+                    })}
+                    accessibilityLabel={t`Retry Rollout`}
+                  />
+                  <Text numberOfLines={1}>{t`Retry Rollout`}</Text>
+                </Row>
+              </Button>
             </Host>
           </View>
         </StatusCard>
