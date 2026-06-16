@@ -118,8 +118,12 @@ export default function Tokens() {
               {!PushTokenRolloutState.isFailed(item.rolloutState) && (
                 <Link.MenuAction
                   icon="square.and.pencil"
-                  onPress={() => {}}
-                  disabled={true}
+                  onPress={() => {
+                    router.push({
+                      pathname: "/token/[tokenId]",
+                      params: { edit: "1", tokenId: item.id },
+                    });
+                  }}
                 >
                   {t`Edit`}
                 </Link.MenuAction>
@@ -146,7 +150,7 @@ export default function Tokens() {
         </Animated.View>
       );
     },
-    [confirmDeleteToken, rolloutToken, t],
+    [confirmDeleteToken, rolloutToken, router, t],
   );
 
   const toolbarAddButton = (
