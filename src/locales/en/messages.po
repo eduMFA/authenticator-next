@@ -114,7 +114,8 @@ msgstr "Grant permission"
 msgid "Key generation failed"
 msgstr "Key generation failed"
 
-#: src/components/token-detail/token-edit-form.tsx:42
+#: src/components/token-detail/token-edit-form.android.tsx:45
+#: src/components/token-detail/token-edit-form.ios.tsx:42
 msgid "Label"
 msgstr "Label"
 
@@ -296,7 +297,7 @@ msgstr "This token did not finish enrollment and cannot receive push requests un
 #~ msgid "to get started."
 #~ msgstr "to get started."
 
-#: src/components/token-detail/token-edit-form.tsx:38
+#: src/components/token-detail/token-edit-form.ios.tsx:38
 msgid "Token"
 msgstr "Token"
 

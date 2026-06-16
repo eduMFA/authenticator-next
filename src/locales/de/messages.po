@@ -114,7 +114,8 @@ msgstr "Berechtigungen erteilen"
 msgid "Key generation failed"
 msgstr "Schlüsselgenerierung fehlgeschlagen"
 
-#: src/components/token-detail/token-edit-form.tsx:42
+#: src/components/token-detail/token-edit-form.android.tsx:45
+#: src/components/token-detail/token-edit-form.ios.tsx:42
 msgid "Label"
 msgstr "Bezeichnung"
 
@@ -296,7 +297,7 @@ msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Pu
 #~ msgid "to get started."
 #~ msgstr "um loszulegen."
 
-#: src/components/token-detail/token-edit-form.tsx:38
+#: src/components/token-detail/token-edit-form.ios.tsx:38
 msgid "Token"
 msgstr "Token"
 
