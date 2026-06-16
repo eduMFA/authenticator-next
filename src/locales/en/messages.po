@@ -151,10 +151,6 @@ msgstr "Open Settings"
 msgid "OR"
 msgstr "OR"
 
-#: src/app/token/[tokenId].tsx:623
-#~ msgid "Overview"
-#~ msgstr "Overview"
-
 #: src/app/token/add.tsx:56
 msgid "Pair new Push Token"
 msgstr "Pair new Push Token"
@@ -241,10 +237,6 @@ msgstr "Server registration failed"
 msgid "Status"
 msgstr "Status"
 
-#: src/app/index.tsx:277
-#~ msgid "Tap the"
-#~ msgstr "Tap the"
-
 #: src/components/token-detail/token-detail-utils.ts:58
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 msgstr "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
@@ -269,14 +261,6 @@ msgstr "The server response could not be parsed or did not include the expected 
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 
-#: src/components/token-detail/token-detail-utils.ts:20
-#~ msgid "This token could not be refreshed because the network request failed. Check your connection and try again."
-#~ msgstr "This token could not be refreshed because the network request failed. Check your connection and try again."
-
-#: src/components/token-detail/token-detail-utils.ts:30
-#~ msgid "This token could not be refreshed because the push service could not be reached. Check your connection and try again."
-#~ msgstr "This token could not be refreshed because the push service could not be reached. Check your connection and try again."
-
 #: src/components/token-detail/token-detail-utils.ts:30
 msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
 msgstr "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
@@ -285,17 +269,9 @@ msgstr "This token could not be refreshed because the push service could not be 
 msgid "This token could not be refreshed. It may have been removed on the server or the institution hosting the push service may be having a technical issue."
 msgstr "This token could not be refreshed. It may have been removed on the server or the institution hosting the push service may be having a technical issue."
 
-#: src/components/token-detail/token-detail-utils.ts:29
-#~ msgid "This token could not be refreshed. It may have been removed on the server, your connection may be unavailable, or the institution hosting the push service may be having a technical issue."
-#~ msgstr "This token could not be refreshed. It may have been removed on the server, your connection may be unavailable, or the institution hosting the push service may be having a technical issue."
-
 #: src/components/token-detail/token-detail-utils.ts:73
 msgid "This token did not finish enrollment and cannot receive push requests until rollout succeeds."
 msgstr "This token did not finish enrollment and cannot receive push requests until rollout succeeds."
-
-#: src/app/index.tsx:289
-#~ msgid "to get started."
-#~ msgstr "to get started."
 
 #: src/components/token-detail/token-edit-form.ios.tsx:38
 msgid "Token"
