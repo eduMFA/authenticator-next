@@ -49,7 +49,7 @@ msgid "Decline"
 msgstr "Ablehnen"
 
 #: src/app/index.tsx:146
-#: src/app/token/[tokenId].tsx:178
+#: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Löschen"
@@ -71,7 +71,7 @@ msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
 #: src/app/index.tsx:128
-#: src/app/token/[tokenId].tsx:172
+#: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -87,7 +87,7 @@ msgstr "Registriert"
 msgid "Enrollment response failed"
 msgstr "Registrierungsantwort fehlgeschlagen"
 
-#: src/app/token/[tokenId].tsx:113
+#: src/app/token/[tokenId].tsx:122
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
@@ -118,7 +118,7 @@ msgstr "Schlüsselgenerierung fehlgeschlagen"
 msgid "Label"
 msgstr "Bezeichnung"
 
-#: src/app/token/[tokenId].tsx:113
+#: src/app/token/[tokenId].tsx:122
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
@@ -207,7 +207,7 @@ msgstr "Rollout fehlgeschlagen"
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
-#: src/app/token/[tokenId].tsx:165
+#: src/app/token/[tokenId].tsx:177
 msgid "Save"
 msgstr "Speichern"
 

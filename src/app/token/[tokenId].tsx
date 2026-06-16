@@ -9,20 +9,28 @@ import { Spacing } from "@/constants/theme";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
+import ArrowBackSymbol from "@expo/material-symbols/arrow_back.xml";
+import CheckSymbol from "@expo/material-symbols/check.xml";
+import CloseSymbol from "@expo/material-symbols/close.xml";
+import DeleteSymbol from "@expo/material-symbols/delete.xml";
+import EditSymbol from "@expo/material-symbols/edit.xml";
 import { useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Platform, StyleSheet, useColorScheme } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function TokenScrollView({
   animationKey,
   children,
+  contentTopInset,
   keyboardShouldPersistTaps,
 }: {
   animationKey: string;
   children: ReactNode;
+  contentTopInset: number;
   keyboardShouldPersistTaps?: "always" | "handled" | "never";
 }) {
   const theme = useTheme();
@@ -32,7 +40,7 @@ function TokenScrollView({
     <Animated.ScrollView
       key={animationKey}
       automaticallyAdjustContentInsets
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingTop: contentTopInset }]}
       contentInsetAdjustmentBehavior="automatic"
       entering={FadeIn.duration(180)}
       exiting={FadeOut.duration(120)}
@@ -55,6 +63,7 @@ export default function TokenDetails() {
   const token = tokens.find((item) => item.id === tokenId);
   const router = useRouter();
   const colorScheme = useColorScheme() || "light";
+  const { top } = useSafeAreaInsets();
   const { t } = useLingui();
   const theme = useTheme();
   const transparentColor = theme.transparent;
@@ -139,6 +148,7 @@ export default function TokenDetails() {
   return (
     <>
       <Stack.Header
+        hidden={Platform.OS === "android"}
         blurEffect={
           isLiquidGlassAvailable()
             ? undefined
@@ -150,7 +160,15 @@ export default function TokenDetails() {
       />
       <Stack.Toolbar placement="left">
         <Stack.Toolbar.Button
-          icon={isEditingActive ? "xmark" : "chevron.left"}
+          icon={
+            isEditingActive
+              ? process.env.EXPO_OS === "ios"
+                ? "xmark"
+                : CloseSymbol
+              : process.env.EXPO_OS === "ios"
+                ? "chevron.left"
+                : ArrowBackSymbol
+          }
           onPress={isEditingActive ? cancelEditing : () => router.back()}
         />
       </Stack.Toolbar>
@@ -158,20 +176,22 @@ export default function TokenDetails() {
         <Stack.Toolbar.Button
           accessibilityLabel={t`Save`}
           hidden={!token || !isEditingActive}
-          icon="checkmark"
+          icon={process.env.EXPO_OS === "ios" ? "checkmark" : CheckSymbol}
           onPress={saveEditing}
           variant="prominent"
         />
         <Stack.Toolbar.Button
           accessibilityLabel={t`Edit`}
           hidden={!token || isEditingActive}
-          icon="square.and.pencil"
+          icon={
+            process.env.EXPO_OS === "ios" ? "square.and.pencil" : EditSymbol
+          }
           onPress={startEditing}
         />
         <Stack.Toolbar.Button
           accessibilityLabel={t`Delete`}
           hidden={!token || isEditingActive}
-          icon="trash"
+          icon={process.env.EXPO_OS === "ios" ? "trash" : DeleteSymbol}
           onPress={() => {
             if (token) {
               confirmDeleteToken(token.id);
@@ -183,6 +203,7 @@ export default function TokenDetails() {
       {!token ? null : isEditingActive && activeEditableFields ? (
         <TokenScrollView
           animationKey="edit"
+          contentTopInset={Platform.OS === "android" ? top : 0}
           keyboardShouldPersistTaps="handled"
         >
           <TokenEditContent
@@ -192,7 +213,10 @@ export default function TokenDetails() {
           />
         </TokenScrollView>
       ) : (
-        <TokenScrollView animationKey="overview">
+        <TokenScrollView
+          animationKey="overview"
+          contentTopInset={Platform.OS === "android" ? top : 0}
+        >
           <TokenOverviewContent token={token} onRetryRollout={retryRollout} />
         </TokenScrollView>
       )}
@@ -205,7 +229,6 @@ const styles = StyleSheet.create({
     gap: Spacing.xl,
     paddingBottom: Spacing.xl,
     paddingHorizontal: Spacing.xl,
-    paddingTop: Platform.select({ android: Spacing.xl, ios: Spacing.lg }),
   },
   scroll: {
     flex: 1,
