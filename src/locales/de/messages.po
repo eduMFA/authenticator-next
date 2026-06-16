@@ -18,8 +18,8 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:279
-#: src/app/index.tsx:281
+#: src/app/index.tsx:285
+#: src/app/index.tsx:287
 msgid "Add token"
 msgstr "Token hinzufügen"
 
@@ -35,7 +35,7 @@ msgstr "Möchtest du diesen Token wirklich löschen?"
 msgid "Audit log"
 msgstr "Prüfprotokoll"
 
-#: src/components/qr-code-scanner.tsx:59
+#: src/components/token-add/qr-code-scanner.tsx:59
 msgid "Camera permission required"
 msgstr "Kamera-Berechtigung erforderlich"
 
@@ -105,7 +105,7 @@ msgstr "Registrierung wird abgeschlossen"
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
-#: src/components/qr-code-scanner.tsx:49
+#: src/components/token-add/qr-code-scanner.tsx:49
 msgid "Grant permission"
 msgstr "Berechtigungen erteilen"
 
@@ -135,7 +135,7 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:319
+#: src/app/index.tsx:325
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
@@ -143,7 +143,7 @@ msgstr "Keine Ergebnisse gefunden für "
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
-#: src/components/qr-code-scanner.tsx:50
+#: src/components/token-add/qr-code-scanner.tsx:50
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
@@ -159,7 +159,7 @@ msgstr "Neues Push-Token koppeln"
 msgid "Pending"
 msgstr "Ausstehend"
 
-#: src/components/upload-qr-code-button.tsx:61
+#: src/components/token-add/upload-qr-code-button.tsx:64
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
@@ -168,7 +168,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:329
+#: src/app/index.tsx:335
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -285,15 +285,15 @@ msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldea
 msgid "Update the display name for this token."
 msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 
-#: src/components/upload-qr-code-button.tsx:64
+#: src/components/token-add/upload-qr-code-button.tsx:67
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#: src/components/qr-code-scanner.tsx:43
+#: src/components/token-add/qr-code-scanner.tsx:43
 msgid "We need your permission to show the camera"
 msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
 
-#: src/components/qr-code-scanner.tsx:44
+#: src/components/token-add/qr-code-scanner.tsx:44
 msgid "You can enable camera permissions in your device settings"
 msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
 

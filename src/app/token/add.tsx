@@ -1,7 +1,7 @@
-import QRCodeScanner from "@/components/qr-code-scanner";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { UploadQRCodeButton } from "@/components/upload-qr-code-button";
+import QRCodeScanner from "@/components/token-add/qr-code-scanner";
+import { UploadQRCodeButton } from "@/components/token-add/upload-qr-code-button";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useTheme } from "@/hooks/use-theme";
