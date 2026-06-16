@@ -147,11 +147,11 @@ msgstr "No tokens yet"
 msgid "Open Settings"
 msgstr "Open Settings"
 
-#: src/app/token/add.tsx:77
+#: src/app/token/add.tsx:81
 msgid "OR"
 msgstr "OR"
 
-#: src/app/token/add.tsx:56
+#: src/app/token/add.tsx:60
 msgid "Pair new Push Token"
 msgstr "Pair new Push Token"
 
@@ -204,7 +204,7 @@ msgstr "Rollout Failed"
 msgid "Save"
 msgstr "Save"
 
-#: src/app/token/add.tsx:63
+#: src/app/token/add.tsx:67
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scan the QR code to pair a new push token."
 
