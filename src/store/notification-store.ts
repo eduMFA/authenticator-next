@@ -1,11 +1,9 @@
 import { i18n } from "@lingui/core";
 import { t } from "@lingui/core/macro";
 import {
-  AuthorizationStatus,
   getMessaging,
   getToken,
   onTokenRefresh,
-  requestPermission,
 } from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
@@ -15,7 +13,7 @@ type NotificationState = {
   fcmToken: string | null;
   isInitialized: boolean;
   isInitializing: boolean;
-  permissionStatus: number | null;
+  permissionStatus: Notifications.NotificationPermissionsStatus | null;
 };
 
 type NotificationActions = {
@@ -62,6 +60,15 @@ async function setupNotificationCategories() {
   ]);
 }
 
+function isNotificationPermissionEnabled(
+  settings: Notifications.NotificationPermissionsStatus,
+): boolean {
+  return (
+    settings.granted ||
+    settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+  );
+}
+
 export const useNotificationStore = create<NotificationStore>((set, get) => ({
   fcmToken: null,
   isInitialized: false,
@@ -89,12 +96,17 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       const messaging = getMessaging();
 
       // Request permission for iOS
-      const authStatus = await requestPermission(messaging);
-      const enabled =
-        authStatus === AuthorizationStatus.AUTHORIZED ||
-        authStatus === AuthorizationStatus.PROVISIONAL;
+      const settings = await Notifications.requestPermissionsAsync({
+        ios: {
+          allowAlert: true,
+          allowBadge: true,
+          allowSound: true,
+          provideAppNotificationSettings: true,
+        },
+      });
+      const enabled = isNotificationPermissionEnabled(settings);
 
-      set({ permissionStatus: authStatus });
+      set({ permissionStatus: settings });
 
       if (!enabled) {
         console.warn("Failed to get push notification permissions");
