@@ -1,4 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
+import { StatusCard } from "@/components/status-card";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useNotificationStore } from "@/store/notification-store";
@@ -6,7 +7,7 @@ import { useSettingsStore } from "@/store/settings-store";
 import { AuthorizationStatus } from "@react-native-firebase/messaging";
 import { Image } from "expo-image";
 import { SymbolView } from "expo-symbols";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -363,7 +364,6 @@ export function OnboardingSequence() {
         return (
           <NotificationStepActions
             accentColor={contentAccentColor}
-            cardColor={cardColor}
             isCheckingPermission={isCheckingPermission}
             isRequestingPermission={isRequestingPermission}
             onContinue={handleContinue}
@@ -519,7 +519,6 @@ export function OnboardingSequence() {
 
 type NotificationStepActionsProps = {
   accentColor: string;
-  cardColor: ColorValue;
   isCheckingPermission: boolean;
   isRequestingPermission: boolean;
   onContinue: () => void;
@@ -532,7 +531,6 @@ type NotificationStepActionsProps = {
 
 function NotificationStepActions({
   accentColor,
-  cardColor,
   isCheckingPermission,
   isRequestingPermission,
   onContinue,
@@ -542,7 +540,6 @@ function NotificationStepActions({
   permissionStatus,
   textColor,
 }: NotificationStepActionsProps) {
-  const theme = useTheme();
   const hasNotificationsEnabled = hasNotificationPermission(permissionStatus);
   const hasNotificationDecision =
     !isNotificationPermissionPending(permissionStatus);
@@ -554,22 +551,11 @@ function NotificationStepActions({
   if (hasNotificationsEnabled) {
     return (
       <View style={styles.buttonStack}>
-        <NotificationStatusNotice
-          borderColor={accentColor}
-          cardColor={cardColor}
-          icon={{ ios: "checkmark.circle.fill", android: "check_circle" }}
-          iconColor={accentColor}
+        <StatusCard
+          description="eduMFA can receive push approvals and alert you when a sign-in needs attention."
           title="Notifications are enabled"
-        >
-          <ThemedText
-            themeColor="textSecondary"
-            fontSize={Typography.fontSize14}
-            style={styles.permissionNoticeText}
-          >
-            eduMFA can receive push approvals and alert you when a sign-in needs
-            attention.
-          </ThemedText>
-        </NotificationStatusNotice>
+          variant="success"
+        />
         <ActionButton
           accentColor={accentColor}
           icon={{ ios: "arrow.right", android: "arrow_forward" }}
@@ -581,27 +567,13 @@ function NotificationStepActions({
   }
 
   if (hasNotificationDecision) {
-    const errorColor = theme.errorBar;
-
     return (
       <View style={[styles.buttonStack, styles.buttonStackCompact]}>
-        <NotificationStatusNotice
-          borderColor={errorColor}
-          cardColor={cardColor}
-          icon={{ ios: "exclamationmark.circle.fill", android: "error" }}
-          iconColor={errorColor}
-          isCritical
+        <StatusCard
+          description="eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
           title="Notifications are required"
-          titleColor={errorColor}
+          variant="error"
         >
-          <ThemedText
-            themeColor="textSecondary"
-            fontSize={Typography.fontSize14}
-            style={styles.permissionNoticeTextCompact}
-          >
-            eduMFA cannot receive push approvals while notifications are
-            disabled. Enable them in system settings, then return here.
-          </ThemedText>
           <ThemedText
             themeColor="textSecondary"
             fontSize={Typography.fontSize12}
@@ -609,7 +581,7 @@ function NotificationStepActions({
           >
             {notificationSettingsGuidance}
           </ThemedText>
-        </NotificationStatusNotice>
+        </StatusCard>
         <ActionButton
           accentColor={accentColor}
           icon={{ ios: "gearshape.fill", android: "settings" }}
@@ -630,50 +602,6 @@ function NotificationStepActions({
         label="Enable notifications"
         onPress={onEnableNotifications}
       />
-    </View>
-  );
-}
-
-type NotificationStatusNoticeProps = {
-  borderColor: ColorValue;
-  cardColor: ColorValue;
-  children: ReactNode;
-  icon: IconName;
-  iconColor: ColorValue;
-  isCritical?: boolean;
-  title: string;
-  titleColor?: ColorValue;
-};
-
-function NotificationStatusNotice({
-  borderColor,
-  cardColor,
-  children,
-  icon,
-  iconColor,
-  isCritical = false,
-  title,
-  titleColor,
-}: NotificationStatusNoticeProps) {
-  return (
-    <View
-      style={[
-        styles.permissionNotice,
-        isCritical && styles.permissionNoticeCritical,
-        { backgroundColor: cardColor, borderColor },
-      ]}
-    >
-      <View style={styles.permissionNoticeHeader}>
-        <SymbolView name={icon} size={20} tintColor={iconColor} />
-        <ThemedText
-          fontSize={Typography.fontSize16}
-          fontWeight={isCritical ? "bold" : "semiBold"}
-          style={titleColor ? { color: titleColor } : undefined}
-        >
-          {title}
-        </ThemedText>
-      </View>
-      {children}
     </View>
   );
 }
@@ -1141,31 +1069,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     width: "100%",
   },
-  permissionNotice: {
-    borderCurve: "continuous",
-    borderRadius: Radii.xl,
-    borderWidth: 1,
-    gap: Spacing.sm,
-    padding: Spacing.lg,
-  },
-  permissionNoticeCritical: {
-    borderWidth: 2,
-    gap: Spacing.xs,
-    padding: Spacing.md,
-  },
-  permissionNoticeHeader: {
-    alignItems: "center",
-    flexDirection: "row",
-    gap: Spacing.sm,
-  },
   permissionNoticePath: {
     lineHeight: Typography.fontSize12 * 1.25,
-  },
-  permissionNoticeText: {
-    lineHeight: Typography.fontSize14 * 1.4,
-  },
-  permissionNoticeTextCompact: {
-    lineHeight: Typography.fontSize14 * 1.3,
   },
   privacyCopy: {
     flex: 1,

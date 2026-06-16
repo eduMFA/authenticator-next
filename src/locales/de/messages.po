@@ -14,16 +14,16 @@ msgstr ""
 "X-Generator: Poedit 3.8\n"
 
 #: src/components/push-request-popup.tsx:225
-#: src/store/notification-store.ts:48
+#: src/store/notification-store.ts:99
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:285
-#: src/app/index.tsx:287
+#: src/app/index.tsx:288
+#: src/app/index.tsx:290
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:256
+#: src/app/index.tsx:259
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -44,7 +44,7 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: src/components/push-request-popup.tsx:219
-#: src/store/notification-store.ts:56
+#: src/store/notification-store.ts:107
 msgid "Decline"
 msgstr "Ablehnen"
 
@@ -135,11 +135,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:325
+#: src/app/index.tsx:328
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:248
+#: src/app/index.tsx:251
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -168,7 +168,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:335
+#: src/app/index.tsx:338
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 

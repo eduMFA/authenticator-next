@@ -14,16 +14,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/components/push-request-popup.tsx:225
-#: src/store/notification-store.ts:48
+#: src/store/notification-store.ts:99
 msgid "Accept"
 msgstr "Accept"
 
-#: src/app/index.tsx:285
-#: src/app/index.tsx:287
+#: src/app/index.tsx:288
+#: src/app/index.tsx:290
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:256
+#: src/app/index.tsx:259
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
@@ -44,7 +44,7 @@ msgid "Cancel"
 msgstr "Cancel"
 
 #: src/components/push-request-popup.tsx:219
-#: src/store/notification-store.ts:56
+#: src/store/notification-store.ts:107
 msgid "Decline"
 msgstr "Decline"
 
@@ -135,11 +135,11 @@ msgstr "No interactions yet"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:325
+#: src/app/index.tsx:328
 msgid "No results found for "
 msgstr "No results found for "
 
-#: src/app/index.tsx:248
+#: src/app/index.tsx:251
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
@@ -168,7 +168,7 @@ msgstr "QR code scanner"
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:335
+#: src/app/index.tsx:338
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
