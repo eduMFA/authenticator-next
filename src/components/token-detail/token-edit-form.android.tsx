@@ -1,4 +1,3 @@
-import { Radii, Spacing } from "@/constants/theme";
 import {
   Host,
   OutlinedTextField,
@@ -50,12 +49,6 @@ export function TokenEditForm({
 }
 
 const styles = StyleSheet.create({
-  form: {
-    borderRadius: Radii.xl,
-    gap: Spacing.sm,
-    padding: Spacing.lg,
-    width: "100%",
-  },
   host: {
     minHeight: 64,
     width: "100%",
