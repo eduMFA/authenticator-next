@@ -1074,9 +1074,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
     width: "100%",
   },
-  permissionNoticePath: {
-    lineHeight: Typography.fontSize12 * 1.25,
-  },
   privacyCopy: {
     flex: 1,
     gap: Spacing.sm,
