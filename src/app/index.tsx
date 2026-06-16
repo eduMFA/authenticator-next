@@ -263,8 +263,14 @@ export default function Tokens() {
             style={[styles.noTokenButton, { width: emptyStateButtonWidth }]}
           >
             <Button
-              variant="filled"
-              modifiers={[controlSize("large"), buttonStyle("glassProminent")]}
+              modifiers={[
+                controlSize("large"),
+                buttonStyle(
+                  isLiquidGlassAvailable()
+                    ? "glassProminent"
+                    : "borderedProminent",
+                ),
+              ]}
               onPress={() => {
                 router.navigate("/token/add");
               }}

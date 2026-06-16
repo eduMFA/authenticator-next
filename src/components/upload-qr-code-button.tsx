@@ -4,6 +4,7 @@ import { height as composeHeight } from "@expo/ui/jetpack-compose/modifiers";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
+import { isLiquidGlassAvailable } from "expo-glass-effect/build/isLiquidGlassAvailable";
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
 
@@ -47,7 +48,9 @@ export function UploadQRCodeButton({
         }}
         modifiers={[
           controlSize("large"),
-          buttonStyle("glassProminent"),
+          buttonStyle(
+            isLiquidGlassAvailable() ? "glassProminent" : "borderedProminent",
+          ),
           composeHeight(100),
         ]}
       >
