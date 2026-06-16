@@ -1,9 +1,10 @@
-import { ThemedText } from "@/components/themed-text";
 import { StatusCard } from "@/components/status-card";
+import { ThemedText } from "@/components/themed-text";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useNotificationStore } from "@/store/notification-store";
 import { useSettingsStore } from "@/store/settings-store";
+import { useLingui } from "@lingui/react/macro";
 import { AuthorizationStatus } from "@react-native-firebase/messaging";
 import { Image } from "expo-image";
 import { SymbolView } from "expo-symbols";
@@ -14,13 +15,12 @@ import {
   AppState,
   Linking,
   PanResponder,
-  Platform,
   Pressable,
   StyleSheet,
-  View,
-  type ColorValue,
   useColorScheme,
   useWindowDimensions,
+  View,
+  type ColorValue,
 } from "react-native";
 import { Presets, Settings } from "react-native-pulsar";
 import Animated, {
@@ -49,32 +49,19 @@ type FirebaseAuthorizationStatus =
 type OnboardingStep = {
   accent: { light: string; dark: string };
   body: string;
+  id: "welcome" | "notifications" | "privacy";
   kicker: string;
   title: string;
 };
 
-const steps: OnboardingStep[] = [
-  {
-    kicker: "Welcome",
-    title: "Welcome to eduMFA",
-    body: "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage.",
-    accent: { light: "#0066FF", dark: "#58A6FF" },
-  },
-  {
-    kicker: "Notifications",
-    title: "Approve sign-ins the moment they arrive",
-    body: "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention.",
-    accent: { light: "#0F9F6E", dark: "#47D7A0" },
-  },
-  {
-    kicker: "Privacy choice",
-    title: "Help improve reliability",
-    body: "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way.",
-    accent: { light: "#8A5CF6", dark: "#B49AFF" },
-  },
+const stepAccents: OnboardingStep["accent"][] = [
+  { light: "#0066FF", dark: "#58A6FF" },
+  { light: "#0F9F6E", dark: "#47D7A0" },
+  { light: "#8A5CF6", dark: "#B49AFF" },
 ];
 
-const progressInputRange = steps.map((_, index) => index);
+const STEP_COUNT = stepAccents.length;
+const progressInputRange = stepAccents.map((_, index) => index);
 
 function configurePulsar() {
   try {
@@ -116,6 +103,7 @@ export function OnboardingSequence() {
   const [crashReportsEnabled, setLocalCrashReportsEnabled] = useState(false);
   const [isCheckingPermission, setIsCheckingPermission] = useState(false);
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
+  const { t } = useLingui();
   const notificationPermissionStatus = useNotificationStore(
     (state) => state.permissionStatus,
   );
@@ -140,9 +128,35 @@ export function OnboardingSequence() {
   const { bottom, top } = useSafeAreaInsets();
   const { height, width } = useWindowDimensions();
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
+  const steps = useMemo<OnboardingStep[]>(
+    () => [
+      {
+        id: "welcome",
+        kicker: t`Welcome`,
+        title: t`Welcome to eduMFA`,
+        body: t`Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage.`,
+        accent: stepAccents[0],
+      },
+      {
+        id: "notifications",
+        kicker: t`Notifications`,
+        title: t`Approve sign-ins the moment they arrive`,
+        body: t`Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention.`,
+        accent: stepAccents[1],
+      },
+      {
+        id: "privacy",
+        kicker: t`Privacy choice`,
+        title: t`Help improve reliability`,
+        body: t`You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way.`,
+        accent: stepAccents[2],
+      },
+    ],
+    [t],
+  );
   const stepAccentColors = useMemo(
     () => steps.map((item) => item.accent[colorScheme]),
-    [colorScheme],
+    [colorScheme, steps],
   );
   const logoColor =
     colorScheme === "dark" ? StaticColors.white : StaticColors.black;
@@ -159,7 +173,7 @@ export function OnboardingSequence() {
   const trackWidthStyle = useMemo(
     () => ({
       columnGap: PANEL_GAP,
-      width: width * steps.length + PANEL_GAP * (steps.length - 1),
+      width: width * STEP_COUNT + PANEL_GAP * (STEP_COUNT - 1),
     }),
     [width],
   );
@@ -168,7 +182,7 @@ export function OnboardingSequence() {
     (nextStepIndex: number, easing: EasingFunction = BUTTON_SLIDE_EASING) => {
       const boundedStepIndex = Math.max(
         0,
-        Math.min(nextStepIndex, steps.length - 1),
+        Math.min(nextStepIndex, STEP_COUNT - 1),
       );
 
       setStepIndex(boundedStepIndex);
@@ -209,7 +223,7 @@ export function OnboardingSequence() {
             Math.abs(gestureState.dx) > Math.abs(gestureState.dy);
           const canSwipeBack = stepIndex > 0 && gestureState.dx > 0;
           const canSwipeForward =
-            stepIndex < steps.length - 1 && gestureState.dx < 0;
+            stepIndex < STEP_COUNT - 1 && gestureState.dx < 0;
 
           return isHorizontalSwipe && (canSwipeBack || canSwipeForward);
         },
@@ -217,7 +231,7 @@ export function OnboardingSequence() {
           const dragProgress = stepIndex - gestureState.dx / slideDistance;
           const maxProgress = shouldBlockNotificationAdvance
             ? stepIndex + 0.08
-            : steps.length - 1;
+            : STEP_COUNT - 1;
           const boundedDragProgress = Math.min(
             maxProgress,
             Math.max(0, dragProgress),
@@ -395,7 +409,7 @@ export function OnboardingSequence() {
           <ActionButton
             accentColor={contentAccentColor}
             icon={{ ios: "arrow.right", android: "arrow_forward" }}
-            label="Get started"
+            label={t`Get started`}
             onPress={handleContinue}
           />
         </View>
@@ -416,6 +430,7 @@ export function OnboardingSequence() {
       notificationPermissionStatus,
       stepAccentColors,
       textColor,
+      t,
     ],
   );
 
@@ -434,7 +449,7 @@ export function OnboardingSequence() {
       <View style={styles.progressWrap}>
         {steps.map((contentStep, contentStepIndex) => (
           <View
-            key={contentStep.title}
+            key={contentStep.id}
             style={[styles.progressSegment, progressTrackStyle]}
           >
             <ProgressSegmentFill
@@ -454,7 +469,7 @@ export function OnboardingSequence() {
 
             return (
               <View
-                key={contentStep.title}
+                key={contentStep.id}
                 style={[styles.panel, panelWidthStyle]}
               >
                 <View style={styles.panelContent}>
@@ -540,26 +555,23 @@ function NotificationStepActions({
   permissionStatus,
   textColor,
 }: NotificationStepActionsProps) {
+  const { t } = useLingui();
   const hasNotificationsEnabled = hasNotificationPermission(permissionStatus);
   const hasNotificationDecision =
     !isNotificationPermissionPending(permissionStatus);
-  const notificationSettingsGuidance =
-    Platform.OS === "ios"
-      ? "Settings -> eduMFA -> Notifications -> Allow Notifications."
-      : "Settings -> eduMFA -> Notifications or Permissions -> Allow.";
 
   if (hasNotificationsEnabled) {
     return (
       <View style={styles.buttonStack}>
         <StatusCard
-          description="eduMFA can receive push approvals and alert you when a sign-in needs attention."
-          title="Notifications are enabled"
+          description={t`eduMFA can receive push approvals and alert you when a sign-in needs attention.`}
+          title={t`Notifications are enabled`}
           variant="success"
         />
         <ActionButton
           accentColor={accentColor}
           icon={{ ios: "arrow.right", android: "arrow_forward" }}
-          label="Continue"
+          label={t`Continue`}
           onPress={onContinue}
         />
       </View>
@@ -570,25 +582,17 @@ function NotificationStepActions({
     return (
       <View style={[styles.buttonStack, styles.buttonStackCompact]}>
         <StatusCard
-          description="eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
-          title="Notifications are required"
+          description={t`eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here.`}
+          title={t`Notifications are required`}
           variant="error"
-        >
-          <ThemedText
-            themeColor="textSecondary"
-            fontSize={Typography.fontSize12}
-            style={styles.permissionNoticePath}
-          >
-            {notificationSettingsGuidance}
-          </ThemedText>
-        </StatusCard>
+        />
         <ActionButton
           accentColor={accentColor}
           icon={{ ios: "gearshape.fill", android: "settings" }}
-          label="Open notification settings"
+          label={t`Open notification settings`}
           onPress={onOpenSettings}
         />
-        <TextButton color={textColor} label="Not now" onPress={onSkip} />
+        <TextButton color={textColor} label={t`Not now`} onPress={onSkip} />
       </View>
     );
   }
@@ -599,7 +603,7 @@ function NotificationStepActions({
         accentColor={accentColor}
         icon={{ ios: "bell.fill", android: "notifications" }}
         isLoading={isRequestingPermission || isCheckingPermission}
-        label="Enable notifications"
+        label={t`Enable notifications`}
         onPress={onEnableNotifications}
       />
     </View>
@@ -625,6 +629,8 @@ function CrashReportsStepActions({
   onOptIn,
   textColor,
 }: CrashReportsStepActionsProps) {
+  const { t } = useLingui();
+
   return (
     <View style={styles.buttonStack}>
       <View
@@ -638,15 +644,14 @@ function CrashReportsStepActions({
       >
         <View style={styles.choiceText}>
           <ThemedText fontSize={Typography.fontSize16} fontWeight="semiBold">
-            Anonymous reports
+            {t`Anonymous reports`}
           </ThemedText>
           <ThemedText
             themeColor="textSecondary"
             fontSize={Typography.fontSize14}
             style={styles.choiceDescription}
           >
-            Share anonymized crash and error reports to help improve
-            reliability. No token secrets, passwords, or institution names.
+            {t`Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names.`}
           </ThemedText>
         </View>
         <View
@@ -667,12 +672,12 @@ function CrashReportsStepActions({
       <ActionButton
         accentColor={accentColor}
         icon={{ ios: "checkmark.shield.fill", android: "verified_user" }}
-        label="Share anonymous reports"
+        label={t`Share anonymous reports`}
         onPress={onOptIn}
       />
       <TextButton
         color={textColor}
-        label="Finish without reports"
+        label={t`Finish without reports`}
         onPress={onDecline}
       />
     </View>

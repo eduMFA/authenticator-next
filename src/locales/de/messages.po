@@ -27,6 +27,14 @@ msgstr "Token hinzufügen"
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
+#: src/components/onboarding-sequence.tsx:647
+msgid "Anonymous reports"
+msgstr "Anonyme Berichte"
+
+#: src/components/onboarding-sequence.tsx:143
+msgid "Approve sign-ins the moment they arrive"
+msgstr "Anmeldungen sofort freigeben"
+
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
@@ -42,6 +50,10 @@ msgstr "Kamera-Berechtigung erforderlich"
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: src/components/onboarding-sequence.tsx:574
+msgid "Continue"
+msgstr "Weiter"
 
 #: src/components/push-request-popup.tsx:219
 #: src/store/notification-store.ts:107
@@ -79,6 +91,18 @@ msgstr "Bearbeiten"
 msgid "Edit token"
 msgstr "Token bearbeiten"
 
+#: src/components/onboarding-sequence.tsx:567
+msgid "eduMFA can receive push approvals and alert you when a sign-in needs attention."
+msgstr "eduMFA kann Push-Freigaben empfangen und dich benachrichtigen, wenn eine Anmeldung deine Aufmerksamkeit benötigt."
+
+#: src/components/onboarding-sequence.tsx:585
+msgid "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
+msgstr "eduMFA kann keine Push-Freigaben empfangen, solange Benachrichtigungen deaktiviert sind. Aktiviere sie in den Systemeinstellungen und kehre dann hierher zurück."
+
+#: src/components/onboarding-sequence.tsx:606
+msgid "Enable notifications"
+msgstr "Benachrichtigungen aktivieren"
+
 #: src/components/token-detail/token-detail-utils.ts:98
 msgid "Enrolled"
 msgstr "Registriert"
@@ -101,13 +125,29 @@ msgstr "Token konnte nicht hinzugefügt werden"
 msgid "Finalizing enrollment"
 msgstr "Registrierung wird abgeschlossen"
 
+#: src/components/onboarding-sequence.tsx:680
+msgid "Finish without reports"
+msgstr "Ohne Berichte abschließen"
+
 #: src/components/token-detail/token-detail-utils.ts:86
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
+#: src/components/onboarding-sequence.tsx:412
+msgid "Get started"
+msgstr "Loslegen"
+
 #: src/components/token-add/qr-code-scanner.tsx:49
 msgid "Grant permission"
 msgstr "Berechtigungen erteilen"
+
+#: src/components/onboarding-sequence.tsx:150
+msgid "Help improve reliability"
+msgstr "Hilf, die Zuverlässigkeit zu verbessern"
+
+#: src/components/onboarding-sequence.tsx:137
+msgid "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
+msgstr "Behalte deine Anmeldungen mit Push-Freigaben und einfach verwaltbaren Token direkt griffbereit."
 
 #: src/components/token-detail/token-detail-utils.ts:59
 #: src/components/token-detail/token-detail-utils.ts:88
@@ -143,6 +183,30 @@ msgstr "Keine Ergebnisse gefunden für "
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
+#: src/components/onboarding-sequence.tsx:595
+msgid "Not now"
+msgstr "Nicht jetzt"
+
+#: src/components/onboarding-sequence.tsx:142
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#: src/components/onboarding-sequence.tsx:568
+msgid "Notifications are enabled"
+msgstr "Benachrichtigungen sind aktiviert"
+
+#: src/components/onboarding-sequence.tsx:144
+msgid "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention."
+msgstr "Benachrichtigungen sind wichtig für eduMFA. Sie ermöglichen der App, Anmeldefreigaben zu empfangen und dich zu informieren, wenn eine Push-Anfrage deine Aufmerksamkeit benötigt."
+
+#: src/components/onboarding-sequence.tsx:586
+msgid "Notifications are required"
+msgstr "Benachrichtigungen sind erforderlich"
+
+#: src/components/onboarding-sequence.tsx:592
+msgid "Open notification settings"
+msgstr "Benachrichtigungseinstellungen öffnen"
+
 #: src/components/token-add/qr-code-scanner.tsx:50
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
@@ -158,6 +222,10 @@ msgstr "Neues Push-Token koppeln"
 #: src/components/token-detail/token-detail-utils.ts:84
 msgid "Pending"
 msgstr "Ausstehend"
+
+#: src/components/onboarding-sequence.tsx:149
+msgid "Privacy choice"
+msgstr "Datenschutz-Auswahl"
 
 #: src/components/token-add/upload-qr-code-button.tsx:64
 msgid "QR code scanner"
@@ -229,6 +297,14 @@ msgstr "Servernachricht"
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
+#: src/components/onboarding-sequence.tsx:654
+msgid "Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names."
+msgstr "Teile anonymisierte Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Keine Token-Geheimnisse, Passwörter oder Namen von Institutionen."
+
+#: src/components/onboarding-sequence.tsx:675
+msgid "Share anonymous reports"
+msgstr "Anonyme Berichte teilen"
+
 #: src/components/token-detail/token-overview-content.tsx:168
 msgid "Status"
 msgstr "Status"
@@ -293,9 +369,21 @@ msgstr "QR-Code hochladen"
 msgid "We need your permission to show the camera"
 msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
 
+#: src/components/onboarding-sequence.tsx:135
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: src/components/onboarding-sequence.tsx:136
+msgid "Welcome to eduMFA"
+msgstr "Willkommen bei eduMFA"
+
 #: src/components/token-add/qr-code-scanner.tsx:44
 msgid "You can enable camera permissions in your device settings"
 msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
+
+#: src/components/onboarding-sequence.tsx:151
+msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
+msgstr "Du kannst anonymisierte Absturz- und Fehlerberichte aktivieren. Das ist standardmäßig ausgeschaltet, und die App funktioniert in beiden Fällen gleich."
 
 #: src/hooks/use-handle-token-uri.ts:46
 msgid "Your image did not contain a QR code."
