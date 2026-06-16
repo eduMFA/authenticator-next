@@ -114,7 +114,7 @@ msgstr "Grant permission"
 msgid "Key generation failed"
 msgstr "Key generation failed"
 
-#: src/components/token-detail/token-edit-form.android.tsx:45
+#: src/components/token-detail/token-edit-form.android.tsx:44
 #: src/components/token-detail/token-edit-form.ios.tsx:42
 msgid "Label"
 msgstr "Label"
@@ -184,11 +184,8 @@ msgstr "Registration failed"
 msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
-#: src/components/token-detail/token-overview-content.tsx:104
-msgid "Retry rollout"
-msgstr "Retry rollout"
-
 #: src/app/index.tsx:138
+#: src/components/token-detail/token-overview-content.tsx:104
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
@@ -197,9 +194,6 @@ msgid "Rolling out..."
 msgstr "Rolling out..."
 
 #: src/components/token-detail/token-detail-utils.ts:74
-msgid "Rollout failed"
-msgstr "Rollout failed"
-
 #: src/components/token-list-item.tsx:108
 msgid "Rollout Failed"
 msgstr "Rollout Failed"

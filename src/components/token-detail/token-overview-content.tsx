@@ -101,7 +101,7 @@ export function TokenOverviewContent({
           <View style={styles.nativeButton}>
             <Host matchContents>
               <Button
-                label={t`Retry rollout`}
+                label={t`Retry Rollout`}
                 systemImage="arrow.clockwise"
                 onPress={onRetryRollout}
                 modifiers={[controlSize("large"), buttonStyle("glass")]}

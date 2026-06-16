@@ -71,7 +71,7 @@ export function getRolloutFailureDetails(
     default:
       return {
         description: msg`This token did not finish enrollment and cannot receive push requests until rollout succeeds.`,
-        title: msg`Rollout failed`,
+        title: msg`Rollout Failed`,
       };
   }
 }
