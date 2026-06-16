@@ -246,8 +246,8 @@ msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
 #: src/components/token-detail/token-detail-utils.ts:63
-msgid "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
-msgstr "Der öffentliche Schlüssel konnte nicht an den Registrierungsserver gesendet werden. Prüfe die Verbindung und die Token-Callback-URL, bevor du es erneut versuchst."
+#~ msgid "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
+#~ msgstr "Der öffentliche Schlüssel konnte nicht an den Registrierungsserver gesendet werden. Prüfe die Verbindung und die Token-Callback-URL, bevor du es erneut versuchst."
 
 #: src/hooks/use-handle-token-uri.ts:69
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
@@ -268,6 +268,10 @@ msgstr "Dieses Token konnte nicht aktualisiert werden, weil der Push-Dienst nich
 #: src/components/token-detail/token-detail-utils.ts:29
 msgid "This token could not be refreshed. It may have been removed on the server or the institution hosting the push service may be having a technical issue."
 msgstr "Dieses Token konnte nicht aktualisiert werden. Es wurde möglicherweise auf dem Server entfernt oder die Institution, die den Push-Dienst betreibt, hat ein technisches Problem."
+
+#: src/components/token-detail/token-detail-utils.ts:63
+msgid "This token could not be registered with the enrollment server. Check your connection or try again later."
+msgstr "Dieses Token konnte nicht beim Registrierungsserver registriert werden. Prüfe deine Verbindung oder versuche es später erneut."
 
 #: src/components/token-detail/token-detail-utils.ts:73
 msgid "This token did not finish enrollment and cannot receive push requests until rollout succeeds."

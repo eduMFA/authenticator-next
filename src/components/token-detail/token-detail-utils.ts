@@ -60,7 +60,7 @@ export function getRolloutFailureDetails(
       };
     case PushTokenRolloutState.SendRSAPublicKeyFailed:
       return {
-        description: msg`The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying.`,
+        description: msg`This token could not be registered with the enrollment server. Check your connection or try again later.`,
         title: msg`Server registration failed`,
       };
     case PushTokenRolloutState.ParsingResponseFailed:
