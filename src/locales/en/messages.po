@@ -14,16 +14,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #: src/components/push-request-popup.tsx:225
-#: src/store/notification-store.ts:48
+#: src/store/notification-store.ts:47
 msgid "Accept"
 msgstr "Accept"
 
-#: src/app/index.tsx:285
-#: src/app/index.tsx:287
+#: src/app/index.tsx:301
+#: src/app/index.tsx:303
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:256
+#: src/app/index.tsx:272
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
@@ -44,11 +44,11 @@ msgid "Cancel"
 msgstr "Cancel"
 
 #: src/components/push-request-popup.tsx:219
-#: src/store/notification-store.ts:56
+#: src/store/notification-store.ts:55
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:146
+#: src/app/index.tsx:162
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -70,7 +70,7 @@ msgstr "Dismiss"
 msgid "Download 2FAS"
 msgstr "Download 2FAS"
 
-#: src/app/index.tsx:128
+#: src/app/index.tsx:144
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Edit"
@@ -78,6 +78,10 @@ msgstr "Edit"
 #: src/components/token-detail/token-edit-content.tsx:33
 msgid "Edit token"
 msgstr "Edit token"
+
+#: src/app/index.tsx:353
+msgid "Enable notifications to receive push approval requests on this device."
+msgstr "Enable notifications to receive push approval requests on this device."
 
 #: src/components/token-detail/token-detail-utils.ts:98
 msgid "Enrolled"
@@ -135,13 +139,17 @@ msgstr "No interactions yet"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:325
+#: src/app/index.tsx:341
 msgid "No results found for "
 msgstr "No results found for "
 
-#: src/app/index.tsx:248
+#: src/app/index.tsx:264
 msgid "No tokens yet"
 msgstr "No tokens yet"
+
+#: src/app/index.tsx:352
+msgid "Notifications are disabled"
+msgstr "Notifications are disabled"
 
 #: src/components/token-add/qr-code-scanner.tsx:50
 msgid "Open Settings"
@@ -168,7 +176,7 @@ msgstr "QR code scanner"
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:335
+#: src/app/index.tsx:362
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
@@ -184,7 +192,7 @@ msgstr "Registration failed"
 msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
-#: src/app/index.tsx:138
+#: src/app/index.tsx:154
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
@@ -212,7 +220,7 @@ msgstr "Scan the QR code to pair a new push token."
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:177
+#: src/app/index.tsx:193
 msgid "Search tokens"
 msgstr "Search tokens"
 
