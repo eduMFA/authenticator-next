@@ -19,6 +19,7 @@ type NotificationState = {
 type NotificationActions = {
   initialize: () => Promise<string | null>;
   getFcmToken: () => Promise<string | null>;
+  refreshPermissionStatus: () => Promise<Notifications.NotificationPermissionsStatus | null>;
   reset: () => void;
 };
 
@@ -173,6 +174,33 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       return token;
     } catch (error) {
       console.error("Error getting FCM token:", error);
+      return null;
+    }
+  },
+
+  refreshPermissionStatus: async () => {
+    try {
+      const settings = await Notifications.getPermissionsAsync();
+      const enabled = isNotificationPermissionEnabled(settings);
+
+      set({ permissionStatus: settings });
+
+      if (!enabled) {
+        set({ fcmToken: null });
+        return settings;
+      }
+
+      await setupNotificationCategories();
+
+      const messaging = getMessaging();
+      const token = await getToken(messaging);
+      if (token) {
+        set({ fcmToken: token });
+      }
+
+      return settings;
+    } catch (error) {
+      console.error("Error refreshing notification permissions:", error);
       return null;
     }
   },

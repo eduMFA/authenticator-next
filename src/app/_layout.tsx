@@ -51,6 +51,9 @@ function RootLayoutContent() {
   const initializeNotifications = useNotificationStore(
     (state) => state.initialize,
   );
+  const refreshNotificationPermissionStatus = useNotificationStore(
+    (state) => state.refreshPermissionStatus,
+  );
   const startPendingRollouts = useTokenStore(
     (state) => state.startPendingRollouts,
   );
@@ -75,6 +78,7 @@ function RootLayoutContent() {
       const wasInactive = /inactive|background/.test(appState.current);
       if (wasInactive && nextAppState === "active") {
         activateCurrentLocale();
+        refreshNotificationPermissionStatus();
         pollChallenges();
       }
 
@@ -84,7 +88,7 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [pollChallenges]);
+  }, [pollChallenges, refreshNotificationPermissionStatus]);
 
   useEffect(() => {
     const handleIncomingUrl = async (incomingUrl: string) => {
