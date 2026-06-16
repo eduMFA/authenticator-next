@@ -159,7 +159,7 @@ msgstr "Pair new Push Token"
 msgid "Pending"
 msgstr "Pending"
 
-#: src/components/upload-qr-code-button.tsx:71
+#: src/components/upload-qr-code-button.tsx:61
 msgid "QR code scanner"
 msgstr "QR code scanner"
 
@@ -285,7 +285,7 @@ msgstr "Token approvals, denials, refresh events, and enrollment activity will a
 msgid "Update the display name for this token."
 msgstr "Update the display name for this token."
 
-#: src/components/upload-qr-code-button.tsx:74
+#: src/components/upload-qr-code-button.tsx:64
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
 

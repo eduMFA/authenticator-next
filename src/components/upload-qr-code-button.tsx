@@ -5,7 +5,6 @@ import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
 import { Platform } from "react-native";
 
 const ANDROID_TEXT_STYLE = Platform.select({
@@ -39,27 +38,18 @@ export function UploadQRCodeButton({
   onQRCodeScanned,
 }: UploadQRCodeButtonProps) {
   const { t } = useLingui();
-  const [hostWidth, setHostWidth] = useState(0);
 
   return (
-    <Host
-      matchContents={{ vertical: true }}
-      onLayout={({ nativeEvent }) => {
-        setHostWidth(nativeEvent.layout.width);
-      }}
-    >
+    <Host matchContents={{ vertical: true }}>
       <Button
-        modifiers={[
-          composeHeight(100),
-          controlSize("large"),
-          buttonStyle("glassProminent"),
-        ]}
         onPress={() => {
           void pickAndScanQRCode(onQRCodeScanned);
         }}
-        style={{
-          width: hostWidth || undefined,
-        }}
+        modifiers={[
+          controlSize("large"),
+          buttonStyle("glassProminent"),
+          composeHeight(100),
+        ]}
       >
         <Row alignment="center" spacing={6}>
           <Spacer flexible />

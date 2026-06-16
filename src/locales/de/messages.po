@@ -159,7 +159,7 @@ msgstr "Neues Push-Token koppeln"
 msgid "Pending"
 msgstr "Ausstehend"
 
-#: src/components/upload-qr-code-button.tsx:71
+#: src/components/upload-qr-code-button.tsx:61
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
@@ -285,7 +285,7 @@ msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldea
 msgid "Update the display name for this token."
 msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 
-#: src/components/upload-qr-code-button.tsx:74
+#: src/components/upload-qr-code-button.tsx:64
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
