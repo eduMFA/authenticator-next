@@ -107,9 +107,7 @@ export default function Tokens() {
           >
             <Link.Trigger>
               <Pressable
-                onLongPress={() => {
-                  confirmDeleteToken(item.id);
-                }}
+                onLongPress={() => {}}
                 style={styles.tokenCard}
                 disabled={!PushTokenRolloutState.isFinished(item.rolloutState)}
               >
@@ -120,8 +118,12 @@ export default function Tokens() {
               {!PushTokenRolloutState.isFailed(item.rolloutState) && (
                 <Link.MenuAction
                   icon="square.and.pencil"
-                  onPress={() => {}}
-                  disabled={true}
+                  onPress={() => {
+                    router.push({
+                      pathname: "/token/[tokenId]",
+                      params: { edit: "1", tokenId: item.id },
+                    });
+                  }}
                 >
                   {t`Edit`}
                 </Link.MenuAction>
@@ -148,7 +150,7 @@ export default function Tokens() {
         </Animated.View>
       );
     },
-    [confirmDeleteToken, rolloutToken, t],
+    [confirmDeleteToken, rolloutToken, router, t],
   );
 
   const toolbarAddButton = (
@@ -186,7 +188,7 @@ export default function Tokens() {
         {__DEV__ && (
           <Stack.Toolbar.Menu
             icon={Icon.select({
-              ios: "ellipsis.circle",
+              ios: "hammer.fill",
               android: CodeSymbol,
             })}
           >
@@ -264,8 +266,14 @@ export default function Tokens() {
             style={[styles.noTokenButton, { width: emptyStateButtonWidth }]}
           >
             <Button
-              variant="filled"
-              modifiers={[controlSize("large"), buttonStyle("glassProminent")]}
+              modifiers={[
+                controlSize("large"),
+                buttonStyle(
+                  isLiquidGlassAvailable()
+                    ? "glassProminent"
+                    : "borderedProminent",
+                ),
+              ]}
               onPress={() => {
                 router.navigate("/token/add");
               }}

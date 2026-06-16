@@ -39,7 +39,7 @@ export default function RootLayout() {
 
   return (
     <I18nProvider i18n={i18n}>
-      <ThemeProvider value={colorScheme == "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <RootLayoutContent />
       </ThemeProvider>
     </I18nProvider>
@@ -193,14 +193,6 @@ function RootLayoutContent() {
         options={{
           headerTransparent: Platform.OS === "ios" ? true : false,
           title: "",
-          presentation:
-            Platform.OS === "ios"
-              ? isLiquidGlassAvailable() && osName !== "iPadOS"
-                ? "formSheet"
-                : "modal"
-              : "modal",
-          sheetAllowedDetents: [0.5],
-          sheetInitialDetentIndex: 0,
           contentStyle: {
             backgroundColor: isLiquidGlassAvailable()
               ? "transparent"
