@@ -337,36 +337,38 @@ export default function Tokens() {
               device.
             </Trans>
           </ThemedText>
-          <Host
-            matchContents={{ vertical: true }}
-            style={[styles.noTokenButton, { width: emptyStateButtonWidth }]}
-          >
-            <Button
-              modifiers={[
-                controlSize("large"),
-                buttonStyle(
-                  isLiquidGlassAvailable()
-                    ? "glassProminent"
-                    : "borderedProminent",
-                ),
-              ]}
-              onPress={() => {
-                router.navigate("/token/add");
-              }}
-              style={{ width: emptyStateButtonWidth }}
+          {Platform.OS === "ios" && (
+            <Host
+              matchContents={{ vertical: true }}
+              style={[styles.noTokenButton, { width: emptyStateButtonWidth }]}
             >
-              <Row alignment="center" spacing={6}>
-                <Icon
-                  name={Icon.select({
-                    ios: "plus",
-                    android: AddSymbol,
-                  })}
-                  accessibilityLabel={t`Add token`}
-                />
-                <ExpoText numberOfLines={1}>{t`Add token`}</ExpoText>
-              </Row>
-            </Button>
-          </Host>
+              <Button
+                modifiers={[
+                  controlSize("large"),
+                  buttonStyle(
+                    isLiquidGlassAvailable()
+                      ? "glassProminent"
+                      : "borderedProminent",
+                  ),
+                ]}
+                onPress={() => {
+                  router.navigate("/token/add");
+                }}
+                style={{ width: emptyStateButtonWidth }}
+              >
+                <Row alignment="center" spacing={6}>
+                  <Icon
+                    name={Icon.select({
+                      ios: "plus",
+                      android: AddSymbol,
+                    })}
+                    accessibilityLabel={t`Add token`}
+                  />
+                  <ExpoText numberOfLines={1}>{t`Add token`}</ExpoText>
+                </Row>
+              </Button>
+            </Host>
+          )}
         </ThemedView>
         {androidAddFab}
         {footer}
