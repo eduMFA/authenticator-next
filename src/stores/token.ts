@@ -2,7 +2,7 @@ import {
   isTokenRollingOut,
   performTokenRollout,
   startPendingRollouts as startPendingRolloutsService,
-} from "@/services/token-rollout-service";
+} from "@/services/token-rollout";
 import { PushToken } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";

@@ -1,5 +1,5 @@
 import { KEY_SIZE } from "@/constants/auth";
-import { useNotificationStore } from "@/store/notification-store";
+import { useNotificationStore } from "@/stores/notification";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { stripPemArmor } from "@/utils/crypto";
 import { deleteRsaKeyPair, generateRsaKeyPair } from "@/utils/rsa";

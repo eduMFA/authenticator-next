@@ -2,7 +2,7 @@ import { SIGN_ALGORITHM } from "@/constants/auth";
 import {
   ChallengePollingNetworkError,
   ChallengePollingServerError,
-} from "@/errors/challenge-polling-errors";
+} from "@/errors/challenge-polling";
 import {
   PushRequest,
   PushRequestStatus,

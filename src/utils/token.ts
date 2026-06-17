@@ -4,7 +4,7 @@ import {
   InvalidUrlError,
   OtpProtocolError,
   UnsupportedVersionError,
-} from "@/errors/token-errors";
+} from "@/errors/token";
 import { PushToken, PushTokenRolloutState } from "@/types";
 
 const parseTokenV1 = (url: URL) => {

@@ -1,5 +1,5 @@
 import { useToken } from "@/hooks/use-token";
-import { usePushRequestStore } from "@/store/push-request-store";
+import { usePushRequestStore } from "@/stores/push-request";
 import { PushTokenRolloutState } from "@/types";
 
 export function useDevMenu() {

@@ -1,5 +1,5 @@
-import { useNotificationStore } from "@/store/notification-store";
-import { usePushRequestStore } from "@/store/push-request-store";
+import { useNotificationStore } from "@/stores/notification";
+import { usePushRequestStore } from "@/stores/push-request";
 import type { PushRequest } from "@/types";
 import { base32ToBase64 } from "@/utils/crypto";
 import type {
