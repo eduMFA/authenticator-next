@@ -83,7 +83,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     set({ isInitializing: true });
 
     initializationPromise = (async () => {
-      const settings = await getNotificationPermissions(true);
+      const settings = await getNotificationPermissions(false);
       const token = await getCurrentFcmToken();
 
       if (!token) {
@@ -148,7 +148,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       return fcmToken;
     }
 
-    // If not initialized, initialize first
+    // If not initialized, initialize first without requesting notification display permission.
     if (!isInitialized) {
       return await initialize();
     }
