@@ -72,11 +72,9 @@ function RootLayoutContent() {
       return;
     }
 
-    initializeNotifications().then((fcmToken) => {
+    initializeNotifications().then(() => {
       // Start pending rollouts after notifications are initialized
-      if (fcmToken) {
-        startPendingRollouts();
-      }
+      startPendingRollouts();
       // Poll for any pending challenges when the app opens
       pollChallenges();
     });

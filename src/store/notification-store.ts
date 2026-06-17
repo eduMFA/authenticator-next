@@ -8,11 +8,6 @@ import {
 import * as Notifications from "expo-notifications";
 import { create } from "zustand";
 
-type NotificationPermissionResult = {
-  status: Notifications.NotificationPermissionsStatus;
-  token: string | null;
-};
-
 type NotificationState = {
   fcmToken: string | null;
   isInitialized: boolean;
@@ -64,17 +59,6 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   isInitialized: false,
   isInitializing: false,
   permissionStatus: null,
-
-  checkPermission: async () => {
-    const settings = await Notifications.getPermissionsAsync();
-    set({ permissionStatus: settings });
-
-    if (!isNotificationPermissionEnabled(settings)) {
-      set({ fcmToken: null });
-    }
-
-    return settings;
-  },
 
   /**
    * Initialize notification system - should only be called once at app startup

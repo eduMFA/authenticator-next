@@ -1,12 +1,13 @@
 import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
-import { useNotificationStore } from "@/store/notification-store";
 import { useSettingsStore } from "@/store/settings-store";
+import { isNotificationPermissionEnabled } from "@/utils/notification";
 import { useLingui } from "@lingui/react/macro";
-import { AuthorizationStatus } from "@react-native-firebase/messaging";
 import { Image } from "expo-image";
+import * as Notifications from "expo-notifications";
 import { SymbolView } from "expo-symbols";
 import type { ComponentProps } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -43,8 +44,6 @@ const logoSource = require("../../assets/app-icons/edumfa.icon/Assets/logo.svg")
 
 type IconName = ComponentProps<typeof SymbolView>["name"];
 type EasingFunction = (value: number) => number;
-type FirebaseAuthorizationStatus =
-  (typeof AuthorizationStatus)[keyof typeof AuthorizationStatus];
 
 type OnboardingStep = {
   accent: { light: string; dark: string };
@@ -84,18 +83,13 @@ function playHaptic(selectPreset: (presets: typeof Presets) => void) {
   }
 }
 
-function hasNotificationPermission(status: FirebaseAuthorizationStatus | null) {
-  return (
-    status === AuthorizationStatus.AUTHORIZED ||
-    status === AuthorizationStatus.PROVISIONAL ||
-    status === AuthorizationStatus.EPHEMERAL
-  );
-}
-
 function isNotificationPermissionPending(
-  status: FirebaseAuthorizationStatus | null,
+  status: Notifications.NotificationPermissionsStatus | null,
 ) {
-  return status === null || status === AuthorizationStatus.NOT_DETERMINED;
+  return (
+    status === null ||
+    status.status === Notifications.PermissionStatus.UNDETERMINED
+  );
 }
 
 export function OnboardingSequence() {
@@ -104,16 +98,13 @@ export function OnboardingSequence() {
   const [isCheckingPermission, setIsCheckingPermission] = useState(false);
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
   const { t } = useLingui();
-  const notificationPermissionStatus = useNotificationStore(
-    (state) => state.permissionStatus,
-  );
-  const checkNotificationPermission = useNotificationStore(
-    (state) => state.checkPermission,
-  );
-  const requestNotificationPermission = useNotificationStore(
-    (state) => state.requestPermission,
-  );
-  const getFcmToken = useNotificationStore((state) => state.getFcmToken);
+  const {
+    checkPermissions: checkNotificationPermission,
+    getFcmToken,
+    hasPermission: hasNotificationPermission,
+    permissionStatus: notificationPermissionStatus,
+    requestPermissions: requestNotificationPermission,
+  } = useNotificationStatus();
   const completeOnboarding = useSettingsStore(
     (state) => state.completeOnboarding,
   );
@@ -204,11 +195,8 @@ export function OnboardingSequence() {
     setIsCheckingPermission(true);
 
     try {
-      const status = await checkNotificationPermission();
-
-      if (hasNotificationPermission(status)) {
-        await getFcmToken();
-      }
+      await checkNotificationPermission();
+      await getFcmToken();
     } finally {
       setIsCheckingPermission(false);
     }
@@ -342,19 +330,16 @@ export function OnboardingSequence() {
     playHaptic((presets) => presets.System.impactHeavy());
 
     const result = await requestNotificationPermission();
+    await getFcmToken();
 
-    if (
-      result.status === AuthorizationStatus.AUTHORIZED ||
-      result.status === AuthorizationStatus.PROVISIONAL ||
-      result.status === AuthorizationStatus.EPHEMERAL
-    ) {
+    if (isNotificationPermissionEnabled(result)) {
       playHaptic((presets) => presets.System.notificationSuccess());
       setIsRequestingPermission(false);
     } else {
       playHaptic((presets) => presets.System.notificationError());
       setIsRequestingPermission(false);
     }
-  }, [requestNotificationPermission]);
+  }, [getFcmToken, requestNotificationPermission]);
 
   const handleOpenNotificationSettings = useCallback(() => {
     playHaptic((presets) => presets.System.impactMedium());
@@ -384,6 +369,7 @@ export function OnboardingSequence() {
             onEnableNotifications={handleEnableNotifications}
             onOpenSettings={handleOpenNotificationSettings}
             onSkip={handleSkipNotifications}
+            hasNotificationPermission={hasNotificationPermission}
             permissionStatus={notificationPermissionStatus}
             textColor={textColor}
           />
@@ -425,6 +411,7 @@ export function OnboardingSequence() {
       handleOpenNotificationSettings,
       handleOptInCrashReports,
       handleSkipNotifications,
+      hasNotificationPermission,
       isCheckingPermission,
       isRequestingPermission,
       notificationPermissionStatus,
@@ -534,18 +521,20 @@ export function OnboardingSequence() {
 
 type NotificationStepActionsProps = {
   accentColor: string;
+  hasNotificationPermission: boolean;
   isCheckingPermission: boolean;
   isRequestingPermission: boolean;
   onContinue: () => void;
   onEnableNotifications: () => void;
   onOpenSettings: () => void;
   onSkip: () => void;
-  permissionStatus: FirebaseAuthorizationStatus | null;
+  permissionStatus: Notifications.NotificationPermissionsStatus | null;
   textColor: ColorValue;
 };
 
 function NotificationStepActions({
   accentColor,
+  hasNotificationPermission: hasNotificationsEnabled,
   isCheckingPermission,
   isRequestingPermission,
   onContinue,
@@ -556,7 +545,6 @@ function NotificationStepActions({
   textColor,
 }: NotificationStepActionsProps) {
   const { t } = useLingui();
-  const hasNotificationsEnabled = hasNotificationPermission(permissionStatus);
   const hasNotificationDecision =
     !isNotificationPermissionPending(permissionStatus);
 
