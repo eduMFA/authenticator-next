@@ -5,7 +5,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 import * as Linking from "expo-linking";
 import { useEffect, useRef, useState } from "react";
 import { Button, StyleSheet, View } from "react-native";
-import { ThemedText } from "./themed-text";
+import { ThemedText } from "../themed-text";
 
 export type Props = {
   onQRCodeScanned: (result: Camera.BarcodeScanningResult) => void;

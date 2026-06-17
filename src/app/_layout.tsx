@@ -1,12 +1,13 @@
+import { NotificationHandler } from "@/components/notification-handler";
 import { ThemedText } from "@/components/themed-text";
 import { Typography, useInterFonts } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
+import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
-import { useNotificationStore } from "@/store/notification-store";
-import { useTokenStore } from "@/store/token-store";
+import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
-import { isTokenEnrollmentUri } from "@/utils/token-utils";
+import { isTokenEnrollmentUri } from "@/utils/token";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
@@ -37,7 +38,7 @@ export default function RootLayout() {
 
   return (
     <I18nProvider i18n={i18n}>
-      <ThemeProvider value={colorScheme == "dark" ? DarkTheme : DefaultTheme}>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <RootLayoutContent />
       </ThemeProvider>
     </I18nProvider>
@@ -48,9 +49,8 @@ function RootLayoutContent() {
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
   const appState = useRef<AppStateStatus>(AppState.currentState);
   const handledUrlsRef = useRef<Set<string>>(new Set());
-  const initializeNotifications = useNotificationStore(
-    (state) => state.initialize,
-  );
+  const { checkPermissions, initialize: initializeNotifications } =
+    useNotificationStatus();
   const startPendingRollouts = useTokenStore(
     (state) => state.startPendingRollouts,
   );
@@ -75,6 +75,7 @@ function RootLayoutContent() {
       const wasInactive = /inactive|background/.test(appState.current);
       if (wasInactive && nextAppState === "active") {
         activateCurrentLocale();
+        checkPermissions();
         pollChallenges();
       }
 
@@ -84,7 +85,7 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [pollChallenges]);
+  }, [pollChallenges, checkPermissions]);
 
   useEffect(() => {
     const handleIncomingUrl = async (incomingUrl: string) => {
@@ -117,64 +118,59 @@ function RootLayoutContent() {
   }, [handleTokenUri]);
 
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerTitle: () =>
-            Platform.OS === "android" ? (
-              <ThemedText fontSize={Typography.fontSize20} fontWeight="bold">
-                Tokens
-              </ThemedText>
-            ) : undefined,
-        }}
-      />
-      <Stack.Screen
-        name="token/add"
-        options={{
-          headerTransparent: Platform.OS === "ios" ? true : false,
-          title: "",
-          presentation:
-            Platform.OS === "ios"
-              ? isLiquidGlassAvailable() && osName !== "iPadOS"
-                ? "formSheet"
-                : "modal"
-              : "modal",
-          sheetAllowedDetents: [0.75],
-          sheetInitialDetentIndex: 0,
-          gestureEnabled: false,
-          contentStyle: {
-            backgroundColor: isLiquidGlassAvailable()
-              ? "transparent"
-              : tabBarBackgroundColor,
-          },
-          headerBlurEffect: isLiquidGlassAvailable()
-            ? undefined
-            : colorScheme === "dark"
-              ? "dark"
-              : "light",
-        }}
-      />
-      <Stack.Screen
-        name="token/[tokenId]"
-        options={{
-          headerTransparent: Platform.OS === "ios" ? true : false,
-          title: "",
-          presentation:
-            Platform.OS === "ios"
-              ? isLiquidGlassAvailable() && osName !== "iPadOS"
-                ? "formSheet"
-                : "modal"
-              : "modal",
-          sheetAllowedDetents: [0.5],
-          sheetInitialDetentIndex: 0,
-          contentStyle: {
-            backgroundColor: isLiquidGlassAvailable()
-              ? "transparent"
-              : tabBarBackgroundColor,
-          },
-        }}
-      />
-    </Stack>
+    <>
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerTitle: () =>
+              Platform.OS === "android" ? (
+                <ThemedText fontSize={Typography.fontSize20} fontWeight="bold">
+                  Tokens
+                </ThemedText>
+              ) : undefined,
+          }}
+        />
+        <Stack.Screen
+          name="token/add"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "",
+            presentation:
+              Platform.OS === "ios"
+                ? isLiquidGlassAvailable() && osName !== "iPadOS"
+                  ? "formSheet"
+                  : "modal"
+                : "modal",
+            sheetAllowedDetents: [0.75],
+            sheetInitialDetentIndex: 0,
+            gestureEnabled: false,
+            contentStyle: {
+              backgroundColor: isLiquidGlassAvailable()
+                ? "transparent"
+                : tabBarBackgroundColor,
+            },
+            headerBlurEffect: isLiquidGlassAvailable()
+              ? undefined
+              : colorScheme === "dark"
+                ? "dark"
+                : "light",
+          }}
+        />
+        <Stack.Screen
+          name="token/[tokenId]"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "",
+            contentStyle: {
+              backgroundColor: isLiquidGlassAvailable()
+                ? "transparent"
+                : tabBarBackgroundColor,
+            },
+          }}
+        />
+      </Stack>
+      <NotificationHandler />
+    </>
   );
 }

@@ -1,10 +1,11 @@
-import QRCodeScanner from "@/components/qr-code-scanner";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { UploadQRCodeButton } from "@/components/upload-qr-code-button";
+import QRCodeScanner from "@/components/token-add/qr-code-scanner";
+import { UploadQRCodeButton } from "@/components/token-add/upload-qr-code-button";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useTheme } from "@/hooks/use-theme";
+import ArrowBackSymbol from "@expo/material-symbols/arrow_back.xml";
 import { Trans } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
@@ -40,7 +41,10 @@ export default function AddToken() {
     <>
       <Stack.Header style={headerStyle} />
       <Stack.Toolbar placement="left">
-        <Stack.Toolbar.Button icon="xmark" onPress={() => router.back()} />
+        <Stack.Toolbar.Button
+          icon={process.env.EXPO_OS === "ios" ? "xmark" : ArrowBackSymbol}
+          onPress={() => router.back()}
+        />
       </Stack.Toolbar>
       <ThemedView
         style={styles.sheet}

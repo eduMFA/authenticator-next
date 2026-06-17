@@ -2,7 +2,7 @@ import {
   InvalidUrlError,
   OtpProtocolError,
   UnsupportedVersionError,
-} from "@/errors/token-errors";
+} from "@/errors/token";
 import { useToken } from "@/hooks/use-token";
 import { useLingui } from "@lingui/react/macro";
 import { useCallback } from "react";

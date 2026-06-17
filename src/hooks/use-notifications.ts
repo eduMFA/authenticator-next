@@ -1,38 +1,75 @@
-import { useNotificationStore } from "@/store/notification-store";
-import { usePushRequestStore } from "@/store/push-request-store";
-import { PushRequest, PushRequestStatus } from "@/types";
+import { useNotificationStore } from "@/stores/notification";
+import { usePushRequestStore } from "@/stores/push-request";
+import type { PushRequest } from "@/types";
 import { base32ToBase64 } from "@/utils/crypto";
+import type {
+  NotificationAction,
+  NotificationResponseData,
+} from "@/utils/notification";
 import {
   addBackgroundMessageHandler,
   addMessageListener,
-} from "@/utils/notification-service";
-import { buildPushRequestSignedData } from "@/utils/push-request-utils";
+  getNotificationAction,
+  getNotificationResponseData,
+  getNotificationResponseKey,
+  isNotificationPermissionEnabled,
+  parsePushRequestFromNotificationData,
+} from "@/utils/notification";
+import { buildPushRequestSignedData } from "@/utils/push-request";
 import { verifyMessage } from "@/utils/rsa";
 import * as Notifications from "expo-notifications";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect } from "react";
 import { useChallengePolling } from "./use-challenge-polling";
 import { useToken } from "./use-token";
 
-export type NotificationAction = "ACCEPT" | "DECLINE" | "TAP";
+export type { NotificationAction } from "@/utils/notification";
 
 export type NotificationActionHandler = (
   action: NotificationAction,
   pushRequest: PushRequest,
 ) => void;
 
+const handledNotificationResponseKeys = new Set<string>();
+
+export function useNotificationStatus() {
+  const fcmToken = useNotificationStore((state) => state.fcmToken);
+  const isInitialized = useNotificationStore((state) => state.isInitialized);
+  const isInitializing = useNotificationStore((state) => state.isInitializing);
+  const permissionStatus = useNotificationStore(
+    (state) => state.permissionStatus,
+  );
+  const initialize = useNotificationStore((state) => state.initialize);
+  const checkPermissions = useNotificationStore(
+    (state) => state.checkPermissions,
+  );
+  const getFcmToken = useNotificationStore((state) => state.getFcmToken);
+  const requestPermissions = useNotificationStore(
+    (state) => state.requestPermissions,
+  );
+  const reset = useNotificationStore((state) => state.reset);
+  const hasPermission = isNotificationPermissionEnabled(permissionStatus);
+
+  return {
+    checkPermissions,
+    fcmToken,
+    getFcmToken,
+    hasPermission,
+    initialize,
+    isInitialized,
+    isInitializing,
+    permissionStatus,
+    requestPermissions,
+    reset,
+  };
+}
+
 export function useNotifications(onAction?: NotificationActionHandler) {
   const { tokens } = useToken();
-
-  // Use the centralized notification store
-  const fcmToken = useNotificationStore((state) => state.fcmToken);
+  const notificationStatus = useNotificationStatus();
   const { pollChallenges } = useChallengePolling();
 
-  const {
-    addPushRequest,
-    updatePushRequestStatus,
-    getPushRequestByNonce,
-    getPushRequestById,
-  } = usePushRequestStore();
+  const { addPushRequest, getPushRequestByNonce, getPushRequestById } =
+    usePushRequestStore();
 
   const handlePushRequest = useCallback(
     async (pushRequest: PushRequest) => {
@@ -75,10 +112,10 @@ export function useNotifications(onAction?: NotificationActionHandler) {
   );
 
   const handleNotificationAction = useCallback(
-    async (action: NotificationAction, data: Record<string, any>) => {
+    async (action: NotificationAction, data: NotificationResponseData) => {
       // Try to find the push request by id or nonce
-      const pushRequestId = data.pushRequestId as string | undefined;
-      const nonce = data.nonce as string | undefined;
+      const pushRequestId = data.pushRequestId;
+      const nonce = data.nonce;
 
       await pollChallenges();
 
@@ -93,18 +130,23 @@ export function useNotifications(onAction?: NotificationActionHandler) {
       }
 
       if (!pushRequest) {
+        const parsedPushRequest = parsePushRequestFromNotificationData(
+          data,
+          pushRequestId ?? nonce ?? `notification-${Date.now()}`,
+        );
+
+        if (parsedPushRequest) {
+          await handlePushRequest(parsedPushRequest);
+          pushRequest = getPushRequestByNonce(parsedPushRequest.nonce);
+        }
+      }
+
+      if (!pushRequest) {
         console.warn("Could not find push request for notification action", {
           pushRequestId,
           nonce,
         });
         return;
-      }
-
-      // Update the push request status based on action
-      if (action === "ACCEPT") {
-        updatePushRequestStatus(pushRequest.id, PushRequestStatus.Accepted);
-      } else if (action === "DECLINE") {
-        updatePushRequestStatus(pushRequest.id, PushRequestStatus.Declined);
       }
 
       // Call the external handler if provided
@@ -113,80 +155,62 @@ export function useNotifications(onAction?: NotificationActionHandler) {
     [
       getPushRequestById,
       getPushRequestByNonce,
+      handlePushRequest,
       pollChallenges,
-      updatePushRequestStatus,
       onAction,
     ],
   );
 
-  const pushRequestHandlerRef = useRef(handlePushRequest);
-  const notificationActionHandlerRef = useRef(handleNotificationAction);
-
-  useEffect(() => {
-    pushRequestHandlerRef.current = handlePushRequest;
-  }, [handlePushRequest]);
-
-  useEffect(() => {
-    notificationActionHandlerRef.current = handleNotificationAction;
-  }, [handleNotificationAction]);
-
   useEffect(() => {
     // Listen for foreground messages
     const unsubscribeMessage = addMessageListener((pushRequest) => {
-      void pushRequestHandlerRef.current(pushRequest);
+      void handlePushRequest(pushRequest);
     });
 
     // Set up background message handler
     addBackgroundMessageHandler((pushRequest) => {
-      void pushRequestHandlerRef.current(pushRequest);
+      void handlePushRequest(pushRequest);
     });
+
+    const handleNotificationResponse = (
+      response: Notifications.NotificationResponse,
+    ) => {
+      const action = getNotificationAction(response.actionIdentifier);
+      if (!action) {
+        return;
+      }
+
+      const responseKey = getNotificationResponseKey(response);
+      if (handledNotificationResponseKeys.has(responseKey)) {
+        return;
+      }
+
+      handledNotificationResponseKeys.add(responseKey);
+
+      const data = getNotificationResponseData(response);
+      console.debug("Notification response received:", { action, data });
+      void handleNotificationAction(action, data);
+    };
 
     // Listen for notification responses (taps and action button presses)
     const responseSubscription =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        const actionId = response.actionIdentifier;
-        const data = (response.notification.request || {}) as Record<
-          string,
-          any
-        >;
-
-        console.debug("Notification response received:", { actionId, data });
-
-        if (actionId === "ACCEPT") {
-          notificationActionHandlerRef.current("ACCEPT", data);
-        } else if (actionId === "DECLINE") {
-          notificationActionHandlerRef.current("DECLINE", data);
-        } else if (actionId === Notifications.DEFAULT_ACTION_IDENTIFIER) {
-          // User tapped the notification itself
-          notificationActionHandlerRef.current("TAP", data);
-        }
-      });
+      Notifications.addNotificationResponseReceivedListener(
+        handleNotificationResponse,
+      );
 
     // Handle notification that opened the app (when app was killed)
     const lastResponse = Notifications.getLastNotificationResponse();
-    console.log("Notification response received:", { lastResponse });
-
     if (lastResponse) {
-      const data = (lastResponse.notification.request.content.data ||
-        {}) as Record<string, any>;
-      const actionId = lastResponse.actionIdentifier;
-
-      if (actionId === "ACCEPT") {
-        notificationActionHandlerRef.current("ACCEPT", data);
-      } else if (actionId === "DECLINE") {
-        notificationActionHandlerRef.current("DECLINE", data);
-      } else {
-        notificationActionHandlerRef.current("TAP", data);
-      }
+      handleNotificationResponse(lastResponse);
     }
 
     return () => {
       unsubscribeMessage();
       responseSubscription.remove();
     };
-  }, []);
+  }, [handleNotificationAction, handlePushRequest]);
 
   return {
-    fcmToken,
+    ...notificationStatus,
   };
 }

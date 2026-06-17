@@ -44,8 +44,12 @@ type ThemeColors = {
   border: ColorValue;
   fill: ColorValue;
   error: ColorValue;
-  successBar: string;
-  errorBar: string;
+  dangerBackground: ColorValue;
+  dangerBar: ColorValue;
+  errorBackground: ColorValue;
+  errorBar: ColorValue;
+  successBackground: ColorValue;
+  successBar: ColorValue;
 };
 
 const fallbackColors = {
@@ -60,6 +64,10 @@ const fallbackColors = {
     border: "#D9D9D0",
     fill: "#E5E5EA",
     error: "#DC3545",
+    dangerBackground: "rgba(255, 149, 0, 0.12)",
+    dangerBar: "rgba(255, 149, 0, 0.75)",
+    errorBackground: "rgba(220, 53, 69, 0.10)",
+    successBackground: "rgba(6, 64, 43, 0.10)",
     successBar: "rgba(6, 64, 43, 0.6)",
     errorBar: "rgba(220, 53, 69, 0.6)",
   },
@@ -74,6 +82,10 @@ const fallbackColors = {
     border: "#363A3F",
     fill: "#2C2C2E",
     error: "#FF453A",
+    dangerBackground: "rgba(255, 149, 0, 0.18)",
+    dangerBar: "rgba(255, 149, 0, 0.8)",
+    errorBackground: "rgba(220, 53, 69, 0.18)",
+    successBackground: "rgba(6, 64, 43, 0.24)",
     successBar: "rgba(6, 64, 43, 0.6)",
     errorBar: "rgba(220, 53, 69, 0.6)",
   },
@@ -95,6 +107,10 @@ const iosThemeColors =
         border: iosColors.separator,
         fill: iosColors.secondarySystemFill,
         error: iosColors.systemRed,
+        dangerBackground: fallbackColors.light.dangerBackground,
+        dangerBar: iosColors.systemOrange,
+        errorBackground: fallbackColors.light.errorBackground,
+        successBackground: fallbackColors.light.successBackground,
         successBar: fallbackColors.light.successBar,
         errorBar: fallbackColors.light.errorBar,
       } satisfies ThemeColors)
@@ -113,6 +129,10 @@ const androidThemeColors =
         border: androidColors.outline,
         fill: androidColors.surfaceVariant,
         error: androidColors.error,
+        dangerBackground: fallbackColors.light.dangerBackground,
+        dangerBar: fallbackColors.light.dangerBar,
+        errorBackground: fallbackColors.light.errorBackground,
+        successBackground: fallbackColors.light.successBackground,
         successBar: fallbackColors.light.successBar,
         errorBar: fallbackColors.light.errorBar,
       } satisfies ThemeColors)

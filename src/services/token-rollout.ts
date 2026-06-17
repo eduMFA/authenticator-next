@@ -1,9 +1,9 @@
 import { KEY_SIZE } from "@/constants/auth";
-import { useNotificationStore } from "@/store/notification-store";
+import { useNotificationStore } from "@/stores/notification";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import { stripPemArmor } from "@/utils/crypto";
 import { deleteRsaKeyPair, generateRsaKeyPair } from "@/utils/rsa";
-import { parseTokenResponse } from "@/utils/token-utils";
+import { parseTokenResponse } from "@/utils/token";
 
 // Map rollout states to their corresponding failed states
 const ROLLOUT_STATE_TO_FAILED_STATE: Partial<
@@ -113,6 +113,12 @@ export async function performTokenRollout(
   let currentStep: PushTokenRolloutState = PushTokenRolloutState.Pending;
 
   try {
+    const fbToken = await useNotificationStore.getState().getFcmToken();
+    if (!fbToken) {
+      throw new Error("Failed to retrieve FCM token");
+    }
+    console.log(`Retrieved FCM token for token ${id}: ${fbToken}`);
+
     // Step 1: Generate RSA key pair
     currentStep = PushTokenRolloutState.RSAKeyGeneration;
     updateState(id, { rolloutState: currentStep });
@@ -124,13 +130,6 @@ export async function performTokenRollout(
       rolloutState: currentStep,
       publicKey: pubkey,
     });
-
-    // Step 3: Get FCM token from the centralized notification store
-    const fbToken = await useNotificationStore.getState().getFcmToken();
-    if (!fbToken) {
-      throw new Error("Failed to retrieve FCM token");
-    }
-    console.log(`Retrieved FCM token for token ${id}: ${fbToken}`);
 
     const response = await sendPublicKeyToServer(token, pubkey, fbToken);
 
