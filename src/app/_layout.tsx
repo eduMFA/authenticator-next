@@ -7,7 +7,7 @@ import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useTokenStore } from "@/store/token-store";
 import { activateCurrentLocale } from "@/utils/locale";
-import { isTokenEnrollmentUri } from "@/utils/token-utils";
+import { isTokenEnrollmentUri } from "@/utils/token";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
