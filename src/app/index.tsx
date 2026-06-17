@@ -117,11 +117,15 @@ export default function Tokens() {
             onPress: () => rolloutToken(item.id),
           }
         : {
-            disabled: true,
             iosIcon: "square.and.pencil",
             key: "edit",
             label: t`Edit`,
-            onPress: () => {},
+            onPress: () => {
+              router.push({
+                pathname: "/token/[tokenId]",
+                params: { edit: "1", tokenId: item.id },
+              });
+            },
           };
       const tokenActions: TokenAction[] = [
         primaryTokenAction,
