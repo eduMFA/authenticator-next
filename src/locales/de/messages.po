@@ -14,16 +14,16 @@ msgstr ""
 "X-Generator: Poedit 3.8\n"
 
 #: src/components/push-request-popup.tsx:225
-#: src/store/notification-store.ts:99
+#: src/utils/notification.ts:63
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:304
-#: src/app/index.tsx:306
+#: src/app/index.tsx:296
+#: src/app/index.tsx:298
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:275
+#: src/app/index.tsx:267
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -56,11 +56,11 @@ msgid "Continue"
 msgstr "Weiter"
 
 #: src/components/push-request-popup.tsx:219
-#: src/store/notification-store.ts:107
+#: src/utils/notification.ts:71
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:162
+#: src/app/index.tsx:154
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -82,7 +82,7 @@ msgstr "Schließen"
 msgid "Download 2FAS"
 msgstr "2FAS herunterladen"
 
-#: src/app/index.tsx:144
+#: src/app/index.tsx:136
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -103,7 +103,7 @@ msgstr "eduMFA kann keine Push-Freigaben empfangen, solange Benachrichtigungen d
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:356
+#: src/app/index.tsx:347
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -179,11 +179,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:344
+#: src/app/index.tsx:335
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:267
+#: src/app/index.tsx:259
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -195,7 +195,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:355
+#: src/app/index.tsx:346
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -244,7 +244,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:365
+#: src/app/index.tsx:356
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -260,7 +260,7 @@ msgstr "Registrierung fehlgeschlagen"
 msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
-#: src/app/index.tsx:154
+#: src/app/index.tsx:146
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
@@ -288,7 +288,7 @@ msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:193
+#: src/app/index.tsx:185
 msgid "Search tokens"
 msgstr "Token suchen"
 
