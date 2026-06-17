@@ -1,4 +1,5 @@
 import { NotificationHandler } from "@/components/notification-handler";
+import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
@@ -8,6 +9,7 @@ import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmatio
 import { useDevMenu } from "@/hooks/use-dev-menu";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
+import { useNotificationStore } from "@/store/notification-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
@@ -15,6 +17,7 @@ import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
+import * as Notifications from "expo-notifications";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
@@ -26,6 +29,7 @@ import {
   StyleSheet,
   useColorScheme,
   useWindowDimensions,
+  View,
 } from "react-native";
 import Animated, {
   FadeIn,
@@ -40,6 +44,12 @@ export default function Tokens() {
   const devMenu = useDevMenu();
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
+  const isNotificationStoreInitialized = useNotificationStore(
+    (state) => state.isInitialized,
+  );
+  const notificationPermissionStatus = useNotificationStore(
+    (state) => state.permissionStatus,
+  );
   const { height, width } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -58,6 +68,12 @@ export default function Tokens() {
   const searchQuery = searchText.toLowerCase();
   const emptyStateButtonWidth = Math.min(320, width - Spacing.xl * 2);
   const showToolbarAddButton = tokens.length > 0;
+  const hasNotificationPermission =
+    notificationPermissionStatus?.granted ||
+    notificationPermissionStatus?.ios?.status ===
+      Notifications.IosAuthorizationStatus.PROVISIONAL;
+  const showNotificationNotice =
+    isNotificationStoreInitialized && !hasNotificationPermission;
   const stackHeaderStyle = useMemo(
     () => ({
       backgroundColor: isLiquidGlassAvailable()
@@ -331,6 +347,17 @@ export default function Tokens() {
             </ThemedView>
           </Animated.View>
         }
+        ListHeaderComponent={
+          showNotificationNotice ? (
+            <View style={styles.notificationNotice}>
+              <StatusCard
+                variant="danger"
+                title={t`Notifications are disabled`}
+                description={t`Enable notifications to receive push approval requests on this device.`}
+              />
+            </View>
+          ) : null
+        }
         refreshControl={
           <RefreshControl
             refreshing={isPolling}
@@ -380,6 +407,9 @@ export const styles = StyleSheet.create({
     lineHeight: Typography.fontSize24 * 1.2,
     marginBottom: Spacing.sm,
     textAlign: "center",
+  },
+  notificationNotice: {
+    marginVertical: Spacing.sm,
   },
   tokenCard: {
     borderRadius: Radii.xl,
