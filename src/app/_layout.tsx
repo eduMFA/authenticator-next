@@ -1,10 +1,10 @@
-import { ThemedText } from "@/components/themed-text";
 import { NotificationHandler } from "@/components/notification-handler";
+import { ThemedText } from "@/components/themed-text";
 import { Typography, useInterFonts } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
+import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
-import { useNotificationStore } from "@/store/notification-store";
 import { useTokenStore } from "@/store/token-store";
 import { activateCurrentLocale } from "@/utils/locale";
 import { isTokenEnrollmentUri } from "@/utils/token-utils";
@@ -49,12 +49,8 @@ function RootLayoutContent() {
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
   const appState = useRef<AppStateStatus>(AppState.currentState);
   const handledUrlsRef = useRef<Set<string>>(new Set());
-  const initializeNotifications = useNotificationStore(
-    (state) => state.initialize,
-  );
-  const refreshNotificationPermissionStatus = useNotificationStore(
-    (state) => state.refreshPermissionStatus,
-  );
+  const { checkPermissions, initialize: initializeNotifications } =
+    useNotificationStatus();
   const startPendingRollouts = useTokenStore(
     (state) => state.startPendingRollouts,
   );
@@ -79,7 +75,7 @@ function RootLayoutContent() {
       const wasInactive = /inactive|background/.test(appState.current);
       if (wasInactive && nextAppState === "active") {
         activateCurrentLocale();
-        refreshNotificationPermissionStatus();
+        checkPermissions();
         pollChallenges();
       }
 
@@ -89,7 +85,7 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [pollChallenges, refreshNotificationPermissionStatus]);
+  }, [pollChallenges, checkPermissions]);
 
   useEffect(() => {
     const handleIncomingUrl = async (incomingUrl: string) => {

@@ -6,9 +6,9 @@ import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
 import { useDevMenu } from "@/hooks/use-dev-menu";
+import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
-import { useNotificationStore } from "@/store/notification-store";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
@@ -16,7 +16,6 @@ import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import * as Notifications from "expo-notifications";
 import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
@@ -43,12 +42,10 @@ export default function Tokens() {
   const devMenu = useDevMenu();
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
-  const isNotificationStoreInitialized = useNotificationStore(
-    (state) => state.isInitialized,
-  );
-  const notificationPermissionStatus = useNotificationStore(
-    (state) => state.permissionStatus,
-  );
+  const {
+    hasPermission: hasNotificationPermission,
+    isInitialized: isNotificationInitialized,
+  } = useNotificationStatus();
   const { height, width } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -67,12 +64,8 @@ export default function Tokens() {
   const searchQuery = searchText.toLowerCase();
   const emptyStateButtonWidth = Math.min(320, width - Spacing.xl * 2);
   const showToolbarAddButton = tokens.length > 0;
-  const hasNotificationPermission =
-    notificationPermissionStatus?.granted ||
-    notificationPermissionStatus?.ios?.status ===
-      Notifications.IosAuthorizationStatus.PROVISIONAL;
   const showNotificationNotice =
-    isNotificationStoreInitialized && !hasNotificationPermission;
+    isNotificationInitialized && !hasNotificationPermission;
   const stackHeaderStyle = useMemo(
     () => ({
       backgroundColor: isLiquidGlassAvailable()
