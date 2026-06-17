@@ -1,4 +1,3 @@
-import { NotificationHandler } from "@/components/notification-handler";
 import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -313,7 +312,6 @@ export default function Tokens() {
   return (
     <>
       {header}
-      <NotificationHandler />
       <Animated.FlatList
         scrollToOverflowEnabled
         contentInsetAdjustmentBehavior="automatic"
