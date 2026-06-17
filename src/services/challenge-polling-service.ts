@@ -1,13 +1,13 @@
 import { SIGN_ALGORITHM } from "@/constants/auth";
 import {
-    ChallengePollingNetworkError,
-    ChallengePollingServerError,
+  ChallengePollingNetworkError,
+  ChallengePollingServerError,
 } from "@/errors/challenge-polling-errors";
 import {
-    PushRequest,
-    PushRequestStatus,
-    PushToken,
-    PushTokenRolloutState,
+  PushRequest,
+  PushRequestStatus,
+  PushToken,
+  PushTokenRolloutState,
 } from "@/types";
 import { base32ToBase64, base64ToBase32 } from "@/utils/crypto";
 import { buildPushRequestSignedData } from "@/utils/push-request";
