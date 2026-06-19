@@ -94,7 +94,6 @@ function isNotificationPermissionPending(
 
 export function OnboardingSequence() {
   const [stepIndex, setStepIndex] = useState(0);
-  const [crashReportsEnabled, setLocalCrashReportsEnabled] = useState(false);
   const [isCheckingPermission, setIsCheckingPermission] = useState(false);
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
   const { t } = useLingui();
@@ -156,18 +155,6 @@ export function OnboardingSequence() {
     stepIndex === 1 &&
     isNotificationPermissionPending(notificationPermissionStatus);
   const slideDistance = width + PANEL_GAP;
-  const panelWidthStyle = useMemo(() => ({ width }), [width]);
-  const progressTrackStyle = useMemo(
-    () => ({ backgroundColor: borderColor }),
-    [borderColor],
-  );
-  const trackWidthStyle = useMemo(
-    () => ({
-      columnGap: PANEL_GAP,
-      width: width * STEP_COUNT + PANEL_GAP * (STEP_COUNT - 1),
-    }),
-    [width],
-  );
 
   const goToStep = useCallback(
     (nextStepIndex: number, easing: EasingFunction = BUTTON_SLIDE_EASING) => {
@@ -304,39 +291,37 @@ export function OnboardingSequence() {
     goToStep(stepIndex + 1);
   }, [goToStep, stepIndex]);
 
-  const finishOnboarding = useCallback(
-    (enableCrashReports: boolean) => {
-      playHaptic((presets) => presets.System.notificationSuccess());
-      setCrashReportsEnabled(enableCrashReports);
-      completeOnboarding();
-    },
-    [completeOnboarding, setCrashReportsEnabled],
-  );
-
   const handleOptInCrashReports = useCallback(() => {
     playHaptic((presets) => presets.System.notificationSuccess());
-    setLocalCrashReportsEnabled(true);
-    finishOnboarding(true);
-  }, [finishOnboarding]);
+    setCrashReportsEnabled(true);
+    completeOnboarding();
+  }, [completeOnboarding, setCrashReportsEnabled]);
 
   const handleDeclineCrashReports = useCallback(() => {
     playHaptic((presets) => presets.System.impactLight());
-    setLocalCrashReportsEnabled(false);
-    finishOnboarding(false);
-  }, [finishOnboarding]);
+    setCrashReportsEnabled(false);
+    completeOnboarding();
+  }, [completeOnboarding, setCrashReportsEnabled]);
 
   const handleEnableNotifications = useCallback(async () => {
     setIsRequestingPermission(true);
     playHaptic((presets) => presets.System.impactHeavy());
 
-    const result = await requestNotificationPermission();
-    await getFcmToken();
+    try {
+      const result = await requestNotificationPermission();
+      await getFcmToken();
 
-    if (isNotificationPermissionEnabled(result)) {
-      playHaptic((presets) => presets.System.notificationSuccess());
-      setIsRequestingPermission(false);
-    } else {
+      if (isNotificationPermissionEnabled(result)) {
+        playHaptic((presets) => presets.System.notificationSuccess());
+      } else {
+        playHaptic((presets) => presets.System.notificationError());
+      }
+    } catch (error) {
       playHaptic((presets) => presets.System.notificationError());
+      if (__DEV__) {
+        console.warn("Could not enable notifications:", error);
+      }
+    } finally {
       setIsRequestingPermission(false);
     }
   }, [getFcmToken, requestNotificationPermission]);
@@ -355,71 +340,48 @@ export function OnboardingSequence() {
     goToStep(2);
   }, [goToStep]);
 
-  const renderStepActions = useCallback(
-    (contentStepIndex: number) => {
-      const contentAccentColor = stepAccentColors[contentStepIndex];
+  const renderStepActions = (contentStepIndex: number) => {
+    const contentAccentColor = stepAccentColors[contentStepIndex];
 
-      if (contentStepIndex === 1) {
-        return (
-          <NotificationStepActions
-            accentColor={contentAccentColor}
-            isCheckingPermission={isCheckingPermission}
-            isRequestingPermission={isRequestingPermission}
-            onContinue={handleContinue}
-            onEnableNotifications={handleEnableNotifications}
-            onOpenSettings={handleOpenNotificationSettings}
-            onSkip={handleSkipNotifications}
-            hasNotificationPermission={hasNotificationPermission}
-            permissionStatus={notificationPermissionStatus}
-            textColor={textColor}
-          />
-        );
-      }
-
-      if (contentStepIndex === 2) {
-        return (
-          <CrashReportsStepActions
-            accentColor={contentAccentColor}
-            borderColor={borderColor}
-            cardColor={cardColor}
-            crashReportsEnabled={crashReportsEnabled}
-            onDecline={handleDeclineCrashReports}
-            onOptIn={handleOptInCrashReports}
-            textColor={textColor}
-          />
-        );
-      }
-
+    if (contentStepIndex === 1) {
       return (
-        <View style={styles.buttonStack}>
-          <ActionButton
-            accentColor={contentAccentColor}
-            icon={{ ios: "arrow.right", android: "arrow_forward" }}
-            label={t`Get started`}
-            onPress={handleContinue}
-          />
-        </View>
+        <NotificationStepActions
+          accentColor={contentAccentColor}
+          isCheckingPermission={isCheckingPermission}
+          isRequestingPermission={isRequestingPermission}
+          onContinue={handleContinue}
+          onEnableNotifications={handleEnableNotifications}
+          onOpenSettings={handleOpenNotificationSettings}
+          onSkip={handleSkipNotifications}
+          hasNotificationPermission={hasNotificationPermission}
+          permissionStatus={notificationPermissionStatus}
+          textColor={textColor}
+        />
       );
-    },
-    [
-      borderColor,
-      cardColor,
-      crashReportsEnabled,
-      handleContinue,
-      handleDeclineCrashReports,
-      handleEnableNotifications,
-      handleOpenNotificationSettings,
-      handleOptInCrashReports,
-      handleSkipNotifications,
-      hasNotificationPermission,
-      isCheckingPermission,
-      isRequestingPermission,
-      notificationPermissionStatus,
-      stepAccentColors,
-      textColor,
-      t,
-    ],
-  );
+    }
+
+    if (contentStepIndex === 2) {
+      return (
+        <CrashReportsStepActions
+          accentColor={contentAccentColor}
+          onDecline={handleDeclineCrashReports}
+          onOptIn={handleOptInCrashReports}
+          textColor={textColor}
+        />
+      );
+    }
+
+    return (
+      <View style={styles.buttonStack}>
+        <ActionButton
+          accentColor={contentAccentColor}
+          icon={{ ios: "arrow.right", android: "arrow_forward" }}
+          label={t`Get started`}
+          onPress={handleContinue}
+        />
+      </View>
+    );
+  };
 
   return (
     <View
@@ -437,7 +399,7 @@ export function OnboardingSequence() {
         {steps.map((contentStep, contentStepIndex) => (
           <View
             key={contentStep.id}
-            style={[styles.progressSegment, progressTrackStyle]}
+            style={[styles.progressSegment, { backgroundColor: borderColor }]}
           >
             <ProgressSegmentFill
               index={contentStepIndex}
@@ -450,15 +412,21 @@ export function OnboardingSequence() {
       </View>
 
       <View style={styles.viewport} {...panResponder.panHandlers}>
-        <Animated.View style={[styles.track, trackWidthStyle, trackStyle]}>
+        <Animated.View
+          style={[
+            styles.track,
+            {
+              columnGap: PANEL_GAP,
+              width: width * STEP_COUNT + PANEL_GAP * (STEP_COUNT - 1),
+            },
+            trackStyle,
+          ]}
+        >
           {steps.map((contentStep, contentStepIndex) => {
             const contentAccentColor = stepAccentColors[contentStepIndex];
 
             return (
-              <View
-                key={contentStep.id}
-                style={[styles.panel, panelWidthStyle]}
-              >
+              <View key={contentStep.id} style={[styles.panel, { width }]}>
                 <View style={styles.panelContent}>
                   <View style={styles.panelBody}>
                     <View style={styles.heroWrap}>
@@ -600,9 +568,6 @@ function NotificationStepActions({
 
 type CrashReportsStepActionsProps = {
   accentColor: string;
-  borderColor: ColorValue;
-  cardColor: ColorValue;
-  crashReportsEnabled: boolean;
   onDecline: () => void;
   onOptIn: () => void;
   textColor: ColorValue;
@@ -610,9 +575,6 @@ type CrashReportsStepActionsProps = {
 
 function CrashReportsStepActions({
   accentColor,
-  borderColor,
-  cardColor,
-  crashReportsEnabled,
   onDecline,
   onOptIn,
   textColor,
@@ -621,42 +583,13 @@ function CrashReportsStepActions({
 
   return (
     <View style={styles.buttonStack}>
-      <View
-        style={[
-          styles.choiceCard,
-          {
-            backgroundColor: cardColor,
-            borderColor,
-          },
-        ]}
-      >
-        <View style={styles.choiceText}>
-          <ThemedText fontSize={Typography.fontSize16} fontWeight="semiBold">
-            {t`Anonymous reports`}
-          </ThemedText>
-          <ThemedText
-            themeColor="textSecondary"
-            fontSize={Typography.fontSize14}
-            style={styles.choiceDescription}
-          >
-            {t`Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names.`}
-          </ThemedText>
-        </View>
-        <View
-          style={[
-            styles.choiceIndicator,
-            crashReportsEnabled && { backgroundColor: accentColor },
-          ]}
-        >
-          <SymbolView
-            name={{ ios: "hand.raised.fill", android: "privacy_tip" }}
-            size={20}
-            tintColor={
-              crashReportsEnabled ? StaticColors.white : StaticColors.grey
-            }
-          />
-        </View>
-      </View>
+      <StatusCard
+        description={t`Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names.`}
+        icon={{ ios: "hand.raised.fill", android: "privacy_tip" }}
+        iconPlacement="side"
+        title={t`Anonymous reports`}
+        variant="neutral"
+      />
       <ActionButton
         accentColor={accentColor}
         icon={{ ios: "checkmark.shield.fill", android: "verified_user" }}
@@ -797,41 +730,21 @@ function VisualCardContent({ accentColor, index }: VisualCardContentProps) {
 }
 
 type ActionButtonProps = {
-  accentColor?: string;
-  borderColor?: ColorValue;
-  color?: ColorValue;
+  accentColor: string;
   icon: IconName;
   isLoading?: boolean;
   label: string;
   onPress: () => void;
-  variant?: "primary" | "secondary";
 };
 
 function ActionButton({
   accentColor,
-  borderColor,
-  color,
   icon,
   isLoading = false,
   label,
   onPress,
-  variant = "primary",
 }: ActionButtonProps) {
-  const theme = useTheme();
-  const isPrimary = variant === "primary";
-  const foregroundColor = isPrimary
-    ? StaticColors.white
-    : (color ?? theme.text);
-  const transparentColor = theme.transparent;
   const pressScale = useSharedValue(1);
-  const primaryButtonStyle = useMemo(
-    () => ({ backgroundColor: accentColor, borderColor: accentColor }),
-    [accentColor],
-  );
-  const secondaryButtonStyle = useMemo(
-    () => ({ backgroundColor: transparentColor, borderColor }),
-    [borderColor, transparentColor],
-  );
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pressScale.value }],
   }));
@@ -850,20 +763,20 @@ function ActionButton({
       onPressOut={handlePressOut}
       style={[
         styles.actionButton,
-        isPrimary ? primaryButtonStyle : secondaryButtonStyle,
+        { backgroundColor: accentColor, borderColor: accentColor },
         isLoading && styles.actionButtonLoading,
         animatedStyle,
       ]}
     >
       {isLoading ? (
-        <ActivityIndicator color={foregroundColor} />
+        <ActivityIndicator color={StaticColors.white} />
       ) : (
-        <SymbolView name={icon} size={18} tintColor={foregroundColor} />
+        <SymbolView name={icon} size={18} tintColor={StaticColors.white} />
       )}
       <ThemedText
         fontSize={Typography.fontSize16}
         fontWeight="semiBold"
-        style={[styles.actionLabel, { color: foregroundColor }]}
+        style={[styles.actionLabel, { color: StaticColors.white }]}
       >
         {label}
       </ThemedText>
@@ -920,33 +833,6 @@ const styles = StyleSheet.create({
   },
   buttonStackCompact: {
     gap: Spacing.sm,
-  },
-  choiceCard: {
-    alignItems: "center",
-    borderCurve: "continuous",
-    borderRadius: Radii.xl,
-    borderWidth: 1,
-    flexDirection: "row",
-    gap: Spacing.lg,
-    justifyContent: "space-between",
-    padding: Spacing.lg,
-  },
-  choiceDescription: {
-    lineHeight: Typography.fontSize14 * 1.4,
-  },
-  choiceIndicator: {
-    alignItems: "center",
-    borderColor: StaticColors.grey,
-    borderCurve: "continuous",
-    borderRadius: Radii.xl,
-    borderWidth: 1,
-    height: 42,
-    justifyContent: "center",
-    width: 42,
-  },
-  choiceText: {
-    flex: 1,
-    gap: Spacing.xs,
   },
   container: {
     alignItems: "center",
