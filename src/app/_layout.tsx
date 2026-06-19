@@ -6,10 +6,9 @@ import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
-import { useSettingsStore } from "@/store/settings-store";
-import { useTokenStore } from "@/store/token-store";
+import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
-import { isTokenEnrollmentUri } from "@/utils/token-utils";
+import { isTokenEnrollmentUri } from "@/utils/token";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
@@ -122,7 +121,7 @@ function RootLayoutContent() {
 
       handledUrlsRef.current.add(incomingUrl);
 
-      await handleTokenUri(incomingUrl, "deepLink");
+      await handleTokenUri(incomingUrl);
     };
 
     Linking.getInitialURL().then((initialUrl) => {

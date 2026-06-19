@@ -27,11 +27,11 @@ msgstr "Token hinzufügen"
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
-#: src/components/onboarding-sequence.tsx:647
+#: src/components/onboarding-sequence.tsx:635
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
-#: src/components/onboarding-sequence.tsx:143
+#: src/components/onboarding-sequence.tsx:134
 msgid "Approve sign-ins the moment they arrive"
 msgstr "Anmeldungen sofort freigeben"
 
@@ -51,7 +51,7 @@ msgstr "Kamera-Berechtigung erforderlich"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/components/onboarding-sequence.tsx:574
+#: src/components/onboarding-sequence.tsx:562
 msgid "Continue"
 msgstr "Weiter"
 
@@ -74,13 +74,9 @@ msgstr "Token löschen"
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/use-handle-token-uri.ts:80
+#: src/hooks/use-handle-token-uri.ts:61
 msgid "Dismiss"
 msgstr "Schließen"
-
-#: src/hooks/use-handle-token-uri.ts:72
-msgid "Download 2FAS"
-msgstr "2FAS herunterladen"
 
 #: src/app/index.tsx:136
 #: src/app/token/[tokenId].tsx:184
@@ -91,15 +87,15 @@ msgstr "Bearbeiten"
 msgid "Edit token"
 msgstr "Token bearbeiten"
 
-#: src/components/onboarding-sequence.tsx:567
+#: src/components/onboarding-sequence.tsx:555
 msgid "eduMFA can receive push approvals and alert you when a sign-in needs attention."
 msgstr "eduMFA kann Push-Freigaben empfangen und dich benachrichtigen, wenn eine Anmeldung deine Aufmerksamkeit benötigt."
 
-#: src/components/onboarding-sequence.tsx:585
+#: src/components/onboarding-sequence.tsx:573
 msgid "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
 msgstr "eduMFA kann keine Push-Freigaben empfangen, solange Benachrichtigungen deaktiviert sind. Aktiviere sie in den Systemeinstellungen und kehre dann hierher zurück."
 
-#: src/components/onboarding-sequence.tsx:606
+#: src/components/onboarding-sequence.tsx:594
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
@@ -119,8 +115,8 @@ msgstr "Registrierungsantwort fehlgeschlagen"
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
-#: src/hooks/use-handle-token-uri.ts:60
-#: src/hooks/use-handle-token-uri.ts:68
+#: src/hooks/use-handle-token-uri.ts:47
+#: src/hooks/use-handle-token-uri.ts:57
 #: src/hooks/use-handle-token-uri.ts:89
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
@@ -129,7 +125,7 @@ msgstr "Token konnte nicht hinzugefügt werden"
 msgid "Finalizing enrollment"
 msgstr "Registrierung wird abgeschlossen"
 
-#: src/components/onboarding-sequence.tsx:680
+#: src/components/onboarding-sequence.tsx:668
 msgid "Finish without reports"
 msgstr "Ohne Berichte abschließen"
 
@@ -137,7 +133,7 @@ msgstr "Ohne Berichte abschließen"
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
-#: src/components/onboarding-sequence.tsx:412
+#: src/components/onboarding-sequence.tsx:398
 msgid "Get started"
 msgstr "Loslegen"
 
@@ -145,11 +141,11 @@ msgstr "Loslegen"
 msgid "Grant permission"
 msgstr "Berechtigungen erteilen"
 
-#: src/components/onboarding-sequence.tsx:150
+#: src/components/onboarding-sequence.tsx:141
 msgid "Help improve reliability"
 msgstr "Hilf, die Zuverlässigkeit zu verbessern"
 
-#: src/components/onboarding-sequence.tsx:137
+#: src/components/onboarding-sequence.tsx:128
 msgid "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
 msgstr "Behalte deine Anmeldungen mit Push-Freigaben und einfach verwaltbaren Token direkt griffbereit."
 
@@ -175,7 +171,7 @@ msgstr "Zuletzt fehlgeschlagen"
 msgid "No interactions yet"
 msgstr "Noch keine Interaktionen"
 
-#: src/hooks/use-handle-token-uri.ts:45
+#: src/hooks/use-handle-token-uri.ts:32
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
@@ -187,11 +183,11 @@ msgstr "Keine Ergebnisse gefunden für "
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
-#: src/components/onboarding-sequence.tsx:595
+#: src/components/onboarding-sequence.tsx:583
 msgid "Not now"
 msgstr "Nicht jetzt"
 
-#: src/components/onboarding-sequence.tsx:142
+#: src/components/onboarding-sequence.tsx:133
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
@@ -199,25 +195,29 @@ msgstr "Benachrichtigungen"
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
-#: src/components/onboarding-sequence.tsx:568
+#: src/components/onboarding-sequence.tsx:556
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
-#: src/components/onboarding-sequence.tsx:144
+#: src/components/onboarding-sequence.tsx:135
 msgid "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention."
 msgstr "Benachrichtigungen sind wichtig für eduMFA. Sie ermöglichen der App, Anmeldefreigaben zu empfangen und dich zu informieren, wenn eine Push-Anfrage deine Aufmerksamkeit benötigt."
 
-#: src/components/onboarding-sequence.tsx:586
+#: src/components/onboarding-sequence.tsx:574
 msgid "Notifications are required"
 msgstr "Benachrichtigungen sind erforderlich"
 
-#: src/components/onboarding-sequence.tsx:592
+#: src/components/onboarding-sequence.tsx:580
 msgid "Open notification settings"
 msgstr "Benachrichtigungseinstellungen öffnen"
 
 #: src/components/token-add/qr-code-scanner.tsx:50
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
+
+#: src/hooks/use-handle-token-uri.ts:67
+msgid "Open with your Authenticator App"
+msgstr "Öffnen mit deiner Authenticator-App"
 
 #: src/app/token/add.tsx:81
 msgid "OR"
@@ -231,7 +231,7 @@ msgstr "Neues Push-Token koppeln"
 msgid "Pending"
 msgstr "Ausstehend"
 
-#: src/components/onboarding-sequence.tsx:149
+#: src/components/onboarding-sequence.tsx:140
 msgid "Privacy choice"
 msgstr "Datenschutz-Auswahl"
 
@@ -284,7 +284,7 @@ msgstr "Speichern"
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
-#: src/hooks/use-handle-token-uri.ts:77
+#: src/hooks/use-handle-token-uri.ts:76
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
@@ -305,11 +305,11 @@ msgstr "Servernachricht"
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
-#: src/components/onboarding-sequence.tsx:654
+#: src/components/onboarding-sequence.tsx:642
 msgid "Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names."
 msgstr "Teile anonymisierte Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Keine Token-Geheimnisse, Passwörter oder Namen von Institutionen."
 
-#: src/components/onboarding-sequence.tsx:675
+#: src/components/onboarding-sequence.tsx:663
 msgid "Share anonymous reports"
 msgstr "Anonyme Berichte teilen"
 
@@ -321,17 +321,13 @@ msgstr "Status"
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 msgstr "Das Gerät konnte das für diesen Token erforderliche RSA-Schlüsselpaar nicht erstellen. Versuche den Rollout erneut und lasse die App währenddessen geöffnet."
 
-#: src/hooks/use-handle-token-uri.ts:61
+#: src/hooks/use-handle-token-uri.ts:48
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
-#: src/components/token-detail/token-detail-utils.ts:63
-#~ msgid "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
-#~ msgstr "Der öffentliche Schlüssel konnte nicht an den Registrierungsserver gesendet werden. Prüfe die Verbindung und die Token-Callback-URL, bevor du es erneut versuchst."
-
-#: src/hooks/use-handle-token-uri.ts:69
-msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
-msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
+#: src/hooks/use-handle-token-uri.ts:58
+msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
+msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App."
 
 #: src/components/token-detail/token-detail-utils.ts:68
 msgid "The server response could not be parsed or did not include the expected token material."
@@ -377,11 +373,11 @@ msgstr "QR-Code hochladen"
 msgid "We need your permission to show the camera"
 msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
 
-#: src/components/onboarding-sequence.tsx:135
+#: src/components/onboarding-sequence.tsx:126
 msgid "Welcome"
 msgstr "Willkommen"
 
-#: src/components/onboarding-sequence.tsx:136
+#: src/components/onboarding-sequence.tsx:127
 msgid "Welcome to eduMFA"
 msgstr "Willkommen bei eduMFA"
 
@@ -389,10 +385,10 @@ msgstr "Willkommen bei eduMFA"
 msgid "You can enable camera permissions in your device settings"
 msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
 
-#: src/components/onboarding-sequence.tsx:151
+#: src/components/onboarding-sequence.tsx:142
 msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 msgstr "Du kannst anonymisierte Absturz- und Fehlerberichte aktivieren. Das ist standardmäßig ausgeschaltet, und die App funktioniert in beiden Fällen gleich."
 
-#: src/hooks/use-handle-token-uri.ts:46
+#: src/hooks/use-handle-token-uri.ts:33
 msgid "Your image did not contain a QR code."
 msgstr "Dein Bild enthielt keinen QR-Code."

@@ -2,7 +2,7 @@ import { SIGN_ALGORITHM } from "@/constants/auth";
 import {
   ChallengePollingNetworkError,
   ChallengePollingServerError,
-} from "@/errors/challenge-polling-errors";
+} from "@/errors/challenge-polling";
 import {
   PushRequest,
   PushRequestStatus,
@@ -10,7 +10,7 @@ import {
   PushTokenRolloutState,
 } from "@/types";
 import { base32ToBase64, base64ToBase32 } from "@/utils/crypto";
-import { buildPushRequestSignedData } from "@/utils/push-request-utils";
+import { buildPushRequestSignedData } from "@/utils/push-request";
 import { signMessage, verifyMessage } from "@/utils/rsa";
 
 export interface ChallengePollingResult {

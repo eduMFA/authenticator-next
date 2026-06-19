@@ -1,7 +1,11 @@
-import { useNotificationStore } from "@/store/notification-store";
-import { usePushRequestStore } from "@/store/push-request-store";
+import { useNotificationStore } from "@/stores/notification";
+import { usePushRequestStore } from "@/stores/push-request";
 import type { PushRequest } from "@/types";
 import { base32ToBase64 } from "@/utils/crypto";
+import type {
+  NotificationAction,
+  NotificationResponseData,
+} from "@/utils/notification";
 import {
   addBackgroundMessageHandler,
   addMessageListener,
@@ -11,11 +15,7 @@ import {
   isNotificationPermissionEnabled,
   parsePushRequestFromNotificationData,
 } from "@/utils/notification";
-import type {
-  NotificationAction,
-  NotificationResponseData,
-} from "@/utils/notification";
-import { buildPushRequestSignedData } from "@/utils/push-request-utils";
+import { buildPushRequestSignedData } from "@/utils/push-request";
 import { verifyMessage } from "@/utils/rsa";
 import * as Notifications from "expo-notifications";
 import { useCallback, useEffect } from "react";

@@ -1,10 +1,10 @@
 import {
   ChallengePollingNetworkError,
   ChallengePollingServerError,
-} from "@/errors/challenge-polling-errors";
-import { pollAllChallenges } from "@/services/challenge-polling-service";
-import { usePushRequestStore } from "@/store/push-request-store";
-import { useTokenStore } from "@/store/token-store";
+} from "@/errors/challenge-polling";
+import { pollAllChallenges } from "@/services/challenge-polling";
+import { usePushRequestStore } from "@/stores/push-request";
+import { useTokenStore } from "@/stores/token";
 import { PushTokenRefreshErrorType, PushTokenRefreshStatus } from "@/types";
 import { useCallback, useRef, useState } from "react";
 
