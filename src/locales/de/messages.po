@@ -62,13 +62,9 @@ msgstr "Token löschen"
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/use-handle-token-uri.ts:80
+#: src/hooks/use-handle-token-uri.ts:69
 msgid "Dismiss"
 msgstr "Schließen"
-
-#: src/hooks/use-handle-token-uri.ts:72
-msgid "Download 2FAS"
-msgstr "2FAS herunterladen"
 
 #: src/app/index.tsx:136
 #: src/app/token/[tokenId].tsx:184
@@ -95,9 +91,9 @@ msgstr "Registrierungsantwort fehlgeschlagen"
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
-#: src/hooks/use-handle-token-uri.ts:60
-#: src/hooks/use-handle-token-uri.ts:68
-#: src/hooks/use-handle-token-uri.ts:89
+#: src/hooks/use-handle-token-uri.ts:47
+#: src/hooks/use-handle-token-uri.ts:78
+#: src/hooks/use-handle-token-uri.ts:88
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
@@ -135,7 +131,7 @@ msgstr "Zuletzt fehlgeschlagen"
 msgid "No interactions yet"
 msgstr "Noch keine Interaktionen"
 
-#: src/hooks/use-handle-token-uri.ts:45
+#: src/hooks/use-handle-token-uri.ts:32
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
@@ -154,6 +150,10 @@ msgstr "Benachrichtigungen sind deaktiviert"
 #: src/components/token-add/qr-code-scanner.tsx:50
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
+
+#: src/hooks/use-handle-token-uri.ts:57
+msgid "Open with your Authenticator App"
+msgstr "Öffnen mit deiner Authenticator-App"
 
 #: src/app/token/add.tsx:81
 msgid "OR"
@@ -216,7 +216,7 @@ msgstr "Speichern"
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
-#: src/hooks/use-handle-token-uri.ts:77
+#: src/hooks/use-handle-token-uri.ts:64
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
@@ -245,7 +245,7 @@ msgstr "Status"
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 msgstr "Das Gerät konnte das für diesen Token erforderliche RSA-Schlüsselpaar nicht erstellen. Versuche den Rollout erneut und lasse die App währenddessen geöffnet."
 
-#: src/hooks/use-handle-token-uri.ts:61
+#: src/hooks/use-handle-token-uri.ts:48
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
@@ -253,15 +253,15 @@ msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 #~ msgid "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
 #~ msgstr "Der öffentliche Schlüssel konnte nicht an den Registrierungsserver gesendet werden. Prüfe die Verbindung und die Token-Callback-URL, bevor du es erneut versuchst."
 
-#: src/hooks/use-handle-token-uri.ts:69
-msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
-msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App. Wir empfehlen 2FAS."
+#: src/hooks/use-handle-token-uri.ts:79
+msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
+msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App."
 
 #: src/components/token-detail/token-detail-utils.ts:68
 msgid "The server response could not be parsed or did not include the expected token material."
 msgstr "Die Serverantwort konnte nicht verarbeitet werden oder enthielt nicht das erwartete Tokenmaterial."
 
-#: src/hooks/use-handle-token-uri.ts:90
+#: src/hooks/use-handle-token-uri.ts:89
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
@@ -305,6 +305,6 @@ msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
 msgid "You can enable camera permissions in your device settings"
 msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
 
-#: src/hooks/use-handle-token-uri.ts:46
+#: src/hooks/use-handle-token-uri.ts:33
 msgid "Your image did not contain a QR code."
 msgstr "Dein Bild enthielt keinen QR-Code."

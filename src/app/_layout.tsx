@@ -99,7 +99,7 @@ function RootLayoutContent() {
 
       handledUrlsRef.current.add(incomingUrl);
 
-      await handleTokenUri(incomingUrl, "deepLink");
+      await handleTokenUri(incomingUrl);
     };
 
     Linking.getInitialURL().then((initialUrl) => {

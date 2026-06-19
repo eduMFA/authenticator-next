@@ -6,21 +6,8 @@ import {
 import { useToken } from "@/hooks/use-token";
 import { useLingui } from "@lingui/react/macro";
 import { useCallback } from "react";
-import { Alert, Linking, Platform } from "react-native";
+import { Alert, Linking, Platform, type AlertButton } from "react-native";
 import { Presets } from "react-native-pulsar";
-
-type TokenUriSource = "qr" | "deepLink";
-
-const openTwoFas = () => {
-  const url = Platform.select({
-    ios: "itms-apps://apps.apple.com/app/id1217793794",
-    android: "market://details?id=com.twofas.authenticator",
-  });
-
-  if (url) {
-    Linking.openURL(url);
-  }
-};
 
 const searchAuthenticatorApps = () => {
   const url = Platform.select({
@@ -38,7 +25,7 @@ export const useHandleTokenUri = () => {
   const { t } = useLingui();
 
   return useCallback(
-    async (uri: string | null, source: TokenUriSource = "qr") => {
+    async (uri: string | null) => {
       if (uri === null) {
         Presets.System.notificationError();
         Alert.alert(
@@ -64,21 +51,33 @@ export const useHandleTokenUri = () => {
         }
 
         if (error instanceof OtpProtocolError) {
-          Alert.alert(
-            t`Failed to add token`,
-            t`The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS.`,
-            [
-              {
-                text: t`Download 2FAS`,
-                onPress: openTwoFas,
+          const hasAuthenticatorApp = await Linking.canOpenURL(uri);
+          const actionButton: AlertButton = hasAuthenticatorApp
+            ? {
+                text: t`Open with your Authenticator App`,
+                onPress: () => {
+                  Linking.openURL(uri);
+                },
                 isPreferred: true,
-              },
-              {
+              }
+            : {
                 text: t`Search Authenticator Apps`,
                 onPress: searchAuthenticatorApps,
-              },
-              { text: t`Dismiss`, style: "cancel" },
-            ],
+                isPreferred: true,
+              };
+          const cancelButton: AlertButton = {
+            text: t`Dismiss`,
+            style: "cancel",
+          };
+          const buttons =
+            Platform.OS === "android"
+              ? [cancelButton, actionButton]
+              : [actionButton, cancelButton];
+
+          Alert.alert(
+            t`Failed to add token`,
+            t`The QR code isn't supported by this app. Please use a general Authenticator app.`,
+            buttons,
             { cancelable: true },
           );
           return false;

@@ -62,13 +62,9 @@ msgstr "Delete token"
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/use-handle-token-uri.ts:80
+#: src/hooks/use-handle-token-uri.ts:69
 msgid "Dismiss"
 msgstr "Dismiss"
-
-#: src/hooks/use-handle-token-uri.ts:72
-msgid "Download 2FAS"
-msgstr "Download 2FAS"
 
 #: src/app/index.tsx:136
 #: src/app/token/[tokenId].tsx:184
@@ -95,9 +91,9 @@ msgstr "Enrollment response failed"
 msgid "Enter a label for this token."
 msgstr "Enter a label for this token."
 
-#: src/hooks/use-handle-token-uri.ts:60
-#: src/hooks/use-handle-token-uri.ts:68
-#: src/hooks/use-handle-token-uri.ts:89
+#: src/hooks/use-handle-token-uri.ts:47
+#: src/hooks/use-handle-token-uri.ts:78
+#: src/hooks/use-handle-token-uri.ts:88
 msgid "Failed to add token"
 msgstr "Failed to add token"
 
@@ -135,7 +131,7 @@ msgstr "Last failed"
 msgid "No interactions yet"
 msgstr "No interactions yet"
 
-#: src/hooks/use-handle-token-uri.ts:45
+#: src/hooks/use-handle-token-uri.ts:32
 msgid "No QR code found"
 msgstr "No QR code found"
 
@@ -154,6 +150,10 @@ msgstr "Notifications are disabled"
 #: src/components/token-add/qr-code-scanner.tsx:50
 msgid "Open Settings"
 msgstr "Open Settings"
+
+#: src/hooks/use-handle-token-uri.ts:57
+msgid "Open with your Authenticator App"
+msgstr "Open with your Authenticator App"
 
 #: src/app/token/add.tsx:81
 msgid "OR"
@@ -216,7 +216,7 @@ msgstr "Save"
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scan the QR code to pair a new push token."
 
-#: src/hooks/use-handle-token-uri.ts:77
+#: src/hooks/use-handle-token-uri.ts:64
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
@@ -245,7 +245,7 @@ msgstr "Status"
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 msgstr "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 
-#: src/hooks/use-handle-token-uri.ts:61
+#: src/hooks/use-handle-token-uri.ts:48
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "The provided QR code isn't a valid eduMFA token."
 
@@ -253,15 +253,15 @@ msgstr "The provided QR code isn't a valid eduMFA token."
 #~ msgid "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
 #~ msgstr "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
 
-#: src/hooks/use-handle-token-uri.ts:69
-msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
-msgstr "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
+#: src/hooks/use-handle-token-uri.ts:79
+msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
+msgstr "The QR code isn't supported by this app. Please use a general Authenticator app."
 
 #: src/components/token-detail/token-detail-utils.ts:68
 msgid "The server response could not be parsed or did not include the expected token material."
 msgstr "The server response could not be parsed or did not include the expected token material."
 
-#: src/hooks/use-handle-token-uri.ts:90
+#: src/hooks/use-handle-token-uri.ts:89
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 
@@ -305,6 +305,6 @@ msgstr "We need your permission to show the camera"
 msgid "You can enable camera permissions in your device settings"
 msgstr "You can enable camera permissions in your device settings"
 
-#: src/hooks/use-handle-token-uri.ts:46
+#: src/hooks/use-handle-token-uri.ts:33
 msgid "Your image did not contain a QR code."
 msgstr "Your image did not contain a QR code."
