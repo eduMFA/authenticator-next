@@ -4,7 +4,8 @@ import { Typography, useInterFonts } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useNotificationStatus } from "@/hooks/use-notifications";
-import { useTheme } from "@/hooks/use-theme";
+import { useResolvedThemeScheme, useTheme } from "@/hooks/use-theme";
+import { useSettingsStore } from "@/stores/settings";
 import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
 import { isTokenEnrollmentUri } from "@/utils/token";
@@ -15,22 +16,24 @@ import { isLiquidGlassAvailable } from "expo-glass-effect";
 import * as Linking from "expo-linking";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { useEffect, useRef } from "react";
-import {
-  AppState,
-  AppStateStatus,
-  Platform,
-  useColorScheme,
-} from "react-native";
+import { Appearance, AppState, AppStateStatus, Platform } from "react-native";
 
 activateCurrentLocale();
 
 export default function RootLayout() {
   const [fontsLoaded] = useInterFonts();
-  const colorScheme = useColorScheme();
+  const colorScheme = useResolvedThemeScheme();
+  const themePreference = useSettingsStore((state) => state.themePreference);
 
   useEffect(() => {
     activateCurrentLocale();
   }, []);
+
+  useEffect(() => {
+    Appearance.setColorScheme(
+      themePreference === "auto" ? "unspecified" : themePreference,
+    );
+  }, [themePreference]);
 
   if (!fontsLoaded) {
     return null;
@@ -46,7 +49,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutContent() {
-  const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
+  const colorScheme = useResolvedThemeScheme();
   const appState = useRef<AppStateStatus>(AppState.currentState);
   const handledUrlsRef = useRef<Set<string>>(new Set());
   const { checkPermissions, initialize: initializeNotifications } =
@@ -167,6 +170,20 @@ function RootLayoutContent() {
                 ? "transparent"
                 : tabBarBackgroundColor,
             },
+          }}
+        />
+        <Stack.Screen
+          name="settings"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "Settings",
+          }}
+        />
+        <Stack.Screen
+          name="settings/about"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "About",
           }}
         />
       </Stack>
