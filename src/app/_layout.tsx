@@ -6,6 +6,7 @@ import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
+import { useSettingsStore } from "@/stores/settings";
 import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
 import { isTokenEnrollmentUri } from "@/utils/token";
