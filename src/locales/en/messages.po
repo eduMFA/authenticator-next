@@ -249,10 +249,6 @@ msgstr "The device could not create the RSA key pair required for this token. Re
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "The provided QR code isn't a valid eduMFA token."
 
-#: src/components/token-detail/token-detail-utils.ts:63
-#~ msgid "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
-#~ msgstr "The public key could not be sent to the enrollment server. Check connectivity and the token callback URL before retrying."
-
 #: src/hooks/use-handle-token-uri.ts:79
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
 msgstr "The QR code isn't supported by this app. Please use a general Authenticator app."
