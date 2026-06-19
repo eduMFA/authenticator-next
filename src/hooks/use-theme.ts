@@ -1,9 +1,18 @@
 import { Colors } from "@/constants/theme";
+import { useSettingsStore } from "@/stores/settings";
 import { useColorScheme } from "react-native";
 
-export function useTheme() {
+export function useResolvedThemeScheme() {
   const scheme = useColorScheme();
-  const theme = scheme === "dark" ? "dark" : "light";
+  const themePreference = useSettingsStore((state) => state.themePreference);
 
-  return Colors[theme];
+  if (themePreference !== "auto") {
+    return themePreference;
+  }
+
+  return scheme === "dark" ? "dark" : "light";
+}
+
+export function useTheme() {
+  return Colors[useResolvedThemeScheme()];
 }

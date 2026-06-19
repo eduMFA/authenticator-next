@@ -12,6 +12,7 @@ import { useToken } from "@/hooks/use-token";
 import { PushToken, PushTokenRolloutState } from "@/types";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
+import SettingsSymbol from "@expo/material-symbols/settings.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -170,9 +171,33 @@ export default function Tokens() {
       }}
     />
   );
+  const navigateToSettings = () => {
+    router.navigate("/settings");
+  };
 
   const header = (
     <>
+      <Stack.Screen
+        options={{
+          headerRight:
+            Platform.OS === "android"
+              ? () => (
+                  <Pressable
+                    accessibilityLabel={t`Settings`}
+                    accessibilityRole="button"
+                    onPress={navigateToSettings}
+                    style={styles.headerIconButton}
+                  >
+                    <SymbolView
+                      name={{ android: "settings", ios: "gearshape" }}
+                      size={26}
+                      tintColor={tabBarTintColor}
+                    />
+                  </Pressable>
+                )
+              : undefined,
+        }}
+      />
       <Stack.Screen.Title large style={{ color: tabBarTintColor }}>
         Tokens
       </Stack.Screen.Title>
@@ -193,6 +218,13 @@ export default function Tokens() {
 
       <Stack.Header style={stackHeaderStyle} />
       <Stack.Toolbar placement="right">
+        <Stack.Toolbar.Button
+          icon={Icon.select({
+            ios: "gearshape",
+            android: SettingsSymbol,
+          })}
+          onPress={navigateToSettings}
+        />
         {__DEV__ && (
           <Stack.Toolbar.Menu
             icon={Icon.select({
@@ -365,6 +397,10 @@ export default function Tokens() {
 export const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: Spacing.lg,
+  },
+  headerIconButton: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
   },
   noResultsContainer: {
     padding: Spacing.xl,

@@ -13,17 +13,24 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/components/settings/about-settings-screen.android.tsx:30
+#: src/components/settings/about-settings-screen.ios.tsx:21
+#: src/components/settings/settings-screen.android.tsx:115
+#: src/components/settings/settings-screen.ios.tsx:68
+msgid "About"
+msgstr "About"
+
 #: src/components/push-request-popup.tsx:225
 #: src/utils/notification.ts:63
 msgid "Accept"
 msgstr "Accept"
 
-#: src/app/index.tsx:293
-#: src/app/index.tsx:295
+#: src/app/index.tsx:303
+#: src/app/index.tsx:305
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:264
+#: src/app/index.tsx:274
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
@@ -35,6 +42,12 @@ msgstr "Are you sure you want to delete this token?"
 msgid "Audit log"
 msgstr "Audit log"
 
+#: src/components/settings/settings-screen.android.tsx:46
+#: src/components/settings/settings-screen.android.tsx:52
+#: src/components/settings/settings-screen.ios.tsx:53
+msgid "Auto"
+msgstr "Auto"
+
 #: src/components/token-add/qr-code-scanner.tsx:59
 msgid "Camera permission required"
 msgstr "Camera permission required"
@@ -43,12 +56,22 @@ msgstr "Camera permission required"
 msgid "Cancel"
 msgstr "Cancel"
 
+#: src/components/settings/about-settings-screen.android.tsx:93
+#: src/components/settings/about-settings-screen.ios.tsx:65
+msgid "Crash Reports"
+msgstr "Crash Reports"
+
+#: src/components/settings/settings-screen.android.tsx:48
+#: src/components/settings/settings-screen.ios.tsx:55
+msgid "Dark"
+msgstr "Dark"
+
 #: src/components/push-request-popup.tsx:219
 #: src/utils/notification.ts:71
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:154
+#: src/app/index.tsx:155
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -70,7 +93,7 @@ msgstr "Dismiss"
 msgid "Download 2FAS"
 msgstr "Download 2FAS"
 
-#: src/app/index.tsx:136
+#: src/app/index.tsx:137
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Edit"
@@ -79,7 +102,7 @@ msgstr "Edit"
 msgid "Edit token"
 msgstr "Edit token"
 
-#: src/app/index.tsx:344
+#: src/app/index.tsx:354
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Enable notifications to receive push approval requests on this device."
 
@@ -105,13 +128,27 @@ msgstr "Failed to add token"
 msgid "Finalizing enrollment"
 msgstr "Finalizing enrollment"
 
+#: src/components/settings/settings-screen.ios.tsx:39
+msgid "General"
+msgstr "General"
+
 #: src/components/token-detail/token-detail-utils.ts:86
 msgid "Generating keys"
 msgstr "Generating keys"
 
+#: src/components/settings/about-settings-screen.android.tsx:75
+#: src/components/settings/about-settings-screen.ios.tsx:47
+msgid "GitHub"
+msgstr "GitHub"
+
 #: src/components/token-add/qr-code-scanner.tsx:49
 msgid "Grant permission"
 msgstr "Grant permission"
+
+#: src/components/settings/settings-screen.android.tsx:67
+#: src/components/settings/settings-screen.ios.tsx:42
+msgid "Haptics"
+msgstr "Haptics"
 
 #: src/components/token-detail/token-detail-utils.ts:59
 #: src/components/token-detail/token-detail-utils.ts:88
@@ -127,9 +164,23 @@ msgstr "Label"
 msgid "Label required"
 msgstr "Label required"
 
+#: src/components/settings/settings-screen.android.tsx:100
+#: src/components/settings/settings-screen.ios.tsx:58
+msgid "Language"
+msgstr "Language"
+
 #: src/components/token-detail/token-overview-content.tsx:157
 msgid "Last failed"
 msgstr "Last failed"
+
+#: src/components/settings/settings-screen.android.tsx:47
+#: src/components/settings/settings-screen.ios.tsx:54
+msgid "Light"
+msgstr "Light"
+
+#: src/components/settings/settings-screen.android.tsx:103
+msgid "Managed by your device settings"
+msgstr "Managed by your device settings"
 
 #: src/components/token-detail/token-overview-content.tsx:179
 msgid "No interactions yet"
@@ -139,15 +190,15 @@ msgstr "No interactions yet"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:332
+#: src/app/index.tsx:342
 msgid "No results found for "
 msgstr "No results found for "
 
-#: src/app/index.tsx:256
+#: src/app/index.tsx:266
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
-#: src/app/index.tsx:343
+#: src/app/index.tsx:353
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
@@ -167,6 +218,11 @@ msgstr "Pair new Push Token"
 msgid "Pending"
 msgstr "Pending"
 
+#: src/components/settings/about-settings-screen.android.tsx:63
+#: src/components/settings/about-settings-screen.ios.tsx:37
+msgid "Privacy Policy"
+msgstr "Privacy Policy"
+
 #: src/components/token-add/upload-qr-code-button.tsx:64
 msgid "QR code scanner"
 msgstr "QR code scanner"
@@ -176,7 +232,7 @@ msgstr "QR code scanner"
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:353
+#: src/app/index.tsx:363
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
@@ -192,7 +248,7 @@ msgstr "Registration failed"
 msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
-#: src/app/index.tsx:146
+#: src/app/index.tsx:147
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
@@ -220,7 +276,7 @@ msgstr "Scan the QR code to pair a new push token."
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:185
+#: src/app/index.tsx:186
 msgid "Search tokens"
 msgstr "Search tokens"
 
@@ -236,6 +292,11 @@ msgstr "Server message"
 #: src/components/token-detail/token-detail-utils.ts:64
 msgid "Server registration failed"
 msgstr "Server registration failed"
+
+#: src/components/settings/settings-screen.android.tsx:61
+#: src/components/settings/settings-screen.ios.tsx:36
+msgid "Settings"
+msgstr "Settings"
 
 #: src/components/token-detail/token-overview-content.tsx:168
 msgid "Status"
@@ -264,6 +325,12 @@ msgstr "The server response could not be parsed or did not include the expected 
 #: src/hooks/use-handle-token-uri.ts:90
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
+
+#: src/components/settings/settings-screen.android.tsx:85
+#: src/components/settings/settings-screen.android.tsx:132
+#: src/components/settings/settings-screen.ios.tsx:47
+msgid "Theme"
+msgstr "Theme"
 
 #: src/components/token-detail/token-detail-utils.ts:30
 msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
@@ -297,9 +364,24 @@ msgstr "Update the display name for this token."
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
 
+#: src/components/settings/about-settings-screen.android.tsx:39
+#: src/components/settings/about-settings-screen.ios.tsx:25
+msgid "Version {version}"
+msgstr "Version {version}"
+
 #: src/components/token-add/qr-code-scanner.tsx:43
 msgid "We need your permission to show the camera"
 msgstr "We need your permission to show the camera"
+
+#: src/components/settings/about-settings-screen.android.tsx:87
+#: src/components/settings/about-settings-screen.ios.tsx:54
+msgid "Website"
+msgstr "Website"
+
+#: src/components/settings/about-settings-screen.android.tsx:51
+#: src/components/settings/about-settings-screen.ios.tsx:30
+msgid "Write a Review"
+msgstr "Write a Review"
 
 #: src/components/token-add/qr-code-scanner.tsx:44
 msgid "You can enable camera permissions in your device settings"
