@@ -62,7 +62,7 @@ msgstr "Token löschen"
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/use-handle-token-uri.ts:69
+#: src/hooks/use-handle-token-uri.ts:61
 msgid "Dismiss"
 msgstr "Schließen"
 
@@ -92,8 +92,8 @@ msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
 #: src/hooks/use-handle-token-uri.ts:47
-#: src/hooks/use-handle-token-uri.ts:78
-#: src/hooks/use-handle-token-uri.ts:88
+#: src/hooks/use-handle-token-uri.ts:57
+#: src/hooks/use-handle-token-uri.ts:89
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
@@ -151,7 +151,7 @@ msgstr "Benachrichtigungen sind deaktiviert"
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
-#: src/hooks/use-handle-token-uri.ts:57
+#: src/hooks/use-handle-token-uri.ts:67
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
@@ -216,7 +216,7 @@ msgstr "Speichern"
 msgid "Scan the QR code to pair a new push token."
 msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
-#: src/hooks/use-handle-token-uri.ts:64
+#: src/hooks/use-handle-token-uri.ts:76
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
@@ -249,7 +249,7 @@ msgstr "Das Gerät konnte das für diesen Token erforderliche RSA-Schlüsselpaar
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
-#: src/hooks/use-handle-token-uri.ts:79
+#: src/hooks/use-handle-token-uri.ts:58
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
 msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App."
 
@@ -257,7 +257,7 @@ msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie 
 msgid "The server response could not be parsed or did not include the expected token material."
 msgstr "Die Serverantwort konnte nicht verarbeitet werden oder enthielt nicht das erwartete Tokenmaterial."
 
-#: src/hooks/use-handle-token-uri.ts:89
+#: src/hooks/use-handle-token-uri.ts:90
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 

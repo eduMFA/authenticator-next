@@ -6,7 +6,7 @@ import {
 import { useToken } from "@/hooks/use-token";
 import { useLingui } from "@lingui/react/macro";
 import { useCallback } from "react";
-import { Alert, Linking, Platform, type AlertButton } from "react-native";
+import { Alert, Linking, Platform } from "react-native";
 import { Presets } from "react-native-pulsar";
 
 const searchAuthenticatorApps = () => {
@@ -52,32 +52,33 @@ export const useHandleTokenUri = () => {
 
         if (error instanceof OtpProtocolError) {
           const hasAuthenticatorApp = await Linking.canOpenURL(uri);
-          const actionButton: AlertButton = hasAuthenticatorApp
-            ? {
-                text: t`Open with your Authenticator App`,
-                onPress: () => {
-                  Linking.openURL(uri);
-                },
-                isPreferred: true,
-              }
-            : {
-                text: t`Search Authenticator Apps`,
-                onPress: searchAuthenticatorApps,
-                isPreferred: true,
-              };
-          const cancelButton: AlertButton = {
-            text: t`Dismiss`,
-            style: "cancel",
-          };
-          const buttons =
-            Platform.OS === "android"
-              ? [cancelButton, actionButton]
-              : [actionButton, cancelButton];
 
           Alert.alert(
             t`Failed to add token`,
             t`The QR code isn't supported by this app. Please use a general Authenticator app.`,
-            buttons,
+            [
+              {
+                text: t`Dismiss`,
+                style: "cancel",
+              },
+              ...(hasAuthenticatorApp
+                ? [
+                    {
+                      text: t`Open with your Authenticator App`,
+                      onPress: () => {
+                        Linking.openURL(uri);
+                      },
+                      isPreferred: true,
+                    },
+                  ]
+                : [
+                    {
+                      text: t`Search Authenticator Apps`,
+                      onPress: searchAuthenticatorApps,
+                      isPreferred: true,
+                    },
+                  ]),
+            ],
             { cancelable: true },
           );
           return false;
