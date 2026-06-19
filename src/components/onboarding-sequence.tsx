@@ -3,7 +3,7 @@ import { ThemedText } from "@/components/themed-text";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
-import { useSettingsStore } from "@/store/settings";
+import { useSettingsStore } from "@/stores/settings";
 import { isNotificationPermissionEnabled } from "@/utils/notification";
 import { useLingui } from "@lingui/react/macro";
 import { Image } from "expo-image";
