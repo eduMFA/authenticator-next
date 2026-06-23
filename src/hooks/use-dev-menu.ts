@@ -1,7 +1,7 @@
 import { useToken } from "@/hooks/use-token";
 import { usePushRequestStore } from "@/stores/push-request";
 import { useSettingsStore } from "@/stores/settings";
-import { PushTokenRolloutState } from "@/types";
+import { PushTokenRolloutState } from "@/types/token";
 
 export function useDevMenu() {
   const { tokens, updateToken, rolloutToken } = useToken();

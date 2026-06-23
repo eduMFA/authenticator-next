@@ -1,4 +1,4 @@
-import { EditableTokenFields } from "./token-detail-utils";
+import type { EditableTokenFields } from "@/types/token-detail";
 
 export declare function TokenEditForm({
   fields,

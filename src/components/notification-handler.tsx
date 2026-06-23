@@ -5,7 +5,8 @@ import {
   handlePushAuthRequest,
 } from "@/services/push-auth";
 import { usePushRequestStore } from "@/stores/push-request";
-import { PushRequest, PushRequestStatus } from "@/types";
+import type { PushRequest } from "@/types/push-request";
+import { PushRequestStatus } from "@/types/push-request";
 import { useCallback } from "react";
 import { PushRequestPopup } from "./push-request-popup";
 

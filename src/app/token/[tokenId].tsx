@@ -1,5 +1,4 @@
 import {
-  EditableTokenFields,
   getEditableTokenFields,
   getParamValue,
 } from "@/components/token-detail/token-detail-utils";
@@ -9,6 +8,7 @@ import { Spacing } from "@/constants/theme";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
+import type { EditableTokenFields } from "@/types/token-detail";
 import ArrowBackSymbol from "@expo/material-symbols/arrow_back.xml";
 import CheckSymbol from "@expo/material-symbols/check.xml";
 import CloseSymbol from "@expo/material-symbols/close.xml";

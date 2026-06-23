@@ -13,7 +13,7 @@ import {
 import { useLingui } from "@lingui/react/macro";
 import { useCallback } from "react";
 import { StyleSheet } from "react-native";
-import { EditableTokenFields } from "./token-detail-utils";
+import type { EditableTokenFields } from "@/types/token-detail";
 
 export function TokenEditForm({
   fields,

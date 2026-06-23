@@ -1,6 +1,6 @@
 import { deleteTokenPrivateKey } from "@/services/token-rollout";
 import { useTokenStore } from "@/stores/token";
-import { PushTokenRolloutState } from "@/types";
+import { PushTokenRolloutState } from "@/types/token";
 import { parseTokenFromUri } from "@/utils/token";
 import { useCallback } from "react";
 
