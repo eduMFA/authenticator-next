@@ -38,10 +38,7 @@ import {
   NotificationStepActions,
   WelcomeStepActions,
 } from "./onboarding-sequence/step-actions";
-import type {
-  EasingFunction,
-  OnboardingStep,
-} from "./onboarding-sequence/types";
+import type { EasingFunction, OnboardingStep } from "@/types/onboarding";
 import {
   VisualCardContent,
   WelcomeVisualContent,

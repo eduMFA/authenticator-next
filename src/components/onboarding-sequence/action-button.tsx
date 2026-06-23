@@ -7,7 +7,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import type { IconName } from "./types";
+import type { IconName } from "@/types/onboarding";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
