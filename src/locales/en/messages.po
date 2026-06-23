@@ -27,11 +27,11 @@ msgstr "Add token"
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
-#: src/components/onboarding-sequence.tsx:635
+#: src/components/onboarding-sequence.tsx:590
 msgid "Anonymous reports"
 msgstr "Anonymous reports"
 
-#: src/components/onboarding-sequence.tsx:134
+#: src/components/onboarding-sequence.tsx:133
 msgid "Approve sign-ins the moment they arrive"
 msgstr "Approve sign-ins the moment they arrive"
 
@@ -51,7 +51,7 @@ msgstr "Camera permission required"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/components/onboarding-sequence.tsx:562
+#: src/components/onboarding-sequence.tsx:530
 msgid "Continue"
 msgstr "Continue"
 
@@ -87,15 +87,15 @@ msgstr "Edit"
 msgid "Edit token"
 msgstr "Edit token"
 
-#: src/components/onboarding-sequence.tsx:555
+#: src/components/onboarding-sequence.tsx:523
 msgid "eduMFA can receive push approvals and alert you when a sign-in needs attention."
 msgstr "eduMFA can receive push approvals and alert you when a sign-in needs attention."
 
-#: src/components/onboarding-sequence.tsx:573
+#: src/components/onboarding-sequence.tsx:541
 msgid "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
 msgstr "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
 
-#: src/components/onboarding-sequence.tsx:594
+#: src/components/onboarding-sequence.tsx:562
 msgid "Enable notifications"
 msgstr "Enable notifications"
 
@@ -125,7 +125,7 @@ msgstr "Failed to add token"
 msgid "Finalizing enrollment"
 msgstr "Finalizing enrollment"
 
-#: src/components/onboarding-sequence.tsx:668
+#: src/components/onboarding-sequence.tsx:601
 msgid "Finish without reports"
 msgstr "Finish without reports"
 
@@ -133,7 +133,7 @@ msgstr "Finish without reports"
 msgid "Generating keys"
 msgstr "Generating keys"
 
-#: src/components/onboarding-sequence.tsx:398
+#: src/components/onboarding-sequence.tsx:379
 msgid "Get started"
 msgstr "Get started"
 
@@ -141,11 +141,11 @@ msgstr "Get started"
 msgid "Grant permission"
 msgstr "Grant permission"
 
-#: src/components/onboarding-sequence.tsx:141
+#: src/components/onboarding-sequence.tsx:140
 msgid "Help improve reliability"
 msgstr "Help improve reliability"
 
-#: src/components/onboarding-sequence.tsx:128
+#: src/components/onboarding-sequence.tsx:127
 msgid "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
 msgstr "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
 
@@ -183,11 +183,11 @@ msgstr "No results found for "
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
-#: src/components/onboarding-sequence.tsx:583
+#: src/components/onboarding-sequence.tsx:551
 msgid "Not now"
 msgstr "Not now"
 
-#: src/components/onboarding-sequence.tsx:133
+#: src/components/onboarding-sequence.tsx:132
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -195,19 +195,19 @@ msgstr "Notifications"
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
-#: src/components/onboarding-sequence.tsx:556
+#: src/components/onboarding-sequence.tsx:524
 msgid "Notifications are enabled"
 msgstr "Notifications are enabled"
 
-#: src/components/onboarding-sequence.tsx:135
+#: src/components/onboarding-sequence.tsx:134
 msgid "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention."
 msgstr "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention."
 
-#: src/components/onboarding-sequence.tsx:574
+#: src/components/onboarding-sequence.tsx:542
 msgid "Notifications are required"
 msgstr "Notifications are required"
 
-#: src/components/onboarding-sequence.tsx:580
+#: src/components/onboarding-sequence.tsx:548
 msgid "Open notification settings"
 msgstr "Open notification settings"
 
@@ -231,7 +231,7 @@ msgstr "Pair new Push Token"
 msgid "Pending"
 msgstr "Pending"
 
-#: src/components/onboarding-sequence.tsx:140
+#: src/components/onboarding-sequence.tsx:139
 msgid "Privacy choice"
 msgstr "Privacy choice"
 
@@ -305,11 +305,11 @@ msgstr "Server message"
 msgid "Server registration failed"
 msgstr "Server registration failed"
 
-#: src/components/onboarding-sequence.tsx:642
+#: src/components/onboarding-sequence.tsx:587
 msgid "Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names."
 msgstr "Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names."
 
-#: src/components/onboarding-sequence.tsx:663
+#: src/components/onboarding-sequence.tsx:596
 msgid "Share anonymous reports"
 msgstr "Share anonymous reports"
 
@@ -373,11 +373,11 @@ msgstr "Upload QR Code"
 msgid "We need your permission to show the camera"
 msgstr "We need your permission to show the camera"
 
-#: src/components/onboarding-sequence.tsx:126
+#: src/components/onboarding-sequence.tsx:125
 msgid "Welcome"
 msgstr "Welcome"
 
-#: src/components/onboarding-sequence.tsx:127
+#: src/components/onboarding-sequence.tsx:126
 msgid "Welcome to eduMFA"
 msgstr "Welcome to eduMFA"
 
@@ -385,7 +385,7 @@ msgstr "Welcome to eduMFA"
 msgid "You can enable camera permissions in your device settings"
 msgstr "You can enable camera permissions in your device settings"
 
-#: src/components/onboarding-sequence.tsx:142
+#: src/components/onboarding-sequence.tsx:141
 msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 msgstr "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 
