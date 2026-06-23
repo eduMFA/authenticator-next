@@ -42,6 +42,15 @@ export function isNotificationPermissionEnabled(
   );
 }
 
+export function isNotificationPermissionPending(
+  status: Notifications.NotificationPermissionsStatus | null,
+) {
+  return (
+    status === null ||
+    status.status === Notifications.PermissionStatus.UNDETERMINED
+  );
+}
+
 /**
  * Configure notification categories with quick actions
  */
