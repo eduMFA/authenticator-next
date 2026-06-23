@@ -1,8 +1,8 @@
 import {
-  PushToken,
   PushTokenRefreshStatus,
   PushTokenRolloutState,
-} from "@/types";
+  type PushToken,
+} from "@/types/token";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";

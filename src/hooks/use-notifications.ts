@@ -1,11 +1,11 @@
 import { useNotificationStore } from "@/stores/notification";
 import { usePushRequestStore } from "@/stores/push-request";
-import type { PushRequest } from "@/types";
-import { base32ToBase64 } from "@/utils/crypto";
 import type {
   NotificationAction,
   NotificationResponseData,
-} from "@/utils/notification";
+} from "@/types/notification";
+import type { PushRequest } from "@/types/push-request";
+import { base32ToBase64 } from "@/utils/crypto";
 import {
   addBackgroundMessageHandler,
   addMessageListener,
@@ -22,7 +22,7 @@ import { useCallback, useEffect } from "react";
 import { useChallengePolling } from "./use-challenge-polling";
 import { useToken } from "./use-token";
 
-export type { NotificationAction } from "@/utils/notification";
+export type { NotificationAction } from "@/types/notification";
 
 export type NotificationActionHandler = (
   action: NotificationAction,

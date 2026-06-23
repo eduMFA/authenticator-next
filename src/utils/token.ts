@@ -5,7 +5,8 @@ import {
   OtpProtocolError,
   UnsupportedVersionError,
 } from "@/errors/token";
-import { PushToken, PushTokenRolloutState } from "@/types";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 
 const parseTokenV1 = (url: URL) => {
   const pushToken: Partial<PushToken> = {};

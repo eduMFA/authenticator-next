@@ -3,10 +3,16 @@ import {
   NOTIFICATION_ACTION_DECLINE,
   PUSH_AUTHENTICATION_CATEGORY,
 } from "@/constants/notification";
+import type {
+  NotificationAction,
+  NotificationActionHandler,
+  NotificationResponseData,
+  PushRequestHandler,
+} from "@/types/notification";
 import { i18n } from "@lingui/core";
 import { t } from "@lingui/core/macro";
-import type { PushRequest, PushRequestData } from "@/types";
-import { PushRequestStatus } from "@/types";
+import type { PushRequest, PushRequestData } from "@/types/push-request";
+import { PushRequestStatus } from "@/types/push-request";
 import {
   getMessaging,
   onMessage,
@@ -15,23 +21,6 @@ import {
 import type { FirebaseMessagingTypes } from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
-
-export type NotificationAction =
-  | typeof NOTIFICATION_ACTION_ACCEPT
-  | typeof NOTIFICATION_ACTION_DECLINE
-  | "TAP";
-
-export type NotificationResponseData = {
-  nonce?: string;
-  pushRequestId?: string;
-} & Partial<PushRequestData>;
-
-export type PushRequestHandler = (pushRequest: PushRequest) => void;
-
-export type NotificationActionHandler = (
-  actionId: string,
-  notification: Notifications.Notification,
-) => void;
 
 export function isNotificationPermissionEnabled(
   settings: Notifications.NotificationPermissionsStatus | null,

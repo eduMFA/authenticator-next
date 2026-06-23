@@ -5,7 +5,10 @@ import {
 import { pollAllChallenges } from "@/services/challenge-polling";
 import { usePushRequestStore } from "@/stores/push-request";
 import { useTokenStore } from "@/stores/token";
-import { PushTokenRefreshErrorType, PushTokenRefreshStatus } from "@/types";
+import {
+  PushTokenRefreshErrorType,
+  PushTokenRefreshStatus,
+} from "@/types/token";
 import { useCallback, useRef, useState } from "react";
 
 export interface UseChallengePollingResult {

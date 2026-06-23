@@ -3,28 +3,17 @@ import {
   ChallengePollingNetworkError,
   ChallengePollingServerError,
 } from "@/errors/challenge-polling";
-import {
-  PushRequest,
-  PushRequestStatus,
-  PushToken,
-  PushTokenRolloutState,
-} from "@/types";
+import type {
+  ChallengePollingResult,
+  TokenChallengePollingResult,
+} from "@/types/challenge-polling";
+import type { PushRequest } from "@/types/push-request";
+import { PushRequestStatus } from "@/types/push-request";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 import { base32ToBase64, base64ToBase32 } from "@/utils/crypto";
 import { buildPushRequestSignedData } from "@/utils/push-request";
 import { signMessage, verifyMessage } from "@/utils/rsa";
-
-export interface ChallengePollingResult {
-  success: boolean;
-  challenges: PushRequest[];
-  tokenResults?: TokenChallengePollingResult[];
-  error?: Error;
-}
-
-export interface TokenChallengePollingResult {
-  tokenId: string;
-  success: boolean;
-  error?: Error;
-}
 
 interface ChallengeResponse {
   nonce: string;
