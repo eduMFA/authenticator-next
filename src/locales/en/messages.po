@@ -31,7 +31,7 @@ msgstr "Add your first eduMFA token to approve sign-ins securely from this devic
 msgid "Anonymous reports"
 msgstr "Anonymous reports"
 
-#: src/components/onboarding-sequence.tsx:91
+#: src/components/onboarding-sequence.tsx:88
 msgid "Approve sign-ins the moment they arrive"
 msgstr "Approve sign-ins the moment they arrive"
 
@@ -133,7 +133,7 @@ msgstr "Finish without reports"
 msgid "Generating keys"
 msgstr "Generating keys"
 
-#: src/components/onboarding-sequence.tsx:335
+#: src/components/onboarding-sequence.tsx:332
 msgid "Get started"
 msgstr "Get started"
 
@@ -141,11 +141,11 @@ msgstr "Get started"
 msgid "Grant permission"
 msgstr "Grant permission"
 
-#: src/components/onboarding-sequence.tsx:98
+#: src/components/onboarding-sequence.tsx:95
 msgid "Help improve reliability"
 msgstr "Help improve reliability"
 
-#: src/components/onboarding-sequence.tsx:85
+#: src/components/onboarding-sequence.tsx:82
 msgid "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
 msgstr "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
 
@@ -187,7 +187,7 @@ msgstr "No tokens yet"
 msgid "Not now"
 msgstr "Not now"
 
-#: src/components/onboarding-sequence.tsx:90
+#: src/components/onboarding-sequence.tsx:87
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -199,7 +199,7 @@ msgstr "Notifications are disabled"
 msgid "Notifications are enabled"
 msgstr "Notifications are enabled"
 
-#: src/components/onboarding-sequence.tsx:92
+#: src/components/onboarding-sequence.tsx:89
 msgid "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention."
 msgstr "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention."
 
@@ -231,7 +231,7 @@ msgstr "Pair new Push Token"
 msgid "Pending"
 msgstr "Pending"
 
-#: src/components/onboarding-sequence.tsx:97
+#: src/components/onboarding-sequence.tsx:94
 msgid "Privacy choice"
 msgstr "Privacy choice"
 
@@ -373,11 +373,11 @@ msgstr "Upload QR Code"
 msgid "We need your permission to show the camera"
 msgstr "We need your permission to show the camera"
 
-#: src/components/onboarding-sequence.tsx:83
+#: src/components/onboarding-sequence.tsx:80
 msgid "Welcome"
 msgstr "Welcome"
 
-#: src/components/onboarding-sequence.tsx:84
+#: src/components/onboarding-sequence.tsx:81
 msgid "Welcome to eduMFA"
 msgstr "Welcome to eduMFA"
 
@@ -385,7 +385,7 @@ msgstr "Welcome to eduMFA"
 msgid "You can enable camera permissions in your device settings"
 msgstr "You can enable camera permissions in your device settings"
 
-#: src/components/onboarding-sequence.tsx:99
+#: src/components/onboarding-sequence.tsx:96
 msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 msgstr "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 
