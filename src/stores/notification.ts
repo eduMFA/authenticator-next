@@ -29,18 +29,6 @@ type NotificationStore = NotificationState & NotificationActions;
 let tokenRefreshUnsubscribe: (() => void) | null = null;
 let initializationPromise: Promise<string | null> | null = null;
 
-async function getNotificationPermissions(
-  shouldRequest: boolean,
-): Promise<Notifications.NotificationPermissionsStatus> {
-  if (shouldRequest) {
-    return await Notifications.requestPermissionsAsync(
-      notificationPermissionOptions,
-    );
-  }
-
-  return await Notifications.getPermissionsAsync();
-}
-
 async function getCurrentFcmToken(): Promise<string | null> {
   await setupNotificationCategories();
   return await getToken(getMessaging());
@@ -83,7 +71,9 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
     set({ isInitializing: true });
 
     initializationPromise = (async () => {
-      const settings = await getNotificationPermissions(true);
+      const settings = await Notifications.requestPermissionsAsync(
+        notificationPermissionOptions,
+      );
       const token = await getCurrentFcmToken();
 
       if (!token) {
@@ -124,7 +114,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
   checkPermissions: async () => {
     try {
-      const settings = await getNotificationPermissions(false);
+      const settings = await Notifications.getPermissionsAsync();
       const token = await getCurrentFcmToken();
 
       set({ fcmToken: token, permissionStatus: settings });
@@ -160,7 +150,9 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   },
 
   requestPermissions: async () => {
-    const settings = await getNotificationPermissions(true);
+    const settings = await Notifications.requestPermissionsAsync(
+      notificationPermissionOptions,
+    );
     set({ permissionStatus: settings });
     return settings;
   },

@@ -1,28 +1,19 @@
 import {
-  PushToken,
   PushTokenRefreshErrorType,
   PushTokenRolloutState,
-} from "@/types";
+  type PushToken,
+} from "@/types/token";
+import type {
+  EditableTokenFields,
+  RefreshErrorDetails,
+  RolloutFailureDetails,
+} from "@/types/token-detail";
 import { type MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
-
-export type EditableTokenFields = {
-  label: string;
-};
-
-export type RefreshErrorDetails = {
-  message: string;
-  serverMessage?: string;
-};
 
 type RefreshErrorMessages = {
   defaultMessage: string;
   networkMessage: string;
-};
-
-export type RolloutFailureDetails = {
-  title: MessageDescriptor;
-  description: MessageDescriptor;
 };
 
 export const refreshErrorMessages = {

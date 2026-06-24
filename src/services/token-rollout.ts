@@ -1,6 +1,12 @@
 import { KEY_SIZE } from "@/constants/auth";
 import { useNotificationStore } from "@/stores/notification";
-import { PushToken, PushTokenRolloutState } from "@/types";
+import type {
+  RolloutResult,
+  RolloutStateUpdater,
+  TokenGetter,
+} from "@/types/token-rollout";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 import { stripPemArmor } from "@/utils/crypto";
 import { deleteRsaKeyPair, generateRsaKeyPair } from "@/utils/rsa";
 import { parseTokenResponse } from "@/utils/token";
@@ -17,15 +23,7 @@ const ROLLOUT_STATE_TO_FAILED_STATE: Partial<
     PushTokenRolloutState.ParsingResponseFailed,
 };
 
-// Track tokens currently being rolled out
 const rollingOutTokens = new Set<string>();
-
-export type RolloutStateUpdater = (
-  id: string,
-  update: Partial<PushToken>,
-) => void;
-
-export type TokenGetter = () => PushToken[];
 
 /**
  * Check if a token is currently being rolled out
@@ -73,13 +71,6 @@ async function sendPublicKeyToServer(
   });
 
   return response;
-}
-
-export interface RolloutResult {
-  success: boolean;
-  serverPublicKey?: string;
-  error?: Error;
-  failedState?: PushTokenRolloutState;
 }
 
 /**

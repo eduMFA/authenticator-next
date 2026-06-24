@@ -13,7 +13,8 @@ import { useDevMenu } from "@/hooks/use-dev-menu";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
-import { PushToken, PushTokenRolloutState } from "@/types";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
 import { Button, Text as ExpoText, Icon, Row } from "@expo/ui";
@@ -273,7 +274,10 @@ export default function Tokens() {
             </Stack.Toolbar.MenuAction>
           </Stack.Toolbar.Menu>
         )}
-        {Platform.OS === "ios" && !isLiquidGlassAvailable() && toolbarAddButton}
+        {Platform.OS === "ios" &&
+          !isLiquidGlassAvailable() &&
+          showToolbarAddButton &&
+          toolbarAddButton}
       </Stack.Toolbar>
     </>
   );

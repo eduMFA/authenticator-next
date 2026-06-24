@@ -1,10 +1,10 @@
 import { ThemedText } from "@/components/themed-text";
 import { TokenImage } from "@/components/token-image";
 import { Spacing, Typography } from "@/constants/theme";
-import { PushToken } from "@/types";
+import type { EditableTokenFields } from "@/types/token-detail";
+import type { PushToken } from "@/types/token";
 import { useLingui } from "@lingui/react/macro";
 import { StyleSheet, View } from "react-native";
-import { EditableTokenFields } from "./token-detail-utils";
 import { TokenEditForm } from "./token-edit-form";
 
 export function TokenEditContent({

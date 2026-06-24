@@ -5,10 +5,10 @@ import { TokenImage } from "@/components/token-image";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import {
-  PushToken,
   PushTokenRefreshStatus,
   PushTokenRolloutState,
-} from "@/types";
+  type PushToken,
+} from "@/types/token";
 import ForwardMediaSymbol from "@expo/material-symbols/forward_media.xml";
 import { Button, Host, Icon, Row, Text } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
