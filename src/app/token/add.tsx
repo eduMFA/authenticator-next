@@ -1,5 +1,6 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { CameraPermissionSplash } from "@/components/token-add/camera-permission-splash";
 import QRCodeScanner from "@/components/token-add/qr-code-scanner";
 import { UploadQRCodeButton } from "@/components/token-add/upload-qr-code-button";
 import { Radii, Spacing, Typography } from "@/constants/theme";
@@ -10,13 +11,16 @@ import { Trans } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useRouter } from "expo-router";
-import { useMemo } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { useEffect, useMemo, useState } from "react";
+import { AppState, Platform, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddToken() {
   const router = useRouter();
   const handleTokenUri = useHandleTokenUri();
+  const [permission, requestPermission, getPermission] =
+    Camera.useCameraPermissions({});
+  const [isRequestingPermission, setIsRequestingPermission] = useState(false);
   const theme = useTheme();
   const borderColor = theme.border;
   const transparentColor = theme.transparent;
@@ -37,6 +41,68 @@ export default function AddToken() {
     void handleTokenUri(uri);
   };
 
+  const handleRequestPermission = async () => {
+    setIsRequestingPermission(true);
+    try {
+      await requestPermission();
+    } finally {
+      setIsRequestingPermission(false);
+    }
+  };
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextState) => {
+      if (nextState === "active") {
+        void getPermission();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [getPermission]);
+
+  const shouldShowPermissionSplash =
+    !permission?.granted && (permission?.canAskAgain ?? true);
+
+  const content = shouldShowPermissionSplash ? (
+    <CameraPermissionSplash
+      disabled={isRequestingPermission}
+      onContinue={() => {
+        void handleRequestPermission();
+      }}
+    />
+  ) : (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header} collapsable={false}>
+        <ThemedText
+          fontWeight="bold"
+          fontSize={Typography.fontSize28}
+          style={styles.title}
+        >
+          <Trans>Pair new Push Token</Trans>
+        </ThemedText>
+      </View>
+      <View style={styles.scanner}>
+        <QRCodeScanner
+          permission={permission}
+          onQRCodeScanned={handleQRCodeScanned}
+        />
+      </View>
+      <View style={styles.splitter}>
+        <View style={[styles.splitterLine, { backgroundColor: borderColor }]} />
+        <ThemedText
+          style={[styles.splitterText, { color: borderColor }]}
+          fontWeight="bold"
+        >
+          <Trans>OR</Trans>
+        </ThemedText>
+        <View style={[styles.splitterLine, { backgroundColor: borderColor }]} />
+      </View>
+      <UploadQRCodeButton onQRCodeScanned={handleQRCodeScanned} />
+    </SafeAreaView>
+  );
+
   return (
     <>
       <Stack.Header style={headerStyle} />
@@ -50,42 +116,7 @@ export default function AddToken() {
         style={styles.sheet}
         type={isLiquidGlassAvailable() ? "transparent" : "background"}
       >
-        <SafeAreaView style={styles.container}>
-          <View style={styles.header} collapsable={false}>
-            <ThemedText
-              fontWeight="bold"
-              fontSize={Typography.fontSize28}
-              style={styles.title}
-            >
-              <Trans>Pair new Push Token</Trans>
-            </ThemedText>
-            <ThemedText
-              fontWeight="light"
-              fontSize={Typography.fontSize16}
-              style={styles.subtitle}
-            >
-              <Trans>Scan the QR code to pair a new push token.</Trans>
-            </ThemedText>
-          </View>
-          <View style={styles.scanner}>
-            <QRCodeScanner onQRCodeScanned={handleQRCodeScanned} />
-          </View>
-          <View style={styles.splitter}>
-            <View
-              style={[styles.splitterLine, { backgroundColor: borderColor }]}
-            />
-            <ThemedText
-              style={[styles.splitterText, { color: borderColor }]}
-              fontWeight="bold"
-            >
-              <Trans>OR</Trans>
-            </ThemedText>
-            <View
-              style={[styles.splitterLine, { backgroundColor: borderColor }]}
-            />
-          </View>
-          <UploadQRCodeButton onQRCodeScanned={handleQRCodeScanned} />
-        </SafeAreaView>
+        {content}
       </ThemedView>
     </>
   );
@@ -100,7 +131,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.xl,
   },
   header: {
-    marginBottom: Spacing.xl,
+    marginBottom: Spacing.lg,
   },
   scanner: {
     borderRadius: Radii.xl,
@@ -123,11 +154,7 @@ const styles = StyleSheet.create({
   splitterText: {
     marginHorizontal: Spacing.lg,
   },
-  subtitle: {
-    textAlign: "center",
-  },
   title: {
-    marginBottom: Spacing.md,
     textAlign: "center",
   },
 });

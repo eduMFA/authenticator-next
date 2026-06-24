@@ -18,14 +18,18 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:297
-#: src/app/index.tsx:299
+#: src/app/index.tsx:300
+#: src/app/index.tsx:302
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:268
+#: src/app/index.tsx:271
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
+
+#: src/components/token-add/camera-permission-splash.tsx:37
+msgid "Allow camera access"
+msgstr "Kamerazugriff erlauben"
 
 #: src/components/onboarding-sequence/step-actions.tsx:133
 msgid "Anonymous reports"
@@ -43,15 +47,20 @@ msgstr "Möchtest du diesen Token wirklich löschen?"
 msgid "Audit log"
 msgstr "Prüfprotokoll"
 
-#: src/components/token-add/qr-code-scanner.tsx:59
-msgid "Camera permission required"
-msgstr "Kamera-Berechtigung erforderlich"
+#: src/components/token-add/camera-permission-splash.tsx:44
+msgid "Camera access is required to scan the QR code and pair a token."
+msgstr "Kamerazugriff ist erforderlich, um den QR-Code zu scannen und einen Token zu koppeln."
+
+#: src/components/token-add/camera-permission-denied.tsx:34
+msgid "Camera access is turned off"
+msgstr "Kamerazugriff ist deaktiviert"
 
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: src/components/onboarding-sequence/step-actions.tsx:73
+#: src/components/token-add/camera-permission-splash.tsx:64
 msgid "Continue"
 msgstr "Weiter"
 
@@ -95,11 +104,15 @@ msgstr "eduMFA kann Push-Freigaben empfangen und dich benachrichtigen, wenn eine
 msgid "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
 msgstr "eduMFA kann keine Push-Freigaben empfangen, solange Benachrichtigungen deaktiviert sind. Aktiviere sie in den Systemeinstellungen und kehre dann hierher zurück."
 
+#: src/components/token-add/camera-permission-denied.tsx:40
+msgid "Enable camera access in Settings to scan QR codes."
+msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen."
+
 #: src/components/onboarding-sequence/step-actions.tsx:105
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:348
+#: src/app/index.tsx:351
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -137,10 +150,6 @@ msgstr "Schlüssel werden generiert"
 msgid "Get started"
 msgstr "Loslegen"
 
-#: src/components/token-add/qr-code-scanner.tsx:49
-msgid "Grant permission"
-msgstr "Berechtigungen erteilen"
-
 #: src/components/onboarding-sequence.tsx:95
 msgid "Help improve reliability"
 msgstr "Hilf, die Zuverlässigkeit zu verbessern"
@@ -175,11 +184,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:336
+#: src/app/index.tsx:339
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:260
+#: src/app/index.tsx:263
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -191,7 +200,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:347
+#: src/app/index.tsx:350
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -211,7 +220,7 @@ msgstr "Benachrichtigungen sind erforderlich"
 msgid "Open notification settings"
 msgstr "Benachrichtigungseinstellungen öffnen"
 
-#: src/components/token-add/qr-code-scanner.tsx:50
+#: src/components/token-add/camera-permission-denied.tsx:55
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
@@ -219,17 +228,21 @@ msgstr "Einstellungen öffnen"
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
-#: src/app/token/add.tsx:81
+#: src/app/token/add.tsx:98
 msgid "OR"
 msgstr "ODER"
 
-#: src/app/token/add.tsx:60
+#: src/app/token/add.tsx:83
 msgid "Pair new Push Token"
 msgstr "Neues Push-Token koppeln"
 
 #: src/components/token-detail/token-detail-utils.ts:75
 msgid "Pending"
 msgstr "Ausstehend"
+
+#: src/components/token-add/scanner-overlay.tsx:27
+msgid "Place the QR code inside the frame"
+msgstr "Platziere den QR-Code im Rahmen"
 
 #: src/components/onboarding-sequence.tsx:94
 msgid "Privacy choice"
@@ -244,7 +257,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:357
+#: src/app/index.tsx:360
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -279,10 +292,6 @@ msgstr "Rollout fehlgeschlagen"
 #: src/app/token/[tokenId].tsx:177
 msgid "Save"
 msgstr "Speichern"
-
-#: src/app/token/add.tsx:67
-msgid "Scan the QR code to pair a new push token."
-msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
 #: src/hooks/use-handle-token-uri.ts:76
 msgid "Search Authenticator Apps"
@@ -369,10 +378,6 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#: src/components/token-add/qr-code-scanner.tsx:43
-msgid "We need your permission to show the camera"
-msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
-
 #: src/components/onboarding-sequence.tsx:80
 msgid "Welcome"
 msgstr "Willkommen"
@@ -380,10 +385,6 @@ msgstr "Willkommen"
 #: src/components/onboarding-sequence.tsx:81
 msgid "Welcome to eduMFA"
 msgstr "Willkommen bei eduMFA"
-
-#: src/components/token-add/qr-code-scanner.tsx:44
-msgid "You can enable camera permissions in your device settings"
-msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
 
 #: src/components/onboarding-sequence.tsx:96
 msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."

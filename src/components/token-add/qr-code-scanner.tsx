@@ -1,66 +1,37 @@
-import { Spacing, StaticColors } from "@/constants/theme";
-import { Trans, useLingui } from "@lingui/react/macro";
+import { StaticColors } from "@/constants/theme";
 import * as Camera from "expo-camera";
-import { CameraView, useCameraPermissions } from "expo-camera";
+import { CameraView } from "expo-camera";
 import * as Linking from "expo-linking";
-import { useEffect, useRef, useState } from "react";
-import { Button, StyleSheet, View } from "react-native";
-import { ThemedText } from "../themed-text";
+import { useRef } from "react";
+import { StyleSheet, View } from "react-native";
+import { CameraPermissionDenied } from "./camera-permission-denied";
+import { ScannerOverlay } from "./scanner-overlay";
 
 export type Props = {
   onQRCodeScanned: (result: Camera.BarcodeScanningResult) => void;
+  permission: Camera.PermissionResponse | null;
 };
 
-export default function QRCodeScanner({ onQRCodeScanned }: Props) {
-  const [scanned, setScanned] = useState(false);
-  const [permission, requestPermission] = useCameraPermissions({});
+export default function QRCodeScanner({ onQRCodeScanned, permission }: Props) {
+  const scannedRef = useRef(false);
   const lastScannedTimestampRef = useRef(0);
-  const { t } = useLingui();
-
   const handleQRCodeScanned = async (result: Camera.BarcodeScanningResult) => {
     const now = Date.now();
-    if (scanned || now - lastScannedTimestampRef.current < 2000) {
+    if (scannedRef.current || now - lastScannedTimestampRef.current < 2000) {
       return;
     }
     lastScannedTimestampRef.current = now;
-    setScanned(true);
+    scannedRef.current = true;
     onQRCodeScanned(result);
   };
 
-  useEffect(() => {
-    if (!permission) {
-      requestPermission();
-    }
-  }, [permission, requestPermission]);
-
-  if (!permission) {
-    // Camera permissions are still loading.
-    return <View style={styles.placeholder} />;
-  }
-
-  if (!permission.granted) {
-    const text = permission.canAskAgain
-      ? t`We need your permission to show the camera`
-      : t`You can enable camera permissions in your device settings`;
-    const handlePress = permission.canAskAgain
-      ? () => requestPermission()
-      : () => Linking.openSettings();
-    const buttonTitle = permission.canAskAgain
-      ? t`Grant permission`
-      : t`Open Settings`;
-
+  if (!permission?.granted) {
     return (
-      <View style={styles.placeholder}>
-        <ThemedText
-          style={styles.permissionText}
-          fontWeight="bold"
-          fontSize={20}
-        >
-          <Trans>Camera permission required</Trans>
-        </ThemedText>
-        <ThemedText style={styles.permissionText}>{text}</ThemedText>
-        <Button title={buttonTitle} onPress={handlePress} />
-      </View>
+      <CameraPermissionDenied
+        onOpenSettings={() => {
+          void Linking.openSettings();
+        }}
+      />
     );
   }
 
@@ -73,6 +44,7 @@ export default function QRCodeScanner({ onQRCodeScanned }: Props) {
         }}
         onBarcodeScanned={handleQRCodeScanned}
       />
+      <ScannerOverlay />
     </View>
   );
 }
@@ -82,19 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container: {
-    flex: 1,
-  },
-  permissionText: {
-    alignContent: "center",
-    color: StaticColors.white,
-    marginBottom: Spacing.md,
-    textAlign: "center",
-  },
-  placeholder: {
-    alignItems: "center",
     backgroundColor: StaticColors.black,
     flex: 1,
-    justifyContent: "center",
-    padding: Spacing.lg,
   },
 });
