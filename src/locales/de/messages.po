@@ -18,14 +18,18 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:294
-#: src/app/index.tsx:296
+#: src/app/index.tsx:297
+#: src/app/index.tsx:299
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:265
+#: src/app/index.tsx:268
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
+
+#: src/components/token-add/camera-permission-splash.tsx:37
+msgid "Allow camera access"
+msgstr "Kamerazugriff erlauben"
 
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
@@ -35,13 +39,21 @@ msgstr "Möchtest du diesen Token wirklich löschen?"
 msgid "Audit log"
 msgstr "Prüfprotokoll"
 
-#: src/components/token-add/qr-code-scanner.tsx:59
-msgid "Camera permission required"
-msgstr "Kamera-Berechtigung erforderlich"
+#: src/components/token-add/camera-permission-splash.tsx:44
+msgid "Camera access is required to scan the QR code and pair a token."
+msgstr "Kamerazugriff ist erforderlich, um den QR-Code zu scannen und einen Token zu koppeln."
+
+#: src/components/token-add/camera-permission-denied.tsx:34
+msgid "Camera access is turned off"
+msgstr "Kamerazugriff ist deaktiviert"
 
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: src/components/token-add/camera-permission-splash.tsx:64
+msgid "Continue"
+msgstr "Weiter"
 
 #: src/components/push-request-popup.tsx:220
 #: src/utils/notification.ts:60
@@ -75,7 +87,11 @@ msgstr "Bearbeiten"
 msgid "Edit token"
 msgstr "Token bearbeiten"
 
-#: src/app/index.tsx:345
+#: src/components/token-add/camera-permission-denied.tsx:40
+msgid "Enable camera access in Settings to scan QR codes."
+msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen."
+
+#: src/app/index.tsx:348
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -105,10 +121,6 @@ msgstr "Registrierung wird abgeschlossen"
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
-#: src/components/token-add/qr-code-scanner.tsx:49
-msgid "Grant permission"
-msgstr "Berechtigungen erteilen"
-
 #: src/components/token-detail/token-detail-utils.ts:50
 #: src/components/token-detail/token-detail-utils.ts:79
 msgid "Key generation failed"
@@ -135,19 +147,19 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:333
+#: src/app/index.tsx:336
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:257
+#: src/app/index.tsx:260
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
-#: src/app/index.tsx:344
+#: src/app/index.tsx:347
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
-#: src/components/token-add/qr-code-scanner.tsx:50
+#: src/components/token-add/camera-permission-denied.tsx:55
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
@@ -155,17 +167,21 @@ msgstr "Einstellungen öffnen"
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
-#: src/app/token/add.tsx:81
+#: src/app/token/add.tsx:98
 msgid "OR"
 msgstr "ODER"
 
-#: src/app/token/add.tsx:60
+#: src/app/token/add.tsx:83
 msgid "Pair new Push Token"
 msgstr "Neues Push-Token koppeln"
 
 #: src/components/token-detail/token-detail-utils.ts:75
 msgid "Pending"
 msgstr "Ausstehend"
+
+#: src/components/token-add/scanner-overlay.tsx:27
+msgid "Place the QR code inside the frame"
+msgstr "Platziere den QR-Code im Rahmen"
 
 #: src/components/token-add/upload-qr-code-button.tsx:64
 msgid "QR code scanner"
@@ -176,7 +192,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:354
+#: src/app/index.tsx:357
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -211,10 +227,6 @@ msgstr "Rollout fehlgeschlagen"
 #: src/app/token/[tokenId].tsx:177
 msgid "Save"
 msgstr "Speichern"
-
-#: src/app/token/add.tsx:67
-msgid "Scan the QR code to pair a new push token."
-msgstr "Scanne den QR-Code, um einen neuen Push-Token zu koppeln."
 
 #: src/hooks/use-handle-token-uri.ts:76
 msgid "Search Authenticator Apps"
@@ -292,14 +304,6 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 #: src/components/token-add/upload-qr-code-button.tsx:67
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
-
-#: src/components/token-add/qr-code-scanner.tsx:43
-msgid "We need your permission to show the camera"
-msgstr "Wir benötigen deine Erlaubnis, um die Kamera zu zeigen"
-
-#: src/components/token-add/qr-code-scanner.tsx:44
-msgid "You can enable camera permissions in your device settings"
-msgstr "Du kannst die Kameraberechtigungen in deinen Geräteeinstellungen aktivieren"
 
 #: src/hooks/use-handle-token-uri.ts:33
 msgid "Your image did not contain a QR code."
