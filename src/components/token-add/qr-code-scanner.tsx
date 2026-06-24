@@ -2,7 +2,7 @@ import { StaticColors } from "@/constants/theme";
 import * as Camera from "expo-camera";
 import { CameraView } from "expo-camera";
 import * as Linking from "expo-linking";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { CameraPermissionDenied } from "./camera-permission-denied";
 import { ScannerOverlay } from "./scanner-overlay";
@@ -13,15 +13,15 @@ export type Props = {
 };
 
 export default function QRCodeScanner({ onQRCodeScanned, permission }: Props) {
-  const [scanned, setScanned] = useState(false);
+  const scannedRef = useRef(false);
   const lastScannedTimestampRef = useRef(0);
   const handleQRCodeScanned = async (result: Camera.BarcodeScanningResult) => {
     const now = Date.now();
-    if (scanned || now - lastScannedTimestampRef.current < 2000) {
+    if (scannedRef.current || now - lastScannedTimestampRef.current < 2000) {
       return;
     }
     lastScannedTimestampRef.current = now;
-    setScanned(true);
+    scannedRef.current = true;
     onQRCodeScanned(result);
   };
 
@@ -44,7 +44,7 @@ export default function QRCodeScanner({ onQRCodeScanned, permission }: Props) {
         }}
         onBarcodeScanned={handleQRCodeScanned}
       />
-      <ScannerOverlay scanned={scanned} />
+      <ScannerOverlay />
     </View>
   );
 }
