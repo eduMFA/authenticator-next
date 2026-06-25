@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Settings } from "react-native-pulsar";
+import { Settings as PulsarSettings } from "react-native-pulsar";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -37,7 +37,7 @@ export const useSettingsStore = create<SettingsStore>()(
       setCrashReportsEnabled: (enabled) =>
         set({ crashReportsEnabled: enabled }),
       setHapticsEnabled: (enabled: boolean) => {
-        Settings.enableHaptics(enabled);
+        PulsarSettings.enableHaptics(enabled);
         set({ hapticsEnabled: enabled });
       },
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
@@ -52,7 +52,7 @@ export const useSettingsStore = create<SettingsStore>()(
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
-        Settings.enableHaptics(state?.hapticsEnabled ?? true);
+        PulsarSettings.enableHaptics(state?.hapticsEnabled ?? true);
       },
     },
   ),
