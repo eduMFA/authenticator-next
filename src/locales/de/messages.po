@@ -18,12 +18,12 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:387
-#: src/app/index.tsx:389
+#: src/app/index.tsx:402
+#: src/app/index.tsx:404
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:360
+#: src/app/index.tsx:375
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -73,7 +73,7 @@ msgstr "Weiter"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:246
+#: src/app/index.tsx:261
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -87,11 +87,11 @@ msgstr "Token löschen"
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/use-handle-token-uri.ts:61
+#: src/hooks/use-handle-token-uri.ts:64
 msgid "Dismiss"
 msgstr "Schließen"
 
-#: src/app/index.tsx:228
+#: src/app/index.tsx:243
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -116,7 +116,7 @@ msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:440
+#: src/app/index.tsx:455
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -132,9 +132,9 @@ msgstr "Registrierungsantwort fehlgeschlagen"
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
-#: src/hooks/use-handle-token-uri.ts:47
-#: src/hooks/use-handle-token-uri.ts:57
-#: src/hooks/use-handle-token-uri.ts:89
+#: src/hooks/use-handle-token-uri.ts:50
+#: src/hooks/use-handle-token-uri.ts:60
+#: src/hooks/use-handle-token-uri.ts:92
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
@@ -180,15 +180,15 @@ msgstr "Zuletzt fehlgeschlagen"
 msgid "No interactions yet"
 msgstr "Noch keine Interaktionen"
 
-#: src/hooks/use-handle-token-uri.ts:32
+#: src/hooks/use-handle-token-uri.ts:35
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:428
+#: src/app/index.tsx:443
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:352
+#: src/app/index.tsx:367
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -200,7 +200,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:439
+#: src/app/index.tsx:454
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -224,7 +224,7 @@ msgstr "Benachrichtigungseinstellungen öffnen"
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
-#: src/hooks/use-handle-token-uri.ts:67
+#: src/hooks/use-handle-token-uri.ts:70
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
@@ -257,7 +257,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:449
+#: src/app/index.tsx:464
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -273,7 +273,7 @@ msgstr "Registrierung fehlgeschlagen"
 msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
-#: src/app/index.tsx:238
+#: src/app/index.tsx:253
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
@@ -293,11 +293,11 @@ msgstr "Rollout fehlgeschlagen"
 msgid "Save"
 msgstr "Speichern"
 
-#: src/hooks/use-handle-token-uri.ts:76
+#: src/hooks/use-handle-token-uri.ts:79
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:275
+#: src/app/index.tsx:290
 msgid "Search tokens"
 msgstr "Token suchen"
 
@@ -330,11 +330,11 @@ msgstr "Status"
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 msgstr "Das Gerät konnte das für diesen Token erforderliche RSA-Schlüsselpaar nicht erstellen. Versuche den Rollout erneut und lasse die App währenddessen geöffnet."
 
-#: src/hooks/use-handle-token-uri.ts:48
+#: src/hooks/use-handle-token-uri.ts:51
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
-#: src/hooks/use-handle-token-uri.ts:58
+#: src/hooks/use-handle-token-uri.ts:61
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
 msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App."
 
@@ -342,7 +342,7 @@ msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie 
 msgid "The server response could not be parsed or did not include the expected token material."
 msgstr "Die Serverantwort konnte nicht verarbeitet werden oder enthielt nicht das erwartete Tokenmaterial."
 
-#: src/hooks/use-handle-token-uri.ts:90
+#: src/hooks/use-handle-token-uri.ts:93
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
@@ -390,6 +390,6 @@ msgstr "Willkommen bei eduMFA"
 msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 msgstr "Du kannst anonymisierte Absturz- und Fehlerberichte aktivieren. Das ist standardmäßig ausgeschaltet, und die App funktioniert in beiden Fällen gleich."
 
-#: src/hooks/use-handle-token-uri.ts:33
+#: src/hooks/use-handle-token-uri.ts:36
 msgid "Your image did not contain a QR code."
 msgstr "Dein Bild enthielt keinen QR-Code."
