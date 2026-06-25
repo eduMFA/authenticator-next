@@ -2,6 +2,7 @@ import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
+import { refreshHapticAbortDistance } from "@/constants/haptics";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
@@ -11,6 +12,12 @@ import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
+import {
+  getRefreshHapticPullProgress,
+  getRefreshHapticRipple,
+  getRefreshHapticRippleIndex,
+  playImpactSoftHaptic,
+} from "@/utils/haptics";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
@@ -30,7 +37,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import { Presets, useRealtimeComposer } from "react-native-pulsar";
+import { useRealtimeComposer } from "react-native-pulsar";
 import Animated, {
   FadeIn,
   FadeOut,
@@ -39,10 +46,6 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-const refreshHapticThreshold = 200;
-const refreshHapticRippleDistances = [75, 110, 130, 135, 145, 150, 155, 160];
-const refreshHapticAbortDistance = refreshHapticRippleDistances[0] ?? 0;
 
 export default function Tokens() {
   const router = useRouter();
@@ -106,7 +109,7 @@ export default function Tokens() {
   };
 
   const handleOpenAddToken = useCallback(() => {
-    Presets.System.impactSoft();
+    playImpactSoftHaptic();
     router.navigate("/token/add");
   }, [router]);
 
@@ -174,7 +177,7 @@ export default function Tokens() {
         return;
       }
 
-      const pullProgress = Math.min(pullDistance / refreshHapticThreshold, 1);
+      const pullProgress = getRefreshHapticPullProgress(pullDistance);
 
       if (pullProgress >= 1 && !didPopRefreshHaptic.value) {
         refreshHaptics.stop();
@@ -184,23 +187,15 @@ export default function Tokens() {
 
       if (pullProgress < 1) {
         didPopRefreshHaptic.value = false;
-        const rippleIndex = refreshHapticRippleDistances.findLastIndex(
-          (distance) => pullDistance >= distance,
-        );
+        const rippleIndex = getRefreshHapticRippleIndex(pullDistance);
 
         if (rippleIndex !== refreshHapticRippleIndex.value) {
-          const rippleElementProgress =
-            (rippleIndex + 1) / refreshHapticRippleDistances.length;
-          const isPullingBack = rippleIndex < refreshHapticRippleIndex.value;
-
-          refreshHaptics.playDiscrete(
-            isPullingBack
-              ? 0.16 + rippleElementProgress * 0.14
-              : 0.35 + rippleElementProgress * 0.35,
-            isPullingBack
-              ? 0.72 - rippleElementProgress * 0.18
-              : 0.35 + rippleElementProgress * 0.4,
+          const ripple = getRefreshHapticRipple(
+            rippleIndex,
+            refreshHapticRippleIndex.value,
           );
+
+          refreshHaptics.playDiscrete(ripple.amplitude, ripple.frequency);
           refreshHapticRippleIndex.value = rippleIndex;
         }
       }

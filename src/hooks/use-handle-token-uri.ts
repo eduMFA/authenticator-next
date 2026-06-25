@@ -4,10 +4,13 @@ import {
   UnsupportedVersionError,
 } from "@/errors/token";
 import { useToken } from "@/hooks/use-token";
+import {
+  playNotificationErrorHaptic,
+  playNotificationSuccessHaptic,
+} from "@/utils/haptics";
 import { useLingui } from "@lingui/react/macro";
 import { useCallback } from "react";
 import { Alert, Linking, Platform } from "react-native";
-import { Presets } from "react-native-pulsar";
 
 const searchAuthenticatorApps = () => {
   const url = Platform.select({
@@ -27,7 +30,7 @@ export const useHandleTokenUri = () => {
   return useCallback(
     async (uri: string | null) => {
       if (uri === null) {
-        Presets.System.notificationError();
+        playNotificationErrorHaptic();
         Alert.alert(
           t`No QR code found`,
           t`Your image did not contain a QR code.`,
@@ -37,10 +40,10 @@ export const useHandleTokenUri = () => {
 
       try {
         await createTokenFromURI(uri);
-        Presets.System.notificationSuccess();
+        playNotificationSuccessHaptic();
         return true;
       } catch (error) {
-        Presets.System.notificationError();
+        playNotificationErrorHaptic();
 
         if (error instanceof InvalidUrlError) {
           Alert.alert(
