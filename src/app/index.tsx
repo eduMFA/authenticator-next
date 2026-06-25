@@ -42,6 +42,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const refreshHapticThreshold = 200;
 const refreshHapticRippleDistances = [75, 110, 130, 135, 145, 150, 155, 160];
+const refreshHapticAbortDistance = refreshHapticRippleDistances[0] ?? 0;
 
 export default function Tokens() {
   const router = useRouter();
@@ -130,8 +131,22 @@ export default function Tokens() {
       didPopRefreshHaptic.value = false;
       refreshHapticRippleIndex.value = -1;
     },
-    onEndDrag: () => {
+    onEndDrag: (event) => {
+      const pullDistance = Math.max(
+        refreshPullStartOffset.value - event.contentOffset.y,
+        0,
+      );
+      const shouldPlayAbortHaptic =
+        isRefreshPullActive.value &&
+        !didPopRefreshHaptic.value &&
+        pullDistance >= refreshHapticAbortDistance;
+
       refreshHaptics.stop();
+
+      if (shouldPlayAbortHaptic) {
+        refreshHaptics.playDiscrete(0.18, 0.75);
+      }
+
       isRefreshPullActive.value = false;
       didPopRefreshHaptic.value = false;
       refreshHapticRippleIndex.value = -1;
@@ -173,13 +188,18 @@ export default function Tokens() {
           (distance) => pullDistance >= distance,
         );
 
-        if (rippleIndex >= 0 && rippleIndex > refreshHapticRippleIndex.value) {
+        if (rippleIndex !== refreshHapticRippleIndex.value) {
           const rippleElementProgress =
             (rippleIndex + 1) / refreshHapticRippleDistances.length;
+          const isPullingBack = rippleIndex < refreshHapticRippleIndex.value;
 
           refreshHaptics.playDiscrete(
-            0.35 + rippleElementProgress * 0.35,
-            0.35 + rippleElementProgress * 0.4,
+            isPullingBack
+              ? 0.16 + rippleElementProgress * 0.14
+              : 0.35 + rippleElementProgress * 0.35,
+            isPullingBack
+              ? 0.72 - rippleElementProgress * 0.18
+              : 0.35 + rippleElementProgress * 0.4,
           );
           refreshHapticRippleIndex.value = rippleIndex;
         }
