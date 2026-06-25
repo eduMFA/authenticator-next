@@ -2,7 +2,7 @@ import { ThemedText } from "@/components/themed-text";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { SymbolView } from "expo-symbols";
-import { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { ColorValue, StyleSheet, View } from "react-native";
 import Animated, {
   Easing,
@@ -11,9 +11,11 @@ import Animated, {
   LinearTransition,
 } from "react-native-reanimated";
 
-export type StatusCardVariant = "error" | "danger" | "success";
+type IconName = ComponentProps<typeof SymbolView>["name"];
 
-const variantIcons = {
+export type StatusCardVariant = "error" | "danger" | "neutral" | "success";
+
+const variantIcons: Record<StatusCardVariant, IconName> = {
   danger: {
     ios: "exclamationmark.triangle.fill",
     android: "warning",
@@ -22,25 +24,38 @@ const variantIcons = {
     ios: "xmark.octagon.fill",
     android: "error",
   },
+  neutral: {
+    ios: "info.circle.fill",
+    android: "info",
+  },
   success: {
     ios: "checkmark.circle.fill",
     android: "check_circle",
   },
-} as const;
+};
+
+type StatusCardProps = {
+  variant: StatusCardVariant;
+  title: string;
+  description: string;
+  children?: ReactNode;
+  icon?: IconName;
+  iconPlacement?: "title" | "side";
+};
 
 export function StatusCard({
   variant,
   title,
   description,
   children,
-}: {
-  variant: StatusCardVariant;
-  title: string;
-  description: string;
-  children?: ReactNode;
-}) {
+  icon = variantIcons[variant],
+  iconPlacement = "title",
+}: StatusCardProps) {
   const theme = useTheme();
   const colors = getVariantColors(variant, theme);
+  const iconElement = (
+    <SymbolView name={icon} size={18} tintColor={colors.accent} />
+  );
 
   return (
     <Animated.View
@@ -60,23 +75,28 @@ export function StatusCard({
         },
       ]}
     >
-      <View style={styles.statusTitleRow}>
-        <SymbolView
-          name={variantIcons[variant]}
-          size={18}
-          tintColor={colors.accent}
-        />
-        <ThemedText fontSize={Typography.fontSize16} fontWeight="bold">
-          {title}
-        </ThemedText>
+      <View style={styles.statusContentRow}>
+        <View style={styles.statusText}>
+          <View style={styles.statusTitleRow}>
+            {iconPlacement === "title" ? iconElement : null}
+            <ThemedText fontSize={Typography.fontSize16} fontWeight="bold">
+              {title}
+            </ThemedText>
+          </View>
+          <ThemedText
+            fontSize={Typography.fontSize14}
+            style={styles.statusDescription}
+          >
+            {description}
+          </ThemedText>
+          {children}
+        </View>
+        {iconPlacement === "side" ? (
+          <View style={[styles.statusSideIcon, { borderColor: colors.accent }]}>
+            {iconElement}
+          </View>
+        ) : null}
       </View>
-      <ThemedText
-        fontSize={Typography.fontSize14}
-        style={styles.statusDescription}
-      >
-        {description}
-      </ThemedText>
-      {children}
     </Animated.View>
   );
 }
@@ -96,6 +116,11 @@ function getVariantColors(
         accent: theme.errorBar,
         background: theme.errorBackground,
       };
+    case "neutral":
+      return {
+        accent: theme.border,
+        background: theme.backgroundSecondary,
+      };
     case "success":
       return {
         accent: theme.successBar,
@@ -110,9 +135,26 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: Spacing.lg,
   },
+  statusContentRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: Spacing.lg,
+  },
   statusDescription: {
     lineHeight: 20,
     marginTop: Spacing.sm,
+  },
+  statusSideIcon: {
+    alignItems: "center",
+    borderCurve: "continuous",
+    borderRadius: Radii.xl,
+    borderWidth: 1,
+    height: 42,
+    justifyContent: "center",
+    width: 42,
+  },
+  statusText: {
+    flex: 1,
   },
   statusTitleRow: {
     alignItems: "center",
