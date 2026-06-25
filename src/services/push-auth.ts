@@ -1,5 +1,7 @@
 import { SIGN_ALGORITHM } from "@/constants/auth";
-import { PushRequest, PushRequestStatus, PushToken } from "@/types";
+import type { PushRequest } from "@/types/push-request";
+import { PushRequestStatus } from "@/types/push-request";
+import type { PushToken } from "@/types/token";
 import { base64ToBase32 } from "@/utils/crypto";
 import { signMessage } from "@/utils/rsa";
 import { Presets } from "react-native-pulsar";
