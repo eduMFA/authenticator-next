@@ -15,7 +15,26 @@ const OTP_AUTH_URI_PATTERN = /otpauth:\/\/[^\s"'<>)]*/gi;
 
 let sentryInitialized = false;
 
-export function initSentry(): void {
+export function setSentryTrackingEnabled(enabled: boolean): void {
+  if (enabled) {
+    initSentry();
+    return;
+  }
+
+  if (!sentryInitialized) {
+    return;
+  }
+
+  sentryInitialized = false;
+
+  void Sentry.close().catch((error: unknown) => {
+    if (__DEV__) {
+      console.warn("Failed to close Sentry:", error);
+    }
+  });
+}
+
+function initSentry(): void {
   if (sentryInitialized) {
     return;
   }
