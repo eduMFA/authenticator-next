@@ -42,8 +42,12 @@ type ThemeColors = {
   textSecondary: ColorValue;
   border: ColorValue;
   fill: ColorValue;
-  successBar: string;
-  errorBar: string;
+  dangerBackground: ColorValue;
+  dangerBar: ColorValue;
+  errorBackground: ColorValue;
+  errorBar: ColorValue;
+  successBackground: ColorValue;
+  successBar: ColorValue;
 };
 
 const fallbackColors = {
@@ -56,6 +60,10 @@ const fallbackColors = {
     textSecondary: "#606060",
     border: "#D9D9D0",
     fill: "#E5E5EA",
+    dangerBackground: "rgba(255, 149, 0, 0.12)",
+    dangerBar: "rgba(255, 149, 0, 0.75)",
+    errorBackground: "rgba(220, 53, 69, 0.10)",
+    successBackground: "rgba(6, 64, 43, 0.10)",
     successBar: "rgba(6, 64, 43, 0.6)",
     errorBar: "rgba(220, 53, 69, 0.6)",
   },
@@ -68,6 +76,10 @@ const fallbackColors = {
     textSecondary: "#CCCCCC",
     border: "#363A3F",
     fill: "#2C2C2E",
+    dangerBackground: "rgba(255, 149, 0, 0.18)",
+    dangerBar: "rgba(255, 149, 0, 0.8)",
+    errorBackground: "rgba(220, 53, 69, 0.18)",
+    successBackground: "rgba(6, 64, 43, 0.24)",
     successBar: "rgba(6, 64, 43, 0.6)",
     errorBar: "rgba(220, 53, 69, 0.6)",
   },
@@ -86,6 +98,10 @@ const iosThemeColors =
         textSecondary: iosColors.secondaryLabel,
         border: iosColors.separator,
         fill: iosColors.secondarySystemFill,
+        dangerBackground: fallbackColors.light.dangerBackground,
+        dangerBar: iosColors.systemOrange,
+        errorBackground: fallbackColors.light.errorBackground,
+        successBackground: fallbackColors.light.successBackground,
         successBar: fallbackColors.light.successBar,
         errorBar: fallbackColors.light.errorBar,
       } satisfies ThemeColors)
@@ -152,6 +168,7 @@ export const Typography = {
 
 export const Radii = {
   sm: 4,
+  xs: 6,
   md: 10,
   lg: 12,
   xl: 20,

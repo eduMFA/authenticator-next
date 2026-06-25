@@ -1,7 +1,8 @@
-import { usePushRequestStore } from "@/store/push-request-store";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
-import { PushRequest, PushRequestStatus } from "@/types";
+import { usePushRequestStore } from "@/stores/push-request";
+import type { PushRequest } from "@/types/push-request";
+import { PushRequestStatus } from "@/types/push-request";
 import { useLingui } from "@lingui/react/macro";
 import { BlurView } from "expo-blur";
 import { useCallback, useEffect, useMemo, useState } from "react";

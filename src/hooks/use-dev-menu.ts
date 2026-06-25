@@ -1,12 +1,14 @@
 import { useToken } from "@/hooks/use-token";
-import { usePushRequestStore } from "@/store/push-request-store";
-import { PushTokenRolloutState } from "@/types";
+import { usePushRequestStore } from "@/stores/push-request";
+import { useSettingsStore } from "@/stores/settings";
+import { PushTokenRolloutState } from "@/types/token";
 
 export function useDevMenu() {
   const { tokens, updateToken, rolloutToken } = useToken();
   const { clearPushRequests } = usePushRequestStore();
   const token = tokens[0];
   const tokenActionDisabled = !token;
+  const resetOnboarding = useSettingsStore((state) => state.resetOnboarding);
 
   const updateTokenRolloutState = (
     tokenId: string,
@@ -67,5 +69,6 @@ export function useDevMenu() {
     demoRolloutSuccess,
     rolloutFirstToken,
     tokenActionDisabled,
+    resetOnboarding,
   };
 }

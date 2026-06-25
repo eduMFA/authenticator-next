@@ -1,9 +1,15 @@
 import { KEY_SIZE } from "@/constants/auth";
-import { useNotificationStore } from "@/store/notification-store";
-import { PushToken, PushTokenRolloutState } from "@/types";
+import { useNotificationStore } from "@/stores/notification";
+import type {
+  RolloutResult,
+  RolloutStateUpdater,
+  TokenGetter,
+} from "@/types/token-rollout";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 import { stripPemArmor } from "@/utils/crypto";
 import { deleteRsaKeyPair, generateRsaKeyPair } from "@/utils/rsa";
-import { parseTokenResponse } from "@/utils/token-utils";
+import { parseTokenResponse } from "@/utils/token";
 
 // Map rollout states to their corresponding failed states
 const ROLLOUT_STATE_TO_FAILED_STATE: Partial<
@@ -17,15 +23,7 @@ const ROLLOUT_STATE_TO_FAILED_STATE: Partial<
     PushTokenRolloutState.ParsingResponseFailed,
 };
 
-// Track tokens currently being rolled out
 const rollingOutTokens = new Set<string>();
-
-export type RolloutStateUpdater = (
-  id: string,
-  update: Partial<PushToken>,
-) => void;
-
-export type TokenGetter = () => PushToken[];
 
 /**
  * Check if a token is currently being rolled out
@@ -75,13 +73,6 @@ async function sendPublicKeyToServer(
   return response;
 }
 
-export interface RolloutResult {
-  success: boolean;
-  serverPublicKey?: string;
-  error?: Error;
-  failedState?: PushTokenRolloutState;
-}
-
 /**
  * Perform the token rollout process
  * This is the core rollout logic extracted from the store
@@ -113,6 +104,12 @@ export async function performTokenRollout(
   let currentStep: PushTokenRolloutState = PushTokenRolloutState.Pending;
 
   try {
+    const fbToken = await useNotificationStore.getState().getFcmToken();
+    if (!fbToken) {
+      throw new Error("Failed to retrieve FCM token");
+    }
+    console.log(`Retrieved FCM token for token ${id}: ${fbToken}`);
+
     // Step 1: Generate RSA key pair
     currentStep = PushTokenRolloutState.RSAKeyGeneration;
     updateState(id, { rolloutState: currentStep });
@@ -124,13 +121,6 @@ export async function performTokenRollout(
       rolloutState: currentStep,
       publicKey: pubkey,
     });
-
-    // Step 3: Get FCM token from the centralized notification store
-    const fbToken = await useNotificationStore.getState().getFcmToken();
-    if (!fbToken) {
-      throw new Error("Failed to retrieve FCM token");
-    }
-    console.log(`Retrieved FCM token for token ${id}: ${fbToken}`);
 
     const response = await sendPublicKeyToServer(token, pubkey, fbToken);
 

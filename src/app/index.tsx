@@ -1,4 +1,4 @@
-import { NotificationHandler } from "@/components/notification-handler";
+import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
@@ -6,9 +6,11 @@ import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
 import { useDevMenu } from "@/hooks/use-dev-menu";
+import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
-import { PushToken, PushTokenRolloutState } from "@/types";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
@@ -26,6 +28,7 @@ import {
   StyleSheet,
   useColorScheme,
   useWindowDimensions,
+  View,
 } from "react-native";
 import Animated, {
   FadeIn,
@@ -40,6 +43,10 @@ export default function Tokens() {
   const devMenu = useDevMenu();
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
+  const {
+    hasPermission: hasNotificationPermission,
+    isInitialized: isNotificationInitialized,
+  } = useNotificationStatus();
   const { height, width } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -58,6 +65,8 @@ export default function Tokens() {
   const searchQuery = searchText.toLowerCase();
   const emptyStateButtonWidth = Math.min(320, width - Spacing.xl * 2);
   const showToolbarAddButton = tokens.length > 0;
+  const showNotificationNotice =
+    isNotificationInitialized && !hasNotificationPermission;
   const stackHeaderStyle = useMemo(
     () => ({
       backgroundColor: isLiquidGlassAvailable()
@@ -118,8 +127,12 @@ export default function Tokens() {
               {!PushTokenRolloutState.isFailed(item.rolloutState) && (
                 <Link.MenuAction
                   icon="square.and.pencil"
-                  onPress={() => {}}
-                  disabled={true}
+                  onPress={() => {
+                    router.push({
+                      pathname: "/token/[tokenId]",
+                      params: { edit: "1", tokenId: item.id },
+                    });
+                  }}
                 >
                   {t`Edit`}
                 </Link.MenuAction>
@@ -146,7 +159,7 @@ export default function Tokens() {
         </Animated.View>
       );
     },
-    [confirmDeleteToken, rolloutToken, t],
+    [confirmDeleteToken, rolloutToken, router, t],
   );
 
   const toolbarAddButton = (
@@ -210,9 +223,15 @@ export default function Tokens() {
             <Stack.Toolbar.MenuAction onPress={devMenu.clearPushRequests}>
               Clear Push Requests
             </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction onPress={devMenu.resetOnboarding}>
+              Show Onboarding
+            </Stack.Toolbar.MenuAction>
           </Stack.Toolbar.Menu>
         )}
-        {Platform.OS === "ios" && !isLiquidGlassAvailable() && toolbarAddButton}
+        {Platform.OS === "ios" &&
+          !isLiquidGlassAvailable() &&
+          showToolbarAddButton &&
+          toolbarAddButton}
       </Stack.Toolbar>
     </>
   );
@@ -259,8 +278,14 @@ export default function Tokens() {
             style={[styles.noTokenButton, { width: emptyStateButtonWidth }]}
           >
             <Button
-              variant="filled"
-              modifiers={[controlSize("large"), buttonStyle("glassProminent")]}
+              modifiers={[
+                controlSize("large"),
+                buttonStyle(
+                  isLiquidGlassAvailable()
+                    ? "glassProminent"
+                    : "borderedProminent",
+                ),
+              ]}
               onPress={() => {
                 router.navigate("/token/add");
               }}
@@ -287,7 +312,6 @@ export default function Tokens() {
   return (
     <>
       {header}
-      <NotificationHandler />
       <Animated.FlatList
         scrollToOverflowEnabled
         contentInsetAdjustmentBehavior="automatic"
@@ -317,6 +341,17 @@ export default function Tokens() {
               </ThemedText>
             </ThemedView>
           </Animated.View>
+        }
+        ListHeaderComponent={
+          showNotificationNotice ? (
+            <View style={styles.notificationNotice}>
+              <StatusCard
+                variant="danger"
+                title={t`Notifications are disabled`}
+                description={t`Enable notifications to receive push approval requests on this device.`}
+              />
+            </View>
+          ) : null
         }
         refreshControl={
           <RefreshControl
@@ -367,6 +402,9 @@ export const styles = StyleSheet.create({
     lineHeight: Typography.fontSize24 * 1.2,
     marginBottom: Spacing.sm,
     textAlign: "center",
+  },
+  notificationNotice: {
+    marginVertical: Spacing.sm,
   },
   tokenCard: {
     borderRadius: Radii.xl,
