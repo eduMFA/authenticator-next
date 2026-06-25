@@ -18,12 +18,12 @@ msgstr ""
 msgid "Accept"
 msgstr "Accept"
 
-#: src/app/index.tsx:300
-#: src/app/index.tsx:302
+#: src/app/index.tsx:402
+#: src/app/index.tsx:404
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:271
+#: src/app/index.tsx:375
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
@@ -73,7 +73,7 @@ msgstr "Continue"
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:155
+#: src/app/index.tsx:261
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -87,11 +87,11 @@ msgstr "Delete token"
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/use-handle-token-uri.ts:61
+#: src/hooks/use-handle-token-uri.ts:64
 msgid "Dismiss"
 msgstr "Dismiss"
 
-#: src/app/index.tsx:137
+#: src/app/index.tsx:243
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Edit"
@@ -116,7 +116,7 @@ msgstr "Enable camera access in Settings to scan QR codes."
 msgid "Enable notifications"
 msgstr "Enable notifications"
 
-#: src/app/index.tsx:351
+#: src/app/index.tsx:455
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Enable notifications to receive push approval requests on this device."
 
@@ -132,9 +132,9 @@ msgstr "Enrollment response failed"
 msgid "Enter a label for this token."
 msgstr "Enter a label for this token."
 
-#: src/hooks/use-handle-token-uri.ts:47
-#: src/hooks/use-handle-token-uri.ts:57
-#: src/hooks/use-handle-token-uri.ts:89
+#: src/hooks/use-handle-token-uri.ts:50
+#: src/hooks/use-handle-token-uri.ts:60
+#: src/hooks/use-handle-token-uri.ts:92
 msgid "Failed to add token"
 msgstr "Failed to add token"
 
@@ -180,15 +180,15 @@ msgstr "Last failed"
 msgid "No interactions yet"
 msgstr "No interactions yet"
 
-#: src/hooks/use-handle-token-uri.ts:32
+#: src/hooks/use-handle-token-uri.ts:35
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:339
+#: src/app/index.tsx:443
 msgid "No results found for "
 msgstr "No results found for "
 
-#: src/app/index.tsx:263
+#: src/app/index.tsx:367
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
@@ -200,7 +200,7 @@ msgstr "Not now"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/app/index.tsx:350
+#: src/app/index.tsx:454
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
@@ -224,7 +224,7 @@ msgstr "Open notification settings"
 msgid "Open Settings"
 msgstr "Open Settings"
 
-#: src/hooks/use-handle-token-uri.ts:67
+#: src/hooks/use-handle-token-uri.ts:70
 msgid "Open with your Authenticator App"
 msgstr "Open with your Authenticator App"
 
@@ -257,7 +257,7 @@ msgstr "QR code scanner"
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:360
+#: src/app/index.tsx:464
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
@@ -273,7 +273,7 @@ msgstr "Registration failed"
 msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
-#: src/app/index.tsx:147
+#: src/app/index.tsx:253
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
@@ -293,11 +293,11 @@ msgstr "Rollout Failed"
 msgid "Save"
 msgstr "Save"
 
-#: src/hooks/use-handle-token-uri.ts:76
+#: src/hooks/use-handle-token-uri.ts:79
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:186
+#: src/app/index.tsx:290
 msgid "Search tokens"
 msgstr "Search tokens"
 
@@ -330,11 +330,11 @@ msgstr "Status"
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 msgstr "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 
-#: src/hooks/use-handle-token-uri.ts:48
+#: src/hooks/use-handle-token-uri.ts:51
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "The provided QR code isn't a valid eduMFA token."
 
-#: src/hooks/use-handle-token-uri.ts:58
+#: src/hooks/use-handle-token-uri.ts:61
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
 msgstr "The QR code isn't supported by this app. Please use a general Authenticator app."
 
@@ -342,7 +342,7 @@ msgstr "The QR code isn't supported by this app. Please use a general Authentica
 msgid "The server response could not be parsed or did not include the expected token material."
 msgstr "The server response could not be parsed or did not include the expected token material."
 
-#: src/hooks/use-handle-token-uri.ts:90
+#: src/hooks/use-handle-token-uri.ts:93
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 
@@ -390,6 +390,6 @@ msgstr "Welcome to eduMFA"
 msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 msgstr "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 
-#: src/hooks/use-handle-token-uri.ts:33
+#: src/hooks/use-handle-token-uri.ts:36
 msgid "Your image did not contain a QR code."
 msgstr "Your image did not contain a QR code."

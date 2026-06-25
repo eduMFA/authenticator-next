@@ -3,6 +3,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { usePushRequestStore } from "@/stores/push-request";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
+import { playImpactLightHaptic, playImpactMediumHaptic } from "@/utils/haptics";
 import { useLingui } from "@lingui/react/macro";
 import { BlurView } from "expo-blur";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -14,7 +15,6 @@ import {
   View,
   useColorScheme,
 } from "react-native";
-import { Presets } from "react-native-pulsar";
 import Animated, {
   Easing,
   FadeIn,
@@ -59,10 +59,10 @@ export function PushRequestPopup({
 
       let pushRequestStatus: PushRequestStatus;
       if (action === "accept") {
-        Presets.System.impactMedium();
+        playImpactMediumHaptic();
         pushRequestStatus = PushRequestStatus.Accepted;
       } else {
-        Presets.System.impactLight();
+        playImpactLightHaptic();
         pushRequestStatus = PushRequestStatus.Declined;
       }
 
