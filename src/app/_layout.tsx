@@ -23,7 +23,6 @@ import {
   Platform,
   useColorScheme,
 } from "react-native";
-import { Settings } from "react-native-pulsar";
 
 activateCurrentLocale();
 
@@ -61,16 +60,11 @@ function RootLayoutContent() {
     (state) => state.hasCompletedOnboarding,
   );
   const hasHydratedSettings = useSettingsStore((state) => state.hasHydrated);
-  const hapticsEnabled = useSettingsStore((state) => state.hapticsEnabled);
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
 
   const theme = useTheme();
   const tabBarBackgroundColor = theme.background;
-
-  useEffect(() => {
-    Settings.enableHaptics(hapticsEnabled);
-  }, [hapticsEnabled]);
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
