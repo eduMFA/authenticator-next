@@ -1,14 +1,15 @@
 import { ThemedText } from "@/components/themed-text";
 import {
   ONBOARDING_PANEL_GAP,
-  onboardingProgressInputRange,
   ONBOARDING_STEP_COUNT,
+  onboardingProgressInputRange,
   onboardingStepAccents,
 } from "@/constants/onboarding";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore } from "@/stores/settings";
+import type { EasingFunction, OnboardingStep } from "@/types/onboarding";
 import { configureHaptics, playHaptic } from "@/utils/haptics";
 import {
   isNotificationPermissionEnabled,
@@ -38,7 +39,6 @@ import {
   NotificationStepActions,
   WelcomeStepActions,
 } from "./onboarding-sequence/step-actions";
-import type { EasingFunction, OnboardingStep } from "@/types/onboarding";
 import {
   VisualCardContent,
   WelcomeVisualContent,
@@ -79,7 +79,7 @@ export function OnboardingSequence() {
         id: "welcome",
         kicker: t`Welcome`,
         title: t`Welcome to eduMFA`,
-        body: t`Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage.`,
+        body: t`Approve sign-ins securely from this device, with your eduMFA tokens ready when you need them.`,
         accent: onboardingStepAccents[0],
       },
       {

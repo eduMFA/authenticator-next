@@ -35,6 +35,10 @@ msgstr "Allow camera access"
 msgid "Anonymous reports"
 msgstr "Anonymous reports"
 
+#: src/components/onboarding-sequence.tsx:82
+msgid "Approve sign-ins securely from this device, with your eduMFA tokens ready when you need them."
+msgstr "Approve sign-ins securely from this device, with your eduMFA tokens ready when you need them."
+
 #: src/components/onboarding-sequence.tsx:88
 msgid "Approve sign-ins the moment they arrive"
 msgstr "Approve sign-ins the moment they arrive"
@@ -153,10 +157,6 @@ msgstr "Get started"
 #: src/components/onboarding-sequence.tsx:95
 msgid "Help improve reliability"
 msgstr "Help improve reliability"
-
-#: src/components/onboarding-sequence.tsx:82
-msgid "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
-msgstr "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
 
 #: src/components/token-detail/token-detail-utils.ts:50
 #: src/components/token-detail/token-detail-utils.ts:79
@@ -315,8 +315,8 @@ msgid "Server registration failed"
 msgstr "Server registration failed"
 
 #: src/components/onboarding-sequence/step-actions.tsx:130
-msgid "Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names."
-msgstr "Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names."
+msgid "Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names."
+msgstr "Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names."
 
 #: src/components/onboarding-sequence/step-actions.tsx:139
 msgid "Share anonymous reports"

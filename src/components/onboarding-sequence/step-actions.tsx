@@ -127,7 +127,7 @@ export function CrashReportsStepActions({
   return (
     <View style={styles.buttonStack}>
       <StatusCard
-        description={t`Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names.`}
+        description={t`Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names.`}
         icon={{ ios: "hand.raised.fill", android: "privacy_tip" }}
         iconPlacement="side"
         title={t`Anonymous reports`}

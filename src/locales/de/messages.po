@@ -35,6 +35,10 @@ msgstr "Kamerazugriff erlauben"
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
+#: src/components/onboarding-sequence.tsx:82
+msgid "Approve sign-ins securely from this device, with your eduMFA tokens ready when you need them."
+msgstr "Genehmige Anmeldungen sicher von diesem Gerät aus, mit deinen eduMFA-Token griffbereit, wenn du sie brauchst."
+
 #: src/components/onboarding-sequence.tsx:88
 msgid "Approve sign-ins the moment they arrive"
 msgstr "Anmeldungen sofort freigeben"
@@ -153,10 +157,6 @@ msgstr "Loslegen"
 #: src/components/onboarding-sequence.tsx:95
 msgid "Help improve reliability"
 msgstr "Hilf, die Zuverlässigkeit zu verbessern"
-
-#: src/components/onboarding-sequence.tsx:82
-msgid "Keep your sign-ins close at hand with push approvals and tokens that feel simple to manage."
-msgstr "Behalte deine Anmeldungen mit Push-Freigaben und einfach verwaltbaren Token direkt griffbereit."
 
 #: src/components/token-detail/token-detail-utils.ts:50
 #: src/components/token-detail/token-detail-utils.ts:79
@@ -315,8 +315,8 @@ msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
 #: src/components/onboarding-sequence/step-actions.tsx:130
-msgid "Share anonymized crash and error reports to help improve reliability. No token secrets, passwords, or institution names."
-msgstr "Teile anonymisierte Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Keine Token-Geheimnisse, Passwörter oder Namen von Institutionen."
+msgid "Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names."
+msgstr "Teile anonymisierte Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Berichte enthalten niemals Token-Geheimnisse, Passwörter oder Namen von Institutionen."
 
 #: src/components/onboarding-sequence/step-actions.tsx:139
 msgid "Share anonymous reports"
