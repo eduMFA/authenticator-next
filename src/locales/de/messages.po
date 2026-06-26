@@ -18,6 +18,10 @@ msgstr ""
 msgid "Accept"
 msgstr "Akzeptieren"
 
+#: src/components/token-detail/token-overview-content.tsx:175
+msgid "Activity Log"
+msgstr "Aktivitätsprotokoll"
+
 #: src/app/index.tsx:300
 #: src/app/index.tsx:302
 msgid "Add token"
@@ -46,10 +50,6 @@ msgstr "Anmeldungen sofort freigeben"
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
-
-#: src/components/token-detail/token-overview-content.tsx:175
-msgid "Audit log"
-msgstr "Prüfprotokoll"
 
 #: src/components/token-add/camera-permission-splash.tsx:44
 msgid "Camera access is required to scan the QR code and pair a token."
