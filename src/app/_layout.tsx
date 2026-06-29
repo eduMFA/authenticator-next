@@ -1,10 +1,12 @@
 import { NotificationHandler } from "@/components/notification-handler";
+import { OnboardingSequence } from "@/components/onboarding-sequence";
 import { ThemedText } from "@/components/themed-text";
 import { Typography, useInterFonts } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
+import { useSettingsStore } from "@/stores/settings";
 import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
 import { isTokenEnrollmentUri } from "@/utils/token";
@@ -55,6 +57,10 @@ function RootLayoutContent() {
   const startPendingRollouts = useTokenStore(
     (state) => state.startPendingRollouts,
   );
+  const hasCompletedOnboarding = useSettingsStore(
+    (state) => state.hasCompletedOnboarding,
+  );
+  const hasHydratedSettings = useSettingsStore((state) => state.hasHydrated);
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
 
@@ -65,15 +71,28 @@ function RootLayoutContent() {
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
     initializeNotifications().then(() => {
       // Start pending rollouts after notifications are initialized
       startPendingRollouts();
       // Poll for any pending challenges when the app opens
       pollChallenges();
     });
-  }, [initializeNotifications, startPendingRollouts, pollChallenges]);
+  }, [
+    hasCompletedOnboarding,
+    initializeNotifications,
+    startPendingRollouts,
+    pollChallenges,
+  ]);
 
   useEffect(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       const wasInactive = /inactive|background/.test(appState.current);
       if (wasInactive && nextAppState === "active") {
@@ -88,9 +107,13 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [pollChallenges, checkPermissions]);
+  }, [hasCompletedOnboarding, pollChallenges, checkPermissions]);
 
   useEffect(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
     const handleIncomingUrl = async (incomingUrl: string) => {
       if (!isTokenEnrollmentUri(incomingUrl)) {
         return;
@@ -118,7 +141,15 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [handleTokenUri]);
+  }, [handleTokenUri, hasCompletedOnboarding]);
+
+  if (!hasHydratedSettings) {
+    return null;
+  }
+
+  if (!hasCompletedOnboarding) {
+    return <OnboardingSequence />;
+  }
 
   return (
     <>

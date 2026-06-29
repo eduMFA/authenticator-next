@@ -14,17 +14,21 @@ msgstr ""
 "X-Generator: Poedit 3.8\n"
 
 #: src/components/push-request-popup.tsx:226
-#: src/utils/notification.ts:52
+#: src/utils/notification.ts:61
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:308
-#: src/app/index.tsx:369
-#: src/app/index.tsx:371
+#: src/components/token-detail/token-overview-content.tsx:175
+msgid "Activity Log"
+msgstr "Aktivitätsprotokoll"
+
+#: src/app/index.tsx:311
+#: src/app/index.tsx:372
+#: src/app/index.tsx:374
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:339
+#: src/app/index.tsx:342
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -32,13 +36,21 @@ msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem
 msgid "Allow camera access"
 msgstr "Kamerazugriff erlauben"
 
+#: src/components/onboarding-sequence/step-actions.tsx:131
+msgid "Anonymous reports"
+msgstr "Anonyme Berichte"
+
+#: src/components/onboarding-sequence.tsx:82
+msgid "Approve sign-ins securely from this device, with your eduMFA tokens ready when you need them."
+msgstr "Genehmige Anmeldungen sicher von diesem Gerät aus, mit deinen eduMFA-Token griffbereit, wenn du sie brauchst."
+
+#: src/components/onboarding-sequence.tsx:88
+msgid "Approve sign-ins the moment they arrive"
+msgstr "Anmeldungen sofort freigeben"
+
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
-
-#: src/components/token-detail/token-overview-content.tsx:175
-msgid "Audit log"
-msgstr "Prüfprotokoll"
 
 #: src/components/token-add/camera-permission-splash.tsx:44
 msgid "Camera access is required to scan the QR code and pair a token."
@@ -52,12 +64,13 @@ msgstr "Kamerazugriff ist deaktiviert"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: src/components/onboarding-sequence/step-actions.tsx:73
 #: src/components/token-add/camera-permission-splash.tsx:64
 msgid "Continue"
 msgstr "Weiter"
 
 #: src/components/push-request-popup.tsx:220
-#: src/utils/notification.ts:60
+#: src/utils/notification.ts:69
 msgid "Decline"
 msgstr "Ablehnen"
 
@@ -79,6 +92,10 @@ msgstr "Details"
 msgid "Dismiss"
 msgstr "Schließen"
 
+#: src/components/onboarding-sequence/step-actions.tsx:137
+msgid "Do not share reports"
+msgstr "Berichte nicht teilen"
+
 #: src/app/index.tsx:123
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
@@ -88,11 +105,23 @@ msgstr "Bearbeiten"
 msgid "Edit token"
 msgstr "Token bearbeiten"
 
+#: src/components/onboarding-sequence/step-actions.tsx:66
+msgid "eduMFA can receive push approvals and alert you when a sign-in needs attention."
+msgstr "eduMFA kann Push-Freigaben empfangen und dich benachrichtigen, wenn eine Anmeldung deine Aufmerksamkeit benötigt."
+
+#: src/components/onboarding-sequence/step-actions.tsx:84
+msgid "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
+msgstr "eduMFA kann keine Push-Freigaben empfangen, solange Benachrichtigungen deaktiviert sind. Aktiviere sie in den Systemeinstellungen und kehre dann hierher zurück."
+
 #: src/components/token-add/camera-permission-denied.tsx:40
 msgid "Enable camera access in Settings to scan QR codes."
 msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen."
 
-#: src/app/index.tsx:422
+#: src/components/onboarding-sequence/step-actions.tsx:105
+msgid "Enable notifications"
+msgstr "Benachrichtigungen aktivieren"
+
+#: src/app/index.tsx:425
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -122,6 +151,14 @@ msgstr "Registrierung wird abgeschlossen"
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
+#: src/components/onboarding-sequence.tsx:331
+msgid "Get started"
+msgstr "Loslegen"
+
+#: src/components/onboarding-sequence.tsx:95
+msgid "Help improve reliability"
+msgstr "Hilf, die Zuverlässigkeit zu verbessern"
+
 #: src/components/token-detail/token-detail-utils.ts:50
 #: src/components/token-detail/token-detail-utils.ts:79
 msgid "Key generation failed"
@@ -148,17 +185,41 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:410
+#: src/app/index.tsx:413
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:331
+#: src/app/index.tsx:334
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
-#: src/app/index.tsx:421
+#: src/components/onboarding-sequence/step-actions.tsx:94
+msgid "Not now"
+msgstr "Nicht jetzt"
+
+#: src/components/onboarding-sequence.tsx:87
+msgid "Notifications"
+msgstr "Benachrichtigungen"
+
+#: src/app/index.tsx:424
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
+
+#: src/components/onboarding-sequence/step-actions.tsx:67
+msgid "Notifications are enabled"
+msgstr "Benachrichtigungen sind aktiviert"
+
+#: src/components/onboarding-sequence.tsx:89
+msgid "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention."
+msgstr "Benachrichtigungen sind wichtig für eduMFA. Sie ermöglichen der App, Anmeldefreigaben zu empfangen und dich zu informieren, wenn eine Push-Anfrage deine Aufmerksamkeit benötigt."
+
+#: src/components/onboarding-sequence/step-actions.tsx:85
+msgid "Notifications are required"
+msgstr "Benachrichtigungen sind erforderlich"
+
+#: src/components/onboarding-sequence/step-actions.tsx:91
+msgid "Open notification settings"
+msgstr "Benachrichtigungseinstellungen öffnen"
 
 #: src/components/token-add/camera-permission-denied.tsx:55
 msgid "Open Settings"
@@ -184,6 +245,10 @@ msgstr "Ausstehend"
 msgid "Place the QR code inside the frame"
 msgstr "Platziere den QR-Code im Rahmen"
 
+#: src/components/onboarding-sequence.tsx:94
+msgid "Privacy choice"
+msgstr "Datenschutz-Auswahl"
+
 #: src/components/token-add/upload-qr-code-button.tsx:64
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
@@ -193,7 +258,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:431
+#: src/app/index.tsx:434
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -250,6 +315,14 @@ msgstr "Servernachricht"
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
+#: src/components/onboarding-sequence/step-actions.tsx:128
+msgid "Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names."
+msgstr "Teile anonymisierte Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Berichte enthalten niemals Token-Geheimnisse, Passwörter oder Namen von Institutionen."
+
+#: src/components/onboarding-sequence/step-actions.tsx:143
+msgid "Share anonymous reports"
+msgstr "Anonyme Berichte teilen"
+
 #: src/components/token-detail/token-overview-content.tsx:168
 msgid "Status"
 msgstr "Status"
@@ -305,6 +378,18 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 #: src/components/token-add/upload-qr-code-button.tsx:67
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
+
+#: src/components/onboarding-sequence.tsx:80
+msgid "Welcome"
+msgstr "Willkommen"
+
+#: src/components/onboarding-sequence.tsx:81
+msgid "Welcome to eduMFA"
+msgstr "Willkommen bei eduMFA"
+
+#: src/components/onboarding-sequence.tsx:96
+msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
+msgstr "Du kannst anonymisierte Absturz- und Fehlerberichte aktivieren. Das ist standardmäßig ausgeschaltet, und die App funktioniert in beiden Fällen gleich."
 
 #: src/hooks/use-handle-token-uri.ts:33
 msgid "Your image did not contain a QR code."
