@@ -1,9 +1,9 @@
 import { StatusCard } from "@/components/status-card";
 import { Spacing } from "@/constants/theme";
+import { isNotificationPermissionPending } from "@/utils/notification";
 import { useLingui } from "@lingui/react/macro";
 import * as Notifications from "expo-notifications";
 import { StyleSheet, View, type ColorValue } from "react-native";
-import { isNotificationPermissionPending } from "@/utils/notification";
 import { ActionButton } from "./action-button";
 import { TextButton } from "./text-button";
 
@@ -113,14 +113,12 @@ type CrashReportsStepActionsProps = {
   accentColor: string;
   onDecline: () => void;
   onOptIn: () => void;
-  textColor: ColorValue;
 };
 
 export function CrashReportsStepActions({
   accentColor,
   onDecline,
   onOptIn,
-  textColor,
 }: CrashReportsStepActionsProps) {
   const { t } = useLingui();
 
@@ -135,14 +133,15 @@ export function CrashReportsStepActions({
       />
       <ActionButton
         accentColor={accentColor}
+        icon={{ ios: "xmark", android: "close" }}
+        label={t`Do not share reports`}
+        onPress={onDecline}
+      />
+      <ActionButton
+        accentColor={accentColor}
         icon={{ ios: "checkmark.shield.fill", android: "verified_user" }}
         label={t`Share anonymous reports`}
         onPress={onOptIn}
-      />
-      <TextButton
-        color={textColor}
-        label={t`Finish without reports`}
-        onPress={onDecline}
       />
     </View>
   );

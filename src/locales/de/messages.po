@@ -35,7 +35,7 @@ msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem
 msgid "Allow camera access"
 msgstr "Kamerazugriff erlauben"
 
-#: src/components/onboarding-sequence/step-actions.tsx:133
+#: src/components/onboarding-sequence/step-actions.tsx:131
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
@@ -91,6 +91,10 @@ msgstr "Details"
 msgid "Dismiss"
 msgstr "Schließen"
 
+#: src/components/onboarding-sequence/step-actions.tsx:137
+msgid "Do not share reports"
+msgstr "Berichte nicht teilen"
+
 #: src/app/index.tsx:137
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
@@ -142,15 +146,11 @@ msgstr "Token konnte nicht hinzugefügt werden"
 msgid "Finalizing enrollment"
 msgstr "Registrierung wird abgeschlossen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:144
-msgid "Finish without reports"
-msgstr "Ohne Berichte abschließen"
-
 #: src/components/token-detail/token-detail-utils.ts:77
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
-#: src/components/onboarding-sequence.tsx:332
+#: src/components/onboarding-sequence.tsx:331
 msgid "Get started"
 msgstr "Loslegen"
 
@@ -314,11 +314,11 @@ msgstr "Servernachricht"
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:130
+#: src/components/onboarding-sequence/step-actions.tsx:128
 msgid "Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names."
 msgstr "Teile anonymisierte Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Berichte enthalten niemals Token-Geheimnisse, Passwörter oder Namen von Institutionen."
 
-#: src/components/onboarding-sequence/step-actions.tsx:139
+#: src/components/onboarding-sequence/step-actions.tsx:143
 msgid "Share anonymous reports"
 msgstr "Anonyme Berichte teilen"
 

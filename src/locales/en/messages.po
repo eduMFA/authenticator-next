@@ -35,7 +35,7 @@ msgstr "Add your first eduMFA token to approve sign-ins securely from this devic
 msgid "Allow camera access"
 msgstr "Allow camera access"
 
-#: src/components/onboarding-sequence/step-actions.tsx:133
+#: src/components/onboarding-sequence/step-actions.tsx:131
 msgid "Anonymous reports"
 msgstr "Anonymous reports"
 
@@ -91,6 +91,10 @@ msgstr "Details"
 msgid "Dismiss"
 msgstr "Dismiss"
 
+#: src/components/onboarding-sequence/step-actions.tsx:137
+msgid "Do not share reports"
+msgstr "Do not share reports"
+
 #: src/app/index.tsx:137
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
@@ -142,15 +146,11 @@ msgstr "Failed to add token"
 msgid "Finalizing enrollment"
 msgstr "Finalizing enrollment"
 
-#: src/components/onboarding-sequence/step-actions.tsx:144
-msgid "Finish without reports"
-msgstr "Finish without reports"
-
 #: src/components/token-detail/token-detail-utils.ts:77
 msgid "Generating keys"
 msgstr "Generating keys"
 
-#: src/components/onboarding-sequence.tsx:332
+#: src/components/onboarding-sequence.tsx:331
 msgid "Get started"
 msgstr "Get started"
 
@@ -314,11 +314,11 @@ msgstr "Server message"
 msgid "Server registration failed"
 msgstr "Server registration failed"
 
-#: src/components/onboarding-sequence/step-actions.tsx:130
+#: src/components/onboarding-sequence/step-actions.tsx:128
 msgid "Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names."
 msgstr "Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names."
 
-#: src/components/onboarding-sequence/step-actions.tsx:139
+#: src/components/onboarding-sequence/step-actions.tsx:143
 msgid "Share anonymous reports"
 msgstr "Share anonymous reports"
 

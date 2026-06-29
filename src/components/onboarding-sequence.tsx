@@ -321,7 +321,6 @@ export function OnboardingSequence() {
           accentColor={contentAccentColor}
           onDecline={handleDeclineCrashReports}
           onOptIn={handleOptInCrashReports}
-          textColor={textColor}
         />
       );
     }
