@@ -14,11 +14,11 @@ import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
-import { Button, Text as ExpoText, Icon, Row } from "@expo/ui";
+import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import {
   Icon as AndroidIcon,
   ExtendedFloatingActionButton,
-  Host,
+  Host as AndroidHost,
   Text,
 } from "@expo/ui/jetpack-compose";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
@@ -289,7 +289,7 @@ export default function Tokens() {
 
   const androidAddFab =
     Platform.OS === "android" ? (
-      <Host
+      <AndroidHost
         matchContents
         style={[styles.fabHost, { bottom: bottom + Spacing.lg }]}
       >
@@ -306,7 +306,7 @@ export default function Tokens() {
             <Text style={styles.fabText}>{t`Add token`}</Text>
           </ExtendedFloatingActionButton.Text>
         </ExtendedFloatingActionButton>
-      </Host>
+      </AndroidHost>
     ) : null;
 
   if (!tokens.length) {

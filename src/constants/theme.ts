@@ -115,9 +115,13 @@ const iosThemeColors =
     : null;
 
 export function getAndroidThemeColors(): ThemeColors | null {
+  if (Platform.OS !== "android") {
+    return null;
+  }
+
   const androidColors = Color.android.dynamic;
 
-  if (Platform.OS !== "android" || !androidColors) {
+  if (!androidColors) {
     return null;
   }
 
