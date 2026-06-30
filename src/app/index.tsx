@@ -33,7 +33,6 @@ import {
   Pressable,
   RefreshControl,
   StyleSheet,
-  useColorScheme,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -56,15 +55,16 @@ export default function Tokens() {
   } = useNotificationStatus();
   const { height, width } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
   const theme = useTheme();
   const backgroundColor = theme.background;
   const { t } = useLingui();
   const tabBarTintColor = theme.text;
   const transparentColor = theme.transparent;
   const tabBarBackgroundColor = theme.background;
-  const refreshControlTintColor =
-    colorScheme === "dark" ? StaticColors.white : StaticColors.black;
+  const refreshControlColor =
+    Platform.OS === "android" ? theme.branding : theme.text;
+  const refreshControlProgressBackgroundColor =
+    Platform.OS === "android" ? theme.backgroundSecondary : undefined;
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -427,9 +427,10 @@ export default function Tokens() {
             refreshing={isPolling}
             onRefresh={onRefresh}
             title={t`Refreshing...`}
-            tintColor={refreshControlTintColor}
-            titleColor={refreshControlTintColor}
-            colors={[refreshControlTintColor]}
+            tintColor={refreshControlColor}
+            titleColor={refreshControlColor}
+            colors={[refreshControlColor]}
+            progressBackgroundColor={refreshControlProgressBackgroundColor}
           />
         }
       />
