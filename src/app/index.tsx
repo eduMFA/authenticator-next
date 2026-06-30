@@ -2,10 +2,7 @@ import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
-import {
-  TOKEN_ACTION_MENU_WIDTH,
-  type TokenAction,
-} from "@/components/TokenActionsMenu";
+import { type TokenAction } from "@/components/TokenActionsMenu";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
@@ -138,11 +135,26 @@ export default function Tokens() {
           onPress: () => confirmDeleteToken(item.id),
         },
       ];
-      const tokenListItem = (
-        <TokenListItem actions={tokenActions} token={item} key={item.id} />
-      );
       const isRolloutFinished = PushTokenRolloutState.isFinished(
         item.rolloutState,
+      );
+      const navigateToToken = () => {
+        router.push({
+          pathname: "/token/[tokenId]",
+          params: { tokenId: item.id },
+        });
+      };
+      const tokenListItem = (
+        <TokenListItem
+          actions={tokenActions}
+          onPress={
+            Platform.OS === "android" && isRolloutFinished
+              ? navigateToToken
+              : undefined
+          }
+          token={item}
+          key={item.id}
+        />
       );
 
       return (
@@ -153,24 +165,7 @@ export default function Tokens() {
           style={styles.tokenWrapper}
         >
           {Platform.OS === "android" ? (
-            <View style={styles.tokenCard}>
-              {tokenListItem}
-              {isRolloutFinished && (
-                <Pressable
-                  accessibilityLabel={
-                    item.issuer ? `${item.label}, ${item.issuer}` : item.label
-                  }
-                  accessibilityRole="button"
-                  onPress={() => {
-                    router.push({
-                      pathname: "/token/[tokenId]",
-                      params: { tokenId: item.id },
-                    });
-                  }}
-                  style={styles.tokenLinkOverlay}
-                />
-              )}
-            </View>
+            <View style={styles.tokenCard}>{tokenListItem}</View>
           ) : (
             <Link
               push
@@ -493,14 +488,6 @@ export const styles = StyleSheet.create({
     borderRadius: Radii.xl,
     overflow: "hidden",
     position: "relative",
-  },
-  tokenLinkOverlay: {
-    bottom: 0,
-    left: 0,
-    position: "absolute",
-    right: TOKEN_ACTION_MENU_WIDTH,
-    top: 0,
-    zIndex: 2,
   },
   tokenWrapper: {
     marginVertical: Spacing.sm,

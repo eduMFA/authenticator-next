@@ -5,7 +5,13 @@ import {
 } from "@/types/token";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import {
+  type LayoutChangeEvent,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -20,9 +26,9 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 import {
-  TOKEN_ACTION_MENU_WIDTH,
   TokenActionsMenu,
   type TokenAction,
+  type TokenActionsMenuAnchor,
 } from "./TokenActionsMenu";
 import { ThemedText } from "./themed-text";
 import { TokenImage } from "./token-image";
@@ -33,6 +39,7 @@ const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 const PROGRESS_ANIMATION_DURATION = 500;
 const FAILED_ANIMATION_DURATION = 1000;
 const PROGRESS_HIDE_DELAY = 1000;
+const ACTIONS_MENU_VERTICAL_OFFSET = Spacing.xs;
 
 const timingConfig = {
   progress: {
@@ -47,9 +54,11 @@ const timingConfig = {
 
 export const TokenListItem = memo(function TokenListItem({
   actions,
+  onPress,
   token,
 }: {
   actions: TokenAction[];
+  onPress?: () => void;
   token: PushToken;
 }) {
   const { t } = useLingui();
@@ -70,6 +79,34 @@ export const TokenListItem = memo(function TokenListItem({
     token.lastRefreshResult?.status === PushTokenRefreshStatus.Failed;
 
   const [showProgress, setShowProgress] = useState(!isCompleted);
+  const [actionsMenuAnchor, setActionsMenuAnchor] =
+    useState<TokenActionsMenuAnchor | null>(null);
+  const [isActionsMenuExpanded, setIsActionsMenuExpanded] = useState(false);
+  const actionMenuAnchorRef = useRef<TokenActionsMenuAnchor | null>(null);
+
+  const closeActionsMenu = () => {
+    setIsActionsMenuExpanded(false);
+  };
+
+  const updateActionsMenuAnchor = (event: LayoutChangeEvent) => {
+    const { height, width } = event.nativeEvent.layout;
+
+    actionMenuAnchorRef.current = {
+      x: width,
+      y: height + ACTIONS_MENU_VERTICAL_OFFSET,
+    };
+  };
+
+  const openActionsMenu = () => {
+    const anchor = actionMenuAnchorRef.current;
+
+    if (!anchor) {
+      return;
+    }
+
+    setActionsMenuAnchor(anchor);
+    setIsActionsMenuExpanded(true);
+  };
 
   // Shared values for animations
   const progress = useSharedValue(
@@ -92,14 +129,6 @@ export const TokenListItem = memo(function TokenListItem({
     () => [styles.token, { backgroundColor }],
     [backgroundColor],
   );
-  const tokenDetailsStyle = useMemo(
-    () => [
-      styles.tokenDetails,
-      showActionsMenu && styles.tokenDetailsWithActionMenu,
-    ],
-    [showActionsMenu],
-  );
-
   useEffect(() => {
     const targetProgress = PushTokenRolloutState.getProgress(
       token.rolloutState,
@@ -124,8 +153,7 @@ export const TokenListItem = memo(function TokenListItem({
 
   // Progress text based on rollout state
   const progressText = isRolloutFailed ? t`Rollout Failed` : t`Rolling out...`;
-
-  return (
+  const tokenContent = (
     <>
       <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
         <TokenImage
@@ -134,7 +162,7 @@ export const TokenListItem = memo(function TokenListItem({
           animated
           size="small"
         />
-        <View style={tokenDetailsStyle}>
+        <View style={styles.tokenDetails}>
           <View style={styles.titleRow}>
             <ThemedText
               fontSize={Typography.fontSize16}
@@ -189,7 +217,34 @@ export const TokenListItem = memo(function TokenListItem({
           <ThemedText style={styles.progressText}>{progressText}</ThemedText>
         </AnimatedBlurView>
       )}
-      {showActionsMenu && <TokenActionsMenu actions={actions} />}
+    </>
+  );
+
+  return (
+    <>
+      {showActionsMenu && onPress ? (
+        <Pressable
+          accessibilityLabel={
+            token.issuer ? `${token.label}, ${token.issuer}` : token.label
+          }
+          accessibilityRole="button"
+          onLayout={updateActionsMenuAnchor}
+          onLongPress={openActionsMenu}
+          onPress={onPress}
+        >
+          {tokenContent}
+        </Pressable>
+      ) : (
+        tokenContent
+      )}
+      {showActionsMenu && actionsMenuAnchor ? (
+        <TokenActionsMenu
+          actions={actions}
+          anchor={actionsMenuAnchor}
+          expanded={isActionsMenuExpanded}
+          onDismissRequest={closeActionsMenu}
+        />
+      ) : null}
     </>
   );
 });
@@ -233,9 +288,6 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: Spacing.xxs,
     justifyContent: "center",
-  },
-  tokenDetailsWithActionMenu: {
-    paddingRight: TOKEN_ACTION_MENU_WIDTH,
   },
   tokenLabel: {
     flexShrink: 1,
