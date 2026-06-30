@@ -36,17 +36,19 @@ export type TokenAction = {
   onPress: () => Promise<void> | void;
 };
 
+type TokenActionsMenuProps = {
+  actions: TokenAction[];
+  anchor: TokenActionsMenuAnchor;
+  expanded: boolean;
+  onDismissRequest: () => void;
+};
+
 export function TokenActionsMenu({
   actions,
   anchor,
   expanded,
   onDismissRequest,
-}: {
-  actions: TokenAction[];
-  anchor: TokenActionsMenuAnchor;
-  expanded: boolean;
-  onDismissRequest: () => void;
-}) {
+}: TokenActionsMenuProps) {
   const theme = useTheme();
 
   return (

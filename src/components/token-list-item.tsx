@@ -29,7 +29,7 @@ import {
   TokenActionsMenu,
   type TokenAction,
   type TokenActionsMenuAnchor,
-} from "./TokenActionsMenu";
+} from "./token-actions-menu";
 import { ThemedText } from "./themed-text";
 import { TokenImage } from "./token-image";
 
