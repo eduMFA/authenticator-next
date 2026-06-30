@@ -22,13 +22,13 @@ msgstr "Accept"
 msgid "Activity Log"
 msgstr "Activity Log"
 
-#: src/app/index.tsx:311
-#: src/app/index.tsx:372
-#: src/app/index.tsx:374
+#: src/app/index.tsx:306
+#: src/app/index.tsx:367
+#: src/app/index.tsx:369
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:342
+#: src/app/index.tsx:337
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
@@ -74,7 +74,7 @@ msgstr "Continue"
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:137
+#: src/app/index.tsx:134
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -96,7 +96,7 @@ msgstr "Dismiss"
 msgid "Do not share reports"
 msgstr "Do not share reports"
 
-#: src/app/index.tsx:123
+#: src/app/index.tsx:120
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Edit"
@@ -121,7 +121,7 @@ msgstr "Enable camera access in Settings to scan QR codes."
 msgid "Enable notifications"
 msgstr "Enable notifications"
 
-#: src/app/index.tsx:425
+#: src/app/index.tsx:420
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Enable notifications to receive push approval requests on this device."
 
@@ -185,11 +185,11 @@ msgstr "No interactions yet"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:413
+#: src/app/index.tsx:408
 msgid "No results found for "
 msgstr "No results found for "
 
-#: src/app/index.tsx:334
+#: src/app/index.tsx:329
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
@@ -201,7 +201,7 @@ msgstr "Not now"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/app/index.tsx:424
+#: src/app/index.tsx:419
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
@@ -254,11 +254,11 @@ msgid "QR code scanner"
 msgstr "QR code scanner"
 
 #: src/components/token-detail/token-overview-content.tsx:128
-#: src/components/token-list-item.tsx:148
+#: src/components/token-list-item.tsx:176
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:434
+#: src/app/index.tsx:429
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
@@ -274,19 +274,19 @@ msgstr "Registration failed"
 msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
-#: src/app/index.tsx:117
+#: src/app/index.tsx:114
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
-#: src/components/token-list-item.tsx:126
+#: src/components/token-list-item.tsx:155
 msgid "Rolling out..."
 msgstr "Rolling out..."
 
 #: src/components/token-detail/token-detail-utils.ts:65
-#: src/components/token-list-item.tsx:126
+#: src/components/token-list-item.tsx:155
 msgid "Rollout Failed"
 msgstr "Rollout Failed"
 
@@ -298,7 +298,7 @@ msgstr "Save"
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:235
+#: src/app/index.tsx:230
 msgid "Search tokens"
 msgstr "Search tokens"
 
