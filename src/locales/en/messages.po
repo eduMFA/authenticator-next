@@ -22,12 +22,12 @@ msgstr "Accept"
 msgid "Activity Log"
 msgstr "Activity Log"
 
-#: src/app/index.tsx:300
-#: src/app/index.tsx:302
+#: src/app/index.tsx:303
+#: src/app/index.tsx:305
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:271
+#: src/app/index.tsx:274
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
@@ -120,7 +120,7 @@ msgstr "Enable camera access in Settings to scan QR codes."
 msgid "Enable notifications"
 msgstr "Enable notifications"
 
-#: src/app/index.tsx:351
+#: src/app/index.tsx:354
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Enable notifications to receive push approval requests on this device."
 
@@ -184,11 +184,11 @@ msgstr "No interactions yet"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:339
+#: src/app/index.tsx:342
 msgid "No results found for "
 msgstr "No results found for "
 
-#: src/app/index.tsx:263
+#: src/app/index.tsx:266
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
@@ -200,7 +200,7 @@ msgstr "Not now"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/app/index.tsx:350
+#: src/app/index.tsx:353
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
@@ -257,7 +257,7 @@ msgstr "QR code scanner"
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:360
+#: src/app/index.tsx:363
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
