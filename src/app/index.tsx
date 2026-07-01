@@ -267,6 +267,9 @@ export default function Tokens() {
             <Stack.Toolbar.MenuAction onPress={devMenu.clearPushRequests}>
               Clear Push Requests
             </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction onPress={devMenu.spawnSampleTokens}>
+              Spawn Sample Tokens
+            </Stack.Toolbar.MenuAction>
             <Stack.Toolbar.MenuAction onPress={devMenu.resetOnboarding}>
               Show Onboarding
             </Stack.Toolbar.MenuAction>

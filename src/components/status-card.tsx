@@ -59,12 +59,7 @@ export function StatusCard({
 
   return (
     <Animated.View
-      entering={FadeIn.duration(160)
-        .easing(Easing.out(Easing.cubic))
-        .withInitialValues({
-          opacity: 0,
-          transform: [{ scale: 0.985 }],
-        })}
+      entering={FadeIn.duration(160).easing(Easing.out(Easing.cubic))}
       exiting={FadeOut.duration(120).easing(Easing.in(Easing.cubic))}
       layout={LinearTransition.duration(180).easing(Easing.out(Easing.cubic))}
       style={[
