@@ -9,16 +9,16 @@ import { useDevMenu } from "@/hooks/use-dev-menu";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
-import type { TokenAction } from "@/types/token-actions";
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
+import type { TokenAction } from "@/types/token-actions";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import {
+  Host as AndroidHost,
   Icon as AndroidIcon,
   ExtendedFloatingActionButton,
-  Host as AndroidHost,
   Text,
 } from "@expo/ui/jetpack-compose";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
