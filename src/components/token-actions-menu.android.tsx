@@ -7,41 +7,14 @@ import {
   Text,
 } from "@expo/ui/jetpack-compose";
 import { size as composeSize } from "@expo/ui/jetpack-compose/modifiers";
+import {
+  TOKEN_ACTION_MENU_ANCHOR_SIZE,
+  TOKEN_ACTION_MENU_ICON_SIZE,
+  TOKEN_ACTION_MENU_ICONS,
+} from "@/constants/token-actions";
 import { useTheme } from "@/hooks/use-theme";
-import { type ImageSourcePropType, StyleSheet } from "react-native";
-import type { SFSymbol } from "sf-symbols-typescript";
-
-const ACTION_MENU_ANCHOR_SIZE = 1;
-const ACTION_MENU_ICON_SIZE = 24;
-
-const ACTION_MENU_ICONS = {
-  delete: require("@expo/material-symbols/delete.xml"),
-  edit: require("@expo/material-symbols/edit.xml"),
-  refresh: require("@expo/material-symbols/refresh.xml"),
-} satisfies Record<string, ImageSourcePropType>;
-
-export type TokenActionKey = keyof typeof ACTION_MENU_ICONS;
-
-export type TokenActionsMenuAnchor = {
-  x: number;
-  y: number;
-};
-
-export type TokenAction = {
-  disabled?: boolean;
-  destructive?: boolean;
-  iosIcon: SFSymbol;
-  key: TokenActionKey;
-  label: string;
-  onPress: () => Promise<void> | void;
-};
-
-type TokenActionsMenuProps = {
-  actions: TokenAction[];
-  anchor: TokenActionsMenuAnchor;
-  expanded: boolean;
-  onDismissRequest: () => void;
-};
+import type { TokenActionsMenuProps } from "@/types/token-actions";
+import { StyleSheet } from "react-native";
 
 export function TokenActionsMenu({
   actions,
@@ -60,7 +33,10 @@ export function TokenActionsMenu({
         <DropdownMenu.Trigger>
           <Spacer
             modifiers={[
-              composeSize(ACTION_MENU_ANCHOR_SIZE, ACTION_MENU_ANCHOR_SIZE),
+              composeSize(
+                TOKEN_ACTION_MENU_ANCHOR_SIZE,
+                TOKEN_ACTION_MENU_ANCHOR_SIZE,
+              ),
             ]}
           />
         </DropdownMenu.Trigger>
@@ -87,8 +63,8 @@ export function TokenActionsMenu({
                 </DropdownMenuItem.Text>
                 <DropdownMenuItem.LeadingIcon>
                   <Icon
-                    source={ACTION_MENU_ICONS[action.key]}
-                    size={ACTION_MENU_ICON_SIZE}
+                    source={TOKEN_ACTION_MENU_ICONS[action.key]}
+                    size={TOKEN_ACTION_MENU_ICON_SIZE}
                     tint={iconTint}
                   />
                 </DropdownMenuItem.LeadingIcon>
@@ -103,9 +79,9 @@ export function TokenActionsMenu({
 
 const styles = StyleSheet.create({
   host: {
-    height: ACTION_MENU_ANCHOR_SIZE,
+    height: TOKEN_ACTION_MENU_ANCHOR_SIZE,
     position: "absolute",
-    width: ACTION_MENU_ANCHOR_SIZE,
+    width: TOKEN_ACTION_MENU_ANCHOR_SIZE,
     zIndex: 3,
   },
 });

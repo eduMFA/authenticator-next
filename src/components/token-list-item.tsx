@@ -3,6 +3,11 @@ import {
   PushTokenRolloutState,
   type PushToken,
 } from "@/types/token";
+import { TOKEN_ACTIONS_MENU_VERTICAL_OFFSET } from "@/constants/token-actions";
+import type {
+  TokenAction,
+  TokenActionsMenuAnchor,
+} from "@/types/token-actions";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -25,11 +30,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import {
-  TokenActionsMenu,
-  type TokenAction,
-  type TokenActionsMenuAnchor,
-} from "./token-actions-menu";
+import { TokenActionsMenu } from "./token-actions-menu";
 import { ThemedText } from "./themed-text";
 import { TokenImage } from "./token-image";
 
@@ -39,7 +40,6 @@ const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 const PROGRESS_ANIMATION_DURATION = 500;
 const FAILED_ANIMATION_DURATION = 1000;
 const PROGRESS_HIDE_DELAY = 1000;
-const ACTIONS_MENU_VERTICAL_OFFSET = Spacing.xs;
 
 const timingConfig = {
   progress: {
@@ -93,7 +93,7 @@ export const TokenListItem = memo(function TokenListItem({
 
     actionMenuAnchorRef.current = {
       x: width,
-      y: height + ACTIONS_MENU_VERTICAL_OFFSET,
+      y: height + TOKEN_ACTIONS_MENU_VERTICAL_OFFSET,
     };
   };
 
