@@ -9,6 +9,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore } from "@/stores/settings";
 import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
+import { withSentryRoot } from "@/utils/sentry";
 import { isTokenEnrollmentUri } from "@/utils/token";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -26,7 +27,7 @@ import {
 
 activateCurrentLocale();
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded] = useInterFonts();
   const colorScheme = useColorScheme();
 
@@ -205,3 +206,5 @@ function RootLayoutContent() {
     </>
   );
 }
+
+export default withSentryRoot(RootLayout);
