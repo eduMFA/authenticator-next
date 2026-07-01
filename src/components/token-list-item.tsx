@@ -9,6 +9,7 @@ import type {
   TokenActionsMenuAnchor,
 } from "@/types/token-actions";
 import { BlurTargetView, BlurView } from "expo-blur";
+import { Link } from "expo-router";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
   type LayoutChangeEvent,
@@ -52,33 +53,17 @@ const timingConfig = {
   },
 } as const;
 
+type TokenListItemProps = {
+  actions: TokenAction[];
+  isRolloutFinished: boolean;
+  token: PushToken;
+};
+
 export const TokenListItem = memo(function TokenListItem({
   actions,
-  onPress,
+  isRolloutFinished,
   token,
-}: {
-  actions: TokenAction[];
-  onPress?: () => void;
-  token: PushToken;
-}) {
-  const { t } = useLingui();
-  const theme = useTheme();
-  const backgroundColor = theme.backgroundSecondary;
-  const successBarColor = theme.successBar;
-  const errorBarColor = theme.errorBar;
-  const blurTargetRef = useRef<View | null>(null);
-
-  // Derive initial states from token
-  const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
-  const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
-  const isRolloutFinished = PushTokenRolloutState.isFinished(
-    token.rolloutState,
-  );
-  const showActionsMenu = Platform.OS === "android" && isRolloutFinished;
-  const isRefreshFailed =
-    token.lastRefreshResult?.status === PushTokenRefreshStatus.Failed;
-
-  const [showProgress, setShowProgress] = useState(!isCompleted);
+}: TokenListItemProps) {
   const [actionsMenuAnchor, setActionsMenuAnchor] =
     useState<TokenActionsMenuAnchor | null>(null);
   const [isActionsMenuExpanded, setIsActionsMenuExpanded] = useState(false);
@@ -107,6 +92,78 @@ export const TokenListItem = memo(function TokenListItem({
     setActionsMenuAnchor(anchor);
     setIsActionsMenuExpanded(true);
   };
+
+  return (
+    <>
+      <Link
+        push
+        href={{
+          pathname: "/token/[tokenId]",
+          params: { tokenId: token.id },
+        }}
+        asChild
+      >
+        <Link.Trigger>
+          <Pressable
+            accessibilityLabel={
+              token.issuer ? `${token.label}, ${token.issuer}` : token.label
+            }
+            accessibilityRole="button"
+            disabled={!isRolloutFinished}
+            onLayout={updateActionsMenuAnchor}
+            onLongPress={Platform.OS === "android" ? openActionsMenu : () => {}}
+            style={styles.tokenCard}
+          >
+            <TokenListItemContent token={token} />
+          </Pressable>
+        </Link.Trigger>
+        {Platform.OS === "ios" ? (
+          <Link.Menu>
+            {actions.map((action) => (
+              <Link.MenuAction
+                key={action.key}
+                icon={action.iosIcon}
+                onPress={action.onPress}
+                disabled={action.disabled}
+                destructive={action.destructive}
+              >
+                {action.label}
+              </Link.MenuAction>
+            ))}
+          </Link.Menu>
+        ) : null}
+      </Link>
+      {Platform.OS === "android" && actionsMenuAnchor ? (
+        <TokenActionsMenu
+          actions={actions}
+          anchor={actionsMenuAnchor}
+          expanded={isActionsMenuExpanded}
+          onDismissRequest={closeActionsMenu}
+        />
+      ) : null}
+    </>
+  );
+});
+
+const TokenListItemContent = memo(function TokenListItemContent({
+  token,
+}: {
+  token: PushToken;
+}) {
+  const { t } = useLingui();
+  const theme = useTheme();
+  const backgroundColor = theme.backgroundSecondary;
+  const successBarColor = theme.successBar;
+  const errorBarColor = theme.errorBar;
+  const blurTargetRef = useRef<View | null>(null);
+
+  // Derive initial states from token
+  const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
+  const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
+  const isRefreshFailed =
+    token.lastRefreshResult?.status === PushTokenRefreshStatus.Failed;
+
+  const [showProgress, setShowProgress] = useState(!isCompleted);
 
   // Shared values for animations
   const progress = useSharedValue(
@@ -153,7 +210,7 @@ export const TokenListItem = memo(function TokenListItem({
 
   // Progress text based on rollout state
   const progressText = isRolloutFailed ? t`Rollout Failed` : t`Rolling out...`;
-  const tokenContent = (
+  return (
     <>
       <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
         <TokenImage
@@ -219,34 +276,6 @@ export const TokenListItem = memo(function TokenListItem({
       )}
     </>
   );
-
-  return (
-    <>
-      {showActionsMenu && onPress ? (
-        <Pressable
-          accessibilityLabel={
-            token.issuer ? `${token.label}, ${token.issuer}` : token.label
-          }
-          accessibilityRole="button"
-          onLayout={updateActionsMenuAnchor}
-          onLongPress={openActionsMenu}
-          onPress={onPress}
-        >
-          {tokenContent}
-        </Pressable>
-      ) : (
-        tokenContent
-      )}
-      {showActionsMenu && actionsMenuAnchor ? (
-        <TokenActionsMenu
-          actions={actions}
-          anchor={actionsMenuAnchor}
-          expanded={isActionsMenuExpanded}
-          onDismissRequest={closeActionsMenu}
-        />
-      ) : null}
-    </>
-  );
 });
 
 const styles = StyleSheet.create({
@@ -283,6 +312,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 70,
     padding: Spacing.md,
+  },
+  tokenCard: {
+    borderRadius: Radii.xl,
+    overflow: "hidden",
+    position: "relative",
   },
   tokenDetails: {
     flex: 1,

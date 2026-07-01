@@ -24,13 +24,12 @@ import {
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
   Keyboard,
   Platform,
-  Pressable,
   RefreshControl,
   StyleSheet,
   useWindowDimensions,
@@ -138,24 +137,6 @@ export default function Tokens() {
       const isRolloutFinished = PushTokenRolloutState.isFinished(
         item.rolloutState,
       );
-      const navigateToToken = () => {
-        router.push({
-          pathname: "/token/[tokenId]",
-          params: { tokenId: item.id },
-        });
-      };
-      const tokenListItem = (
-        <TokenListItem
-          actions={tokenActions}
-          onPress={
-            Platform.OS === "android" && isRolloutFinished
-              ? navigateToToken
-              : undefined
-          }
-          token={item}
-          key={item.id}
-        />
-      );
 
       return (
         <Animated.View
@@ -164,42 +145,11 @@ export default function Tokens() {
           exiting={FadeOut}
           style={styles.tokenWrapper}
         >
-          {Platform.OS === "android" ? (
-            <View style={styles.tokenCard}>{tokenListItem}</View>
-          ) : (
-            <Link
-              push
-              key={item.id}
-              href={{
-                pathname: "/token/[tokenId]",
-                params: { tokenId: item.id },
-              }}
-              asChild
-            >
-              <Link.Trigger>
-                <Pressable
-                  onLongPress={() => {}}
-                  style={styles.tokenCard}
-                  disabled={!isRolloutFinished}
-                >
-                  {tokenListItem}
-                </Pressable>
-              </Link.Trigger>
-              <Link.Menu>
-                {tokenActions.map((action) => (
-                  <Link.MenuAction
-                    key={action.key}
-                    icon={action.iosIcon}
-                    onPress={action.onPress}
-                    disabled={action.disabled}
-                    destructive={action.destructive}
-                  >
-                    {action.label}
-                  </Link.MenuAction>
-                ))}
-              </Link.Menu>
-            </Link>
-          )}
+          <TokenListItem
+            actions={tokenActions}
+            isRolloutFinished={isRolloutFinished}
+            token={item}
+          />
         </Animated.View>
       );
     },
@@ -487,11 +437,6 @@ export const styles = StyleSheet.create({
   },
   notificationNotice: {
     marginVertical: Spacing.sm,
-  },
-  tokenCard: {
-    borderRadius: Radii.xl,
-    overflow: "hidden",
-    position: "relative",
   },
   tokenWrapper: {
     marginVertical: Spacing.sm,
