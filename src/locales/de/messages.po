@@ -22,12 +22,13 @@ msgstr "Akzeptieren"
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"
 
-#: src/app/index.tsx:303
-#: src/app/index.tsx:305
+#: src/app/index.tsx:259
+#: src/app/index.tsx:320
+#: src/app/index.tsx:322
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:274
+#: src/app/index.tsx:290
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -73,7 +74,7 @@ msgstr "Weiter"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:155
+#: src/app/index.tsx:133
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -95,7 +96,7 @@ msgstr "Schließen"
 msgid "Do not share reports"
 msgstr "Berichte nicht teilen"
 
-#: src/app/index.tsx:137
+#: src/app/index.tsx:119
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -120,7 +121,7 @@ msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:354
+#: src/app/index.tsx:373
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -184,11 +185,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:342
+#: src/app/index.tsx:361
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:266
+#: src/app/index.tsx:282
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -200,7 +201,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:353
+#: src/app/index.tsx:372
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -253,11 +254,11 @@ msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
 #: src/components/token-detail/token-overview-content.tsx:128
-#: src/components/token-list-item.tsx:130
+#: src/components/token-list-item.tsx:233
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:363
+#: src/app/index.tsx:382
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -273,19 +274,19 @@ msgstr "Registrierung fehlgeschlagen"
 msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
-#: src/app/index.tsx:147
+#: src/app/index.tsx:113
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/components/token-list-item.tsx:108
+#: src/components/token-list-item.tsx:212
 msgid "Rolling out..."
 msgstr "Rollout läuft..."
 
 #: src/components/token-detail/token-detail-utils.ts:65
-#: src/components/token-list-item.tsx:108
+#: src/components/token-list-item.tsx:212
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
@@ -297,7 +298,7 @@ msgstr "Speichern"
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:186
+#: src/app/index.tsx:180
 msgid "Search tokens"
 msgstr "Token suchen"
 

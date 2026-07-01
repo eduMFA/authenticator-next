@@ -272,6 +272,8 @@ function ActionButton({
   const theme = useTheme();
   const brandingColor = theme.branding;
   const backgroundColor = theme.fill;
+  const primaryButtonTextColor = theme.textOnBranding;
+  const secondaryButtonTextColor = theme.branding;
   const pressScale = useSharedValue(1);
   const primaryButtonStyle = useMemo(
     () => ({ backgroundColor: brandingColor }),
@@ -281,9 +283,13 @@ function ActionButton({
     () => ({ backgroundColor, borderColor: brandingColor }),
     [backgroundColor, brandingColor],
   );
+  const primaryButtonTextStyle = useMemo(
+    () => ({ color: primaryButtonTextColor }),
+    [primaryButtonTextColor],
+  );
   const secondaryButtonTextStyle = useMemo(
-    () => ({ color: brandingColor }),
-    [brandingColor],
+    () => ({ color: secondaryButtonTextColor }),
+    [secondaryButtonTextColor],
   );
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -320,7 +326,7 @@ function ActionButton({
         fontWeight="semiBold"
         style={[
           styles.buttonText,
-          isPrimary ? styles.buttonPrimaryText : secondaryButtonTextStyle,
+          isPrimary ? primaryButtonTextStyle : secondaryButtonTextStyle,
         ]}
       >
         {label}
@@ -345,9 +351,6 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.6,
-  },
-  buttonPrimaryText: {
-    color: StaticColors.white,
   },
   buttonSecondary: {
     borderWidth: 1,
