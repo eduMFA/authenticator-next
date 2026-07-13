@@ -40,11 +40,11 @@ msgstr "Kamerazugriff erlauben"
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
-#: src/components/onboarding-sequence.tsx:82
+#: src/components/onboarding-sequence.tsx:83
 msgid "Approve sign-ins securely from this device, with your eduMFA tokens ready when you need them."
 msgstr "Genehmige Anmeldungen sicher von diesem Gerät aus, mit deinen eduMFA-Token griffbereit, wenn du sie brauchst."
 
-#: src/components/onboarding-sequence.tsx:88
+#: src/components/onboarding-sequence.tsx:89
 msgid "Approve sign-ins the moment they arrive"
 msgstr "Anmeldungen sofort freigeben"
 
@@ -151,11 +151,11 @@ msgstr "Registrierung wird abgeschlossen"
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
-#: src/components/onboarding-sequence.tsx:331
+#: src/components/onboarding-sequence.tsx:332
 msgid "Get started"
 msgstr "Loslegen"
 
-#: src/components/onboarding-sequence.tsx:95
+#: src/components/onboarding-sequence.tsx:96
 msgid "Help improve reliability"
 msgstr "Hilf, die Zuverlässigkeit zu verbessern"
 
@@ -197,7 +197,7 @@ msgstr "Noch keine Token vorhanden"
 msgid "Not now"
 msgstr "Nicht jetzt"
 
-#: src/components/onboarding-sequence.tsx:87
+#: src/components/onboarding-sequence.tsx:88
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
@@ -209,7 +209,7 @@ msgstr "Benachrichtigungen sind deaktiviert"
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
-#: src/components/onboarding-sequence.tsx:89
+#: src/components/onboarding-sequence.tsx:90
 msgid "Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention."
 msgstr "Benachrichtigungen sind wichtig für eduMFA. Sie ermöglichen der App, Anmeldefreigaben zu empfangen und dich zu informieren, wenn eine Push-Anfrage deine Aufmerksamkeit benötigt."
 
@@ -245,7 +245,7 @@ msgstr "Ausstehend"
 msgid "Place the QR code inside the frame"
 msgstr "Platziere den QR-Code im Rahmen"
 
-#: src/components/onboarding-sequence.tsx:94
+#: src/components/onboarding-sequence.tsx:95
 msgid "Privacy choice"
 msgstr "Datenschutz-Auswahl"
 
@@ -379,15 +379,15 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#: src/components/onboarding-sequence.tsx:80
+#: src/components/onboarding-sequence.tsx:81
 msgid "Welcome"
 msgstr "Willkommen"
 
-#: src/components/onboarding-sequence.tsx:81
+#: src/components/onboarding-sequence.tsx:82
 msgid "Welcome to eduMFA"
 msgstr "Willkommen bei eduMFA"
 
-#: src/components/onboarding-sequence.tsx:96
+#: src/components/onboarding-sequence.tsx:97
 msgid "You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way."
 msgstr "Du kannst anonymisierte Absturz- und Fehlerberichte aktivieren. Das ist standardmäßig ausgeschaltet, und die App funktioniert in beiden Fällen gleich."
 

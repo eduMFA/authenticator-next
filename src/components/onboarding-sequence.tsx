@@ -21,6 +21,7 @@ import {
   AppState,
   Linking,
   PanResponder,
+  ScrollView,
   StyleSheet,
   useColorScheme,
   useWindowDimensions,
@@ -381,7 +382,12 @@ export function OnboardingSequence() {
             return (
               <View key={contentStep.id} style={[styles.panel, { width }]}>
                 <View style={styles.panelContent}>
-                  <View style={styles.panelBody}>
+                  <ScrollView
+                    bounces={false}
+                    contentContainerStyle={styles.panelBody}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.panelBodyScroll}
+                  >
                     <View style={styles.heroWrap}>
                       <View
                         style={[
@@ -427,7 +433,7 @@ export function OnboardingSequence() {
                         {contentStep.body}
                       </ThemedText>
                     </View>
-                  </View>
+                  </ScrollView>
 
                   {renderStepActions(contentStepIndex)}
                 </View>
@@ -470,9 +476,13 @@ const styles = StyleSheet.create({
   },
   panelBody: {
     alignItems: "center",
-    flex: 1,
+    flexGrow: 1,
     gap: Spacing.xl,
     justifyContent: "center",
+    width: "100%",
+  },
+  panelBodyScroll: {
+    flex: 1,
     width: "100%",
   },
   panelContent: {
