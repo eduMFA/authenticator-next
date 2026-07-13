@@ -3,9 +3,21 @@ import {
   PushTokenRolloutState,
   type PushToken,
 } from "@/types/token";
+import { TOKEN_ACTIONS_MENU_VERTICAL_OFFSET } from "@/constants/token-actions";
+import type {
+  TokenAction,
+  TokenActionsMenuAnchor,
+} from "@/types/token-actions";
 import { BlurTargetView, BlurView } from "expo-blur";
+import { Link } from "expo-router";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import {
+  type LayoutChangeEvent,
+  Platform,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -19,6 +31,7 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+import { TokenActionsMenu } from "./token-actions-menu";
 import { ThemedText } from "./themed-text";
 import { TokenImage } from "./token-image";
 
@@ -40,7 +53,99 @@ const timingConfig = {
   },
 } as const;
 
+type TokenListItemProps = {
+  actions: TokenAction[];
+  isRolloutFinished: boolean;
+  token: PushToken;
+};
+
 export const TokenListItem = memo(function TokenListItem({
+  actions,
+  isRolloutFinished,
+  token,
+}: TokenListItemProps) {
+  const [actionsMenuAnchor, setActionsMenuAnchor] =
+    useState<TokenActionsMenuAnchor | null>(null);
+  const [isActionsMenuExpanded, setIsActionsMenuExpanded] = useState(false);
+  const actionMenuAnchorRef = useRef<TokenActionsMenuAnchor | null>(null);
+
+  const closeActionsMenu = () => {
+    setIsActionsMenuExpanded(false);
+  };
+
+  const updateActionsMenuAnchor = (event: LayoutChangeEvent) => {
+    const { height, width } = event.nativeEvent.layout;
+
+    actionMenuAnchorRef.current = {
+      x: width,
+      y: height + TOKEN_ACTIONS_MENU_VERTICAL_OFFSET,
+    };
+  };
+
+  const openActionsMenu = () => {
+    const anchor = actionMenuAnchorRef.current;
+
+    if (!anchor) {
+      return;
+    }
+
+    setActionsMenuAnchor(anchor);
+    setIsActionsMenuExpanded(true);
+  };
+
+  return (
+    <>
+      <Link
+        push
+        href={{
+          pathname: "/token/[tokenId]",
+          params: { tokenId: token.id },
+        }}
+        asChild
+      >
+        <Link.Trigger>
+          <Pressable
+            accessibilityLabel={
+              token.issuer ? `${token.label}, ${token.issuer}` : token.label
+            }
+            accessibilityRole="button"
+            disabled={!isRolloutFinished}
+            onLayout={updateActionsMenuAnchor}
+            onLongPress={Platform.OS === "android" ? openActionsMenu : () => {}}
+            style={styles.tokenCard}
+          >
+            <TokenListItemContent token={token} />
+          </Pressable>
+        </Link.Trigger>
+        {Platform.OS === "ios" ? (
+          <Link.Menu>
+            {actions.map((action) => (
+              <Link.MenuAction
+                key={action.key}
+                icon={action.iosIcon}
+                onPress={action.onPress}
+                disabled={action.disabled}
+                destructive={action.destructive}
+              >
+                {action.label}
+              </Link.MenuAction>
+            ))}
+          </Link.Menu>
+        ) : null}
+      </Link>
+      {Platform.OS === "android" && actionsMenuAnchor ? (
+        <TokenActionsMenu
+          actions={actions}
+          anchor={actionsMenuAnchor}
+          expanded={isActionsMenuExpanded}
+          onDismissRequest={closeActionsMenu}
+        />
+      ) : null}
+    </>
+  );
+});
+
+const TokenListItemContent = memo(function TokenListItemContent({
   token,
 }: {
   token: PushToken;
@@ -81,7 +186,6 @@ export const TokenListItem = memo(function TokenListItem({
     () => [styles.token, { backgroundColor }],
     [backgroundColor],
   );
-
   useEffect(() => {
     const targetProgress = PushTokenRolloutState.getProgress(
       token.rolloutState,
@@ -106,7 +210,6 @@ export const TokenListItem = memo(function TokenListItem({
 
   // Progress text based on rollout state
   const progressText = isRolloutFailed ? t`Rollout Failed` : t`Rolling out...`;
-
   return (
     <>
       <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
@@ -209,6 +312,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 70,
     padding: Spacing.md,
+  },
+  tokenCard: {
+    borderRadius: Radii.xl,
+    overflow: "hidden",
+    position: "relative",
   },
   tokenDetails: {
     flex: 1,

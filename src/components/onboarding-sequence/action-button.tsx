@@ -1,7 +1,13 @@
 import { ThemedText } from "@/components/themed-text";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 import { SymbolView } from "expo-symbols";
-import { ActivityIndicator, Pressable, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  type ColorValue,
+} from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -17,6 +23,7 @@ type ActionButtonProps = {
   isLoading?: boolean;
   label: string;
   onPress: () => void;
+  variant?: "neutral" | "primary" | "secondary";
 };
 
 export function ActionButton({
@@ -25,7 +32,14 @@ export function ActionButton({
   isLoading = false,
   label,
   onPress,
+  variant = "primary",
 }: ActionButtonProps) {
+  const theme = useTheme();
+  const isPrimary = variant === "primary";
+  const isNeutral = variant === "neutral";
+  const foregroundColor: ColorValue = isPrimary
+    ? StaticColors.white
+    : theme.text;
   const pressScale = useSharedValue(1);
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pressScale.value }],
@@ -45,20 +59,23 @@ export function ActionButton({
       onPressOut={handlePressOut}
       style={[
         styles.actionButton,
-        { backgroundColor: accentColor, borderColor: accentColor },
+        {
+          backgroundColor: isPrimary ? accentColor : theme.transparent,
+          borderColor: isNeutral ? theme.border : accentColor,
+        },
         isLoading && styles.actionButtonLoading,
         animatedStyle,
       ]}
     >
       {isLoading ? (
-        <ActivityIndicator color={StaticColors.white} />
+        <ActivityIndicator color={foregroundColor} />
       ) : (
-        <SymbolView name={icon} size={18} tintColor={StaticColors.white} />
+        <SymbolView name={icon} size={18} tintColor={foregroundColor} />
       )}
       <ThemedText
         fontSize={Typography.fontSize16}
         fontWeight="semiBold"
-        style={[styles.actionLabel, { color: StaticColors.white }]}
+        style={[styles.actionLabel, { color: foregroundColor }]}
       >
         {label}
       </ThemedText>

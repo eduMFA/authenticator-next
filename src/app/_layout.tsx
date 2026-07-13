@@ -22,6 +22,7 @@ import {
   AppState,
   AppStateStatus,
   Platform,
+  StatusBar,
   useColorScheme,
 } from "react-native";
 
@@ -66,6 +67,8 @@ function RootLayoutContent() {
 
   const theme = useTheme();
   const tabBarBackgroundColor = theme.background;
+  const statusBarStyle =
+    colorScheme === "dark" ? "light-content" : "dark-content";
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
@@ -151,6 +154,7 @@ function RootLayoutContent() {
 
   return (
     <>
+      <StatusBar backgroundColor={theme.background} barStyle={statusBarStyle} />
       <Stack>
         <Stack.Screen
           name="index"
