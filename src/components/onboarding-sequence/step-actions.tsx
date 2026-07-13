@@ -63,7 +63,7 @@ export function NotificationStepActions({
     return (
       <View style={styles.buttonStack}>
         <StatusCard
-          description={t`eduMFA can receive push approvals and alert you when a sign-in needs attention.`}
+          description={t`You’re ready to receive and approve sign-in requests.`}
           title={t`Notifications are enabled`}
           variant="success"
         />
@@ -81,8 +81,8 @@ export function NotificationStepActions({
     return (
       <View style={[styles.buttonStack, styles.buttonStackCompact]}>
         <StatusCard
-          description={t`eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here.`}
-          title={t`Notifications are required`}
+          description={t`Turn on notifications in Settings so you can respond when a request arrives.`}
+          title={t`Sign-in requests may go unnoticed`}
           variant="error"
         />
         <ActionButton
@@ -125,7 +125,7 @@ export function CrashReportsStepActions({
   return (
     <View style={styles.buttonStack}>
       <StatusCard
-        description={t`Share anonymized crash and error reports to help improve reliability. Reports never include token secrets, passwords, or institution names.`}
+        description={t`Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names.`}
         icon={{ ios: "hand.raised.fill", android: "privacy_tip" }}
         iconPlacement="side"
         title={t`Anonymous reports`}
