@@ -104,7 +104,9 @@ function sanitizeEvent(event: ErrorEvent): ErrorEvent {
         }
       : event.exception,
     breadcrumbs: event.breadcrumbs?.map(sanitizeBreadcrumb),
+    contexts: sanitizeRecord(event.contexts),
     extra: sanitizeRecord(event.extra),
+    tags: sanitizeRecord(event.tags),
   };
 
   delete sanitizedEvent.request;
