@@ -46,7 +46,7 @@
       [
         "@sentry/react-native/expo",
         {
-          "url": "https://edumfa.edumfa.io/",
+          "url": "https://sentry.edumfa.io/",
           "project": "app",
           "organization": "edumfa"
         }
