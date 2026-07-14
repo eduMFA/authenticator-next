@@ -46,6 +46,7 @@ export const useSettingsStore = create<SettingsStore>()(
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
+        // Initialize error reporting only after persisted consent is known.
         setSentryTrackingEnabled(state?.crashReportsEnabled ?? false);
       },
     },
