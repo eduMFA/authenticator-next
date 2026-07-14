@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { setSentryTrackingEnabled } from "@/utils/sentry";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -30,8 +31,10 @@ export const useSettingsStore = create<SettingsStore>()(
       hasHydrated: false,
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),
       resetOnboarding: () => set({ hasCompletedOnboarding: false }),
-      setCrashReportsEnabled: (enabled) =>
-        set({ crashReportsEnabled: enabled }),
+      setCrashReportsEnabled: (enabled) => {
+        set({ crashReportsEnabled: enabled });
+        setSentryTrackingEnabled(enabled);
+      },
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
     }),
     {
@@ -43,6 +46,8 @@ export const useSettingsStore = create<SettingsStore>()(
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
+        // Initialize error reporting only after persisted consent is known.
+        setSentryTrackingEnabled(state?.crashReportsEnabled ?? false);
       },
     },
   ),
