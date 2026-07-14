@@ -21,9 +21,23 @@
       "distribution": "store",
       "autoIncrement": true
     },
+    "beta-apk": {
+      "extends": "beta",
+      "autoIncrement": false,
+      "android": {
+        "buildType": "apk"
+      }
+    },
     "production": {
       "extends": "base",
       "autoIncrement": true
+    },
+    "production-apk": {
+      "extends": "production",
+      "autoIncrement": false,
+      "android": {
+        "buildType": "apk"
+      }
     }
   },
   "submit": {
