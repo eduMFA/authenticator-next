@@ -22,13 +22,13 @@ msgstr "Akzeptieren"
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"
 
-#: src/app/index.tsx:259
-#: src/app/index.tsx:320
-#: src/app/index.tsx:322
+#: src/app/index.tsx:265
+#: src/app/index.tsx:326
+#: src/app/index.tsx:328
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:290
+#: src/app/index.tsx:296
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -117,7 +117,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Enable notifications to receive approval requests."
 msgstr "Aktiviere Benachrichtigungen, um Freigabeanfragen zu erhalten."
 
-#: src/app/index.tsx:373
+#: src/app/index.tsx:379
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -193,11 +193,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:361
+#: src/app/index.tsx:367
 msgid "No results found for "
 msgstr "Keine Ergebnisse gefunden für "
 
-#: src/app/index.tsx:282
+#: src/app/index.tsx:288
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -209,7 +209,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:372
+#: src/app/index.tsx:378
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -262,7 +262,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:382
+#: src/app/index.tsx:388
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
