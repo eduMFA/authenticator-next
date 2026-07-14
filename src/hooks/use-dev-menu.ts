@@ -1,6 +1,7 @@
 import { useToken } from "@/hooks/use-token";
 import { usePushRequestStore } from "@/stores/push-request";
 import { useSettingsStore } from "@/stores/settings";
+import { PushRequestStatus, type PushRequest } from "@/types/push-request";
 import { PushTokenRolloutState, type PushToken } from "@/types/token";
 import { Alert } from "react-native";
 
@@ -19,7 +20,7 @@ const sampleTokens: PushToken[] = [1, 2, 3].map((index) => ({
 export function useDevMenu() {
   const { tokens, addToken, deleteToken, updateToken, rolloutToken } =
     useToken();
-  const { clearPushRequests } = usePushRequestStore();
+  const { addPushRequest, clearPushRequests } = usePushRequestStore();
   const token = tokens[0];
   const tokenActionDisabled = !token;
   const resetOnboarding = useSettingsStore((state) => state.resetOnboarding);
@@ -98,11 +99,34 @@ export function useDevMenu() {
     );
   };
 
+  const spawnSamplePushRequest = () => {
+    if (!token) {
+      return;
+    }
+
+    const id = `sample-push-request-${Date.now()}`;
+    const request: PushRequest = {
+      id,
+      status: PushRequestStatus.Pending,
+      sentAt: Date.now(),
+      nonce: `${id}-nonce`,
+      question: "Do you want to approve this sample sign-in?",
+      serial: token.id,
+      signature: "sample-signature",
+      sslverify: token.sslVerify.toString(),
+      title: "Sample sign-in request",
+      url: token.callbackUrl,
+    };
+
+    addPushRequest(request);
+  };
+
   return {
     clearPushRequests,
     demoRolloutFailure,
     demoRolloutSuccess,
     rolloutFirstToken,
+    spawnSamplePushRequest,
     spawnSampleTokens,
     tokenActionDisabled,
     resetOnboarding,

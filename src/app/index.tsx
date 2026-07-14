@@ -217,6 +217,12 @@ export default function Tokens() {
             <Stack.Toolbar.MenuAction onPress={devMenu.clearPushRequests}>
               Clear Push Requests
             </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction
+              disabled={devMenu.tokenActionDisabled}
+              onPress={devMenu.spawnSamplePushRequest}
+            >
+              Spawn Sample Push Request
+            </Stack.Toolbar.MenuAction>
             <Stack.Toolbar.MenuAction onPress={devMenu.spawnSampleTokens}>
               Spawn Sample Tokens
             </Stack.Toolbar.MenuAction>
