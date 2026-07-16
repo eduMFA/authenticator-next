@@ -8,7 +8,6 @@
     "icon": "./assets/app-icons/icon-default.png",
     "userInterfaceStyle": "automatic",
     "scheme": "edumfa-push",
-    "assetBundlePatterns": ["**/*"],
     "ios": {
       "icon": "./assets/app-icons/edumfa.icon",
       "supportsTablet": false,
