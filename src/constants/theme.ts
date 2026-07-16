@@ -1,4 +1,4 @@
-import { useFonts } from "@expo-google-fonts/inter/";
+import { useFonts } from "expo-font";
 import { Inter_300Light } from "@expo-google-fonts/inter/300Light";
 import { Inter_300Light_Italic } from "@expo-google-fonts/inter/300Light_Italic";
 import { Inter_500Medium } from "@expo-google-fonts/inter/500Medium";
