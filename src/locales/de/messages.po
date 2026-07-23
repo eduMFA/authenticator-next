@@ -22,13 +22,13 @@ msgstr "Akzeptieren"
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"
 
-#: src/app/index.tsx:266
-#: src/app/index.tsx:328
-#: src/app/index.tsx:330
+#: src/app/index.tsx:356
+#: src/app/index.tsx:418
+#: src/app/index.tsx:420
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:298
+#: src/app/index.tsx:388
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -70,7 +70,7 @@ msgstr "Weiter"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:136
+#: src/app/index.tsx:147
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -92,7 +92,7 @@ msgstr "Schließen"
 msgid "Do not share reports"
 msgstr "Berichte nicht teilen"
 
-#: src/app/index.tsx:122
+#: src/app/index.tsx:133
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -117,7 +117,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Enable notifications to receive approval requests."
 msgstr "Aktiviere Benachrichtigungen, um Freigabeanfragen zu erhalten."
 
-#: src/app/index.tsx:421
+#: src/app/index.tsx:511
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -193,11 +193,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:387
+#: src/app/index.tsx:477
 msgid "No tokens found"
 msgstr "Keine Token gefunden"
 
-#: src/app/index.tsx:290
+#: src/app/index.tsx:380
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -209,7 +209,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:420
+#: src/app/index.tsx:510
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -262,7 +262,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:430
+#: src/app/index.tsx:520
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -278,7 +278,7 @@ msgstr "Registrierung fehlgeschlagen"
 msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
-#: src/app/index.tsx:116
+#: src/app/index.tsx:127
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
@@ -302,7 +302,7 @@ msgstr "Speichern"
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:183
+#: src/app/index.tsx:194
 msgid "Search tokens"
 msgstr "Token suchen"
 
@@ -375,7 +375,7 @@ msgstr "Token"
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldeaktivitäten werden hier angezeigt."
 
-#: src/app/index.tsx:394
+#: src/app/index.tsx:484
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
 

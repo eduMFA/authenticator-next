@@ -13,7 +13,18 @@ import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import type { TokenAction } from "@/types/token-actions";
 import AddSymbol from "@expo/material-symbols/add.xml";
+import AddCircleSymbol from "@expo/material-symbols/add_circle.xml";
+import CancelSymbol from "@expo/material-symbols/cancel.xml";
+import CheckCircleSymbol from "@expo/material-symbols/check_circle.xml";
+import ClearAllSymbol from "@expo/material-symbols/clear_all.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
+import DeleteSymbol from "@expo/material-symbols/delete.xml";
+import KeySymbol from "@expo/material-symbols/key.xml";
+import NotificationAddSymbol from "@expo/material-symbols/notification_add.xml";
+import NotificationsSymbol from "@expo/material-symbols/notifications.xml";
+import PlayArrowSymbol from "@expo/material-symbols/play_arrow.xml";
+import RestartAltSymbol from "@expo/material-symbols/restart_alt.xml";
+import SyncSymbol from "@expo/material-symbols/sync.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import {
   Host as AndroidHost,
@@ -199,37 +210,116 @@ export default function Tokens() {
             })}
           >
             <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
-            <Stack.Toolbar.MenuAction
-              disabled={devMenu.tokenActionDisabled}
-              onPress={devMenu.rolloutFirstToken}
+            <Stack.Toolbar.Menu
+              icon={Icon.select({
+                ios: "arrow.trianglehead.2.clockwise.rotate.90",
+                android: SyncSymbol,
+              })}
             >
-              Rollout
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction
-              disabled={devMenu.tokenActionDisabled}
-              onPress={devMenu.demoRolloutFailure}
+              <Stack.Toolbar.Label>Rollout</Stack.Toolbar.Label>
+              <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "play.fill",
+                  android: PlayArrowSymbol,
+                })}
+                onPress={devMenu.rolloutFirstToken}
+              >
+                Start
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "checkmark.circle.fill",
+                  android: CheckCircleSymbol,
+                })}
+                onPress={devMenu.demoRolloutSuccess}
+              >
+                Demo Success
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "xmark.circle.fill",
+                  android: CancelSymbol,
+                })}
+                onPress={devMenu.demoRolloutFailure}
+              >
+                Demo Failure
+              </Stack.Toolbar.MenuAction>
+            </Stack.Toolbar.Menu>
+            <Stack.Toolbar.Menu
+              icon={Icon.select({
+                ios: "key.fill",
+                android: KeySymbol,
+              })}
             >
-              Demo Rollout Failure
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction
-              disabled={devMenu.tokenActionDisabled}
-              onPress={devMenu.demoRolloutSuccess}
+              <Stack.Toolbar.Label>Tokens</Stack.Toolbar.Label>
+              <Stack.Toolbar.MenuAction
+                icon={Icon.select({
+                  ios: "plus.circle.fill",
+                  android: AddCircleSymbol,
+                })}
+                onPress={() => devMenu.spawnSampleTokens(3)}
+              >
+                Spawn Sample 3
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                icon={Icon.select({
+                  ios: "plus.circle.fill",
+                  android: AddCircleSymbol,
+                })}
+                onPress={() => devMenu.spawnSampleTokens(10)}
+              >
+                Spawn Sample 10
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                destructive
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "trash.fill",
+                  android: DeleteSymbol,
+                })}
+                onPress={devMenu.clearAllTokens}
+              >
+                Clear
+              </Stack.Toolbar.MenuAction>
+            </Stack.Toolbar.Menu>
+            <Stack.Toolbar.Menu
+              icon={Icon.select({
+                ios: "bell.fill",
+                android: NotificationsSymbol,
+              })}
             >
-              Demo Rollout Success
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction onPress={devMenu.clearPushRequests}>
-              Clear Push Requests
-            </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.Label>Push Requests</Stack.Toolbar.Label>
+              <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "bell.badge.fill",
+                  android: NotificationAddSymbol,
+                })}
+                onPress={devMenu.spawnSamplePushRequest}
+              >
+                Spawn Sample
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                destructive
+                icon={Icon.select({
+                  ios: "clear.fill",
+                  android: ClearAllSymbol,
+                })}
+                onPress={devMenu.clearPushRequests}
+              >
+                Clear
+              </Stack.Toolbar.MenuAction>
+            </Stack.Toolbar.Menu>
             <Stack.Toolbar.MenuAction
-              disabled={devMenu.tokenActionDisabled}
-              onPress={devMenu.spawnSamplePushRequest}
+              icon={Icon.select({
+                ios: "arrow.counterclockwise",
+                android: RestartAltSymbol,
+              })}
+              onPress={devMenu.resetOnboarding}
             >
-              Spawn Sample Push Request
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction onPress={devMenu.spawnSampleTokens}>
-              Spawn Sample Tokens
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction onPress={devMenu.resetOnboarding}>
               Show Onboarding
             </Stack.Toolbar.MenuAction>
           </Stack.Toolbar.Menu>
