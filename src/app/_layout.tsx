@@ -1,12 +1,16 @@
+import { NotificationHandler } from "@/components/notification-handler";
+import { OnboardingSequence } from "@/components/onboarding-sequence";
 import { ThemedText } from "@/components/themed-text";
 import { Typography, useInterFonts } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
+import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
-import { useNotificationStore } from "@/store/notification-store";
-import { useTokenStore } from "@/store/token-store";
+import { useSettingsStore } from "@/stores/settings";
+import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
-import { isTokenEnrollmentUri } from "@/utils/token-utils";
+import { withSentryRoot } from "@/utils/sentry";
+import { isTokenEnrollmentUri } from "@/utils/token";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
 import { osName } from "expo-device";
@@ -18,12 +22,13 @@ import {
   AppState,
   AppStateStatus,
   Platform,
+  StatusBar,
   useColorScheme,
 } from "react-native";
 
 activateCurrentLocale();
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded] = useInterFonts();
   const colorScheme = useColorScheme();
 
@@ -48,33 +53,52 @@ function RootLayoutContent() {
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
   const appState = useRef<AppStateStatus>(AppState.currentState);
   const handledUrlsRef = useRef<Set<string>>(new Set());
-  const initializeNotifications = useNotificationStore(
-    (state) => state.initialize,
-  );
+  const { checkPermissions, initialize: initializeNotifications } =
+    useNotificationStatus();
   const startPendingRollouts = useTokenStore(
     (state) => state.startPendingRollouts,
   );
+  const hasCompletedOnboarding = useSettingsStore(
+    (state) => state.hasCompletedOnboarding,
+  );
+  const hasHydratedSettings = useSettingsStore((state) => state.hasHydrated);
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
 
   const theme = useTheme();
   const tabBarBackgroundColor = theme.background;
+  const statusBarStyle =
+    colorScheme === "dark" ? "light-content" : "dark-content";
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
     initializeNotifications().then(() => {
       // Start pending rollouts after notifications are initialized
       startPendingRollouts();
       // Poll for any pending challenges when the app opens
       pollChallenges();
     });
-  }, [initializeNotifications, startPendingRollouts, pollChallenges]);
+  }, [
+    hasCompletedOnboarding,
+    initializeNotifications,
+    startPendingRollouts,
+    pollChallenges,
+  ]);
 
   useEffect(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
     const subscription = AppState.addEventListener("change", (nextAppState) => {
       const wasInactive = /inactive|background/.test(appState.current);
       if (wasInactive && nextAppState === "active") {
         activateCurrentLocale();
+        checkPermissions();
         pollChallenges();
       }
 
@@ -84,9 +108,13 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [pollChallenges]);
+  }, [hasCompletedOnboarding, pollChallenges, checkPermissions]);
 
   useEffect(() => {
+    if (!hasCompletedOnboarding) {
+      return;
+    }
+
     const handleIncomingUrl = async (incomingUrl: string) => {
       if (!isTokenEnrollmentUri(incomingUrl)) {
         return;
@@ -98,7 +126,7 @@ function RootLayoutContent() {
 
       handledUrlsRef.current.add(incomingUrl);
 
-      await handleTokenUri(incomingUrl, "deepLink");
+      await handleTokenUri(incomingUrl);
     };
 
     Linking.getInitialURL().then((initialUrl) => {
@@ -114,67 +142,73 @@ function RootLayoutContent() {
     return () => {
       subscription.remove();
     };
-  }, [handleTokenUri]);
+  }, [handleTokenUri, hasCompletedOnboarding]);
+
+  if (!hasHydratedSettings) {
+    return null;
+  }
+
+  if (!hasCompletedOnboarding) {
+    return <OnboardingSequence />;
+  }
 
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerTitle: () =>
-            Platform.OS === "android" ? (
-              <ThemedText fontSize={Typography.fontSize20} fontWeight="bold">
-                Tokens
-              </ThemedText>
-            ) : undefined,
-        }}
-      />
-      <Stack.Screen
-        name="token/add"
-        options={{
-          headerTransparent: Platform.OS === "ios" ? true : false,
-          title: "",
-          presentation:
-            Platform.OS === "ios"
-              ? isLiquidGlassAvailable() && osName !== "iPadOS"
-                ? "formSheet"
-                : "modal"
-              : "modal",
-          sheetAllowedDetents: [0.75],
-          sheetInitialDetentIndex: 0,
-          gestureEnabled: false,
-          contentStyle: {
-            backgroundColor: isLiquidGlassAvailable()
-              ? "transparent"
-              : tabBarBackgroundColor,
-          },
-          headerBlurEffect: isLiquidGlassAvailable()
-            ? undefined
-            : colorScheme === "dark"
-              ? "dark"
-              : "light",
-        }}
-      />
-      <Stack.Screen
-        name="token/[tokenId]"
-        options={{
-          headerTransparent: Platform.OS === "ios" ? true : false,
-          title: "",
-          presentation:
-            Platform.OS === "ios"
-              ? isLiquidGlassAvailable() && osName !== "iPadOS"
-                ? "formSheet"
-                : "modal"
-              : "modal",
-          sheetAllowedDetents: [0.5],
-          sheetInitialDetentIndex: 0,
-          contentStyle: {
-            backgroundColor: isLiquidGlassAvailable()
-              ? "transparent"
-              : tabBarBackgroundColor,
-          },
-        }}
-      />
-    </Stack>
+    <>
+      <StatusBar backgroundColor={theme.background} barStyle={statusBarStyle} />
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerTitle: () =>
+              Platform.OS === "android" ? (
+                <ThemedText fontSize={Typography.fontSize20} fontWeight="bold">
+                  Tokens
+                </ThemedText>
+              ) : undefined,
+          }}
+        />
+        <Stack.Screen
+          name="token/add"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "",
+            presentation:
+              Platform.OS === "ios"
+                ? isLiquidGlassAvailable() && osName !== "iPadOS"
+                  ? "formSheet"
+                  : "modal"
+                : "modal",
+            sheetAllowedDetents: [0.75],
+            sheetInitialDetentIndex: 0,
+            gestureEnabled: false,
+            contentStyle: {
+              backgroundColor: isLiquidGlassAvailable()
+                ? "transparent"
+                : tabBarBackgroundColor,
+            },
+            headerBlurEffect: isLiquidGlassAvailable()
+              ? undefined
+              : colorScheme === "dark"
+                ? "dark"
+                : "light",
+          }}
+        />
+        <Stack.Screen
+          name="token/[tokenId]"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "",
+            contentStyle: {
+              backgroundColor: isLiquidGlassAvailable()
+                ? "transparent"
+                : tabBarBackgroundColor,
+            },
+          }}
+        />
+      </Stack>
+      <NotificationHandler />
+    </>
   );
 }
+
+export default withSentryRoot(RootLayout);

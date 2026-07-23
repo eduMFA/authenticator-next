@@ -1,6 +1,14 @@
-import { pollAllChallenges } from "@/services/challenge-polling-service";
-import { usePushRequestStore } from "@/store/push-request-store";
-import { useTokenStore } from "@/store/token-store";
+import {
+  ChallengePollingNetworkError,
+  ChallengePollingServerError,
+} from "@/errors/challenge-polling";
+import { pollAllChallenges } from "@/services/challenge-polling";
+import { usePushRequestStore } from "@/stores/push-request";
+import { useTokenStore } from "@/stores/token";
+import {
+  PushTokenRefreshErrorType,
+  PushTokenRefreshStatus,
+} from "@/types/token";
 import { useCallback, useRef, useState } from "react";
 
 export interface UseChallengePollingResult {
@@ -8,6 +16,18 @@ export interface UseChallengePollingResult {
   lastPollTime: number | null;
   pollChallenges: () => Promise<void>;
   error: Error | null;
+}
+
+function getRefreshErrorType(error: Error | undefined) {
+  if (error instanceof ChallengePollingNetworkError) {
+    return PushTokenRefreshErrorType.Network;
+  }
+
+  if (error instanceof ChallengePollingServerError) {
+    return PushTokenRefreshErrorType.Server;
+  }
+
+  return error ? PushTokenRefreshErrorType.Unknown : undefined;
 }
 
 /**
@@ -20,7 +40,7 @@ export function useChallengePolling(): UseChallengePollingResult {
   const [error, setError] = useState<Error | null>(null);
   const pollingRef = useRef(false);
 
-  const tokens = useTokenStore((state) => state.tokens);
+  const updateToken = useTokenStore((state) => state.updateToken);
   const addPushRequest = usePushRequestStore((state) => state.addPushRequest);
 
   const pollChallenges = useCallback(async () => {
@@ -29,6 +49,8 @@ export function useChallengePolling(): UseChallengePollingResult {
       console.log("Polling already in progress, skipping...");
       return;
     }
+
+    const tokens = useTokenStore.getState().tokens;
 
     if (tokens.length === 0) {
       console.log("No tokens available to poll");
@@ -42,6 +64,20 @@ export function useChallengePolling(): UseChallengePollingResult {
     try {
       console.log(`Starting challenge polling for ${tokens.length} tokens`);
       const result = await pollAllChallenges(tokens);
+      const refreshTimestamp = Date.now();
+
+      for (const tokenResult of result.tokenResults ?? []) {
+        updateToken(tokenResult.tokenId, {
+          lastRefreshResult: {
+            status: tokenResult.success
+              ? PushTokenRefreshStatus.Success
+              : PushTokenRefreshStatus.Failed,
+            timestamp: refreshTimestamp,
+            error: tokenResult.error?.message,
+            errorType: getRefreshErrorType(tokenResult.error),
+          },
+        });
+      }
 
       if (result.error) {
         console.warn("Polling completed with errors:", result.error);
@@ -67,7 +103,7 @@ export function useChallengePolling(): UseChallengePollingResult {
       pollingRef.current = false;
       setIsPolling(false);
     }
-  }, [tokens, addPushRequest]);
+  }, [addPushRequest, updateToken]);
 
   return {
     isPolling,

@@ -8,7 +8,6 @@
     "icon": "./assets/app-icons/icon-default.png",
     "userInterfaceStyle": "automatic",
     "scheme": "edumfa-push",
-    "assetBundlePatterns": ["**/*"],
     "ios": {
       "icon": "./assets/app-icons/edumfa.icon",
       "supportsTablet": false,
@@ -44,6 +43,14 @@
       "@react-native-firebase/app",
       "@react-native-firebase/messaging",
       [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.edumfa.io/",
+          "project": "app",
+          "organization": "edumfa"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/splash-icon.png",
@@ -75,6 +82,10 @@
       [
         "expo-build-properties",
         {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          },
           "ios": {
             "useFrameworks": "static",
             "forceStaticLinking": ["RNFBApp", "RNFBMessaging", "FastSquircle"]

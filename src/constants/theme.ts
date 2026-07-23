@@ -1,4 +1,4 @@
-import { useFonts } from "@expo-google-fonts/inter/";
+import { useFonts } from "expo-font";
 import { Inter_300Light } from "@expo-google-fonts/inter/300Light";
 import { Inter_300Light_Italic } from "@expo-google-fonts/inter/300Light_Italic";
 import { Inter_500Medium } from "@expo-google-fonts/inter/500Medium";
@@ -35,6 +35,7 @@ export function useInterFonts() {
 
 type ThemeColors = {
   branding: ColorValue;
+  textOnBranding: ColorValue;
   transparent: ColorValue;
   background: ColorValue;
   backgroundSecondary: ColorValue;
@@ -42,13 +43,19 @@ type ThemeColors = {
   textSecondary: ColorValue;
   border: ColorValue;
   fill: ColorValue;
-  successBar: string;
+  error: ColorValue;
+  dangerBackground: ColorValue;
+  dangerBar: ColorValue;
+  errorBackground: ColorValue;
   errorBar: string;
+  successBackground: ColorValue;
+  successBar: string;
 };
 
 const fallbackColors = {
   light: {
     branding: "#0066FF",
+    textOnBranding: "#FFFFFF",
     transparent: "rgba(255,255,255,0)",
     background: "#FFFFFF",
     backgroundSecondary: "#f1f1f1",
@@ -56,11 +63,17 @@ const fallbackColors = {
     textSecondary: "#606060",
     border: "#D9D9D0",
     fill: "#E5E5EA",
+    error: "#DC3545",
+    dangerBackground: "rgba(255, 149, 0, 0.12)",
+    dangerBar: "rgba(255, 149, 0, 0.75)",
+    errorBackground: "rgba(220, 53, 69, 0.10)",
+    successBackground: "rgba(6, 64, 43, 0.10)",
     successBar: "rgba(6, 64, 43, 0.6)",
     errorBar: "rgba(220, 53, 69, 0.6)",
   },
   dark: {
     branding: "#3399FF",
+    textOnBranding: "#FFFFFF",
     transparent: "rgba(0,0,0,0)",
     background: "#000000",
     backgroundSecondary: "#242424",
@@ -68,17 +81,22 @@ const fallbackColors = {
     textSecondary: "#CCCCCC",
     border: "#363A3F",
     fill: "#2C2C2E",
+    error: "#FF453A",
+    dangerBackground: "rgba(255, 149, 0, 0.18)",
+    dangerBar: "rgba(255, 149, 0, 0.8)",
+    errorBackground: "rgba(220, 53, 69, 0.18)",
+    successBackground: "rgba(6, 64, 43, 0.24)",
     successBar: "rgba(6, 64, 43, 0.6)",
     errorBar: "rgba(220, 53, 69, 0.6)",
   },
 } as const satisfies Record<"light" | "dark", ThemeColors>;
 
 const iosColors = Color.ios;
-
 const iosThemeColors =
   Platform.OS === "ios" && iosColors
     ? ({
         branding: iosColors.systemBlue,
+        textOnBranding: fallbackColors.light.textOnBranding,
         transparent: "transparent",
         background: iosColors.systemGroupedBackground,
         backgroundSecondary: iosColors.secondarySystemGroupedBackground,
@@ -86,14 +104,50 @@ const iosThemeColors =
         textSecondary: iosColors.secondaryLabel,
         border: iosColors.separator,
         fill: iosColors.secondarySystemFill,
+        error: iosColors.systemRed,
+        dangerBackground: fallbackColors.light.dangerBackground,
+        dangerBar: iosColors.systemOrange,
+        errorBackground: fallbackColors.light.errorBackground,
+        successBackground: fallbackColors.light.successBackground,
         successBar: fallbackColors.light.successBar,
         errorBar: fallbackColors.light.errorBar,
       } satisfies ThemeColors)
     : null;
 
+export function getAndroidThemeColors(): ThemeColors | null {
+  if (Platform.OS !== "android") {
+    return null;
+  }
+
+  const androidColors = Color.android.dynamic;
+
+  if (!androidColors) {
+    return null;
+  }
+
+  return {
+    branding: androidColors.primary,
+    textOnBranding: androidColors.onPrimary,
+    transparent: "transparent",
+    background: androidColors.background,
+    backgroundSecondary: androidColors.surfaceContainerHigh,
+    text: androidColors.onBackground,
+    textSecondary: androidColors.onSurfaceVariant,
+    border: androidColors.outline,
+    fill: androidColors.surfaceVariant,
+    error: androidColors.error,
+    dangerBackground: fallbackColors.light.dangerBackground,
+    dangerBar: fallbackColors.light.dangerBar,
+    errorBackground: fallbackColors.light.errorBackground,
+    successBackground: fallbackColors.light.successBackground,
+    successBar: fallbackColors.light.successBar,
+    errorBar: fallbackColors.light.errorBar,
+  } satisfies ThemeColors;
+}
+
 export const Colors = {
-  light: iosThemeColors ?? fallbackColors.light,
-  dark: iosThemeColors ?? fallbackColors.dark,
+  light: iosThemeColors ?? getAndroidThemeColors() ?? fallbackColors.light,
+  dark: iosThemeColors ?? getAndroidThemeColors() ?? fallbackColors.dark,
 } as const satisfies Record<"light" | "dark", ThemeColors>;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
@@ -152,6 +206,7 @@ export const Typography = {
 
 export const Radii = {
   sm: 4,
+  xs: 6,
   md: 10,
   lg: 12,
   xl: 20,

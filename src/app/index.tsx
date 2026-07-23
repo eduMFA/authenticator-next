@@ -1,4 +1,4 @@
-import { NotificationHandler } from "@/components/notification-handler";
+import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
@@ -6,26 +6,34 @@ import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
 import { useDevMenu } from "@/hooks/use-dev-menu";
+import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
-import { PushToken, PushTokenRolloutState } from "@/types";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
+import type { TokenAction } from "@/types/token-actions";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
+import {
+  Host as AndroidHost,
+  Icon as AndroidIcon,
+  ExtendedFloatingActionButton,
+  Text,
+} from "@expo/ui/jetpack-compose";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import { Link, Stack, useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
   Keyboard,
   Platform,
-  Pressable,
   RefreshControl,
   StyleSheet,
-  useColorScheme,
   useWindowDimensions,
+  View,
 } from "react-native";
 import Animated, {
   FadeIn,
@@ -40,17 +48,22 @@ export default function Tokens() {
   const devMenu = useDevMenu();
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
+  const {
+    hasPermission: hasNotificationPermission,
+    isInitialized: isNotificationInitialized,
+  } = useNotificationStatus();
   const { height, width } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
-  const colorScheme = useColorScheme();
   const theme = useTheme();
   const backgroundColor = theme.background;
   const { t } = useLingui();
   const tabBarTintColor = theme.text;
   const transparentColor = theme.transparent;
   const tabBarBackgroundColor = theme.background;
-  const refreshControlTintColor =
-    colorScheme === "dark" ? StaticColors.white : StaticColors.black;
+  const refreshControlColor =
+    Platform.OS === "android" ? theme.branding : theme.text;
+  const refreshControlProgressBackgroundColor =
+    Platform.OS === "android" ? theme.backgroundSecondary : undefined;
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -58,6 +71,8 @@ export default function Tokens() {
   const searchQuery = searchText.toLowerCase();
   const emptyStateButtonWidth = Math.min(320, width - Spacing.xl * 2);
   const showToolbarAddButton = tokens.length > 0;
+  const showNotificationNotice =
+    isNotificationInitialized && !hasNotificationPermission;
   const stackHeaderStyle = useMemo(
     () => ({
       backgroundColor: isLiquidGlassAvailable()
@@ -89,6 +104,40 @@ export default function Tokens() {
 
   const renderItem = useCallback(
     ({ item }: { item: PushToken }) => {
+      const primaryTokenAction: TokenAction = PushTokenRolloutState.isFailed(
+        item.rolloutState,
+      )
+        ? {
+            iosIcon: "arrow.clockwise",
+            key: "refresh",
+            label: t`Retry Rollout`,
+            onPress: () => rolloutToken(item.id),
+          }
+        : {
+            iosIcon: "square.and.pencil",
+            key: "edit",
+            label: t`Edit`,
+            onPress: () => {
+              router.push({
+                pathname: "/token/[tokenId]",
+                params: { edit: "1", tokenId: item.id },
+              });
+            },
+          };
+      const tokenActions: TokenAction[] = [
+        primaryTokenAction,
+        {
+          destructive: true,
+          iosIcon: "trash",
+          key: "delete",
+          label: t`Delete`,
+          onPress: () => confirmDeleteToken(item.id),
+        },
+      ];
+      const isRolloutFinished = PushTokenRolloutState.isFinished(
+        item.rolloutState,
+      );
+
       return (
         <Animated.View
           key={item.id}
@@ -96,57 +145,15 @@ export default function Tokens() {
           exiting={FadeOut}
           style={styles.tokenWrapper}
         >
-          <Link
-            push
-            key={item.id}
-            href={{
-              pathname: "/token/[tokenId]",
-              params: { tokenId: item.id },
-            }}
-            asChild
-          >
-            <Link.Trigger>
-              <Pressable
-                onLongPress={() => {}}
-                style={styles.tokenCard}
-                disabled={!PushTokenRolloutState.isFinished(item.rolloutState)}
-              >
-                <TokenListItem token={item} key={item.id} />
-              </Pressable>
-            </Link.Trigger>
-            <Link.Menu>
-              {!PushTokenRolloutState.isFailed(item.rolloutState) && (
-                <Link.MenuAction
-                  icon="square.and.pencil"
-                  onPress={() => {}}
-                  disabled={true}
-                >
-                  {t`Edit`}
-                </Link.MenuAction>
-              )}
-              {PushTokenRolloutState.isFailed(item.rolloutState) && (
-                <Link.MenuAction
-                  icon="arrow.clockwise"
-                  onPress={() => {
-                    rolloutToken(item.id);
-                  }}
-                >
-                  {t`Retry Rollout`}
-                </Link.MenuAction>
-              )}
-              <Link.MenuAction
-                icon="trash"
-                destructive
-                onPress={() => confirmDeleteToken(item.id)}
-              >
-                {t`Delete`}
-              </Link.MenuAction>
-            </Link.Menu>
-          </Link>
+          <TokenListItem
+            actions={tokenActions}
+            isRolloutFinished={isRolloutFinished}
+            token={item}
+          />
         </Animated.View>
       );
     },
-    [confirmDeleteToken, rolloutToken, t],
+    [confirmDeleteToken, rolloutToken, router, t],
   );
 
   const toolbarAddButton = (
@@ -210,9 +217,24 @@ export default function Tokens() {
             <Stack.Toolbar.MenuAction onPress={devMenu.clearPushRequests}>
               Clear Push Requests
             </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction
+              disabled={devMenu.tokenActionDisabled}
+              onPress={devMenu.spawnSamplePushRequest}
+            >
+              Spawn Sample Push Request
+            </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction onPress={devMenu.spawnSampleTokens}>
+              Spawn Sample Tokens
+            </Stack.Toolbar.MenuAction>
+            <Stack.Toolbar.MenuAction onPress={devMenu.resetOnboarding}>
+              Show Onboarding
+            </Stack.Toolbar.MenuAction>
           </Stack.Toolbar.Menu>
         )}
-        {Platform.OS === "ios" && !isLiquidGlassAvailable() && toolbarAddButton}
+        {Platform.OS === "ios" &&
+          !isLiquidGlassAvailable() &&
+          showToolbarAddButton &&
+          toolbarAddButton}
       </Stack.Toolbar>
     </>
   );
@@ -223,6 +245,28 @@ export default function Tokens() {
       {showToolbarAddButton && toolbarAddButton}
     </Stack.Toolbar>
   ) : null;
+
+  const androidAddFab =
+    Platform.OS === "android" ? (
+      <AndroidHost
+        matchContents
+        style={[styles.fabHost, { bottom: bottom + Spacing.lg }]}
+      >
+        <ExtendedFloatingActionButton
+          expanded={tokens.length === 0}
+          onClick={() => {
+            router.navigate("/token/add");
+          }}
+        >
+          <ExtendedFloatingActionButton.Icon>
+            <AndroidIcon source={AddSymbol} />
+          </ExtendedFloatingActionButton.Icon>
+          <ExtendedFloatingActionButton.Text>
+            <Text style={styles.fabText}>{t`Add token`}</Text>
+          </ExtendedFloatingActionButton.Text>
+        </ExtendedFloatingActionButton>
+      </AndroidHost>
+    ) : null;
 
   if (!tokens.length) {
     return (
@@ -254,31 +298,40 @@ export default function Tokens() {
               device.
             </Trans>
           </ThemedText>
-          <Host
-            matchContents={{ vertical: true }}
-            style={[styles.noTokenButton, { width: emptyStateButtonWidth }]}
-          >
-            <Button
-              variant="filled"
-              modifiers={[controlSize("large"), buttonStyle("glassProminent")]}
-              onPress={() => {
-                router.navigate("/token/add");
-              }}
-              style={{ width: emptyStateButtonWidth }}
+          {Platform.OS === "ios" && (
+            <Host
+              matchContents={{ vertical: true }}
+              style={[styles.noTokenButton, { width: emptyStateButtonWidth }]}
             >
-              <Row alignment="center" spacing={6}>
-                <Icon
-                  name={Icon.select({
-                    ios: "plus",
-                    android: AddSymbol,
-                  })}
-                  accessibilityLabel={t`Add token`}
-                />
-                <ExpoText numberOfLines={1}>{t`Add token`}</ExpoText>
-              </Row>
-            </Button>
-          </Host>
+              <Button
+                modifiers={[
+                  controlSize("large"),
+                  buttonStyle(
+                    isLiquidGlassAvailable()
+                      ? "glassProminent"
+                      : "borderedProminent",
+                  ),
+                ]}
+                onPress={() => {
+                  router.navigate("/token/add");
+                }}
+                style={{ width: emptyStateButtonWidth }}
+              >
+                <Row alignment="center" spacing={6}>
+                  <Icon
+                    name={Icon.select({
+                      ios: "plus",
+                      android: AddSymbol,
+                    })}
+                    accessibilityLabel={t`Add token`}
+                  />
+                  <ExpoText numberOfLines={1}>{t`Add token`}</ExpoText>
+                </Row>
+              </Button>
+            </Host>
+          )}
         </ThemedView>
+        {androidAddFab}
         {footer}
       </>
     );
@@ -287,7 +340,6 @@ export default function Tokens() {
   return (
     <>
       {header}
-      <NotificationHandler />
       <Animated.FlatList
         scrollToOverflowEnabled
         contentInsetAdjustmentBehavior="automatic"
@@ -318,17 +370,30 @@ export default function Tokens() {
             </ThemedView>
           </Animated.View>
         }
+        ListHeaderComponent={
+          showNotificationNotice ? (
+            <View style={styles.notificationNotice}>
+              <StatusCard
+                variant="danger"
+                title={t`Notifications are disabled`}
+                description={t`Enable notifications to receive push approval requests on this device.`}
+              />
+            </View>
+          ) : null
+        }
         refreshControl={
           <RefreshControl
             refreshing={isPolling}
             onRefresh={onRefresh}
             title={t`Refreshing...`}
-            tintColor={refreshControlTintColor}
-            titleColor={refreshControlTintColor}
-            colors={[refreshControlTintColor]}
+            tintColor={refreshControlColor}
+            titleColor={refreshControlColor}
+            colors={[refreshControlColor]}
+            progressBackgroundColor={refreshControlProgressBackgroundColor}
           />
         }
       />
+      {androidAddFab}
       {footer}
     </>
   );
@@ -337,6 +402,14 @@ export default function Tokens() {
 export const styles = StyleSheet.create({
   contentContainer: {
     paddingHorizontal: Spacing.lg,
+  },
+  fabHost: {
+    position: "absolute",
+    right: Spacing.lg,
+    zIndex: 10,
+  },
+  fabText: {
+    fontWeight: "bold",
   },
   noResultsContainer: {
     padding: Spacing.xl,
@@ -368,9 +441,8 @@ export const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
     textAlign: "center",
   },
-  tokenCard: {
-    borderRadius: Radii.xl,
-    overflow: "hidden",
+  notificationNotice: {
+    marginVertical: Spacing.sm,
   },
   tokenWrapper: {
     marginVertical: Spacing.sm,

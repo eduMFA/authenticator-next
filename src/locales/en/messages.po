@@ -13,38 +13,65 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/push-request-popup.tsx:225
-#: src/store/notification-store.ts:48
+#: src/components/push-request-popup.tsx:226
+#: src/utils/notification.ts:61
 msgid "Accept"
 msgstr "Accept"
 
-#: src/app/index.tsx:274
-#: src/app/index.tsx:275
+#: src/components/token-detail/token-overview-content.tsx:175
+msgid "Activity Log"
+msgstr "Activity Log"
+
+#: src/app/index.tsx:265
+#: src/app/index.tsx:326
+#: src/app/index.tsx:328
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:256
+#: src/app/index.tsx:296
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
+
+#: src/components/token-add/camera-permission-splash.tsx:37
+msgid "Allow camera access"
+msgstr "Allow camera access"
+
+#: src/components/onboarding-sequence/step-actions.tsx:131
+msgid "Anonymous reports"
+msgstr "Anonymous reports"
 
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Are you sure you want to delete this token?"
 
-#: src/components/qr-code-scanner.tsx:59
-msgid "Camera permission required"
-msgstr "Camera permission required"
+#: src/components/token-add/camera-permission-splash.tsx:44
+msgid "Camera access is required to scan the QR code and pair a token."
+msgstr "Camera access is required to scan the QR code and pair a token."
+
+#: src/components/token-add/camera-permission-denied.tsx:34
+msgid "Camera access is turned off"
+msgstr "Camera access is turned off"
 
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/components/push-request-popup.tsx:219
-#: src/store/notification-store.ts:56
+#: src/components/onboarding-sequence.tsx:97
+msgid "Choose whether to share anonymous crash and error reports."
+msgstr "Choose whether to share anonymous crash and error reports."
+
+#: src/components/onboarding-sequence/step-actions.tsx:73
+#: src/components/token-add/camera-permission-splash.tsx:64
+msgid "Continue"
+msgstr "Continue"
+
+#: src/components/push-request-popup.tsx:220
+#: src/utils/notification.ts:69
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:151
+#: src/app/index.tsx:133
+#: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Delete"
@@ -53,112 +80,337 @@ msgstr "Delete"
 msgid "Delete token"
 msgstr "Delete token"
 
-#: src/hooks/use-handle-token-uri.ts:80
+#: src/components/token-detail/token-overview-content.tsx:165
+msgid "Details"
+msgstr "Details"
+
+#: src/hooks/use-handle-token-uri.ts:61
 msgid "Dismiss"
 msgstr "Dismiss"
 
-#: src/hooks/use-handle-token-uri.ts:72
-msgid "Download 2FAS"
-msgstr "Download 2FAS"
+#: src/components/onboarding-sequence/step-actions.tsx:137
+msgid "Do not share reports"
+msgstr "Do not share reports"
 
-#: src/app/index.tsx:133
+#: src/app/index.tsx:119
+#: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Edit"
 
-#: src/hooks/use-handle-token-uri.ts:60
-#: src/hooks/use-handle-token-uri.ts:68
+#: src/components/token-detail/token-edit-content.tsx:33
+msgid "Edit token"
+msgstr "Edit token"
+
+#: src/components/onboarding-sequence/step-actions.tsx:84
+#~ msgid "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
+#~ msgstr "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
+
+#: src/components/token-add/camera-permission-denied.tsx:40
+msgid "Enable camera access in Settings to scan QR codes."
+msgstr "Enable camera access in Settings to scan QR codes."
+
+#: src/components/onboarding-sequence/step-actions.tsx:105
+msgid "Enable notifications"
+msgstr "Enable notifications"
+
+#: src/components/onboarding-sequence.tsx:90
+msgid "Enable notifications to receive approval requests."
+msgstr "Enable notifications to receive approval requests."
+
+#: src/app/index.tsx:379
+msgid "Enable notifications to receive push approval requests on this device."
+msgstr "Enable notifications to receive push approval requests on this device."
+
+#: src/components/token-detail/token-detail-utils.ts:89
+msgid "Enrolled"
+msgstr "Enrolled"
+
+#: src/components/token-detail/token-detail-utils.ts:60
+msgid "Enrollment response failed"
+msgstr "Enrollment response failed"
+
+#: src/app/token/[tokenId].tsx:122
+msgid "Enter a label for this token."
+msgstr "Enter a label for this token."
+
+#: src/hooks/use-handle-token-uri.ts:47
+#: src/hooks/use-handle-token-uri.ts:57
 #: src/hooks/use-handle-token-uri.ts:89
 msgid "Failed to add token"
 msgstr "Failed to add token"
 
-#: src/components/qr-code-scanner.tsx:49
-msgid "Grant permission"
-msgstr "Grant permission"
+#: src/components/token-detail/token-detail-utils.ts:85
+msgid "Finalizing enrollment"
+msgstr "Finalizing enrollment"
 
-#: src/hooks/use-handle-token-uri.ts:45
+#: src/components/token-detail/token-detail-utils.ts:77
+msgid "Generating keys"
+msgstr "Generating keys"
+
+#: src/components/onboarding-sequence.tsx:332
+msgid "Get started"
+msgstr "Get started"
+
+#: src/components/onboarding-sequence.tsx:96
+msgid "Help improve eduMFA"
+msgstr "Help improve eduMFA"
+
+#: src/components/onboarding-sequence/step-actions.tsx:128
+msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
+msgstr "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
+
+#: src/components/onboarding-sequence.tsx:83
+msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
+msgstr "Keep your authentication tokens in one place and approve sign-ins securely from this device."
+
+#: src/components/token-detail/token-detail-utils.ts:50
+#: src/components/token-detail/token-detail-utils.ts:79
+msgid "Key generation failed"
+msgstr "Key generation failed"
+
+#: src/components/token-detail/token-edit-form.android.tsx:44
+#: src/components/token-detail/token-edit-form.ios.tsx:42
+msgid "Label"
+msgstr "Label"
+
+#: src/app/token/[tokenId].tsx:122
+msgid "Label required"
+msgstr "Label required"
+
+#: src/components/token-detail/token-overview-content.tsx:157
+msgid "Last failed"
+msgstr "Last failed"
+
+#: src/components/onboarding-sequence.tsx:89
+msgid "Never miss a sign-in request"
+msgstr "Never miss a sign-in request"
+
+#: src/components/token-detail/token-overview-content.tsx:179
+msgid "No interactions yet"
+msgstr "No interactions yet"
+
+#: src/hooks/use-handle-token-uri.ts:32
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:313
+#: src/app/index.tsx:367
 msgid "No results found for "
 msgstr "No results found for "
 
-#: src/app/index.tsx:248
+#: src/app/index.tsx:288
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
-#: src/components/qr-code-scanner.tsx:50
+#: src/components/onboarding-sequence/step-actions.tsx:94
+msgid "Not now"
+msgstr "Not now"
+
+#: src/components/onboarding-sequence.tsx:88
+msgid "Notifications"
+msgstr "Notifications"
+
+#: src/app/index.tsx:378
+msgid "Notifications are disabled"
+msgstr "Notifications are disabled"
+
+#: src/components/onboarding-sequence/step-actions.tsx:67
+msgid "Notifications are enabled"
+msgstr "Notifications are enabled"
+
+#: src/components/onboarding-sequence/step-actions.tsx:85
+#~ msgid "Notifications are off"
+#~ msgstr "Notifications are off"
+
+#: src/components/onboarding-sequence/step-actions.tsx:85
+#~ msgid "Notifications are required"
+#~ msgstr "Notifications are required"
+
+#: src/components/onboarding-sequence/step-actions.tsx:91
+msgid "Open notification settings"
+msgstr "Open notification settings"
+
+#: src/components/token-add/camera-permission-denied.tsx:55
 msgid "Open Settings"
 msgstr "Open Settings"
 
-#: src/app/token/add.tsx:77
+#: src/hooks/use-handle-token-uri.ts:67
+msgid "Open with your Authenticator App"
+msgstr "Open with your Authenticator App"
+
+#: src/app/token/add.tsx:98
 msgid "OR"
 msgstr "OR"
 
-#: src/app/token/add.tsx:56
+#: src/app/token/add.tsx:83
 msgid "Pair new Push Token"
 msgstr "Pair new Push Token"
 
-#: src/components/upload-qr-code-button.tsx:73
+#: src/components/token-detail/token-detail-utils.ts:75
+msgid "Pending"
+msgstr "Pending"
+
+#: src/components/token-add/scanner-overlay.tsx:47
+msgid "Place the QR code inside the frame"
+msgstr "Place the QR code inside the frame"
+
+#: src/components/token-add/upload-qr-code-button.tsx:64
 msgid "QR code scanner"
 msgstr "QR code scanner"
 
-#: src/app/index.tsx:323
+#: src/components/token-detail/token-overview-content.tsx:128
+#: src/components/token-list-item.tsx:233
+msgid "Refresh failed"
+msgstr "Refresh failed"
+
+#: src/app/index.tsx:388
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
-#: src/app/index.tsx:143
+#: src/components/token-detail/token-detail-utils.ts:81
+msgid "Registering public key"
+msgstr "Registering public key"
+
+#: src/components/token-detail/token-detail-utils.ts:83
+msgid "Registration failed"
+msgstr "Registration failed"
+
+#: src/components/token-detail/token-detail-utils.ts:87
+msgid "Response parsing failed"
+msgstr "Response parsing failed"
+
+#: src/app/index.tsx:113
+#: src/components/token-detail/token-overview-content.tsx:105
+#: src/components/token-detail/token-overview-content.tsx:115
+#: src/components/token-detail/token-overview-content.tsx:117
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
-#: src/components/token-list-item.tsx:102
+#: src/components/token-list-item.tsx:212
 msgid "Rolling out..."
 msgstr "Rolling out..."
 
-#: src/components/token-list-item.tsx:102
+#: src/components/token-detail/token-detail-utils.ts:65
+#: src/components/token-list-item.tsx:212
 msgid "Rollout Failed"
 msgstr "Rollout Failed"
 
-#: src/app/token/add.tsx:63
-msgid "Scan the QR code to pair a new push token."
-msgstr "Scan the QR code to pair a new push token."
+#: src/app/token/[tokenId].tsx:177
+msgid "Save"
+msgstr "Save"
 
-#: src/hooks/use-handle-token-uri.ts:77
+#: src/hooks/use-handle-token-uri.ts:76
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:182
+#: src/app/index.tsx:180
 msgid "Search tokens"
 msgstr "Search tokens"
 
-#: src/components/push-request-popup.tsx:212
+#: src/components/push-request-popup.tsx:213
+#: src/components/token-detail/token-overview-content.tsx:169
 msgid "Serial"
 msgstr "Serial"
 
-#: src/hooks/use-handle-token-uri.ts:61
+#: src/components/token-detail/token-overview-content.tsx:140
+msgid "Server message"
+msgstr "Server message"
+
+#: src/components/token-detail/token-detail-utils.ts:55
+msgid "Server registration failed"
+msgstr "Server registration failed"
+
+#: src/components/onboarding-sequence/step-actions.tsx:143
+msgid "Share anonymous reports"
+msgstr "Share anonymous reports"
+
+#: src/components/onboarding-sequence/step-actions.tsx:85
+msgid "Sign-in requests may go unnoticed"
+msgstr "Sign-in requests may go unnoticed"
+
+#: src/components/token-detail/token-overview-content.tsx:168
+msgid "Status"
+msgstr "Status"
+
+#: src/components/token-detail/token-detail-utils.ts:49
+msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
+msgstr "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
+
+#: src/hooks/use-handle-token-uri.ts:48
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "The provided QR code isn't a valid eduMFA token."
 
-#: src/hooks/use-handle-token-uri.ts:69
-msgid "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
-msgstr "The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS."
+#: src/hooks/use-handle-token-uri.ts:58
+msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
+msgstr "The QR code isn't supported by this app. Please use a general Authenticator app."
+
+#: src/components/token-detail/token-detail-utils.ts:59
+msgid "The server response could not be parsed or did not include the expected token material."
+msgstr "The server response could not be parsed or did not include the expected token material."
 
 #: src/hooks/use-handle-token-uri.ts:90
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 
-#: src/components/upload-qr-code-button.tsx:76
+#: src/components/token-detail/token-detail-utils.ts:21
+msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
+msgstr "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
+
+#: src/components/token-detail/token-detail-utils.ts:20
+msgid "This token could not be refreshed. It may have been removed on the server or the institution hosting the push service may be having a technical issue."
+msgstr "This token could not be refreshed. It may have been removed on the server or the institution hosting the push service may be having a technical issue."
+
+#: src/components/token-detail/token-detail-utils.ts:54
+msgid "This token could not be registered with the enrollment server. Check your connection or try again later."
+msgstr "This token could not be registered with the enrollment server. Check your connection or try again later."
+
+#: src/components/token-detail/token-detail-utils.ts:64
+msgid "This token did not finish enrollment and cannot receive push requests until rollout succeeds."
+msgstr "This token did not finish enrollment and cannot receive push requests until rollout succeeds."
+
+#: src/components/token-detail/token-edit-form.ios.tsx:38
+msgid "Token"
+msgstr "Token"
+
+#: src/components/token-detail/token-overview-content.tsx:186
+msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
+msgstr "Token approvals, denials, refresh events, and enrollment activity will appear here."
+
+#: src/components/onboarding-sequence/step-actions.tsx:84
+msgid "Turn on notifications in Settings so you can respond when a request arrives."
+msgstr "Turn on notifications in Settings so you can respond when a request arrives."
+
+#: src/components/onboarding-sequence/step-actions.tsx:84
+#~ msgid "Turn them on in Settings to receive sign-in requests."
+#~ msgstr "Turn them on in Settings to receive sign-in requests."
+
+#: src/components/token-detail/token-edit-content.tsx:40
+msgid "Update the display name for this token."
+msgstr "Update the display name for this token."
+
+#: src/components/token-add/upload-qr-code-button.tsx:67
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
 
-#: src/components/qr-code-scanner.tsx:43
-msgid "We need your permission to show the camera"
-msgstr "We need your permission to show the camera"
+#: src/components/onboarding-sequence.tsx:81
+msgid "Welcome"
+msgstr "Welcome"
 
-#: src/components/qr-code-scanner.tsx:44
-msgid "You can enable camera permissions in your device settings"
-msgstr "You can enable camera permissions in your device settings"
+#: src/components/onboarding-sequence.tsx:82
+msgid "Welcome to eduMFA"
+msgstr "Welcome to eduMFA"
 
-#: src/hooks/use-handle-token-uri.ts:46
+#: src/components/onboarding-sequence/step-actions.tsx:85
+#~ msgid "You may miss sign-in requests"
+#~ msgstr "You may miss sign-in requests"
+
+#: src/components/onboarding-sequence/step-actions.tsx:66
+msgid "You’re ready to receive and approve sign-in requests."
+msgstr "You’re ready to receive and approve sign-in requests."
+
+#: src/components/onboarding-sequence.tsx:95
+msgid "Your choice"
+msgstr "Your choice"
+
+#: src/hooks/use-handle-token-uri.ts:33
 msgid "Your image did not contain a QR code."
 msgstr "Your image did not contain a QR code."

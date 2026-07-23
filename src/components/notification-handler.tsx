@@ -3,9 +3,10 @@ import { useToken } from "@/hooks/use-token";
 import {
   findTokenForPushRequest,
   handlePushAuthRequest,
-} from "@/services/push-auth-service";
-import { usePushRequestStore } from "@/store/push-request-store";
-import { PushRequest, PushRequestStatus } from "@/types";
+} from "@/services/push-auth";
+import { usePushRequestStore } from "@/stores/push-request";
+import type { PushRequest } from "@/types/push-request";
+import { PushRequestStatus } from "@/types/push-request";
 import { useCallback } from "react";
 import { PushRequestPopup } from "./push-request-popup";
 

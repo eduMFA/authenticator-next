@@ -2,25 +2,12 @@ import {
   InvalidUrlError,
   OtpProtocolError,
   UnsupportedVersionError,
-} from "@/errors/token-errors";
+} from "@/errors/token";
 import { useToken } from "@/hooks/use-token";
 import { useLingui } from "@lingui/react/macro";
 import { useCallback } from "react";
 import { Alert, Linking, Platform } from "react-native";
 import { Presets } from "react-native-pulsar";
-
-type TokenUriSource = "qr" | "deepLink";
-
-const openTwoFas = () => {
-  const url = Platform.select({
-    ios: "itms-apps://apps.apple.com/app/id1217793794",
-    android: "market://details?id=com.twofas.authenticator",
-  });
-
-  if (url) {
-    Linking.openURL(url);
-  }
-};
 
 const searchAuthenticatorApps = () => {
   const url = Platform.select({
@@ -38,7 +25,7 @@ export const useHandleTokenUri = () => {
   const { t } = useLingui();
 
   return useCallback(
-    async (uri: string | null, source: TokenUriSource = "qr") => {
+    async (uri: string | null) => {
       if (uri === null) {
         Presets.System.notificationError();
         Alert.alert(
@@ -64,20 +51,33 @@ export const useHandleTokenUri = () => {
         }
 
         if (error instanceof OtpProtocolError) {
+          const hasAuthenticatorApp = await Linking.canOpenURL(uri);
+
           Alert.alert(
             t`Failed to add token`,
-            t`The QR code isn't supported by this app. Please use a general Authenticator app. We recommend 2FAS.`,
+            t`The QR code isn't supported by this app. Please use a general Authenticator app.`,
             [
               {
-                text: t`Download 2FAS`,
-                onPress: openTwoFas,
-                isPreferred: true,
+                text: t`Dismiss`,
+                style: "cancel",
               },
-              {
-                text: t`Search Authenticator Apps`,
-                onPress: searchAuthenticatorApps,
-              },
-              { text: t`Dismiss`, style: "cancel" },
+              ...(hasAuthenticatorApp
+                ? [
+                    {
+                      text: t`Open with your Authenticator App`,
+                      onPress: () => {
+                        Linking.openURL(uri);
+                      },
+                      isPreferred: true,
+                    },
+                  ]
+                : [
+                    {
+                      text: t`Search Authenticator Apps`,
+                      onPress: searchAuthenticatorApps,
+                      isPreferred: true,
+                    },
+                  ]),
             ],
             { cancelable: true },
           );

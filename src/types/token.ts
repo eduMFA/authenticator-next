@@ -12,36 +12,25 @@ export type PushToken = {
   rolloutState: PushTokenRolloutState;
   publicKey?: string;
   serverPublicKey?: string;
+  lastRefreshResult?: PushTokenRefreshResult;
 };
 
-export type PushRequest = {
-  id: string;
-  status: PushRequestStatus;
-  sentAt: number;
-  nonce: string;
-  question: string;
-  serial: string;
-  signature: string;
-  sslverify: string;
-  title: string;
-  url: string;
+export type PushTokenRefreshResult = {
+  status: PushTokenRefreshStatus;
+  timestamp: number;
+  error?: string;
+  errorType?: PushTokenRefreshErrorType;
 };
 
-export type PushRequestData = {
-  nonce: string;
-  question: string;
-  serial: string;
-  signature: string;
-  sslverify: string;
-  title: string;
-  url: string;
-};
+export enum PushTokenRefreshStatus {
+  Success = "success",
+  Failed = "failed",
+}
 
-export enum PushRequestStatus {
-  Pending = "pending",
-  Accepted = "accepted",
-  Declined = "declined",
-  Expired = "expired",
+export enum PushTokenRefreshErrorType {
+  Network = "network",
+  Server = "server",
+  Unknown = "unknown",
 }
 
 export enum PushTokenRolloutState {
