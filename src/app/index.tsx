@@ -18,9 +18,11 @@ import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import {
   Host as AndroidHost,
   Icon as AndroidIcon,
+  Box,
   ExtendedFloatingActionButton,
   Text,
 } from "@expo/ui/jetpack-compose";
+import { imePadding } from "@expo/ui/jetpack-compose/modifiers";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
@@ -249,23 +251,22 @@ export default function Tokens() {
 
   const androidAddFab =
     Platform.OS === "android" ? (
-      <AndroidHost
-        matchContents
-        style={[styles.fabHost, { bottom: bottom + Spacing.lg }]}
-      >
-        <ExtendedFloatingActionButton
-          expanded={tokens.length === 0}
-          onClick={() => {
-            router.navigate("/token/add");
-          }}
-        >
-          <ExtendedFloatingActionButton.Icon>
-            <AndroidIcon source={AddSymbol} />
-          </ExtendedFloatingActionButton.Icon>
-          <ExtendedFloatingActionButton.Text>
-            <Text style={styles.fabText}>{t`Add token`}</Text>
-          </ExtendedFloatingActionButton.Text>
-        </ExtendedFloatingActionButton>
+      <AndroidHost matchContents style={styles.fabHost}>
+        <Box modifiers={[imePadding()]}>
+          <ExtendedFloatingActionButton
+            expanded={tokens.length === 0}
+            onClick={() => {
+              router.navigate("/token/add");
+            }}
+          >
+            <ExtendedFloatingActionButton.Icon>
+              <AndroidIcon source={AddSymbol} />
+            </ExtendedFloatingActionButton.Icon>
+            <ExtendedFloatingActionButton.Text>
+              <Text style={styles.fabText}>{t`Add token`}</Text>
+            </ExtendedFloatingActionButton.Text>
+          </ExtendedFloatingActionButton>
+        </Box>
       </AndroidHost>
     ) : null;
 
@@ -447,6 +448,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   fabHost: {
+    bottom: Spacing.lg,
     position: "absolute",
     right: Spacing.lg,
     zIndex: 10,

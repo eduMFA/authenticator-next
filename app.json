@@ -31,7 +31,7 @@
       },
       "userInterfaceStyle": "automatic",
       "package": "io.edumfa.app",
-      "softwareKeyboardLayoutMode": "pan",
+      "softwareKeyboardLayoutMode": "resize",
       "googleServicesFile": "./google-services.json"
     },
     "plugins": [
