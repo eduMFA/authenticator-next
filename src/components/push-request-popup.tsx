@@ -1,18 +1,20 @@
-import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { usePushRequestStore } from "@/stores/push-request";
+import { useTokenStore } from "@/stores/token";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import { useLingui } from "@lingui/react/macro";
 import { BlurView } from "expo-blur";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  Dimensions,
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   View,
   useColorScheme,
+  useWindowDimensions,
 } from "react-native";
 import { Presets } from "react-native-pulsar";
 import Animated, {
@@ -23,12 +25,12 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
+
 import { ThemedText } from "./themed-text";
+import { TokenImage } from "./token-image";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
-const POPUP_WIDTH = Math.min(Dimensions.get("window").width - 48, 340);
 
 type PushRequestPopupProps = {
   requests: PushRequest[];
@@ -42,40 +44,30 @@ export function PushRequestPopup({
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const colorScheme = useColorScheme();
   const { updatePushRequestStatus } = usePushRequestStore();
-
-  // Filter to only pending requests
   const pendingRequests = requests.filter(
-    (r) => r.status === PushRequestStatus.Pending,
+    (request) => request.status === PushRequestStatus.Pending,
   );
-
-  const currentIndex = 0;
-  const currentRequest = pendingRequests[currentIndex];
-  const hasRequests = pendingRequests.length > 0;
-  const totalPending = pendingRequests.length;
+  const currentRequest = pendingRequests[0];
 
   const handleAction = useCallback(
     (action: "accept" | "decline") => {
       if (!currentRequest || isAnimatingOut) return;
 
-      let pushRequestStatus: PushRequestStatus;
+      const status =
+        action === "accept"
+          ? PushRequestStatus.Accepted
+          : PushRequestStatus.Declined;
+
       if (action === "accept") {
         Presets.System.impactMedium();
-        pushRequestStatus = PushRequestStatus.Accepted;
       } else {
         Presets.System.impactLight();
-        pushRequestStatus = PushRequestStatus.Declined;
       }
 
       setIsAnimatingOut(true);
-
-      // Delay the action to allow exit animation
       setTimeout(() => {
-        const updatedRequest = {
-          ...currentRequest,
-          status: pushRequestStatus,
-        };
-
-        updatePushRequestStatus(updatedRequest.id, updatedRequest.status);
+        const updatedRequest = { ...currentRequest, status };
+        updatePushRequestStatus(updatedRequest.id, status);
         onAction(updatedRequest);
         setIsAnimatingOut(false);
       }, 200);
@@ -83,33 +75,28 @@ export function PushRequestPopup({
     [currentRequest, isAnimatingOut, onAction, updatePushRequestStatus],
   );
 
-  if (!hasRequests || !currentRequest) {
-    return null;
-  }
+  if (!currentRequest) return null;
 
   return (
     <Modal
-      visible={hasRequests}
+      visible
       transparent
       animationType="none"
       statusBarTranslucent
+      onRequestClose={() => handleAction("decline")}
     >
       <View style={styles.container}>
-        {/* Backdrop - blurs entire screen including nav */}
         <AnimatedBlurView
           style={StyleSheet.absoluteFill}
-          intensity={50}
+          intensity={55}
           tint={colorScheme === "dark" ? "dark" : "light"}
           entering={FadeIn.duration(250)}
           exiting={FadeOut.duration(200)}
         />
-
-        {/* Popup Card */}
         <PopupCard
           request={currentRequest}
-          currentIndex={currentIndex}
-          totalPending={totalPending}
-          onAction={(action) => handleAction(action)}
+          totalPending={pendingRequests.length}
+          onAction={handleAction}
           isAnimatingOut={isAnimatingOut}
         />
       </View>
@@ -119,7 +106,6 @@ export function PushRequestPopup({
 
 type PopupCardProps = {
   request: PushRequest;
-  currentIndex: number;
   totalPending: number;
   onAction: (action: "accept" | "decline") => void;
   isAnimatingOut: boolean;
@@ -127,207 +113,232 @@ type PopupCardProps = {
 
 function PopupCard({
   request,
-  currentIndex,
   totalPending,
   onAction,
   isAnimatingOut,
 }: PopupCardProps) {
-  const theme = useTheme();
-  const backgroundColor = theme.background;
-  const borderColor = theme.border;
   const { t } = useLingui();
-
-  const scale = useSharedValue(0.9);
+  const theme = useTheme();
+  const { width, height } = useWindowDimensions();
+  const token = useTokenStore((state) =>
+    state.tokens.find((candidate) => candidate.id === request.serial),
+  );
+  const scale = useSharedValue(0.96);
   const opacity = useSharedValue(0);
 
   useEffect(() => {
     scale.value = withTiming(1, {
-      duration: 300,
+      duration: 280,
       easing: Easing.out(Easing.quad),
     });
-    opacity.value = withTiming(1, {
-      duration: 300,
-      easing: Easing.out(Easing.quad),
-    });
+    opacity.value = withTiming(1, { duration: 240 });
   }, [opacity, scale]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
     transform: [{ scale: scale.value }],
   }));
+  const service = getServiceName(request.url);
+  const receivedAt = useMemo(
+    () =>
+      new Date(request.sentAt).toLocaleTimeString(undefined, {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    [request.sentAt],
+  );
+  const organizationName = token?.issuer ?? token?.label;
+  const context = [
+    ...new Set(
+      [token?.label, service, receivedAt].filter(
+        (value): value is string =>
+          Boolean(value) && value !== organizationName,
+      ),
+    ),
+  ];
+  const cardWidth = Math.min(width - Spacing.xl * 2, 420);
+  const cardMaxHeight = Math.max(320, height - Spacing.xl * 2);
 
   return (
     <Animated.View
-      entering={FadeIn.duration(300)}
+      style={[
+        styles.popup,
+        {
+          backgroundColor: theme.background,
+          borderColor: theme.border,
+          width: cardWidth,
+          maxHeight: cardMaxHeight,
+        },
+        animatedStyle,
+      ]}
+      entering={FadeIn.duration(240)}
       exiting={FadeOut.duration(200)}
     >
-      <Animated.View
-        style={[
-          styles.popup,
-          {
-            backgroundColor,
-            borderColor,
-            width: POPUP_WIDTH,
-          },
-          animatedStyle,
-        ]}
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        bounces={false}
+        contentContainerStyle={styles.scrollContent}
       >
-        {/* Queue indicator */}
-        {totalPending > 1 && (
-          <Animated.View
-            style={styles.queueIndicator}
-            entering={FadeIn.delay(200)}
+        <TokenImage
+          imageUrl={token?.imageUrl}
+          label={organizationName}
+          size="medium"
+          animated
+          style={styles.organizationLogo}
+        />
+
+        <View style={styles.heading}>
+          <ThemedText
+            selectable
+            fontSize={Typography.fontSize24}
+            fontWeight="bold"
+            style={styles.centeredText}
           >
+            {t`Review sign-in`}
+          </ThemedText>
+          {organizationName ? (
             <ThemedText
-              fontSize={Typography.fontSize12}
+              selectable
+              fontSize={Typography.fontSize14}
               themeColor="textSecondary"
+              style={styles.centeredText}
             >
-              {currentIndex + 1} of {totalPending}
+              {organizationName}
             </ThemedText>
-          </Animated.View>
-        )}
-
-        {/* Header */}
-        <View style={styles.header}>
-          <ThemedText
-            fontSize={Typography.fontSize20}
-            fontWeight="semiBold"
-            style={styles.title}
-          >
-            {request.title || "Authentication Request"}
-          </ThemedText>
+          ) : null}
         </View>
 
-        {/* Content */}
-        <View style={styles.content}>
-          <ThemedText
-            fontSize={Typography.fontSize16}
-            themeColor="textSecondary"
-            style={styles.question}
+        {request.title || request.question || context.length > 0 ? (
+          <View
+            style={[
+              styles.requestMessage,
+              {
+                backgroundColor: theme.backgroundSecondary,
+                borderColor: theme.border,
+              },
+            ]}
           >
-            {request.question || "Do you want to confirm this authentication?"}
-          </ThemedText>
-
-          {/* Request details */}
-          <View style={[styles.detailsContainer, { borderColor }]}>
-            <DetailRow label={t`Serial`} value={request.serial} />
+            {request.title ? (
+              <ThemedText
+                selectable
+                fontSize={Typography.fontSize16}
+                fontWeight="semiBold"
+              >
+                {request.title}
+              </ThemedText>
+            ) : null}
+            {request.question ? (
+              <ThemedText
+                selectable
+                fontSize={Typography.fontSize14}
+                themeColor="textSecondary"
+              >
+                {request.question}
+              </ThemedText>
+            ) : null}
+            {context.length > 0 ? (
+              <ThemedText
+                selectable
+                fontSize={Typography.fontSize12}
+                themeColor="textSecondary"
+                numberOfLines={2}
+              >
+                {context.join(" · ")}
+              </ThemedText>
+            ) : null}
           </View>
+        ) : null}
+
+        <View
+          style={[
+            styles.guidance,
+            {
+              backgroundColor: theme.dangerBackground,
+              borderColor: theme.dangerBar,
+            },
+          ]}
+        >
+          <ThemedText selectable fontSize={Typography.fontSize14}>
+            {t`Only approve if you started this sign-in. If you are unsure, deny it.`}
+          </ThemedText>
         </View>
 
-        {/* Action Buttons */}
+        {totalPending > 1 ? (
+          <ThemedText
+            selectable
+            fontSize={Typography.fontSize12}
+            themeColor="textSecondary"
+            style={styles.centeredText}
+          >
+            {t`${totalPending} requests are waiting. Review each one separately.`}
+          </ThemedText>
+        ) : null}
+
         <View style={styles.buttonContainer}>
           <ActionButton
-            label={t`Decline`}
+            label={t`Deny`}
             onPress={() => onAction("decline")}
-            variant="secondary"
             disabled={isAnimatingOut}
           />
           <ActionButton
-            label={t`Accept`}
+            label={t`Approve`}
             onPress={() => onAction("accept")}
-            variant="primary"
             disabled={isAnimatingOut}
           />
         </View>
-      </Animated.View>
+      </ScrollView>
     </Animated.View>
   );
 }
 
-function DetailRow({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.detailRow}>
-      <ThemedText
-        fontSize={Typography.fontSize14}
-        themeColor="textSecondary"
-        style={styles.detailLabel}
-      >
-        {label}
-      </ThemedText>
-      <ThemedText
-        fontSize={Typography.fontSize14}
-        fontWeight="medium"
-        style={styles.detailValue}
-        numberOfLines={1}
-      >
-        {value}
-      </ThemedText>
-    </View>
-  );
-}
+function getServiceName(value: string): string | undefined {
+  if (!value) return undefined;
 
-type ActionButtonProps = {
-  label: string;
-  onPress: () => void;
-  variant: "primary" | "secondary";
-  disabled?: boolean;
-};
+  try {
+    return new URL(value).hostname;
+  } catch {
+    return undefined;
+  }
+}
 
 function ActionButton({
   label,
   onPress,
-  variant,
   disabled,
-}: ActionButtonProps) {
+}: {
+  label: string;
+  onPress: () => void;
+  disabled: boolean;
+}) {
   const theme = useTheme();
-  const brandingColor = theme.branding;
-  const backgroundColor = theme.fill;
-  const primaryButtonTextColor = theme.textOnBranding;
-  const secondaryButtonTextColor = theme.branding;
   const pressScale = useSharedValue(1);
-  const primaryButtonStyle = useMemo(
-    () => ({ backgroundColor: brandingColor }),
-    [brandingColor],
-  );
-  const secondaryButtonStyle = useMemo(
-    () => ({ backgroundColor, borderColor: brandingColor }),
-    [backgroundColor, brandingColor],
-  );
-  const primaryButtonTextStyle = useMemo(
-    () => ({ color: primaryButtonTextColor }),
-    [primaryButtonTextColor],
-  );
-  const secondaryButtonTextStyle = useMemo(
-    () => ({ color: secondaryButtonTextColor }),
-    [secondaryButtonTextColor],
-  );
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pressScale.value }],
   }));
 
-  const handlePressIn = () => {
-    pressScale.set(withTiming(0.95, { duration: 100 }));
-  };
-
-  const handlePressOut = () => {
-    pressScale.set(withTiming(1, { duration: 100 }));
-  };
-
-  const isPrimary = variant === "primary";
-
   return (
     <AnimatedPressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
       style={[
         styles.button,
-        isPrimary
-          ? primaryButtonStyle
-          : [styles.buttonSecondary, secondaryButtonStyle],
+        {
+          backgroundColor: theme.fill,
+          borderColor: theme.border,
+        },
         animatedStyle,
         disabled && styles.buttonDisabled,
       ]}
       onPress={onPress}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
+      onPressIn={() => pressScale.set(withTiming(0.97, { duration: 100 }))}
+      onPressOut={() => pressScale.set(withTiming(1, { duration: 100 }))}
       disabled={disabled}
     >
       <ThemedText
+        selectable
         fontSize={Typography.fontSize16}
         fontWeight="semiBold"
-        style={[
-          styles.buttonText,
-          isPrimary ? primaryButtonTextStyle : secondaryButtonTextStyle,
-        ]}
+        style={styles.centeredText}
       >
         {label}
       </ThemedText>
@@ -338,76 +349,61 @@ function ActionButton({
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
+    borderCurve: "continuous",
     borderRadius: Radii.lg,
+    borderWidth: 1,
     flex: 1,
     justifyContent: "center",
+    minHeight: 52,
+    paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.md,
   },
   buttonContainer: {
     flexDirection: "row",
     gap: Spacing.md,
-    padding: Spacing.lg,
-    paddingTop: Spacing.sm,
   },
   buttonDisabled: {
-    opacity: 0.6,
+    opacity: 0.5,
   },
-  buttonSecondary: {
-    borderWidth: 1,
-  },
-  buttonText: {
+  centeredText: {
     textAlign: "center",
   },
   container: {
     ...StyleSheet.absoluteFill,
     alignItems: "center",
     justifyContent: "center",
+    padding: Spacing.xl,
   },
-  content: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.lg,
-  },
-  detailLabel: {
-    flex: 1,
-  },
-  detailRow: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  detailValue: {
-    flex: 2,
-    textAlign: "right",
-  },
-  detailsContainer: {
-    borderRadius: Radii.lg,
-    borderWidth: 1,
+  guidance: {
+    borderCurve: "continuous",
+    borderLeftWidth: 3,
+    borderRadius: Radii.md,
+    gap: Spacing.xs,
     padding: Spacing.md,
   },
-  header: {
-    alignItems: "center",
-    paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.lg,
+  heading: {
+    gap: Spacing.xs,
+  },
+  organizationLogo: {
+    alignSelf: "center",
+    marginRight: 0,
   },
   popup: {
+    borderCurve: "continuous",
     borderRadius: Radii.xl,
     borderWidth: 1,
-    elevation: 12,
+    boxShadow: "0 12px 36px rgba(0, 0, 0, 0.24)",
     overflow: "hidden",
-    shadowColor: StaticColors.black,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.25,
-    shadowRadius: 24,
   },
-  question: {
-    marginBottom: Spacing.lg,
-    textAlign: "center",
+  requestMessage: {
+    borderCurve: "continuous",
+    borderRadius: Radii.lg,
+    borderWidth: 1,
+    gap: Spacing.sm,
+    padding: Spacing.lg,
   },
-  queueIndicator: {
-    alignItems: "center",
-    paddingTop: Spacing.md,
-  },
-  title: {
-    textAlign: "center",
+  scrollContent: {
+    gap: Spacing.lg,
+    padding: Spacing.lg,
   },
 });
