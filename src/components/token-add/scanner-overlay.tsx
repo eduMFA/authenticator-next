@@ -1,6 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { Trans } from "@lingui/react/macro";
+import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 import { StyleSheet, View } from "react-native";
 
 const scanHintBackgroundColor = "rgba(0, 0, 0, 0.62)";
@@ -18,16 +19,33 @@ export function ScannerOverlay() {
         <View style={[styles.scanCorner, styles.scanCornerBottomLeft]} />
         <View style={[styles.scanCorner, styles.scanCornerBottomRight]} />
       </View>
-      <View style={styles.scanHint}>
-        <ThemedText
-          fontSize={Typography.fontSize14}
-          fontWeight="semiBold"
-          style={styles.scanHintText}
+      {isLiquidGlassAvailable() ? (
+        <GlassView
+          colorScheme="dark"
+          glassEffectStyle="regular"
+          style={styles.scanHint}
+          tintColor="rgba(0, 0, 0, 0.35)"
         >
-          <Trans>Place the QR code inside the frame</Trans>
-        </ThemedText>
-      </View>
+          <ScanHintText />
+        </GlassView>
+      ) : (
+        <View style={[styles.scanHint, styles.scanHintFallback]}>
+          <ScanHintText />
+        </View>
+      )}
     </View>
+  );
+}
+
+function ScanHintText() {
+  return (
+    <ThemedText
+      fontSize={Typography.fontSize14}
+      fontWeight="semiBold"
+      style={styles.scanHintText}
+    >
+      <Trans>Place the QR code inside the frame</Trans>
+    </ThemedText>
   );
 }
 
@@ -76,7 +94,6 @@ const styles = StyleSheet.create({
   },
   scanHint: {
     alignItems: "center",
-    backgroundColor: scanHintBackgroundColor,
     borderRadius: Radii.pill,
     bottom: Spacing.lg,
     left: Spacing.xl,
@@ -84,6 +101,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     position: "absolute",
     right: Spacing.xl,
+  },
+  scanHintFallback: {
+    backgroundColor: scanHintBackgroundColor,
   },
   scanHintText: {
     color: StaticColors.white,

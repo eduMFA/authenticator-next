@@ -9,6 +9,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore } from "@/stores/settings";
 import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
+import { withSentryRoot } from "@/utils/sentry";
 import { isTokenEnrollmentUri } from "@/utils/token";
 import { i18n } from "@lingui/core";
 import { I18nProvider } from "@lingui/react";
@@ -21,12 +22,13 @@ import {
   AppState,
   AppStateStatus,
   Platform,
+  StatusBar,
   useColorScheme,
 } from "react-native";
 
 activateCurrentLocale();
 
-export default function RootLayout() {
+function RootLayout() {
   const [fontsLoaded] = useInterFonts();
   const colorScheme = useColorScheme();
 
@@ -65,6 +67,8 @@ function RootLayoutContent() {
 
   const theme = useTheme();
   const tabBarBackgroundColor = theme.background;
+  const statusBarStyle =
+    colorScheme === "dark" ? "light-content" : "dark-content";
 
   // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
@@ -150,6 +154,7 @@ function RootLayoutContent() {
 
   return (
     <>
+      <StatusBar backgroundColor={theme.background} barStyle={statusBarStyle} />
       <Stack>
         <Stack.Screen
           name="index"
@@ -205,3 +210,5 @@ function RootLayoutContent() {
     </>
   );
 }
+
+export default withSentryRoot(RootLayout);

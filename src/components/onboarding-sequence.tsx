@@ -21,6 +21,7 @@ import {
   AppState,
   Linking,
   PanResponder,
+  ScrollView,
   StyleSheet,
   useColorScheme,
   useWindowDimensions,
@@ -79,21 +80,21 @@ export function OnboardingSequence() {
         id: "welcome",
         kicker: t`Welcome`,
         title: t`Welcome to eduMFA`,
-        body: t`Approve sign-ins securely from this device, with your eduMFA tokens ready when you need them.`,
+        body: t`Keep your authentication tokens in one place and approve sign-ins securely from this device.`,
         accent: onboardingStepAccents[0],
       },
       {
         id: "notifications",
         kicker: t`Notifications`,
-        title: t`Approve sign-ins the moment they arrive`,
-        body: t`Notifications are important for eduMFA. They let the app receive sign-in approvals and tell you when a push request needs your attention.`,
+        title: t`Never miss a sign-in request`,
+        body: t`Enable notifications to receive approval requests.`,
         accent: onboardingStepAccents[1],
       },
       {
         id: "privacy",
-        kicker: t`Privacy choice`,
-        title: t`Help improve reliability`,
-        body: t`You can opt in to anonymized crash and error reports. This is off by default, and the app works the same either way.`,
+        kicker: t`Your choice`,
+        title: t`Help improve eduMFA`,
+        body: t`Choose whether to share anonymous crash and error reports.`,
         accent: onboardingStepAccents[2],
       },
     ],
@@ -321,7 +322,6 @@ export function OnboardingSequence() {
           accentColor={contentAccentColor}
           onDecline={handleDeclineCrashReports}
           onOptIn={handleOptInCrashReports}
-          textColor={textColor}
         />
       );
     }
@@ -382,7 +382,12 @@ export function OnboardingSequence() {
             return (
               <View key={contentStep.id} style={[styles.panel, { width }]}>
                 <View style={styles.panelContent}>
-                  <View style={styles.panelBody}>
+                  <ScrollView
+                    bounces={false}
+                    contentContainerStyle={styles.panelBody}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.panelBodyScroll}
+                  >
                     <View style={styles.heroWrap}>
                       <View
                         style={[
@@ -428,7 +433,7 @@ export function OnboardingSequence() {
                         {contentStep.body}
                       </ThemedText>
                     </View>
-                  </View>
+                  </ScrollView>
 
                   {renderStepActions(contentStepIndex)}
                 </View>
@@ -471,9 +476,13 @@ const styles = StyleSheet.create({
   },
   panelBody: {
     alignItems: "center",
-    flex: 1,
+    flexGrow: 1,
     gap: Spacing.xl,
     justifyContent: "center",
+    width: "100%",
+  },
+  panelBodyScroll: {
+    flex: 1,
     width: "100%",
   },
   panelContent: {

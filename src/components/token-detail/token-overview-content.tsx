@@ -172,7 +172,7 @@ export function TokenOverviewContent({
 
       <View style={styles.section}>
         <ThemedText fontSize={Typography.fontSize18} fontWeight="bold">
-          {t`Audit log`}
+          {t`Activity Log`}
         </ThemedText>
         <ThemedView type="backgroundSecondary" style={styles.auditPlaceholder}>
           <ThemedText fontSize={Typography.fontSize16} fontWeight="semiBold">
