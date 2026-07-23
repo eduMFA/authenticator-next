@@ -29,6 +29,7 @@ import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo } from "react";
 import {
   Keyboard,
+  KeyboardAvoidingView,
   Platform,
   RefreshControl,
   StyleSheet,
@@ -52,8 +53,8 @@ export default function Tokens() {
     hasPermission: hasNotificationPermission,
     isInitialized: isNotificationInitialized,
   } = useNotificationStatus();
-  const { height, width } = useWindowDimensions();
-  const { bottom, top } = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const { bottom } = useSafeAreaInsets();
   const theme = useTheme();
   const backgroundColor = theme.background;
   const { t } = useLingui();
@@ -340,59 +341,100 @@ export default function Tokens() {
   return (
     <>
       {header}
-      <Animated.FlatList
-        scrollToOverflowEnabled
-        contentInsetAdjustmentBehavior="automatic"
-        onScrollBeginDrag={dismissKeyboard}
-        keyboardShouldPersistTaps="handled"
-        style={{ backgroundColor }}
-        contentContainerStyle={[
-          styles.contentContainer,
-          {
-            paddingBottom: Platform.select({
-              android: 100 + bottom,
-              default: 0,
-            }),
-          },
-          { minHeight: height - (bottom + top + 130) },
-        ]}
-        renderItem={renderItem}
-        data={filteredTokens}
-        keyExtractor={(item) => item.id}
-        itemLayoutAnimation={LinearTransition}
-        ListEmptyComponent={
-          <Animated.View entering={FadeIn} exiting={FadeOut}>
-            <ThemedView style={styles.noResultsContainer}>
-              <ThemedText>
-                <Trans>No results found for </Trans>
-                <ThemedText fontWeight="bold">{searchText}</ThemedText>
-              </ThemedText>
-            </ThemedView>
-          </Animated.View>
-        }
-        ListHeaderComponent={
-          showNotificationNotice ? (
-            <View style={styles.notificationNotice}>
-              <StatusCard
-                variant="danger"
-                title={t`Notifications are disabled`}
-                description={t`Enable notifications to receive push approval requests on this device.`}
-              />
-            </View>
-          ) : null
-        }
-        refreshControl={
-          <RefreshControl
-            refreshing={isPolling}
-            onRefresh={onRefresh}
-            title={t`Refreshing...`}
-            tintColor={refreshControlColor}
-            titleColor={refreshControlColor}
-            colors={[refreshControlColor]}
-            progressBackgroundColor={refreshControlProgressBackgroundColor}
-          />
-        }
-      />
+      <KeyboardAvoidingView behavior="height" style={styles.listContainer}>
+        <Animated.FlatList
+          scrollToOverflowEnabled
+          contentInsetAdjustmentBehavior="automatic"
+          onScrollBeginDrag={dismissKeyboard}
+          keyboardShouldPersistTaps="handled"
+          style={{ backgroundColor }}
+          contentContainerStyle={[
+            styles.contentContainer,
+            {
+              paddingBottom: Platform.select({
+                android: filteredTokens.length > 0 ? 100 + bottom : 0,
+                default: 0,
+              }),
+            },
+          ]}
+          renderItem={renderItem}
+          data={filteredTokens}
+          keyExtractor={(item) => item.id}
+          itemLayoutAnimation={LinearTransition}
+          ListEmptyComponent={
+            <Animated.View
+              entering={FadeIn}
+              exiting={FadeOut}
+              style={styles.noResultsWrapper}
+            >
+              <ThemedView style={styles.noResultsContainer}>
+                <ThemedView
+                  type="backgroundSecondary"
+                  style={styles.noResultsIcon}
+                >
+                  <SymbolView
+                    name={{ ios: "magnifyingglass", android: "search" }}
+                    size={32}
+                    tintColor={theme.textSecondary}
+                  />
+                </ThemedView>
+                <ThemedText
+                  fontSize={Typography.fontSize24}
+                  fontWeight="semiBold"
+                  style={styles.noResultsTitle}
+                >
+                  <Trans>No tokens found</Trans>
+                </ThemedText>
+                <ThemedText
+                  fontWeight="light"
+                  style={styles.noResultsDescription}
+                  themeColor="textSecondary"
+                >
+                  <Trans>
+                    Try another token name, issuer, or serial number.
+                  </Trans>
+                </ThemedText>
+                <ThemedView
+                  type="backgroundSecondary"
+                  style={styles.searchQueryChip}
+                >
+                  <ThemedText
+                    fontSize={Typography.fontSize14}
+                    fontWeight="semiBold"
+                    numberOfLines={1}
+                    selectable
+                    style={styles.searchQueryText}
+                  >
+                    “{searchText}”
+                  </ThemedText>
+                </ThemedView>
+              </ThemedView>
+            </Animated.View>
+          }
+          ListHeaderComponent={
+            showNotificationNotice && !searchQuery ? (
+              <View style={styles.notificationNotice}>
+                <StatusCard
+                  variant="danger"
+                  title={t`Notifications are disabled`}
+                  description={t`Enable notifications to receive push approval requests on this device.`}
+                />
+              </View>
+            ) : null
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={isPolling}
+              onRefresh={onRefresh}
+              title={t`Refreshing...`}
+              tintColor={refreshControlColor}
+              titleColor={refreshControlColor}
+              colors={[refreshControlColor]}
+              progressBackgroundColor={refreshControlProgressBackgroundColor}
+            />
+          }
+        />
+      </KeyboardAvoidingView>
       {androidAddFab}
       {footer}
     </>
@@ -401,6 +443,7 @@ export default function Tokens() {
 
 export const styles = StyleSheet.create({
   contentContainer: {
+    flexGrow: 1,
     paddingHorizontal: Spacing.lg,
   },
   fabHost: {
@@ -411,8 +454,35 @@ export const styles = StyleSheet.create({
   fabText: {
     fontWeight: "bold",
   },
+  listContainer: {
+    flex: 1,
+  },
   noResultsContainer: {
-    padding: Spacing.xl,
+    alignItems: "center",
+    maxWidth: 360,
+    paddingHorizontal: Spacing.xl,
+  },
+  noResultsDescription: {
+    lineHeight: Typography.fontSize16 * 1.4,
+    textAlign: "center",
+  },
+  noResultsIcon: {
+    alignItems: "center",
+    borderRadius: Radii.pill,
+    height: 72,
+    justifyContent: "center",
+    marginBottom: Spacing.lg,
+    width: 72,
+  },
+  noResultsTitle: {
+    lineHeight: Typography.fontSize24 * 1.2,
+    marginBottom: Spacing.sm,
+    textAlign: "center",
+  },
+  noResultsWrapper: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
   },
   noTokenButton: {
     marginTop: Spacing.xl,
@@ -443,6 +513,16 @@ export const styles = StyleSheet.create({
   },
   notificationNotice: {
     marginVertical: Spacing.sm,
+  },
+  searchQueryChip: {
+    borderRadius: Radii.pill,
+    marginTop: Spacing.lg,
+    maxWidth: "100%",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+  },
+  searchQueryText: {
+    textAlign: "center",
   },
   tokenWrapper: {
     marginVertical: Spacing.sm,
