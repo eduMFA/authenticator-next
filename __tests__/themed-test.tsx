@@ -21,14 +21,16 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 
 describe("themed components", () => {
-  test("renders themed text content", () => {
-    const { getByText } = render(<ThemedText>Authenticator</ThemedText>);
+  test("renders themed text content", async () => {
+    const { getByText } = await render(
+      <ThemedText>Authenticator</ThemedText>,
+    );
 
     expect(getByText("Authenticator")).toBeTruthy();
   });
 
-  test("applies theme and typography styles", () => {
-    const { getByText, toJSON } = render(
+  test("applies theme and typography styles", async () => {
+    const { getByText, toJSON } = await render(
       <ThemedView>
         <ThemedText fontWeight="semiBold">Authenticator</ThemedText>
       </ThemedView>,
