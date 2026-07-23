@@ -1,4 +1,4 @@
-import { PushTokenRolloutState } from "@/types";
+import { PushTokenRolloutState } from "@/types/token";
 
 describe("PushTokenRolloutState helpers", () => {
   test("identifies failed rollout states", () => {

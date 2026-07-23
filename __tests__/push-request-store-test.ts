@@ -1,5 +1,6 @@
-import { usePushRequestStore } from "@/store/pushRequestStore";
-import { PushRequest, PushRequestStatus } from "@/types";
+import { usePushRequestStore } from "@/stores/push-request";
+import type { PushRequest } from "@/types/push-request";
+import { PushRequestStatus } from "@/types/push-request";
 
 const createRequest = (overrides: Partial<PushRequest> = {}): PushRequest => ({
   id: "request-1",

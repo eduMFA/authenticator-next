@@ -2,14 +2,14 @@ import {
   InvalidUrlError,
   OtpProtocolError,
   UnsupportedVersionError,
-} from "@/errors/tokenErrors";
-import { PushTokenRolloutState } from "@/types";
+} from "@/errors/token";
+import { PushTokenRolloutState } from "@/types/token";
 import {
   isTokenEnrollmentUri,
   parseLabelAndIssuer,
   parseTokenFromUri,
   parseTokenResponse,
-} from "@/utils/tokenUtils";
+} from "@/utils/token";
 
 const createTokenUri = (params: Record<string, string>) => {
   const searchParams = new URLSearchParams({

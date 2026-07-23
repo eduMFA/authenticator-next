@@ -1,4 +1,4 @@
-jest.mock("@/services/tokenRolloutService", () => ({
+jest.mock("@/services/token-rollout", () => ({
   __esModule: true,
   isTokenRollingOut: jest.fn(),
   performTokenRollout: jest.fn(),
@@ -9,9 +9,10 @@ import {
   isTokenRollingOut,
   performTokenRollout,
   startPendingRollouts,
-} from "@/services/tokenRolloutService";
-import { useTokenStore } from "@/store/tokenStore";
-import { PushToken, PushTokenRolloutState } from "@/types";
+} from "@/services/token-rollout";
+import { useTokenStore } from "@/stores/token";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 
 const mockIsTokenRollingOut = isTokenRollingOut as jest.Mock;
 const mockPerformTokenRollout = performTokenRollout as jest.Mock;

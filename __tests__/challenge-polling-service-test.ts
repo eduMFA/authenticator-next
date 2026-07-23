@@ -7,10 +7,11 @@ jest.mock("@/utils/rsa", () => ({
 import {
   pollAllChallenges,
   pollChallengesForToken,
-} from "@/services/challengePollingService";
-import { PushToken, PushTokenRolloutState } from "@/types";
+} from "@/services/challenge-polling";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 import { base64ToBase32 } from "@/utils/crypto";
-import { buildPushRequestSignedData } from "@/utils/pushRequestUtils";
+import { buildPushRequestSignedData } from "@/utils/push-request";
 import { signMessage, verifyMessage } from "@/utils/rsa";
 
 const mockSignMessage = signMessage as jest.Mock;
@@ -172,6 +173,7 @@ describe("challenge polling service", () => {
     await expect(pollAllChallenges([pendingToken])).resolves.toEqual({
       success: true,
       challenges: [],
+      tokenResults: [],
     });
   });
 });

@@ -1,10 +1,11 @@
-jest.mock("expo-haptics", () => ({
+jest.mock("react-native-pulsar", () => ({
   __esModule: true,
-  NotificationFeedbackType: {
-    Success: "success",
-    Warning: "warning",
+  Presets: {
+    System: {
+      notificationSuccess: jest.fn(),
+      notificationWarning: jest.fn(),
+    },
   },
-  notificationAsync: jest.fn(),
 }));
 
 jest.mock("@/utils/rsa", () => ({
@@ -12,22 +13,21 @@ jest.mock("@/utils/rsa", () => ({
   signMessage: jest.fn(),
 }));
 
-import * as Haptics from "expo-haptics";
+import { Presets } from "react-native-pulsar";
 
 import {
   findTokenForPushRequest,
   handlePushAuthRequest,
-} from "@/services/pushAuthService";
-import {
-  PushRequest,
-  PushRequestStatus,
-  PushToken,
-  PushTokenRolloutState,
-} from "@/types";
+} from "@/services/push-auth";
+import type { PushRequest } from "@/types/push-request";
+import { PushRequestStatus } from "@/types/push-request";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 import { base64ToBase32 } from "@/utils/crypto";
 import { signMessage } from "@/utils/rsa";
 
-const mockNotificationAsync = Haptics.notificationAsync as jest.Mock;
+const mockNotificationSuccess = Presets.System.notificationSuccess as jest.Mock;
+const mockNotificationWarning = Presets.System.notificationWarning as jest.Mock;
 const mockSignMessage = signMessage as jest.Mock;
 
 const createToken = (overrides: Partial<PushToken> = {}): PushToken => ({
@@ -96,7 +96,7 @@ describe("push auth service", () => {
         decline: 0,
       }),
     });
-    expect(mockNotificationAsync).toHaveBeenCalledWith("success");
+    expect(mockNotificationSuccess).toHaveBeenCalledTimes(1);
   });
 
   test("includes decline marker for declined requests", async () => {
@@ -114,7 +114,7 @@ describe("push auth service", () => {
     ).toMatchObject({
       decline: 1,
     });
-    expect(mockNotificationAsync).toHaveBeenCalledWith("warning");
+    expect(mockNotificationWarning).toHaveBeenCalledTimes(1);
   });
 
   test("returns server errors without haptic success feedback", async () => {
@@ -129,7 +129,7 @@ describe("push auth service", () => {
       success: false,
       error: expect.any(Error),
     });
-    expect(mockNotificationAsync).not.toHaveBeenCalled();
+    expect(mockNotificationSuccess).not.toHaveBeenCalled();
   });
 
   test("returns thrown signing errors", async () => {

@@ -4,22 +4,23 @@ jest.mock("@/utils/rsa", () => ({
   generateRsaKeyPair: jest.fn(),
 }));
 
-jest.mock("@/store/notificationStore", () => ({
+jest.mock("@/stores/notification", () => ({
   __esModule: true,
   useNotificationStore: {
     getState: jest.fn(),
   },
 }));
 
-import { useNotificationStore } from "@/store/notificationStore";
+import { useNotificationStore } from "@/stores/notification";
 import { deleteRsaKeyPair, generateRsaKeyPair } from "@/utils/rsa";
 import {
   deleteTokenPrivateKey,
   isTokenRollingOut,
   performTokenRollout,
   startPendingRollouts,
-} from "@/services/tokenRolloutService";
-import { PushToken, PushTokenRolloutState } from "@/types";
+} from "@/services/token-rollout";
+import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState } from "@/types/token";
 
 const mockDeleteRsaKeyPair = deleteRsaKeyPair as jest.Mock;
 const mockGenerateRsaKeyPair = generateRsaKeyPair as jest.Mock;
@@ -181,7 +182,7 @@ describe("token rollout service", () => {
     });
   });
 
-  test("maps missing FCM tokens to send-key failures", async () => {
+  test("reports missing FCM tokens before rollout starts", async () => {
     mockGetFcmToken.mockResolvedValueOnce(null);
     const updateState = jest.fn();
 
@@ -190,15 +191,13 @@ describe("token rollout service", () => {
     ).resolves.toMatchObject({
       success: false,
       error: expect.any(Error),
-      failedState: PushTokenRolloutState.SendRSAPublicKeyFailed,
+      failedState: undefined,
     });
 
-    expect(updateState).toHaveBeenCalledWith("PUSH0001", {
-      rolloutState: PushTokenRolloutState.SendRSAPublicKeyFailed,
-    });
+    expect(updateState).not.toHaveBeenCalled();
   });
 
-  test("starts rollout for only pending tokens", () => {
+  test("starts rollout for only pending tokens", async () => {
     const updateState = jest.fn();
     startPendingRollouts(
       () => [
@@ -215,6 +214,8 @@ describe("token rollout service", () => {
       updateState,
     );
 
+    await Promise.resolve();
+    await Promise.resolve();
     expect(mockGenerateRsaKeyPair).toHaveBeenCalledTimes(1);
     expect(mockGenerateRsaKeyPair).toHaveBeenCalledWith("PUSH-PENDING", 4096);
   });
