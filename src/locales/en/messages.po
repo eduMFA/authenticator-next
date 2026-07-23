@@ -249,7 +249,7 @@ msgstr "Pair new Push Token"
 msgid "Pending"
 msgstr "Pending"
 
-#: src/components/token-add/scanner-overlay.tsx:27
+#: src/components/token-add/scanner-overlay.tsx:47
 msgid "Place the QR code inside the frame"
 msgstr "Place the QR code inside the frame"
 
