@@ -1,9 +1,9 @@
+import { TOKEN_ACTIONS_MENU_VERTICAL_OFFSET } from "@/constants/token-actions";
 import {
   PushTokenRefreshStatus,
   PushTokenRolloutState,
   type PushToken,
 } from "@/types/token";
-import { TOKEN_ACTIONS_MENU_VERTICAL_OFFSET } from "@/constants/token-actions";
 import type {
   TokenAction,
   TokenActionsMenuAnchor,
@@ -12,11 +12,11 @@ import { BlurTargetView, BlurView } from "expo-blur";
 import { Link } from "expo-router";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import {
-  type LayoutChangeEvent,
   Platform,
   Pressable,
   StyleSheet,
   View,
+  type LayoutChangeEvent,
 } from "react-native";
 
 import { Radii, Spacing, Typography } from "@/constants/theme";
@@ -31,8 +31,8 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { TokenActionsMenu } from "./token-actions-menu";
 import { ThemedText } from "./themed-text";
+import { TokenActionsMenu } from "./token-actions-menu";
 import { TokenImage } from "./token-image";
 
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
@@ -213,12 +213,14 @@ const TokenListItemContent = memo(function TokenListItemContent({
   return (
     <>
       <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
-        <TokenImage
-          imageUrl={token.imageUrl}
-          label={token.label}
-          animated
-          size="small"
-        />
+        <Link.AppleZoom>
+          <TokenImage
+            imageUrl={token.imageUrl}
+            label={token.label}
+            animated
+            size="small"
+          />
+        </Link.AppleZoom>
         <View style={styles.tokenDetails}>
           <View style={styles.titleRow}>
             <ThemedText
