@@ -21,7 +21,7 @@ msgstr "{totalPending} requests are waiting. Review each one separately."
 msgid "Accept"
 msgstr "Accept"
 
-#: src/components/token-detail/token-overview-content.tsx:175
+#: src/components/token-detail/token-overview-content.tsx:178
 msgid "Activity Log"
 msgstr "Activity Log"
 
@@ -90,7 +90,7 @@ msgstr "Delete token"
 msgid "Deny"
 msgstr "Deny"
 
-#: src/components/token-detail/token-overview-content.tsx:165
+#: src/components/token-detail/token-overview-content.tsx:168
 msgid "Details"
 msgstr "Details"
 
@@ -187,7 +187,7 @@ msgstr "Label"
 msgid "Label required"
 msgstr "Label required"
 
-#: src/components/token-detail/token-overview-content.tsx:157
+#: src/components/token-detail/token-overview-content.tsx:160
 msgid "Last failed"
 msgstr "Last failed"
 
@@ -195,7 +195,7 @@ msgstr "Last failed"
 msgid "Never miss a sign-in request"
 msgstr "Never miss a sign-in request"
 
-#: src/components/token-detail/token-overview-content.tsx:179
+#: src/components/token-detail/token-overview-content.tsx:182
 msgid "No interactions yet"
 msgstr "No interactions yet"
 
@@ -271,8 +271,8 @@ msgstr "Place the QR code inside the frame"
 msgid "QR code scanner"
 msgstr "QR code scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:128
-#: src/components/token-list-item.tsx:233
+#: src/components/token-detail/token-overview-content.tsx:131
+#: src/components/token-list-item.tsx:235
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
@@ -293,9 +293,9 @@ msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
 #: src/app/index.tsx:127
-#: src/components/token-detail/token-overview-content.tsx:105
-#: src/components/token-detail/token-overview-content.tsx:115
-#: src/components/token-detail/token-overview-content.tsx:117
+#: src/components/token-detail/token-overview-content.tsx:108
+#: src/components/token-detail/token-overview-content.tsx:118
+#: src/components/token-detail/token-overview-content.tsx:120
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
@@ -324,11 +324,11 @@ msgstr "Search Authenticator Apps"
 msgid "Search tokens"
 msgstr "Search tokens"
 
-#: src/components/token-detail/token-overview-content.tsx:169
+#: src/components/token-detail/token-overview-content.tsx:172
 msgid "Serial"
 msgstr "Serial"
 
-#: src/components/token-detail/token-overview-content.tsx:140
+#: src/components/token-detail/token-overview-content.tsx:143
 msgid "Server message"
 msgstr "Server message"
 
@@ -344,7 +344,7 @@ msgstr "Share anonymous reports"
 msgid "Sign-in requests may go unnoticed"
 msgstr "Sign-in requests may go unnoticed"
 
-#: src/components/token-detail/token-overview-content.tsx:168
+#: src/components/token-detail/token-overview-content.tsx:171
 msgid "Status"
 msgstr "Status"
 
@@ -388,7 +388,7 @@ msgstr "This token did not finish enrollment and cannot receive push requests un
 msgid "Token"
 msgstr "Token"
 
-#: src/components/token-detail/token-overview-content.tsx:186
+#: src/components/token-detail/token-overview-content.tsx:189
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token approvals, denials, refresh events, and enrollment activity will appear here."
 
