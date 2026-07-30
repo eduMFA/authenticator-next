@@ -3,6 +3,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { OPEN_SOURCE_LICENSES } from "@/generated/open-source-licenses";
 import { useTheme } from "@/hooks/use-theme";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { FlatList, Pressable, StyleSheet, View } from "react-native";
@@ -10,6 +11,8 @@ import { FlatList, Pressable, StyleSheet, View } from "react-native";
 export default function LicensesScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { t } = useLingui();
+  const licenseCount = OPEN_SOURCE_LICENSES.length;
 
   return (
     <>
@@ -20,9 +23,10 @@ export default function LicensesScreen() {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <ThemedText style={styles.intro} themeColor="textSecondary">
-            eduMFA uses {OPEN_SOURCE_LICENSES.length} open-source packages.
-            Package details are generated from the installed production
-            dependency graph.
+            <Trans>
+              eduMFA uses {licenseCount} open-source packages. Package details
+              are generated from the installed production dependency graph.
+            </Trans>
           </ThemedText>
         }
         ItemSeparatorComponent={() => (
@@ -71,7 +75,7 @@ export default function LicensesScreen() {
           </ThemedView>
         )}
       />
-      <Stack.Screen.Title>Open-source licenses</Stack.Screen.Title>
+      <Stack.Screen.Title>{t`Open-source licenses`}</Stack.Screen.Title>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { SETTINGS_LINKS } from "@/constants/settings";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore, type ThemePreference } from "@/stores/settings";
+import { useLingui } from "@lingui/react/macro";
 import * as Application from "expo-application";
 import * as Linking from "expo-linking";
 import { Stack, useRouter } from "expo-router";
@@ -18,21 +19,13 @@ import {
   View,
 } from "react-native";
 
-const THEME_OPTIONS: readonly {
-  label: string;
-  value: ThemePreference;
-}[] = [
-  { label: "Automatic", value: "automatic" },
-  { label: "Light", value: "light" },
-  { label: "Dark", value: "dark" },
-];
-
 function openUrl(url: string): void {
   void Linking.openURL(url);
 }
 
 export default function SettingsScreen() {
   const router = useRouter();
+  const { t } = useLingui();
   const theme = useTheme();
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const crashReportsEnabled = useSettingsStore(
@@ -47,6 +40,14 @@ export default function SettingsScreen() {
   );
   const version = Application.nativeApplicationVersion ?? "1.0.0";
   const build = Application.nativeBuildVersion;
+  const themeOptions: readonly {
+    label: string;
+    value: ThemePreference;
+  }[] = [
+    { label: t`Automatic`, value: "automatic" },
+    { label: t`Light`, value: "light" },
+    { label: t`Dark`, value: "dark" },
+  ];
 
   return (
     <>
@@ -54,10 +55,10 @@ export default function SettingsScreen() {
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={styles.content}
       >
-        <Section title="Appearance">
-          <SettingsRow icon="circle.lefthalf.filled" label="Theme" />
+        <Section title={t`Appearance`}>
+          <SettingsRow icon="circle.lefthalf.filled" label={t`Theme`} />
           <View style={styles.themeOptions}>
-            {THEME_OPTIONS.map((option) => {
+            {themeOptions.map((option) => {
               const selected = option.value === themePreference;
               return (
                 <Pressable
@@ -86,13 +87,13 @@ export default function SettingsScreen() {
           </View>
         </Section>
 
-        <Section title="General">
+        <Section title={t`General`}>
           <SettingsRow
             icon="hand.tap"
-            label="Haptics"
+            label={t`Haptics`}
             trailing={
               <Switch
-                accessibilityLabel="Haptics"
+                accessibilityLabel={t`Haptics`}
                 onValueChange={setHapticsEnabled}
                 value={hapticsEnabled}
               />
@@ -100,17 +101,17 @@ export default function SettingsScreen() {
           />
           <Divider />
           <SettingsRow
-            detail="Change the app language in system settings"
+            detail={t`Change the app language in system settings`}
             icon="globe"
-            label="Language"
+            label={t`Language`}
             onPress={() => void Linking.openSettings()}
           />
         </Section>
 
-        <Section title="About">
+        <Section title={t`About`}>
           <SettingsRow
             icon="star"
-            label="Review eduMFA"
+            label={t`Review eduMFA`}
             onPress={() =>
               openUrl(
                 Platform.OS === "ios"
@@ -122,37 +123,37 @@ export default function SettingsScreen() {
           <Divider />
           <SettingsRow
             icon="hand.raised"
-            label="Privacy policy"
+            label={t`Privacy policy`}
             onPress={() => openUrl(SETTINGS_LINKS.privacy)}
           />
           <Divider />
           <SettingsRow
             icon="chevron.left.forwardslash.chevron.right"
-            label="GitHub"
+            label={t`GitHub`}
             onPress={() => openUrl(SETTINGS_LINKS.github)}
           />
           <Divider />
           <SettingsRow
             icon="safari"
-            label="Website"
+            label={t`Website`}
             onPress={() => openUrl(SETTINGS_LINKS.website)}
           />
           <Divider />
           <SettingsRow
             icon="doc.text"
-            label="Open-source licenses"
+            label={t`Open-source licenses`}
             onPress={() => router.navigate("/settings/licenses")}
           />
         </Section>
 
-        <Section title="Privacy">
+        <Section title={t`Privacy`}>
           <SettingsRow
-            detail="Send anonymized crash and error diagnostics"
+            detail={t`Send anonymized crash and error diagnostics`}
             icon="waveform.path.ecg"
-            label="Crash and error reports"
+            label={t`Crash and error reports`}
             trailing={
               <Switch
-                accessibilityLabel="Crash and error reports"
+                accessibilityLabel={t`Crash and error reports`}
                 onValueChange={setCrashReportsEnabled}
                 value={crashReportsEnabled}
               />
@@ -169,7 +170,7 @@ export default function SettingsScreen() {
           {build ? ` (${build})` : ""}
         </ThemedText>
       </ScrollView>
-      <Stack.Screen.Title>Settings</Stack.Screen.Title>
+      <Stack.Screen.Title>{t`Settings`}</Stack.Screen.Title>
     </>
   );
 }

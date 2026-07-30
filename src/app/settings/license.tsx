@@ -1,11 +1,13 @@
 import { ThemedText } from "@/components/themed-text";
 import { Spacing, Typography } from "@/constants/theme";
 import { OPEN_SOURCE_LICENSES } from "@/generated/open-source-licenses";
+import { Trans, useLingui } from "@lingui/react/macro";
 import * as Linking from "expo-linking";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
 
 export default function LicenseScreen() {
+  const { t } = useLingui();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const item = OPEN_SOURCE_LICENSES.find((license) => license.id === id);
 
@@ -17,13 +19,16 @@ export default function LicenseScreen() {
           contentContainerStyle={styles.content}
         >
           <ThemedText selectable>
-            License information is unavailable.
+            <Trans>License information is unavailable.</Trans>
           </ThemedText>
         </ScrollView>
-        <Stack.Screen.Title>License</Stack.Screen.Title>
+        <Stack.Screen.Title>{t`License`}</Stack.Screen.Title>
       </>
     );
   }
+
+  const itemLicense = item.license;
+  const itemVersion = item.version;
 
   return (
     <>
@@ -35,7 +40,9 @@ export default function LicenseScreen() {
           {item.name}
         </ThemedText>
         <ThemedText selectable themeColor="textSecondary">
-          Version {item.version} · {item.license}
+          <Trans>
+            Version {itemVersion} · {itemLicense}
+          </Trans>
         </ThemedText>
         {item.url ? (
           <Pressable
@@ -43,7 +50,7 @@ export default function LicenseScreen() {
             onPress={() => void Linking.openURL(item.url)}
           >
             <ThemedText style={styles.link} themeColor="branding">
-              Project website
+              <Trans>Project website</Trans>
             </ThemedText>
           </Pressable>
         ) : null}
