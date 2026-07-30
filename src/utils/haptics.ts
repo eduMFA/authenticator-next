@@ -2,6 +2,7 @@ import {
   refreshHapticRippleDistances,
   refreshHapticThreshold,
 } from "@/constants/haptics";
+import { useSettingsStore } from "@/stores/settings";
 import { Presets, Settings } from "react-native-pulsar";
 
 export function configureHaptics() {
