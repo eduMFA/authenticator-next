@@ -13,7 +13,6 @@ import ForwardMediaSymbol from "@expo/material-symbols/forward_media.xml";
 import { Button, Host, Icon, Row, Text } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
-import { Link } from "expo-router";
 import { StyleSheet, View } from "react-native";
 import {
   formatTimestamp,
@@ -68,15 +67,13 @@ export function TokenOverviewContent({
   return (
     <>
       <View style={styles.hero}>
-        <Link.AppleZoomTarget>
-          <TokenImage
-            imageUrl={token.imageUrl}
-            label={token.label}
-            size="large"
-            style={styles.heroImage}
-            animated
-          />
-        </Link.AppleZoomTarget>
+        <TokenImage
+          imageUrl={token.imageUrl}
+          label={token.label}
+          size="large"
+          style={styles.heroImage}
+          animated
+        />
         <ThemedText
           fontSize={Typography.fontSize28}
           fontWeight="bold"
