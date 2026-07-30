@@ -7,6 +7,7 @@ export type ThemePreference = "automatic" | "dark" | "light";
 
 type SettingsState = {
   crashReportsEnabled: boolean;
+  hapticsEnabled: boolean;
   hasCompletedOnboarding: boolean;
   hasHydrated: boolean;
   themePreference: ThemePreference;
@@ -16,6 +17,7 @@ type SettingsActions = {
   completeOnboarding: () => void;
   resetOnboarding: () => void;
   setCrashReportsEnabled: (enabled: boolean) => void;
+  setHapticsEnabled: (enabled: boolean) => void;
   setHasHydrated: (hasHydrated: boolean) => void;
   setThemePreference: (preference: ThemePreference) => void;
 };
@@ -24,13 +26,17 @@ type SettingsStore = SettingsState & SettingsActions;
 
 type PersistedSettings = Pick<
   SettingsState,
-  "crashReportsEnabled" | "hasCompletedOnboarding" | "themePreference"
+  | "crashReportsEnabled"
+  | "hapticsEnabled"
+  | "hasCompletedOnboarding"
+  | "themePreference"
 >;
 
 export const useSettingsStore = create<SettingsStore>()(
   persist<SettingsStore, [], [], PersistedSettings>(
     (set) => ({
       crashReportsEnabled: false,
+      hapticsEnabled: true,
       hasCompletedOnboarding: false,
       hasHydrated: false,
       themePreference: "automatic",
@@ -40,6 +46,7 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ crashReportsEnabled: enabled });
         setSentryTrackingEnabled(enabled);
       },
+      setHapticsEnabled: (enabled) => set({ hapticsEnabled: enabled }),
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
       setThemePreference: (themePreference) => set({ themePreference }),
     }),
@@ -48,6 +55,7 @@ export const useSettingsStore = create<SettingsStore>()(
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         crashReportsEnabled: state.crashReportsEnabled,
+        hapticsEnabled: state.hapticsEnabled,
         hasCompletedOnboarding: state.hasCompletedOnboarding,
         themePreference: state.themePreference,
       }),

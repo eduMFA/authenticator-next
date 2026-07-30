@@ -9,7 +9,6 @@ import { useLingui } from "@lingui/react/macro";
 import * as Application from "expo-application";
 import * as Linking from "expo-linking";
 import { Stack, useRouter } from "expo-router";
-import { useState } from "react";
 import {
   Platform,
   Pressable,
@@ -27,13 +26,16 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { t } = useLingui();
   const theme = useTheme();
-  const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const crashReportsEnabled = useSettingsStore(
     (state) => state.crashReportsEnabled,
   );
+  const hapticsEnabled = useSettingsStore((state) => state.hapticsEnabled);
   const themePreference = useSettingsStore((state) => state.themePreference);
   const setCrashReportsEnabled = useSettingsStore(
     (state) => state.setCrashReportsEnabled,
+  );
+  const setHapticsEnabled = useSettingsStore(
+    (state) => state.setHapticsEnabled,
   );
   const setThemePreference = useSettingsStore(
     (state) => state.setThemePreference,
