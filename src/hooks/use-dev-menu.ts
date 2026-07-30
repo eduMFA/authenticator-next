@@ -5,17 +5,26 @@ import { PushRequestStatus, type PushRequest } from "@/types/push-request";
 import { PushTokenRolloutState, type PushToken } from "@/types/token";
 import { Alert } from "react-native";
 
-const sampleTokens: PushToken[] = [1, 2, 3].map((index) => ({
-  id: `sample-university-${index}`,
-  version: 1,
-  label: `University ${index}`,
-  issuer: "eduMFA",
-  callbackUrl: `https://example.edu/edumfa/sample/${index}`,
-  ttl: 10,
-  enrollmentCredential: `sample-enrollment-credential-${index}`,
-  sslVerify: true,
-  rolloutState: PushTokenRolloutState.Completed,
-}));
+function createSampleTokens(amount: number): PushToken[] {
+  const batchId = Date.now();
+
+  return Array.from({ length: amount }, (_, offset) => {
+    const index = offset + 1;
+    const id = `sample-university-${batchId}-${index}`;
+
+    return {
+      id,
+      version: 1,
+      label: `University ${index}`,
+      issuer: "eduMFA",
+      callbackUrl: `https://example.edu/edumfa/sample/${id}`,
+      ttl: 10,
+      enrollmentCredential: `sample-enrollment-credential-${id}`,
+      sslVerify: true,
+      rolloutState: PushTokenRolloutState.Completed,
+    };
+  });
+}
 
 export function useDevMenu() {
   const { tokens, addToken, deleteToken, updateToken, rolloutToken } =
@@ -78,21 +87,23 @@ export function useDevMenu() {
     }
   };
 
-  const spawnSampleTokens = () => {
+  const spawnSampleTokens = (amount: number) => {
+    createSampleTokens(amount).forEach(addToken);
+  };
+
+  const clearAllTokens = () => {
     Alert.alert(
-      "Spawn sample token data?",
-      "This clears all existing tokens and replaces them with 3 sample tokens.",
+      "Clear all tokens?",
+      "This permanently removes every token from this device.",
       [
         { text: "Cancel", style: "cancel" },
         {
-          text: "Spawn",
+          text: "Clear",
           style: "destructive",
           onPress: () => {
             void Promise.all(
               tokens.map((existingToken) => deleteToken(existingToken.id)),
-            ).then(() => {
-              sampleTokens.forEach(addToken);
-            });
+            );
           },
         },
       ],
@@ -122,6 +133,7 @@ export function useDevMenu() {
   };
 
   return {
+    clearAllTokens,
     clearPushRequests,
     demoRolloutFailure,
     demoRolloutSuccess,

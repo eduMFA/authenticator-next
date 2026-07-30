@@ -20,14 +20,27 @@ import {
   playImpactSoftHaptic,
 } from "@/utils/haptics";
 import AddSymbol from "@expo/material-symbols/add.xml";
+import AddCircleSymbol from "@expo/material-symbols/add_circle.xml";
+import CancelSymbol from "@expo/material-symbols/cancel.xml";
+import CheckCircleSymbol from "@expo/material-symbols/check_circle.xml";
+import ClearAllSymbol from "@expo/material-symbols/clear_all.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
+import DeleteSymbol from "@expo/material-symbols/delete.xml";
+import KeySymbol from "@expo/material-symbols/key.xml";
+import NotificationAddSymbol from "@expo/material-symbols/notification_add.xml";
+import NotificationsSymbol from "@expo/material-symbols/notifications.xml";
+import PlayArrowSymbol from "@expo/material-symbols/play_arrow.xml";
+import RestartAltSymbol from "@expo/material-symbols/restart_alt.xml";
+import SyncSymbol from "@expo/material-symbols/sync.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import {
   Host as AndroidHost,
   Icon as AndroidIcon,
+  Box,
   ExtendedFloatingActionButton,
   Text,
 } from "@expo/ui/jetpack-compose";
+import { imePadding } from "@expo/ui/jetpack-compose/modifiers";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
@@ -36,6 +49,7 @@ import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo, useState } from "react";
 import {
   Keyboard,
+  KeyboardAvoidingView,
   Platform,
   RefreshControl,
   StyleSheet,
@@ -63,8 +77,8 @@ export default function Tokens() {
     isInitialized: isNotificationInitialized,
   } = useNotificationStatus();
   const [isManualRefreshPolling, setIsManualRefreshPolling] = useState(false);
-  const { height, width } = useWindowDimensions();
-  const { bottom, top } = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const { bottom } = useSafeAreaInsets();
   const theme = useTheme();
   const refreshHaptics = useRealtimeComposer();
   const didPopRefreshHaptic = useSharedValue(false);
@@ -300,37 +314,116 @@ export default function Tokens() {
             })}
           >
             <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
-            <Stack.Toolbar.MenuAction
-              disabled={devMenu.tokenActionDisabled}
-              onPress={devMenu.rolloutFirstToken}
+            <Stack.Toolbar.Menu
+              icon={Icon.select({
+                ios: "arrow.trianglehead.2.clockwise.rotate.90",
+                android: SyncSymbol,
+              })}
             >
-              Rollout
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction
-              disabled={devMenu.tokenActionDisabled}
-              onPress={devMenu.demoRolloutFailure}
+              <Stack.Toolbar.Label>Rollout</Stack.Toolbar.Label>
+              <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "play.fill",
+                  android: PlayArrowSymbol,
+                })}
+                onPress={devMenu.rolloutFirstToken}
+              >
+                Start
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "checkmark.circle.fill",
+                  android: CheckCircleSymbol,
+                })}
+                onPress={devMenu.demoRolloutSuccess}
+              >
+                Demo Success
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "xmark.circle.fill",
+                  android: CancelSymbol,
+                })}
+                onPress={devMenu.demoRolloutFailure}
+              >
+                Demo Failure
+              </Stack.Toolbar.MenuAction>
+            </Stack.Toolbar.Menu>
+            <Stack.Toolbar.Menu
+              icon={Icon.select({
+                ios: "key.fill",
+                android: KeySymbol,
+              })}
             >
-              Demo Rollout Failure
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction
-              disabled={devMenu.tokenActionDisabled}
-              onPress={devMenu.demoRolloutSuccess}
+              <Stack.Toolbar.Label>Tokens</Stack.Toolbar.Label>
+              <Stack.Toolbar.MenuAction
+                icon={Icon.select({
+                  ios: "plus.circle.fill",
+                  android: AddCircleSymbol,
+                })}
+                onPress={() => devMenu.spawnSampleTokens(3)}
+              >
+                Spawn Sample 3
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                icon={Icon.select({
+                  ios: "plus.circle.fill",
+                  android: AddCircleSymbol,
+                })}
+                onPress={() => devMenu.spawnSampleTokens(10)}
+              >
+                Spawn Sample 10
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                destructive
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "trash.fill",
+                  android: DeleteSymbol,
+                })}
+                onPress={devMenu.clearAllTokens}
+              >
+                Clear
+              </Stack.Toolbar.MenuAction>
+            </Stack.Toolbar.Menu>
+            <Stack.Toolbar.Menu
+              icon={Icon.select({
+                ios: "bell.fill",
+                android: NotificationsSymbol,
+              })}
             >
-              Demo Rollout Success
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction onPress={devMenu.clearPushRequests}>
-              Clear Push Requests
-            </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.Label>Push Requests</Stack.Toolbar.Label>
+              <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "bell.badge.fill",
+                  android: NotificationAddSymbol,
+                })}
+                onPress={devMenu.spawnSamplePushRequest}
+              >
+                Spawn Sample
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
+                destructive
+                icon={Icon.select({
+                  ios: "clear.fill",
+                  android: ClearAllSymbol,
+                })}
+                onPress={devMenu.clearPushRequests}
+              >
+                Clear
+              </Stack.Toolbar.MenuAction>
+            </Stack.Toolbar.Menu>
             <Stack.Toolbar.MenuAction
-              disabled={devMenu.tokenActionDisabled}
-              onPress={devMenu.spawnSamplePushRequest}
+              icon={Icon.select({
+                ios: "arrow.counterclockwise",
+                android: RestartAltSymbol,
+              })}
+              onPress={devMenu.resetOnboarding}
             >
-              Spawn Sample Push Request
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction onPress={devMenu.spawnSampleTokens}>
-              Spawn Sample Tokens
-            </Stack.Toolbar.MenuAction>
-            <Stack.Toolbar.MenuAction onPress={devMenu.resetOnboarding}>
               Show Onboarding
             </Stack.Toolbar.MenuAction>
           </Stack.Toolbar.Menu>
@@ -352,23 +445,22 @@ export default function Tokens() {
 
   const androidAddFab =
     Platform.OS === "android" ? (
-      <AndroidHost
-        matchContents
-        style={[styles.fabHost, { bottom: bottom + Spacing.lg }]}
-      >
-        <ExtendedFloatingActionButton
-          expanded={tokens.length === 0}
-          onClick={() => {
-            router.navigate("/token/add");
-          }}
-        >
-          <ExtendedFloatingActionButton.Icon>
-            <AndroidIcon source={AddSymbol} />
-          </ExtendedFloatingActionButton.Icon>
-          <ExtendedFloatingActionButton.Text>
-            <Text style={styles.fabText}>{t`Add token`}</Text>
-          </ExtendedFloatingActionButton.Text>
-        </ExtendedFloatingActionButton>
+      <AndroidHost matchContents style={styles.fabHost}>
+        <Box modifiers={[imePadding()]}>
+          <ExtendedFloatingActionButton
+            expanded={tokens.length === 0}
+            onClick={() => {
+              router.navigate("/token/add");
+            }}
+          >
+            <ExtendedFloatingActionButton.Icon>
+              <AndroidIcon source={AddSymbol} />
+            </ExtendedFloatingActionButton.Icon>
+            <ExtendedFloatingActionButton.Text>
+              <Text style={styles.fabText}>{t`Add token`}</Text>
+            </ExtendedFloatingActionButton.Text>
+          </ExtendedFloatingActionButton>
+        </Box>
       </AndroidHost>
     ) : null;
 
@@ -442,61 +534,102 @@ export default function Tokens() {
   return (
     <>
       {header}
-      <Animated.FlatList
-        scrollToOverflowEnabled
-        contentInsetAdjustmentBehavior="automatic"
-        onScroll={onRefreshScroll}
-        onScrollBeginDrag={dismissKeyboard}
-        scrollEventThrottle={16}
-        keyboardShouldPersistTaps="handled"
-        style={{ backgroundColor }}
-        contentContainerStyle={[
-          styles.contentContainer,
-          {
-            paddingBottom: Platform.select({
-              android: 100 + bottom,
-              default: 0,
-            }),
-          },
-          { minHeight: height - (bottom + top + 130) },
-        ]}
-        renderItem={renderItem}
-        data={filteredTokens}
-        keyExtractor={(item) => item.id}
-        itemLayoutAnimation={LinearTransition}
-        ListEmptyComponent={
-          <Animated.View entering={FadeIn} exiting={FadeOut}>
-            <ThemedView style={styles.noResultsContainer}>
-              <ThemedText>
-                <Trans>No results found for </Trans>
-                <ThemedText fontWeight="bold">{searchText}</ThemedText>
-              </ThemedText>
-            </ThemedView>
-          </Animated.View>
-        }
-        ListHeaderComponent={
-          showNotificationNotice ? (
-            <View style={styles.notificationNotice}>
-              <StatusCard
-                variant="danger"
-                title={t`Notifications are disabled`}
-                description={t`Enable notifications to receive push approval requests on this device.`}
-              />
-            </View>
-          ) : null
-        }
-        refreshControl={
-          <RefreshControl
-            refreshing={isPolling || isManualRefreshPolling}
-            onRefresh={onRefresh}
-            title={t`Refreshing...`}
-            tintColor={refreshControlColor}
-            titleColor={refreshControlColor}
-            colors={[refreshControlColor]}
-            progressBackgroundColor={refreshControlProgressBackgroundColor}
-          />
-        }
-      />
+      <KeyboardAvoidingView behavior="height" style={styles.listContainer}>
+        <Animated.FlatList
+          scrollToOverflowEnabled
+          contentInsetAdjustmentBehavior="automatic"
+          onScroll={onRefreshScroll}
+          onScrollBeginDrag={dismissKeyboard}
+          scrollEventThrottle={16}
+          keyboardShouldPersistTaps="handled"
+          style={{ backgroundColor }}
+          contentContainerStyle={[
+            styles.contentContainer,
+            {
+              paddingBottom: Platform.select({
+                android: filteredTokens.length > 0 ? 100 + bottom : 0,
+                default: 0,
+              }),
+            },
+          ]}
+          renderItem={renderItem}
+          data={filteredTokens}
+          keyExtractor={(item) => item.id}
+          itemLayoutAnimation={LinearTransition}
+          ListEmptyComponent={
+            <Animated.View
+              entering={FadeIn}
+              exiting={FadeOut}
+              style={styles.noResultsWrapper}
+            >
+              <ThemedView style={styles.noResultsContainer}>
+                <ThemedView
+                  type="backgroundSecondary"
+                  style={styles.noResultsIcon}
+                >
+                  <SymbolView
+                    name={{ ios: "magnifyingglass", android: "search" }}
+                    size={32}
+                    tintColor={theme.textSecondary}
+                  />
+                </ThemedView>
+                <ThemedText
+                  fontSize={Typography.fontSize24}
+                  fontWeight="semiBold"
+                  style={styles.noResultsTitle}
+                >
+                  <Trans>No tokens found</Trans>
+                </ThemedText>
+                <ThemedText
+                  fontWeight="light"
+                  style={styles.noResultsDescription}
+                  themeColor="textSecondary"
+                >
+                  <Trans>
+                    Try another token name, issuer, or serial number.
+                  </Trans>
+                </ThemedText>
+                <ThemedView
+                  type="backgroundSecondary"
+                  style={styles.searchQueryChip}
+                >
+                  <ThemedText
+                    fontSize={Typography.fontSize14}
+                    fontWeight="semiBold"
+                    numberOfLines={1}
+                    selectable
+                    style={styles.searchQueryText}
+                  >
+                    “{searchText}”
+                  </ThemedText>
+                </ThemedView>
+              </ThemedView>
+            </Animated.View>
+          }
+          ListHeaderComponent={
+            showNotificationNotice && !searchQuery ? (
+              <View style={styles.notificationNotice}>
+                <StatusCard
+                  variant="danger"
+                  title={t`Notifications are disabled`}
+                  description={t`Enable notifications to receive push approval requests on this device.`}
+                />
+              </View>
+            ) : null
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={isPolling || isManualRefreshPolling}
+              onRefresh={onRefresh}
+              title={t`Refreshing...`}
+              tintColor={refreshControlColor}
+              titleColor={refreshControlColor}
+              colors={[refreshControlColor]}
+              progressBackgroundColor={refreshControlProgressBackgroundColor}
+            />
+          }
+        />
+      </KeyboardAvoidingView>
       {androidAddFab}
       {footer}
     </>
@@ -505,9 +638,11 @@ export default function Tokens() {
 
 export const styles = StyleSheet.create({
   contentContainer: {
+    flexGrow: 1,
     paddingHorizontal: Spacing.lg,
   },
   fabHost: {
+    bottom: Spacing.lg,
     position: "absolute",
     right: Spacing.lg,
     zIndex: 10,
@@ -515,8 +650,35 @@ export const styles = StyleSheet.create({
   fabText: {
     fontWeight: "bold",
   },
+  listContainer: {
+    flex: 1,
+  },
   noResultsContainer: {
-    padding: Spacing.xl,
+    alignItems: "center",
+    maxWidth: 360,
+    paddingHorizontal: Spacing.xl,
+  },
+  noResultsDescription: {
+    lineHeight: Typography.fontSize16 * 1.4,
+    textAlign: "center",
+  },
+  noResultsIcon: {
+    alignItems: "center",
+    borderRadius: Radii.pill,
+    height: 72,
+    justifyContent: "center",
+    marginBottom: Spacing.lg,
+    width: 72,
+  },
+  noResultsTitle: {
+    lineHeight: Typography.fontSize24 * 1.2,
+    marginBottom: Spacing.sm,
+    textAlign: "center",
+  },
+  noResultsWrapper: {
+    alignItems: "center",
+    flex: 1,
+    justifyContent: "center",
   },
   noTokenButton: {
     marginTop: Spacing.xl,
@@ -547,6 +709,16 @@ export const styles = StyleSheet.create({
   },
   notificationNotice: {
     marginVertical: Spacing.sm,
+  },
+  searchQueryChip: {
+    borderRadius: Radii.pill,
+    marginTop: Spacing.lg,
+    maxWidth: "100%",
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+  },
+  searchQueryText: {
+    textAlign: "center",
   },
   tokenWrapper: {
     marginVertical: Spacing.sm,
