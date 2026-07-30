@@ -21,7 +21,7 @@ msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/components/token-detail/token-overview-content.tsx:178
+#: src/components/token-detail/token-overview-content.tsx:175
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"
 
@@ -90,7 +90,7 @@ msgstr "Token löschen"
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: src/components/token-detail/token-overview-content.tsx:168
+#: src/components/token-detail/token-overview-content.tsx:165
 msgid "Details"
 msgstr "Details"
 
@@ -187,7 +187,7 @@ msgstr "Bezeichnung"
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
-#: src/components/token-detail/token-overview-content.tsx:160
+#: src/components/token-detail/token-overview-content.tsx:157
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
 
@@ -195,7 +195,7 @@ msgstr "Zuletzt fehlgeschlagen"
 msgid "Never miss a sign-in request"
 msgstr "Keine Anmeldeanfrage verpassen"
 
-#: src/components/token-detail/token-overview-content.tsx:182
+#: src/components/token-detail/token-overview-content.tsx:179
 msgid "No interactions yet"
 msgstr "Noch keine Interaktionen"
 
@@ -271,8 +271,8 @@ msgstr "Platziere den QR-Code im Rahmen"
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:131
-#: src/components/token-list-item.tsx:235
+#: src/components/token-detail/token-overview-content.tsx:128
+#: src/components/token-list-item.tsx:233
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
@@ -293,9 +293,9 @@ msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
 #: src/app/index.tsx:127
-#: src/components/token-detail/token-overview-content.tsx:108
-#: src/components/token-detail/token-overview-content.tsx:118
-#: src/components/token-detail/token-overview-content.tsx:120
+#: src/components/token-detail/token-overview-content.tsx:105
+#: src/components/token-detail/token-overview-content.tsx:115
+#: src/components/token-detail/token-overview-content.tsx:117
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
@@ -324,11 +324,11 @@ msgstr "Authenticator-Apps suchen"
 msgid "Search tokens"
 msgstr "Token suchen"
 
-#: src/components/token-detail/token-overview-content.tsx:172
+#: src/components/token-detail/token-overview-content.tsx:169
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/components/token-detail/token-overview-content.tsx:143
+#: src/components/token-detail/token-overview-content.tsx:140
 msgid "Server message"
 msgstr "Servernachricht"
 
@@ -344,7 +344,7 @@ msgstr "Anonyme Berichte teilen"
 msgid "Sign-in requests may go unnoticed"
 msgstr "Anmeldeanfragen können unbemerkt bleiben"
 
-#: src/components/token-detail/token-overview-content.tsx:171
+#: src/components/token-detail/token-overview-content.tsx:168
 msgid "Status"
 msgstr "Status"
 
@@ -388,7 +388,7 @@ msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Pu
 msgid "Token"
 msgstr "Token"
 
-#: src/components/token-detail/token-overview-content.tsx:189
+#: src/components/token-detail/token-overview-content.tsx:186
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldeaktivitäten werden hier angezeigt."
 
