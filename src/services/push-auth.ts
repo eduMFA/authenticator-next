@@ -3,8 +3,11 @@ import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import type { PushToken } from "@/types/token";
 import { base64ToBase32 } from "@/utils/crypto";
+import {
+  playNotificationSuccessHaptic,
+  playNotificationWarningHaptic,
+} from "@/utils/haptics";
 import { signMessage } from "@/utils/rsa";
-import { Presets } from "react-native-pulsar";
 
 export interface PushAuthResponse {
   success: boolean;
@@ -111,9 +114,9 @@ export async function handlePushAuthRequest(
 
     // Provide haptic feedback
     if (isDeclined) {
-      Presets.System.notificationWarning();
+      playNotificationWarningHaptic();
     } else {
-      Presets.System.notificationSuccess();
+      playNotificationSuccessHaptic();
     }
 
     return { success: true };

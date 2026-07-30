@@ -2,6 +2,7 @@ import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
+import { refreshHapticAbortDistance } from "@/constants/haptics";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useDeleteTokenConfirmation } from "@/hooks/use-delete-token-confirmation";
@@ -12,6 +13,12 @@ import { useToken } from "@/hooks/use-token";
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import type { TokenAction } from "@/types/token-actions";
+import {
+  getRefreshHapticPullProgress,
+  getRefreshHapticRipple,
+  getRefreshHapticRippleIndex,
+  playImpactSoftHaptic,
+} from "@/utils/haptics";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import AddCircleSymbol from "@expo/material-symbols/add_circle.xml";
 import CancelSymbol from "@expo/material-symbols/cancel.xml";
@@ -39,7 +46,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -49,10 +56,13 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+import { useRealtimeComposer } from "react-native-pulsar";
 import Animated, {
   FadeIn,
   FadeOut,
   LinearTransition,
+  useAnimatedScrollHandler,
+  useSharedValue,
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -66,9 +76,15 @@ export default function Tokens() {
     hasPermission: hasNotificationPermission,
     isInitialized: isNotificationInitialized,
   } = useNotificationStatus();
+  const [isManualRefreshPolling, setIsManualRefreshPolling] = useState(false);
   const { width } = useWindowDimensions();
   const { bottom } = useSafeAreaInsets();
   const theme = useTheme();
+  const refreshHaptics = useRealtimeComposer();
+  const didPopRefreshHaptic = useSharedValue(false);
+  const isRefreshPullActive = useSharedValue(false);
+  const refreshPullStartOffset = useSharedValue(0);
+  const refreshHapticRippleIndex = useSharedValue(-1);
   const backgroundColor = theme.background;
   const { t } = useLingui();
   const tabBarTintColor = theme.text;
@@ -112,9 +128,99 @@ export default function Tokens() {
     Keyboard.dismiss();
   };
 
+  const handleOpenAddToken = useCallback(() => {
+    playImpactSoftHaptic();
+    router.navigate("/token/add");
+  }, [router]);
+
   const onRefresh = useCallback(() => {
-    pollChallenges();
-  }, [pollChallenges]);
+    if (isPolling || tokens.length === 0) {
+      return;
+    }
+
+    refreshHaptics.stop();
+    refreshHaptics.playDiscrete(1, 1);
+    setIsManualRefreshPolling(true);
+
+    pollChallenges().finally(() => {
+      setIsManualRefreshPolling(false);
+    });
+  }, [isPolling, pollChallenges, refreshHaptics, tokens.length]);
+
+  const onRefreshScroll = useAnimatedScrollHandler({
+    onBeginDrag: (event) => {
+      refreshPullStartOffset.value = event.contentOffset.y;
+      isRefreshPullActive.value = event.contentOffset.y <= 0;
+      didPopRefreshHaptic.value = false;
+      refreshHapticRippleIndex.value = -1;
+    },
+    onEndDrag: (event) => {
+      const pullDistance = Math.max(
+        refreshPullStartOffset.value - event.contentOffset.y,
+        0,
+      );
+      const shouldPlayAbortHaptic =
+        isRefreshPullActive.value &&
+        !didPopRefreshHaptic.value &&
+        pullDistance >= refreshHapticAbortDistance;
+
+      refreshHaptics.stop();
+
+      if (shouldPlayAbortHaptic) {
+        refreshHaptics.playDiscrete(0.18, 0.75);
+      }
+
+      isRefreshPullActive.value = false;
+      didPopRefreshHaptic.value = false;
+      refreshHapticRippleIndex.value = -1;
+    },
+    onMomentumEnd: () => {
+      refreshHaptics.stop();
+      isRefreshPullActive.value = false;
+      didPopRefreshHaptic.value = false;
+      refreshHapticRippleIndex.value = -1;
+    },
+    onScroll: (event) => {
+      if (!isRefreshPullActive.value) {
+        return;
+      }
+
+      const pullDistance = Math.max(
+        refreshPullStartOffset.value - event.contentOffset.y,
+        0,
+      );
+
+      if (pullDistance <= 0) {
+        refreshHaptics.stop();
+        didPopRefreshHaptic.value = false;
+        refreshHapticRippleIndex.value = -1;
+        return;
+      }
+
+      const pullProgress = getRefreshHapticPullProgress(pullDistance);
+
+      if (pullProgress >= 1 && !didPopRefreshHaptic.value) {
+        refreshHaptics.stop();
+        didPopRefreshHaptic.value = true;
+        return;
+      }
+
+      if (pullProgress < 1) {
+        didPopRefreshHaptic.value = false;
+        const rippleIndex = getRefreshHapticRippleIndex(pullDistance);
+
+        if (rippleIndex !== refreshHapticRippleIndex.value) {
+          const ripple = getRefreshHapticRipple(
+            rippleIndex,
+            refreshHapticRippleIndex.value,
+          );
+
+          refreshHaptics.playDiscrete(ripple.amplitude, ripple.frequency);
+          refreshHapticRippleIndex.value = rippleIndex;
+        }
+      }
+    },
+  });
 
   const renderItem = useCallback(
     ({ item }: { item: PushToken }) => {
@@ -174,9 +280,7 @@ export default function Tokens() {
     <Stack.Toolbar.Button
       icon="plus"
       variant="prominent"
-      onPress={() => {
-        router.navigate("/token/add");
-      }}
+      onPress={handleOpenAddToken}
     />
   );
 
@@ -404,9 +508,7 @@ export default function Tokens() {
                       : "borderedProminent",
                   ),
                 ]}
-                onPress={() => {
-                  router.navigate("/token/add");
-                }}
+                onPress={handleOpenAddToken}
                 style={{ width: emptyStateButtonWidth }}
               >
                 <Row alignment="center" spacing={6}>
@@ -436,7 +538,9 @@ export default function Tokens() {
         <Animated.FlatList
           scrollToOverflowEnabled
           contentInsetAdjustmentBehavior="automatic"
+          onScroll={onRefreshScroll}
           onScrollBeginDrag={dismissKeyboard}
+          scrollEventThrottle={16}
           keyboardShouldPersistTaps="handled"
           style={{ backgroundColor }}
           contentContainerStyle={[
@@ -515,7 +619,7 @@ export default function Tokens() {
           }
           refreshControl={
             <RefreshControl
-              refreshing={isPolling}
+              refreshing={isPolling || isManualRefreshPolling}
               onRefresh={onRefresh}
               title={t`Refreshing...`}
               tintColor={refreshControlColor}

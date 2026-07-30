@@ -1,10 +1,12 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setSentryTrackingEnabled } from "@/utils/sentry";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Settings as PulsarSettings } from "react-native-pulsar";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type SettingsState = {
   crashReportsEnabled: boolean;
+  hapticsEnabled: boolean;
   hasCompletedOnboarding: boolean;
   hasHydrated: boolean;
 };
@@ -13,6 +15,7 @@ type SettingsActions = {
   completeOnboarding: () => void;
   resetOnboarding: () => void;
   setCrashReportsEnabled: (enabled: boolean) => void;
+  setHapticsEnabled: (enabled: boolean) => void;
   setHasHydrated: (hasHydrated: boolean) => void;
 };
 
@@ -20,13 +23,14 @@ type SettingsStore = SettingsState & SettingsActions;
 
 type PersistedSettings = Pick<
   SettingsState,
-  "crashReportsEnabled" | "hasCompletedOnboarding"
+  "crashReportsEnabled" | "hapticsEnabled" | "hasCompletedOnboarding"
 >;
 
 export const useSettingsStore = create<SettingsStore>()(
   persist<SettingsStore, [], [], PersistedSettings>(
     (set) => ({
       crashReportsEnabled: false,
+      hapticsEnabled: true,
       hasCompletedOnboarding: false,
       hasHydrated: false,
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),
@@ -35,6 +39,10 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ crashReportsEnabled: enabled });
         setSentryTrackingEnabled(enabled);
       },
+      setHapticsEnabled: (enabled: boolean) => {
+        PulsarSettings.enableHaptics(enabled);
+        set({ hapticsEnabled: enabled });
+      },
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
     }),
     {
@@ -42,12 +50,14 @@ export const useSettingsStore = create<SettingsStore>()(
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         crashReportsEnabled: state.crashReportsEnabled,
+        hapticsEnabled: state.hapticsEnabled,
         hasCompletedOnboarding: state.hasCompletedOnboarding,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
         // Initialize error reporting only after persisted consent is known.
         setSentryTrackingEnabled(state?.crashReportsEnabled ?? false);
+        PulsarSettings.enableHaptics(state?.hapticsEnabled ?? true);
       },
     },
   ),
