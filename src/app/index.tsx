@@ -24,6 +24,7 @@ import NotificationAddSymbol from "@expo/material-symbols/notification_add.xml";
 import NotificationsSymbol from "@expo/material-symbols/notifications.xml";
 import PlayArrowSymbol from "@expo/material-symbols/play_arrow.xml";
 import RestartAltSymbol from "@expo/material-symbols/restart_alt.xml";
+import SettingsSymbol from "@expo/material-symbols/settings.xml";
 import SyncSymbol from "@expo/material-symbols/sync.xml";
 import { Button, Text as ExpoText, Host, Icon, Row } from "@expo/ui";
 import {
@@ -202,6 +203,15 @@ export default function Tokens() {
 
       <Stack.Header style={stackHeaderStyle} />
       <Stack.Toolbar placement="right">
+        <Stack.Toolbar.Button
+          icon={Icon.select({
+            ios: "gearshape",
+            android: SettingsSymbol,
+          })}
+          onPress={() => {
+            router.navigate("/settings");
+          }}
+        />
         {__DEV__ && (
           <Stack.Toolbar.Menu
             icon={Icon.select({

@@ -3,10 +3,13 @@ import { setSentryTrackingEnabled } from "@/utils/sentry";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+export type ThemePreference = "automatic" | "dark" | "light";
+
 type SettingsState = {
   crashReportsEnabled: boolean;
   hasCompletedOnboarding: boolean;
   hasHydrated: boolean;
+  themePreference: ThemePreference;
 };
 
 type SettingsActions = {
@@ -14,13 +17,14 @@ type SettingsActions = {
   resetOnboarding: () => void;
   setCrashReportsEnabled: (enabled: boolean) => void;
   setHasHydrated: (hasHydrated: boolean) => void;
+  setThemePreference: (preference: ThemePreference) => void;
 };
 
 type SettingsStore = SettingsState & SettingsActions;
 
 type PersistedSettings = Pick<
   SettingsState,
-  "crashReportsEnabled" | "hasCompletedOnboarding"
+  "crashReportsEnabled" | "hasCompletedOnboarding" | "themePreference"
 >;
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -29,6 +33,7 @@ export const useSettingsStore = create<SettingsStore>()(
       crashReportsEnabled: false,
       hasCompletedOnboarding: false,
       hasHydrated: false,
+      themePreference: "automatic",
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),
       resetOnboarding: () => set({ hasCompletedOnboarding: false }),
       setCrashReportsEnabled: (enabled) => {
@@ -36,6 +41,7 @@ export const useSettingsStore = create<SettingsStore>()(
         setSentryTrackingEnabled(enabled);
       },
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
+      setThemePreference: (themePreference) => set({ themePreference }),
     }),
     {
       name: "settings-storage",
@@ -43,6 +49,7 @@ export const useSettingsStore = create<SettingsStore>()(
       partialize: (state) => ({
         crashReportsEnabled: state.crashReportsEnabled,
         hasCompletedOnboarding: state.hasCompletedOnboarding,
+        themePreference: state.themePreference,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
