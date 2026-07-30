@@ -487,12 +487,6 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#. placeholder {0}: item.version
-#. placeholder {1}: item.license
-#: src/app/settings/license.tsx:40
-#~ msgid "Version {0} · {1}"
-#~ msgstr "Version {0} · {1}"
-
 #: src/app/settings/license.tsx:43
 msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
