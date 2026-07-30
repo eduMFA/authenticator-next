@@ -1,5 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setSentryTrackingEnabled } from "@/utils/sentry";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Settings as PulsarSettings } from "react-native-pulsar";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -28,6 +29,7 @@ type PersistedSettings = Pick<
   SettingsState,
   | "crashReportsEnabled"
   | "hapticsEnabled"
+  | "hapticsEnabled"
   | "hasCompletedOnboarding"
   | "themePreference"
 >;
@@ -46,7 +48,10 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ crashReportsEnabled: enabled });
         setSentryTrackingEnabled(enabled);
       },
-      setHapticsEnabled: (enabled) => set({ hapticsEnabled: enabled }),
+      setHapticsEnabled: (enabled: boolean) => {
+        PulsarSettings.enableHaptics(enabled);
+        set({ hapticsEnabled: enabled });
+      },
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
       setThemePreference: (themePreference) => set({ themePreference }),
     }),
@@ -63,6 +68,7 @@ export const useSettingsStore = create<SettingsStore>()(
         state?.setHasHydrated(true);
         // Initialize error reporting only after persisted consent is known.
         setSentryTrackingEnabled(state?.crashReportsEnabled ?? false);
+        PulsarSettings.enableHaptics(state?.hapticsEnabled ?? true);
       },
     },
   ),

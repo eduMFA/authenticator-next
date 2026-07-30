@@ -17,7 +17,7 @@ msgstr ""
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
-#: src/app/settings/index.tsx:111
+#: src/app/settings/index.tsx:113
 msgid "About"
 msgstr "Über"
 
@@ -29,13 +29,13 @@ msgstr "Akzeptieren"
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"
 
-#: src/app/index.tsx:366
-#: src/app/index.tsx:428
-#: src/app/index.tsx:430
+#: src/app/index.tsx:470
+#: src/app/index.tsx:530
+#: src/app/index.tsx:532
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:398
+#: src/app/index.tsx:502
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -47,7 +47,7 @@ msgstr "Kamerazugriff erlauben"
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
-#: src/app/settings/index.tsx:58
+#: src/app/settings/index.tsx:60
 msgid "Appearance"
 msgstr "Darstellung"
 
@@ -59,7 +59,7 @@ msgstr "Freigeben"
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
 
-#: src/app/settings/index.tsx:47
+#: src/app/settings/index.tsx:49
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -75,7 +75,7 @@ msgstr "Kamerazugriff ist deaktiviert"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/app/settings/index.tsx:104
+#: src/app/settings/index.tsx:106
 msgid "Change the app language in system settings"
 msgstr "App-Sprache in den Systemeinstellungen ändern"
 
@@ -88,12 +88,12 @@ msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest
 msgid "Continue"
 msgstr "Weiter"
 
-#: src/app/settings/index.tsx:153
-#: src/app/settings/index.tsx:156
+#: src/app/settings/index.tsx:155
+#: src/app/settings/index.tsx:158
 msgid "Crash and error reports"
 msgstr "Absturz- und Fehlerberichte"
 
-#: src/app/settings/index.tsx:49
+#: src/app/settings/index.tsx:51
 msgid "Dark"
 msgstr "Dunkel"
 
@@ -101,7 +101,7 @@ msgstr "Dunkel"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:148
+#: src/app/index.tsx:254
 #: src/app/token/[tokenId].tsx:192
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -119,7 +119,7 @@ msgstr "Ablehnen"
 msgid "Details"
 msgstr "Details"
 
-#: src/hooks/use-handle-token-uri.ts:61
+#: src/hooks/use-handle-token-uri.ts:64
 msgid "Dismiss"
 msgstr "Schließen"
 
@@ -127,7 +127,7 @@ msgstr "Schließen"
 msgid "Do not share reports"
 msgstr "Berichte nicht teilen"
 
-#: src/app/index.tsx:134
+#: src/app/index.tsx:240
 #: src/app/token/[tokenId].tsx:184
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -161,7 +161,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Enable notifications to receive approval requests."
 msgstr "Aktiviere Benachrichtigungen, um Freigabeanfragen zu erhalten."
 
-#: src/app/index.tsx:521
+#: src/app/index.tsx:625
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -177,9 +177,9 @@ msgstr "Registrierungsantwort fehlgeschlagen"
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
-#: src/hooks/use-handle-token-uri.ts:47
-#: src/hooks/use-handle-token-uri.ts:57
-#: src/hooks/use-handle-token-uri.ts:89
+#: src/hooks/use-handle-token-uri.ts:50
+#: src/hooks/use-handle-token-uri.ts:60
+#: src/hooks/use-handle-token-uri.ts:92
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
@@ -187,7 +187,7 @@ msgstr "Token konnte nicht hinzugefügt werden"
 msgid "Finalizing enrollment"
 msgstr "Registrierung wird abgeschlossen"
 
-#: src/app/settings/index.tsx:90
+#: src/app/settings/index.tsx:92
 msgid "General"
 msgstr "Allgemein"
 
@@ -199,12 +199,12 @@ msgstr "Schlüssel werden generiert"
 msgid "Get started"
 msgstr "Loslegen"
 
-#: src/app/settings/index.tsx:132
+#: src/app/settings/index.tsx:134
 msgid "GitHub"
 msgstr "GitHub"
 
-#: src/app/settings/index.tsx:93
-#: src/app/settings/index.tsx:96
+#: src/app/settings/index.tsx:95
+#: src/app/settings/index.tsx:98
 msgid "Haptics"
 msgstr "Haptik"
 
@@ -234,7 +234,7 @@ msgstr "Bezeichnung"
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
-#: src/app/settings/index.tsx:106
+#: src/app/settings/index.tsx:108
 msgid "Language"
 msgstr "Sprache"
 
@@ -250,7 +250,7 @@ msgstr "Lizenz"
 msgid "License information is unavailable."
 msgstr "Lizenzinformationen sind nicht verfügbar."
 
-#: src/app/settings/index.tsx:48
+#: src/app/settings/index.tsx:50
 msgid "Light"
 msgstr "Hell"
 
@@ -262,15 +262,15 @@ msgstr "Keine Anmeldeanfrage verpassen"
 msgid "No interactions yet"
 msgstr "Noch keine Interaktionen"
 
-#: src/hooks/use-handle-token-uri.ts:32
+#: src/hooks/use-handle-token-uri.ts:35
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:487
+#: src/app/index.tsx:591
 msgid "No tokens found"
 msgstr "Keine Token gefunden"
 
-#: src/app/index.tsx:390
+#: src/app/index.tsx:494
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -282,7 +282,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:520
+#: src/app/index.tsx:624
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -310,11 +310,11 @@ msgstr "Benachrichtigungseinstellungen öffnen"
 msgid "Open Settings"
 msgstr "Einstellungen öffnen"
 
-#: src/hooks/use-handle-token-uri.ts:67
+#: src/hooks/use-handle-token-uri.ts:70
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
-#: src/app/settings/index.tsx:144
+#: src/app/settings/index.tsx:146
 #: src/app/settings/licenses.tsx:78
 msgid "Open-source licenses"
 msgstr "Open-Source-Lizenzen"
@@ -335,11 +335,11 @@ msgstr "Ausstehend"
 msgid "Place the QR code inside the frame"
 msgstr "Platziere den QR-Code im Rahmen"
 
-#: src/app/settings/index.tsx:149
+#: src/app/settings/index.tsx:151
 msgid "Privacy"
 msgstr "Datenschutz"
 
-#: src/app/settings/index.tsx:126
+#: src/app/settings/index.tsx:128
 msgid "Privacy policy"
 msgstr "Datenschutzerklärung"
 
@@ -356,7 +356,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:530
+#: src/app/index.tsx:634
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -372,14 +372,14 @@ msgstr "Registrierung fehlgeschlagen"
 msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
-#: src/app/index.tsx:128
+#: src/app/index.tsx:234
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/app/settings/index.tsx:114
+#: src/app/settings/index.tsx:116
 msgid "Review eduMFA"
 msgstr "eduMFA bewerten"
 
@@ -400,15 +400,15 @@ msgstr "Rollout fehlgeschlagen"
 msgid "Save"
 msgstr "Speichern"
 
-#: src/hooks/use-handle-token-uri.ts:76
+#: src/hooks/use-handle-token-uri.ts:79
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:195
+#: src/app/index.tsx:299
 msgid "Search tokens"
 msgstr "Token suchen"
 
-#: src/app/settings/index.tsx:151
+#: src/app/settings/index.tsx:153
 msgid "Send anonymized crash and error diagnostics"
 msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
 
@@ -424,7 +424,7 @@ msgstr "Servernachricht"
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
-#: src/app/settings/index.tsx:173
+#: src/app/settings/index.tsx:175
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -444,11 +444,11 @@ msgstr "Status"
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 msgstr "Das Gerät konnte das für diesen Token erforderliche RSA-Schlüsselpaar nicht erstellen. Versuche den Rollout erneut und lasse die App währenddessen geöffnet."
 
-#: src/hooks/use-handle-token-uri.ts:48
+#: src/hooks/use-handle-token-uri.ts:51
 msgid "The provided QR code isn't a valid eduMFA token."
 msgstr "Der bereitgestellte QR-Code ist kein gültiger eduMFA-Token."
 
-#: src/hooks/use-handle-token-uri.ts:58
+#: src/hooks/use-handle-token-uri.ts:61
 msgid "The QR code isn't supported by this app. Please use a general Authenticator app."
 msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie eine allgemeine Authenticator-App."
 
@@ -456,11 +456,11 @@ msgstr "Der QR-Code wird von dieser App nicht unterstützt. Bitte verwenden Sie 
 msgid "The server response could not be parsed or did not include the expected token material."
 msgstr "Die Serverantwort konnte nicht verarbeitet werden oder enthielt nicht das erwartete Tokenmaterial."
 
-#: src/hooks/use-handle-token-uri.ts:90
+#: src/hooks/use-handle-token-uri.ts:93
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
-#: src/app/settings/index.tsx:59
+#: src/app/settings/index.tsx:61
 msgid "Theme"
 msgstr "Erscheinungsbild"
 
@@ -488,7 +488,7 @@ msgstr "Token"
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldeaktivitäten werden hier angezeigt."
 
-#: src/app/index.tsx:494
+#: src/app/index.tsx:598
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
 
@@ -518,7 +518,7 @@ msgstr "QR-Code hochladen"
 msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
 
-#: src/app/settings/index.tsx:138
+#: src/app/settings/index.tsx:140
 msgid "Website"
 msgstr "Webseite"
 
@@ -542,6 +542,6 @@ msgstr "Du kannst jetzt Anmeldeanfragen empfangen und freigeben."
 msgid "Your choice"
 msgstr "Deine Wahl"
 
-#: src/hooks/use-handle-token-uri.ts:33
+#: src/hooks/use-handle-token-uri.ts:36
 msgid "Your image did not contain a QR code."
 msgstr "Dein Bild enthielt keinen QR-Code."
