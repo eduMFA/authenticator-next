@@ -136,18 +136,9 @@ msgstr "Bearbeiten"
 msgid "Edit token"
 msgstr "Token bearbeiten"
 
-#: src/components/onboarding-sequence/step-actions.tsx:84
-#~ msgid "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
-#~ msgstr "eduMFA kann keine Push-Freigaben empfangen, solange Benachrichtigungen deaktiviert sind. Aktiviere sie in den Systemeinstellungen und kehre dann hierher zurück."
-
-#. placeholder {0}: OPEN_SOURCE_LICENSES.length
-#: src/app/settings/licenses.tsx:25
-#~ msgid "eduMFA uses {0} open-source packages. Package details are generated from the installed production dependency graph."
-#~ msgstr "eduMFA verwendet {0} Open-Source-Pakete. Die Paketdetails werden aus den installierten Produktionsabhängigkeiten generiert."
-
 #: src/app/settings/licenses.tsx:26
 msgid "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
-msgstr "eduMFA verwendet {licenseCount} Open-Source-Pakete. Die Paketdetails werden aus den installierten Produktionsabhängigkeiten generiert."
+msgstr ""
 
 #: src/components/token-add/camera-permission-denied.tsx:40
 msgid "Enable camera access in Settings to scan QR codes."
@@ -289,14 +280,6 @@ msgstr "Benachrichtigungen sind deaktiviert"
 #: src/components/onboarding-sequence/step-actions.tsx:67
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
-
-#: src/components/onboarding-sequence/step-actions.tsx:85
-#~ msgid "Notifications are off"
-#~ msgstr "Benachrichtigungen sind deaktiviert"
-
-#: src/components/onboarding-sequence/step-actions.tsx:85
-#~ msgid "Notifications are required"
-#~ msgstr "Benachrichtigungen sind erforderlich"
 
 #: src/components/push-request-popup.tsx:262
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
@@ -496,10 +479,6 @@ msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennu
 msgid "Turn on notifications in Settings so you can respond when a request arrives."
 msgstr "Aktiviere Benachrichtigungen in den Einstellungen, damit du reagieren kannst, sobald eine Anfrage eingeht."
 
-#: src/components/onboarding-sequence/step-actions.tsx:84
-#~ msgid "Turn them on in Settings to receive sign-in requests."
-#~ msgstr "Aktiviere sie in den Einstellungen, um Anmeldeanfragen zu erhalten."
-
 #: src/components/token-detail/token-edit-content.tsx:40
 msgid "Update the display name for this token."
 msgstr "Aktualisiere den Anzeigenamen für diesen Token."
@@ -529,10 +508,6 @@ msgstr "Willkommen"
 #: src/components/onboarding-sequence.tsx:82
 msgid "Welcome to eduMFA"
 msgstr "Willkommen bei eduMFA"
-
-#: src/components/onboarding-sequence/step-actions.tsx:85
-#~ msgid "You may miss sign-in requests"
-#~ msgstr "Du könntest Anmeldeanfragen verpassen"
 
 #: src/components/onboarding-sequence/step-actions.tsx:66
 msgid "You’re ready to receive and approve sign-in requests."

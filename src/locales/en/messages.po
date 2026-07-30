@@ -136,15 +136,6 @@ msgstr "Edit"
 msgid "Edit token"
 msgstr "Edit token"
 
-#: src/components/onboarding-sequence/step-actions.tsx:84
-#~ msgid "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
-#~ msgstr "eduMFA cannot receive push approvals while notifications are disabled. Enable them in system settings, then return here."
-
-#. placeholder {0}: OPEN_SOURCE_LICENSES.length
-#: src/app/settings/licenses.tsx:25
-#~ msgid "eduMFA uses {0} open-source packages. Package details are generated from the installed production dependency graph."
-#~ msgstr "eduMFA uses {0} open-source packages. Package details are generated from the installed production dependency graph."
-
 #: src/app/settings/licenses.tsx:26
 msgid "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
 msgstr "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
@@ -289,14 +280,6 @@ msgstr "Notifications are disabled"
 #: src/components/onboarding-sequence/step-actions.tsx:67
 msgid "Notifications are enabled"
 msgstr "Notifications are enabled"
-
-#: src/components/onboarding-sequence/step-actions.tsx:85
-#~ msgid "Notifications are off"
-#~ msgstr "Notifications are off"
-
-#: src/components/onboarding-sequence/step-actions.tsx:85
-#~ msgid "Notifications are required"
-#~ msgstr "Notifications are required"
 
 #: src/components/push-request-popup.tsx:262
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
@@ -496,10 +479,6 @@ msgstr "Try another token name, issuer, or serial number."
 msgid "Turn on notifications in Settings so you can respond when a request arrives."
 msgstr "Turn on notifications in Settings so you can respond when a request arrives."
 
-#: src/components/onboarding-sequence/step-actions.tsx:84
-#~ msgid "Turn them on in Settings to receive sign-in requests."
-#~ msgstr "Turn them on in Settings to receive sign-in requests."
-
 #: src/components/token-detail/token-edit-content.tsx:40
 msgid "Update the display name for this token."
 msgstr "Update the display name for this token."
@@ -529,10 +508,6 @@ msgstr "Welcome"
 #: src/components/onboarding-sequence.tsx:82
 msgid "Welcome to eduMFA"
 msgstr "Welcome to eduMFA"
-
-#: src/components/onboarding-sequence/step-actions.tsx:85
-#~ msgid "You may miss sign-in requests"
-#~ msgstr "You may miss sign-in requests"
 
 #: src/components/onboarding-sequence/step-actions.tsx:66
 msgid "You’re ready to receive and approve sign-in requests."
