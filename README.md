@@ -50,9 +50,16 @@ The beta workflow builds Android and iOS store binaries. Android is submitted to
 
 The production workflow builds Android and iOS store binaries, then waits for approval in EAS before submitting to Google Play production and App Store Connect.
 
+Both workflows build the downloadable APK after the Android store build has reserved
+the next remote build number. EAS then publishes the APK to the matching GitHub
+release, so no GitHub Actions runner waits in the EAS build queue.
+
 Required setup:
 
 - Connect this GitHub repository to EAS Workflows.
 - Configure EAS credentials for iOS and Android.
 - Configure Android Google Play submission credentials in EAS.
 - Configure iOS App Store Connect submission credentials in EAS.
+- Add `GITHUB_RELEASE_TOKEN` as a secret EAS environment variable in the
+  `production` environment. Use a fine-grained GitHub token for this repository
+  with read/write access to Contents.
