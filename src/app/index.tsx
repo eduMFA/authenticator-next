@@ -378,6 +378,16 @@ export default function Tokens() {
                 Spawn Sample 10
               </Stack.Toolbar.MenuAction>
               <Stack.Toolbar.MenuAction
+                disabled={devMenu.tokenActionDisabled}
+                icon={Icon.select({
+                  ios: "list.bullet.rectangle.fill",
+                  android: CodeSymbol,
+                })}
+                onPress={devMenu.spawnAllActivityTypes}
+              >
+                Spawn Activity Log
+              </Stack.Toolbar.MenuAction>
+              <Stack.Toolbar.MenuAction
                 destructive
                 disabled={devMenu.tokenActionDisabled}
                 icon={Icon.select({

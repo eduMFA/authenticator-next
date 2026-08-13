@@ -5,6 +5,8 @@ import {
   handlePushAuthRequest,
 } from "@/services/push-auth";
 import { usePushRequestStore } from "@/stores/push-request";
+import { useActivityStore } from "@/stores/activity";
+import { ActivityType } from "@/types/activity";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import { useCallback } from "react";
@@ -17,6 +19,7 @@ import { PushRequestPopup } from "./push-request-popup";
 export function NotificationHandler() {
   const { tokens } = useToken();
   const { pushRequests, updatePushRequestStatus } = usePushRequestStore();
+  const addActivity = useActivityStore((state) => state.addActivity);
 
   const handleRequest = useCallback(
     async (request: PushRequest): Promise<boolean> => {
@@ -39,6 +42,14 @@ export function NotificationHandler() {
     if (action === "ACCEPT") {
       console.log("User accepted the push authentication");
       updatePushRequestStatus(pushRequest.id, PushRequestStatus.Accepted);
+      addActivity({
+        id: `push-approved-${pushRequest.id}`,
+        tokenId: pushRequest.serial,
+        type: ActivityType.PushApproved,
+        timestamp: Date.now(),
+        pushRequestId: pushRequest.id,
+        title: pushRequest.title || undefined,
+      });
       void handleRequest({
         ...pushRequest,
         status: PushRequestStatus.Accepted,
@@ -46,6 +57,14 @@ export function NotificationHandler() {
     } else if (action === "DECLINE") {
       console.log("User declined the push authentication");
       updatePushRequestStatus(pushRequest.id, PushRequestStatus.Declined);
+      addActivity({
+        id: `push-denied-${pushRequest.id}`,
+        tokenId: pushRequest.serial,
+        type: ActivityType.PushDenied,
+        timestamp: Date.now(),
+        pushRequestId: pushRequest.id,
+        title: pushRequest.title || undefined,
+      });
       void handleRequest({
         ...pushRequest,
         status: PushRequestStatus.Declined,

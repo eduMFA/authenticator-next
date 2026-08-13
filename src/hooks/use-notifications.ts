@@ -1,10 +1,12 @@
 import { useNotificationStore } from "@/stores/notification";
+import { useActivityStore } from "@/stores/activity";
 import { usePushRequestStore } from "@/stores/push-request";
 import type {
   NotificationAction,
   NotificationResponseData,
 } from "@/types/notification";
 import type { PushRequest } from "@/types/push-request";
+import { ActivityType } from "@/types/activity";
 import { base32ToBase64 } from "@/utils/crypto";
 import {
   addBackgroundMessageHandler,
@@ -70,6 +72,7 @@ export function useNotifications(onAction?: NotificationActionHandler) {
 
   const { addPushRequest, getPushRequestByNonce, getPushRequestById } =
     usePushRequestStore();
+  const addActivity = useActivityStore((state) => state.addActivity);
 
   const handlePushRequest = useCallback(
     async (pushRequest: PushRequest) => {
@@ -106,9 +109,19 @@ export function useNotifications(onAction?: NotificationActionHandler) {
         return;
       }
 
-      addPushRequest(pushRequest);
+      const wasAdded = addPushRequest(pushRequest);
+      if (wasAdded) {
+        addActivity({
+          id: `push-received-${pushRequest.id}`,
+          tokenId: pushRequest.serial,
+          type: ActivityType.PushReceived,
+          timestamp: pushRequest.sentAt,
+          pushRequestId: pushRequest.id,
+          title: pushRequest.title || undefined,
+        });
+      }
     },
-    [addPushRequest, tokens],
+    [addActivity, addPushRequest, tokens],
   );
 
   const handleNotificationAction = useCallback(

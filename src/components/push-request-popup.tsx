@@ -1,7 +1,9 @@
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { usePushRequestStore } from "@/stores/push-request";
+import { useActivityStore } from "@/stores/activity";
 import { useTokenStore } from "@/stores/token";
+import { ActivityType } from "@/types/activity";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import { playImpactLightHaptic, playImpactMediumHaptic } from "@/utils/haptics";
@@ -44,6 +46,7 @@ export function PushRequestPopup({
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const colorScheme = useColorScheme();
   const { updatePushRequestStatus } = usePushRequestStore();
+  const addActivity = useActivityStore((state) => state.addActivity);
   const pendingRequests = requests.filter(
     (request) => request.status === PushRequestStatus.Pending,
   );
@@ -68,11 +71,28 @@ export function PushRequestPopup({
       setTimeout(() => {
         const updatedRequest = { ...currentRequest, status };
         updatePushRequestStatus(updatedRequest.id, status);
+        addActivity({
+          id: `push-${action === "accept" ? "approved" : "denied"}-${updatedRequest.id}`,
+          tokenId: updatedRequest.serial,
+          type:
+            action === "accept"
+              ? ActivityType.PushApproved
+              : ActivityType.PushDenied,
+          timestamp: Date.now(),
+          pushRequestId: updatedRequest.id,
+          title: updatedRequest.title || undefined,
+        });
         onAction(updatedRequest);
         setIsAnimatingOut(false);
       }, 200);
     },
-    [currentRequest, isAnimatingOut, onAction, updatePushRequestStatus],
+    [
+      addActivity,
+      currentRequest,
+      isAnimatingOut,
+      onAction,
+      updatePushRequestStatus,
+    ],
   );
 
   if (!currentRequest) return null;
