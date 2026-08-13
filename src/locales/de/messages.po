@@ -13,27 +13,31 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:273
+#: src/components/push-request-popup.tsx:293
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
 #: src/app/settings/index.tsx:128
 msgid "About"
-msgstr "Über"
+msgstr ""
 
 #: src/utils/notification.ts:62
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:590
-#: src/app/index.tsx:653
-#: src/app/index.tsx:655
+#: src/components/token-detail/token-overview-content.tsx:273
+msgid "Activity Log"
+msgstr "Aktivitätsprotokoll"
+
+#: src/app/index.tsx:598
+#: src/app/index.tsx:661
+#: src/app/index.tsx:663
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:625
+#: src/app/index.tsx:633
 msgid "Add your first eduMFA Push token to approve sign-ins securely from this device."
-msgstr "Füge deinen ersten eduMFA Push-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
+msgstr ""
 
 #: src/components/token-add/camera-permission-splash.tsx:37
 msgid "Allow camera access"
@@ -45,9 +49,9 @@ msgstr "Anonyme Berichte"
 
 #: src/app/settings/index.tsx:67
 msgid "Appearance"
-msgstr "Darstellung"
+msgstr ""
 
-#: src/components/push-request-popup.tsx:284
+#: src/components/push-request-popup.tsx:304
 msgid "Approve"
 msgstr "Freigeben"
 
@@ -57,19 +61,19 @@ msgstr "Möchtest du diesen Token wirklich löschen?"
 
 #: src/app/settings/index.tsx:53
 msgid "Automatic"
-msgstr "Automatisch"
+msgstr ""
 
 #: src/hooks/use-feedback-form.ts:22
 msgid "Bug report"
-msgstr "Fehlerbericht"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:213
 msgid "By sending feedback, you agree to the processing of your data under our"
-msgstr "Mit dem Senden des Feedbacks akzeptierst du die Verarbeitung deiner Daten gemäß unserer"
+msgstr ""
 
 #: src/components/feedback-form.ios.tsx:180
 msgid "By sending feedback, you agree to the processing of your data under our [Privacy policy](https://edumfa.io/app-privacy)."
-msgstr "Mit dem Senden des Feedbacks stimmst du der Verarbeitung deiner Daten gemäß unserer [Datenschutzerklärung](https://edumfa.io/app-privacy) zu."
+msgstr ""
 
 #: src/components/token-add/camera-permission-splash.tsx:44
 msgid "Camera access is required to scan the QR code and pair a token."
@@ -79,27 +83,37 @@ msgstr "Kamerazugriff ist erforderlich, um den QR-Code zu scannen und einen Toke
 msgid "Camera access is turned off"
 msgstr "Kamerazugriff ist deaktiviert"
 
+#: src/components/token-detail/token-overview-content.tsx:151
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: src/app/settings/index.tsx:121
 msgid "Change the app language in system settings"
-msgstr "App-Sprache in den Systemeinstellungen ändern"
+msgstr ""
 
 #: src/components/onboarding-sequence.tsx:128
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
 
+#: src/components/token-detail/token-overview-content.tsx:153
+#: src/components/token-detail/token-overview-content.tsx:290
+msgid "Clear"
+msgstr "Leeren"
+
+#: src/components/token-detail/token-overview-content.tsx:148
+msgid "Clear activity log?"
+msgstr "Aktivitätsprotokoll leeren?"
+
 #: src/components/feedback-form.android.tsx:95
 #: src/components/feedback-form.ios.tsx:84
 msgid "Close"
-msgstr "Schließen"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:174
 #: src/components/feedback-form.ios.tsx:130
 msgid "Contact (optional)"
-msgstr "Kontakt (optional)"
+msgstr ""
 
 #: src/components/onboarding-sequence/step-actions.tsx:85
 #: src/components/onboarding-sequence/step-actions.tsx:106
@@ -110,11 +124,11 @@ msgstr "Weiter"
 #: src/app/settings/index.tsx:179
 #: src/app/settings/index.tsx:185
 msgid "Crash and error reports"
-msgstr "Absturz- und Fehlerberichte"
+msgstr ""
 
 #: src/app/settings/index.tsx:55
 msgid "Dark"
-msgstr "Dunkel"
+msgstr ""
 
 #: src/utils/notification.ts:70
 msgid "Decline"
@@ -130,11 +144,11 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/components/push-request-popup.tsx:279
+#: src/components/push-request-popup.tsx:299
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: src/components/token-detail/token-overview-content.tsx:165
+#: src/components/token-detail/token-overview-content.tsx:262
 msgid "Details"
 msgstr "Details"
 
@@ -144,12 +158,12 @@ msgstr "Schließen"
 
 #: src/components/onboarding-sequence/step-actions.tsx:184
 msgid "Don't share anonymous reports"
-msgstr "Anonyme Berichte nicht teilen"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:80
 #: src/components/feedback-form.ios.tsx:55
 msgid "Done"
-msgstr "Fertig"
+msgstr ""
 
 #: src/app/index.tsx:287
 #: src/app/token/[tokenId].tsx:192
@@ -162,12 +176,12 @@ msgstr "Token bearbeiten"
 
 #: src/app/settings/licenses.tsx:31
 msgid "eduMFA Push uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
-msgstr "eduMFA Push verwendet {licenseCount} Open-Source-Pakete. Die Paketdetails werden aus den installierten Produktionsabhängigkeiten generiert."
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:199
 #: src/components/feedback-form.ios.tsx:147
 msgid "Email (optional)"
-msgstr "E-Mail (optional)"
+msgstr ""
 
 #: src/components/token-add/camera-permission-denied.tsx:40
 msgid "Enable camera access in Settings to scan QR codes."
@@ -177,7 +191,7 @@ msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:763
+#: src/app/index.tsx:771
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -185,9 +199,21 @@ msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Ge
 msgid "Enrolled"
 msgstr "Registriert"
 
+#: src/components/token-detail/token-overview-content.tsx:57
+msgid "Enrollment completed"
+msgstr "Registrierung abgeschlossen"
+
+#: src/components/token-detail/token-overview-content.tsx:61
+msgid "Enrollment failed"
+msgstr "Registrierung fehlgeschlagen"
+
 #: src/components/token-detail/token-detail-utils.ts:60
 msgid "Enrollment response failed"
 msgstr "Registrierungsantwort fehlgeschlagen"
+
+#: src/components/token-detail/token-overview-content.tsx:53
+msgid "Enrollment started"
+msgstr "Registrierung gestartet"
 
 #: src/app/token/[tokenId].tsx:130
 msgid "Enter a label for this token."
@@ -195,7 +221,7 @@ msgstr "Gib eine Bezeichnung für dieses Token ein."
 
 #: src/hooks/use-feedback-form.ts:30
 msgid "Enter a valid email address."
-msgstr "Gib eine gültige E-Mail-Adresse ein."
+msgstr ""
 
 #: src/hooks/use-handle-token-uri.ts:50
 #: src/hooks/use-handle-token-uri.ts:60
@@ -205,26 +231,26 @@ msgstr "Token konnte nicht hinzugefügt werden"
 
 #: src/hooks/use-feedback-form.ts:24
 msgid "Feature request"
-msgstr "Funktionswunsch"
+msgstr ""
 
 #: src/app/settings/index.tsx:131
 msgid "Feedback"
-msgstr "Feedback"
+msgstr ""
 
 #: src/hooks/use-feedback-form.ts:77
 msgid "Feedback could not be sent. Please try again."
-msgstr "Feedback konnte nicht gesendet werden. Bitte versuche es erneut."
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:102
 #: src/components/feedback-form.ios.tsx:91
 msgid "Feedback details"
-msgstr "Feedback-Details"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:115
 #: src/components/feedback-form.android.tsx:119
 #: src/components/feedback-form.ios.tsx:96
 msgid "Feedback type"
-msgstr "Feedback-Typ"
+msgstr ""
 
 #: src/components/token-detail/token-detail-utils.ts:85
 msgid "Finalizing enrollment"
@@ -233,7 +259,7 @@ msgstr "Registrierung wird abgeschlossen"
 #: src/app/settings/index.tsx:105
 #: src/hooks/use-feedback-form.ts:23
 msgid "General"
-msgstr "Allgemein"
+msgstr ""
 
 #: src/components/token-detail/token-detail-utils.ts:77
 msgid "Generating keys"
@@ -241,7 +267,7 @@ msgstr "Schlüssel werden generiert"
 
 #: src/components/onboarding-sequence.tsx:121
 msgid "Get notified when a sign-in needs your approval."
-msgstr "Lass dich benachrichtigen, wenn eine Anmeldung deine Genehmigung erfordert."
+msgstr ""
 
 #: src/components/onboarding-sequence.tsx:385
 msgid "Get started"
@@ -249,17 +275,17 @@ msgstr "Loslegen"
 
 #: src/app/settings/index.tsx:158
 msgid "GitHub"
-msgstr "GitHub"
+msgstr ""
 
-#: src/app/index.tsx:762
+#: src/app/index.tsx:770
 #: src/components/onboarding-sequence/step-actions.tsx:75
 msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
-msgstr "Google Play-Dienste sind nicht verfügbar, daher können Anfragen nicht automatisch eingehen. Ziehe die Token-Liste nach unten, um nach ausstehenden Anfragen zu suchen."
+msgstr ""
 
 #: src/app/settings/index.tsx:108
 #: src/app/settings/index.tsx:114
 msgid "Haptics"
-msgstr "Haptik"
+msgstr ""
 
 #: src/components/onboarding-sequence/step-actions.tsx:173
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
@@ -267,12 +293,12 @@ msgstr "Teile Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern
 
 #: src/components/onboarding-sequence.tsx:127
 msgid "Help improve the app"
-msgstr "Hilf, die App zu verbessern"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:165
 #: src/components/feedback-form.ios.tsx:124
 msgid "Include logs"
-msgstr "Protokolle einschließen"
+msgstr ""
 
 #: src/components/onboarding-sequence.tsx:114
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
@@ -294,52 +320,56 @@ msgstr "Bezeichnung erforderlich"
 
 #: src/app/settings/index.tsx:123
 msgid "Language"
-msgstr "Sprache"
+msgstr ""
 
-#: src/components/token-detail/token-overview-content.tsx:157
+#: src/components/token-detail/token-overview-content.tsx:254
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
 
 #: src/app/settings/license.tsx:30
 msgid "License"
-msgstr "Lizenz"
+msgstr ""
 
 #: src/app/settings/license.tsx:27
 msgid "License information is unavailable."
-msgstr "Lizenzinformationen sind nicht verfügbar."
+msgstr ""
 
 #: src/app/settings/index.tsx:54
 msgid "Light"
-msgstr "Hell"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:172
 #: src/components/feedback-form.ios.tsx:125
 msgid "Logs provide more context and help us find the cause of the issue."
-msgstr "Protokolle liefern mehr Kontext und helfen uns, die Ursache des Problems zu finden."
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:185
 #: src/components/feedback-form.ios.tsx:139
 msgid "Name (optional)"
-msgstr "Name (optional)"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:176
 #: src/components/feedback-form.ios.tsx:133
 msgid "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
-msgstr "Name und E-Mail-Adresse sind optional. Sie ermöglichen es uns, dich bei Rückfragen zu deinem Feedback zu kontaktieren."
+msgstr ""
 
 #: src/components/onboarding-sequence.tsx:120
 msgid "Never miss a sign-in request"
 msgstr "Keine Anmeldeanfrage verpassen"
 
+#: src/components/token-detail/token-overview-content.tsx:330
+msgid "No interactions yet"
+msgstr "Noch keine Interaktionen"
+
 #: src/hooks/use-handle-token-uri.ts:35
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:716
+#: src/app/index.tsx:724
 msgid "No tokens found"
 msgstr "Keine Token gefunden"
 
-#: src/app/index.tsx:617
+#: src/app/index.tsx:625
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -351,7 +381,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:758
+#: src/app/index.tsx:766
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -359,7 +389,7 @@ msgstr "Benachrichtigungen sind deaktiviert"
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
-#: src/components/push-request-popup.tsx:262
+#: src/components/push-request-popup.tsx:282
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
@@ -378,7 +408,7 @@ msgstr "Öffnen mit deiner Authenticator-App"
 #: src/app/settings/index.tsx:170
 #: src/app/settings/licenses.tsx:84
 msgid "Open-source licenses"
-msgstr "Open-Source-Lizenzen"
+msgstr ""
 
 #: src/app/token/add.tsx:154
 msgid "OR"
@@ -398,36 +428,48 @@ msgstr "Platziere den QR-Code im Rahmen"
 
 #: src/hooks/use-feedback-form.ts:56
 msgid "Please describe your feedback."
-msgstr "Bitte beschreibe dein Feedback."
+msgstr ""
 
 #: src/app/settings/index.tsx:175
 msgid "Privacy"
-msgstr "Datenschutz"
+msgstr ""
 
 #: src/app/settings/index.tsx:149
 #: src/components/feedback-form.android.tsx:214
 msgid "Privacy policy"
-msgstr "Datenschutzerklärung"
+msgstr ""
 
 #: src/app/settings/license.tsx:61
 msgid "Project website"
-msgstr "Projektwebsite"
+msgstr ""
 
-#: src/app/index.tsx:757
+#: src/app/index.tsx:765
 #: src/components/onboarding-sequence/step-actions.tsx:79
 msgid "Pull to refresh for requests"
-msgstr "Nach unten ziehen, um Anfragen abzurufen"
+msgstr ""
+
+#: src/components/token-detail/token-overview-content.tsx:69
+msgid "Push request approved"
+msgstr "Push-Anfrage genehmigt"
+
+#: src/components/token-detail/token-overview-content.tsx:73
+msgid "Push request denied"
+msgstr "Push-Anfrage abgelehnt"
+
+#: src/components/token-detail/token-overview-content.tsx:65
+msgid "Push request received"
+msgstr "Push-Anfrage empfangen"
 
 #: src/components/token-add/upload-qr-code-button.tsx:70
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:128
+#: src/components/token-detail/token-overview-content.tsx:225
 #: src/components/token-list-item.tsx:234
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:779
+#: src/app/index.tsx:787
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -444,17 +486,17 @@ msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
 #: src/app/index.tsx:281
-#: src/components/token-detail/token-overview-content.tsx:105
-#: src/components/token-detail/token-overview-content.tsx:115
-#: src/components/token-detail/token-overview-content.tsx:117
+#: src/components/token-detail/token-overview-content.tsx:202
+#: src/components/token-detail/token-overview-content.tsx:212
+#: src/components/token-detail/token-overview-content.tsx:214
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
 #: src/app/settings/index.tsx:137
 msgid "Review eduMFA Push"
-msgstr "eduMFA Push bewerten"
+msgstr ""
 
-#: src/components/push-request-popup.tsx:197
+#: src/components/push-request-popup.tsx:217
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 
@@ -475,26 +517,26 @@ msgstr "Speichern"
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:451
-#: src/app/index.tsx:522
+#: src/app/index.tsx:459
+#: src/app/index.tsx:530
 msgid "Search tokens"
 msgstr "Token suchen"
 
 #: src/app/settings/index.tsx:177
 msgid "Send anonymized crash and error diagnostics"
-msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
+msgstr ""
 
 #: src/app/settings/feedback.tsx:23
 #: src/components/feedback-form.android.tsx:91
 #: src/components/feedback-form.ios.tsx:80
 msgid "Send feedback"
-msgstr "Feedback senden"
+msgstr ""
 
-#: src/components/token-detail/token-overview-content.tsx:169
+#: src/components/token-detail/token-overview-content.tsx:266
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/components/token-detail/token-overview-content.tsx:140
+#: src/components/token-detail/token-overview-content.tsx:237
 msgid "Server message"
 msgstr "Servernachricht"
 
@@ -504,29 +546,33 @@ msgstr "Serverregistrierung fehlgeschlagen"
 
 #: src/app/settings/index.tsx:201
 msgid "Settings"
-msgstr "Einstellungen"
+msgstr ""
 
 #: src/components/onboarding-sequence/step-actions.tsx:191
 msgid "Share anonymous reports"
 msgstr "Anonyme Berichte teilen"
 
+#: src/components/token-detail/token-overview-content.tsx:319
+msgid "Show older activity"
+msgstr "Ältere Aktivitäten anzeigen"
+
 #: src/components/onboarding-sequence/step-actions.tsx:120
 msgid "Sign-in requests may go unnoticed"
 msgstr "Anmeldeanfragen können unbemerkt bleiben"
 
-#: src/components/token-detail/token-overview-content.tsx:168
+#: src/components/token-detail/token-overview-content.tsx:265
 msgid "Status"
 msgstr "Status"
 
 #: src/components/feedback-form.android.tsx:217
 #: src/components/feedback-form.ios.tsx:191
 msgid "Submit feedback"
-msgstr "Feedback senden"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:74
 #: src/components/feedback-form.ios.tsx:51
 msgid "Thank you for your feedback"
-msgstr "Vielen Dank für dein Feedback"
+msgstr ""
 
 #: src/components/token-detail/token-detail-utils.ts:49
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
@@ -550,7 +596,11 @@ msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualis
 
 #: src/app/settings/index.tsx:70
 msgid "Theme"
-msgstr "Erscheinungsbild"
+msgstr ""
+
+#: src/components/token-detail/token-overview-content.tsx:149
+msgid "This permanently removes all activity for this token."
+msgstr "Dadurch werden alle Aktivitäten für dieses Token dauerhaft entfernt."
 
 #: src/components/token-detail/token-detail-utils.ts:21
 msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
@@ -572,7 +622,11 @@ msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Pu
 msgid "Token"
 msgstr "Token"
 
-#: src/app/index.tsx:723
+#: src/components/token-detail/token-overview-content.tsx:337
+msgid "Token approvals, denials, push requests, and enrollment activity will appear here."
+msgstr "Token-Genehmigungen, Ablehnungen, Push-Anfragen und Registrierungsaktivitäten werden hier angezeigt."
+
+#: src/app/index.tsx:731
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
 
@@ -590,11 +644,11 @@ msgstr "QR-Code hochladen"
 
 #: src/app/settings/license.tsx:51
 msgid "Version {itemVersion} · {itemLicense}"
-msgstr "Version {itemVersion} · {itemLicense}"
+msgstr ""
 
 #: src/app/settings/index.tsx:164
 msgid "Website"
-msgstr "Webseite"
+msgstr ""
 
 #: src/components/onboarding-sequence.tsx:108
 msgid "Welcome"
@@ -602,12 +656,12 @@ msgstr "Willkommen"
 
 #: src/components/onboarding-sequence.tsx:110
 msgid "Welcome to <0/>"
-msgstr "Willkommen bei <0/>"
+msgstr ""
 
 #: src/components/feedback-form.android.tsx:155
 #: src/components/feedback-form.ios.tsx:111
 msgid "What would you like us to know?"
-msgstr "Was möchtest du uns mitteilen?"
+msgstr ""
 
 #: src/components/onboarding-sequence/step-actions.tsx:97
 msgid "You’re ready to receive and approve sign-in requests."
@@ -620,7 +674,7 @@ msgstr "Deine Wahl"
 #: src/components/feedback-form.android.tsx:77
 #: src/components/feedback-form.ios.tsx:53
 msgid "Your feedback was submitted successfully."
-msgstr "Dein Feedback wurde erfolgreich übermittelt."
+msgstr ""
 
 #: src/hooks/use-handle-token-uri.ts:36
 msgid "Your image did not contain a QR code."
