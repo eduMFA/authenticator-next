@@ -45,13 +45,17 @@
       "android": {
         "track": "beta"
       },
-      "ios": {}
+      "ios": {
+        "ascAppId": "6762263407"
+      }
     },
     "production": {
       "android": {
         "track": "production"
       },
-      "ios": {}
+      "ios": {
+        "ascAppId": "6762263407"
+      }
     }
   }
 }
