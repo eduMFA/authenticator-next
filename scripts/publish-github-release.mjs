@@ -2,12 +2,12 @@ import { readFile } from "node:fs/promises";
 
 const [artifactPath, releaseKind] = process.argv.slice(2);
 const token = process.env.GITHUB_RELEASE_TOKEN;
-const repository = process.env.GITHUB_REPOSITORY;
-const tag = process.env.GITHUB_REF_NAME;
+const repository = process.env.RELEASE_REPOSITORY;
+const tag = process.env.RELEASE_TAG;
 
 if (!artifactPath || !token || !repository || !tag) {
   throw new Error(
-    "artifact path, GITHUB_RELEASE_TOKEN, GITHUB_REPOSITORY, and GITHUB_REF_NAME are required",
+    "artifact path, GITHUB_RELEASE_TOKEN, RELEASE_REPOSITORY, and RELEASE_TAG are required",
   );
 }
 

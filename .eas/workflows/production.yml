@@ -32,8 +32,8 @@ jobs:
     name: Publish APK to GitHub
     needs: [build_android_apk]
     env:
-      GITHUB_REPOSITORY: ${{ github.repository }}
-      GITHUB_REF_NAME: ${{ github.ref_name }}
+      RELEASE_REPOSITORY: ${{ github.repository }}
+      RELEASE_TAG: ${{ github.ref_name }}
     steps:
       - uses: eas/checkout
       - uses: eas/download_build
