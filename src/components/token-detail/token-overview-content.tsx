@@ -1,9 +1,12 @@
 import { StatusCard } from "@/components/status-card";
+import { ThemedPressable } from "@/components/themed-pressable";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenImage } from "@/components/token-image";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
+import { useActivityStore } from "@/stores/activity";
+import { ActivityType, type Activity } from "@/types/activity";
 import {
   PushTokenRefreshStatus,
   PushTokenRolloutState,
@@ -13,7 +16,8 @@ import ForwardMediaSymbol from "@expo/material-symbols/forward_media.xml";
 import { Button, Host, Icon, Row, Text } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
-import { StyleSheet, View } from "react-native";
+import { useCallback, useMemo, useState } from "react";
+import { Alert, StyleSheet, View } from "react-native";
 import {
   formatTimestamp,
   getRolloutFailureDetails,
@@ -21,6 +25,8 @@ import {
   prettifyRefreshError,
   refreshErrorMessages,
 } from "./token-detail-utils";
+
+const ACTIVITY_PAGE_SIZE = 20;
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
@@ -39,6 +45,68 @@ function DetailRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+function ActivityRow({ activity }: { activity: Activity }) {
+  const { t } = useLingui();
+  const theme = useTheme();
+  const content = {
+    [ActivityType.EnrollmentStarted]: {
+      label: t`Enrollment started`,
+      color: theme.branding,
+    },
+    [ActivityType.EnrollmentCompleted]: {
+      label: t`Enrollment completed`,
+      color: theme.successBar,
+    },
+    [ActivityType.EnrollmentFailed]: {
+      label: t`Enrollment failed`,
+      color: theme.error,
+    },
+    [ActivityType.PushReceived]: {
+      label: t`Push request received`,
+      color: theme.branding,
+    },
+    [ActivityType.PushApproved]: {
+      label: t`Push request approved`,
+      color: theme.successBar,
+    },
+    [ActivityType.PushDenied]: {
+      label: t`Push request denied`,
+      color: theme.error,
+    },
+  } satisfies Record<
+    ActivityType,
+    { label: string; color: (typeof theme)["branding"] }
+  >;
+  const event = content[activity.type];
+  const timestamp = new Date(activity.timestamp).toLocaleString(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  return (
+    <View style={styles.activityRow}>
+      <View style={[styles.activityDot, { backgroundColor: event.color }]} />
+      <View style={styles.activityContent}>
+        <ThemedText fontSize={Typography.fontSize14} fontWeight="semiBold">
+          {event.label}
+        </ThemedText>
+        {activity.title ? (
+          <ThemedText
+            themeColor="textSecondary"
+            fontSize={Typography.fontSize12}
+            numberOfLines={1}
+          >
+            {activity.title}
+          </ThemedText>
+        ) : null}
+        <ThemedText themeColor="textSecondary" fontSize={Typography.fontSize12}>
+          {timestamp}
+        </ThemedText>
+      </View>
+    </View>
+  );
+}
+
 export function TokenOverviewContent({
   token,
   onRetryRollout,
@@ -48,6 +116,18 @@ export function TokenOverviewContent({
 }) {
   const { i18n, t } = useLingui();
   const theme = useTheme();
+  const allActivities = useActivityStore((state) => state.activities);
+  const clearTokenActivities = useActivityStore(
+    (state) => state.clearTokenActivities,
+  );
+  const [visibleActivityCount, setVisibleActivityCount] =
+    useState(ACTIVITY_PAGE_SIZE);
+  const activities = useMemo(
+    () => allActivities.filter((activity) => activity.tokenId === token.id),
+    [allActivities, token.id],
+  );
+  const visibleActivities = activities.slice(0, visibleActivityCount);
+  const hasOlderActivities = visibleActivities.length < activities.length;
   const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
   const rolloutFailureDetails = getRolloutFailureDetails(token.rolloutState);
   const rolloutStateLabel = getRolloutStateLabel(token.rolloutState);
@@ -63,6 +143,23 @@ export function TokenOverviewContent({
       networkMessage: i18n._(refreshErrorMessages.networkMessage),
     },
   );
+  const confirmClearActivityLog = useCallback(() => {
+    Alert.alert(
+      t`Clear activity log?`,
+      t`This permanently removes all activity for this token.`,
+      [
+        { text: t`Cancel`, style: "cancel" },
+        {
+          text: t`Clear`,
+          style: "destructive",
+          onPress: () => {
+            clearTokenActivities(token.id);
+            setVisibleActivityCount(ACTIVITY_PAGE_SIZE);
+          },
+        },
+      ],
+    );
+  }, [clearTokenActivities, t, token.id]);
 
   return (
     <>
@@ -171,20 +268,76 @@ export function TokenOverviewContent({
       </View>
 
       <View style={styles.section}>
-        <ThemedText fontSize={Typography.fontSize18} fontWeight="bold">
-          {t`Activity Log`}
-        </ThemedText>
-        <ThemedView type="backgroundSecondary" style={styles.auditPlaceholder}>
-          <ThemedText fontSize={Typography.fontSize16} fontWeight="semiBold">
-            {t`No interactions yet`}
+        <View style={styles.activityHeader}>
+          <ThemedText fontSize={Typography.fontSize18} fontWeight="bold">
+            {t`Activity Log`}
           </ThemedText>
-          <ThemedText
-            themeColor="textSecondary"
-            fontSize={Typography.fontSize14}
-            style={styles.auditDescription}
-          >
-            {t`Token approvals, denials, refresh events, and enrollment activity will appear here.`}
-          </ThemedText>
+          {activities.length > 0 ? (
+            <ThemedPressable
+              accessibilityRole="button"
+              onPress={confirmClearActivityLog}
+              style={({ pressed }) => [
+                styles.clearActivityButton,
+                { opacity: pressed ? 0.65 : 1 },
+              ]}
+              type="errorBackground"
+            >
+              <ThemedText
+                fontSize={Typography.fontSize12}
+                fontWeight="semiBold"
+                themeColor="error"
+              >
+                {t`Clear`}
+              </ThemedText>
+            </ThemedPressable>
+          ) : null}
+        </View>
+        <ThemedView type="backgroundSecondary" style={styles.activityCard}>
+          {activities.length > 0 ? (
+            <>
+              {visibleActivities.map((activity) => (
+                <ActivityRow key={activity.id} activity={activity} />
+              ))}
+              {hasOlderActivities ? (
+                <ThemedPressable
+                  accessibilityRole="button"
+                  onPress={() =>
+                    setVisibleActivityCount((count) =>
+                      Math.min(count + ACTIVITY_PAGE_SIZE, activities.length),
+                    )
+                  }
+                  style={({ pressed }) => [
+                    styles.showOlderButton,
+                    { opacity: pressed ? 0.65 : 1 },
+                  ]}
+                  type="fill"
+                >
+                  <ThemedText
+                    fontSize={Typography.fontSize14}
+                    fontWeight="semiBold"
+                  >
+                    {t`Show older activity`}
+                  </ThemedText>
+                </ThemedPressable>
+              ) : null}
+            </>
+          ) : (
+            <View style={styles.auditPlaceholder}>
+              <ThemedText
+                fontSize={Typography.fontSize16}
+                fontWeight="semiBold"
+              >
+                {t`No interactions yet`}
+              </ThemedText>
+              <ThemedText
+                themeColor="textSecondary"
+                fontSize={Typography.fontSize14}
+                style={styles.auditDescription}
+              >
+                {t`Token approvals, denials, push requests, and enrollment activity will appear here.`}
+              </ThemedText>
+            </View>
+          )}
         </ThemedView>
       </View>
     </>
@@ -192,6 +345,30 @@ export function TokenOverviewContent({
 }
 
 const styles = StyleSheet.create({
+  activityCard: {
+    borderRadius: Radii.xl,
+    paddingHorizontal: Spacing.lg,
+  },
+  activityContent: {
+    flex: 1,
+    gap: Spacing.xxs,
+  },
+  activityDot: {
+    borderRadius: 5,
+    height: 10,
+    marginTop: Spacing.xs,
+    width: 10,
+  },
+  activityHeader: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  activityRow: {
+    flexDirection: "row",
+    gap: Spacing.md,
+    paddingVertical: Spacing.md,
+  },
   auditDescription: {
     lineHeight: 20,
     marginTop: Spacing.xs,
@@ -199,10 +376,15 @@ const styles = StyleSheet.create({
   },
   auditPlaceholder: {
     alignItems: "center",
-    borderRadius: Radii.xl,
     justifyContent: "center",
     minHeight: 132,
     padding: Spacing.xl,
+  },
+  clearActivityButton: {
+    alignItems: "center",
+    borderRadius: Radii.pill,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
   },
   detailRow: {
     gap: Spacing.xs,
@@ -245,6 +427,13 @@ const styles = StyleSheet.create({
   },
   serverErrorMessage: {
     lineHeight: 20,
+  },
+  showOlderButton: {
+    alignItems: "center",
+    borderRadius: Radii.lg,
+    marginBottom: Spacing.lg,
+    marginTop: Spacing.sm,
+    padding: Spacing.md,
   },
   statusMeta: {
     marginTop: Spacing.md,

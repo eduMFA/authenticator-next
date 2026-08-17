@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:273
+#: src/components/push-request-popup.tsx:293
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
@@ -21,17 +21,17 @@ msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/components/token-detail/token-overview-content.tsx:175
+#: src/components/token-detail/token-overview-content.tsx:273
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"
 
-#: src/app/index.tsx:460
-#: src/app/index.tsx:520
-#: src/app/index.tsx:522
+#: src/app/index.tsx:470
+#: src/app/index.tsx:530
+#: src/app/index.tsx:532
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:492
+#: src/app/index.tsx:502
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -43,7 +43,7 @@ msgstr "Kamerazugriff erlauben"
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
-#: src/components/push-request-popup.tsx:284
+#: src/components/push-request-popup.tsx:304
 msgid "Approve"
 msgstr "Freigeben"
 
@@ -59,6 +59,7 @@ msgstr "Kamerazugriff ist erforderlich, um den QR-Code zu scannen und einen Toke
 msgid "Camera access is turned off"
 msgstr "Kamerazugriff ist deaktiviert"
 
+#: src/components/token-detail/token-overview-content.tsx:151
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -66,6 +67,19 @@ msgstr "Abbrechen"
 #: src/components/onboarding-sequence.tsx:97
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
+
+#: src/components/token-detail/token-overview-content.tsx:153
+#: src/components/token-detail/token-overview-content.tsx:290
+msgid "Clear"
+msgstr "Leeren"
+
+#: src/components/token-detail/token-overview-content.tsx:285
+#~ msgid "Clear Activity Log"
+#~ msgstr "Aktivitätsprotokoll leeren"
+
+#: src/components/token-detail/token-overview-content.tsx:148
+msgid "Clear activity log?"
+msgstr "Aktivitätsprotokoll leeren?"
 
 #: src/components/onboarding-sequence/step-actions.tsx:73
 #: src/components/token-add/camera-permission-splash.tsx:64
@@ -86,11 +100,11 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/components/push-request-popup.tsx:279
+#: src/components/push-request-popup.tsx:299
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: src/components/token-detail/token-overview-content.tsx:165
+#: src/components/token-detail/token-overview-content.tsx:262
 msgid "Details"
 msgstr "Details"
 
@@ -123,7 +137,7 @@ msgstr "Benachrichtigungen aktivieren"
 msgid "Enable notifications to receive approval requests."
 msgstr "Aktiviere Benachrichtigungen, um Freigabeanfragen zu erhalten."
 
-#: src/app/index.tsx:615
+#: src/app/index.tsx:625
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -131,9 +145,21 @@ msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Ge
 msgid "Enrolled"
 msgstr "Registriert"
 
+#: src/components/token-detail/token-overview-content.tsx:57
+msgid "Enrollment completed"
+msgstr "Registrierung abgeschlossen"
+
+#: src/components/token-detail/token-overview-content.tsx:61
+msgid "Enrollment failed"
+msgstr "Registrierung fehlgeschlagen"
+
 #: src/components/token-detail/token-detail-utils.ts:60
 msgid "Enrollment response failed"
 msgstr "Registrierungsantwort fehlgeschlagen"
+
+#: src/components/token-detail/token-overview-content.tsx:53
+msgid "Enrollment started"
+msgstr "Registrierung gestartet"
 
 #: src/app/token/[tokenId].tsx:122
 msgid "Enter a label for this token."
@@ -183,7 +209,7 @@ msgstr "Bezeichnung"
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
-#: src/components/token-detail/token-overview-content.tsx:157
+#: src/components/token-detail/token-overview-content.tsx:254
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
 
@@ -191,7 +217,7 @@ msgstr "Zuletzt fehlgeschlagen"
 msgid "Never miss a sign-in request"
 msgstr "Keine Anmeldeanfrage verpassen"
 
-#: src/components/token-detail/token-overview-content.tsx:179
+#: src/components/token-detail/token-overview-content.tsx:330
 msgid "No interactions yet"
 msgstr "Noch keine Interaktionen"
 
@@ -199,11 +225,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:581
+#: src/app/index.tsx:591
 msgid "No tokens found"
 msgstr "Keine Token gefunden"
 
-#: src/app/index.tsx:484
+#: src/app/index.tsx:494
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -215,7 +241,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:614
+#: src/app/index.tsx:624
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -223,7 +249,7 @@ msgstr "Benachrichtigungen sind deaktiviert"
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
-#: src/components/push-request-popup.tsx:262
+#: src/components/push-request-popup.tsx:282
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
@@ -255,16 +281,28 @@ msgstr "Ausstehend"
 msgid "Place the QR code inside the frame"
 msgstr "Platziere den QR-Code im Rahmen"
 
+#: src/components/token-detail/token-overview-content.tsx:69
+msgid "Push request approved"
+msgstr "Push-Anfrage genehmigt"
+
+#: src/components/token-detail/token-overview-content.tsx:73
+msgid "Push request denied"
+msgstr "Push-Anfrage abgelehnt"
+
+#: src/components/token-detail/token-overview-content.tsx:65
+msgid "Push request received"
+msgstr "Push-Anfrage empfangen"
+
 #: src/components/token-add/upload-qr-code-button.tsx:64
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:128
+#: src/components/token-detail/token-overview-content.tsx:225
 #: src/components/token-list-item.tsx:233
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:624
+#: src/app/index.tsx:634
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -281,13 +319,13 @@ msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
 #: src/app/index.tsx:233
-#: src/components/token-detail/token-overview-content.tsx:105
-#: src/components/token-detail/token-overview-content.tsx:115
-#: src/components/token-detail/token-overview-content.tsx:117
+#: src/components/token-detail/token-overview-content.tsx:202
+#: src/components/token-detail/token-overview-content.tsx:212
+#: src/components/token-detail/token-overview-content.tsx:214
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/components/push-request-popup.tsx:197
+#: src/components/push-request-popup.tsx:217
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 
@@ -312,11 +350,11 @@ msgstr "Authenticator-Apps suchen"
 msgid "Search tokens"
 msgstr "Token suchen"
 
-#: src/components/token-detail/token-overview-content.tsx:169
+#: src/components/token-detail/token-overview-content.tsx:266
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/components/token-detail/token-overview-content.tsx:140
+#: src/components/token-detail/token-overview-content.tsx:237
 msgid "Server message"
 msgstr "Servernachricht"
 
@@ -328,11 +366,15 @@ msgstr "Serverregistrierung fehlgeschlagen"
 msgid "Share anonymous reports"
 msgstr "Anonyme Berichte teilen"
 
+#: src/components/token-detail/token-overview-content.tsx:319
+msgid "Show older activity"
+msgstr "Ältere Aktivitäten anzeigen"
+
 #: src/components/onboarding-sequence/step-actions.tsx:85
 msgid "Sign-in requests may go unnoticed"
 msgstr "Anmeldeanfragen können unbemerkt bleiben"
 
-#: src/components/token-detail/token-overview-content.tsx:168
+#: src/components/token-detail/token-overview-content.tsx:265
 msgid "Status"
 msgstr "Status"
 
@@ -356,6 +398,10 @@ msgstr "Die Serverantwort konnte nicht verarbeitet werden oder enthielt nicht da
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
+#: src/components/token-detail/token-overview-content.tsx:149
+msgid "This permanently removes all activity for this token."
+msgstr "Dadurch werden alle Aktivitäten für dieses Token dauerhaft entfernt."
+
 #: src/components/token-detail/token-detail-utils.ts:21
 msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
 msgstr "Dieses Token konnte nicht aktualisiert werden, weil der Push-Dienst nicht erreichbar war. Prüfe deine Verbindung oder versuche es später erneut."
@@ -376,11 +422,15 @@ msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Pu
 msgid "Token"
 msgstr "Token"
 
-#: src/components/token-detail/token-overview-content.tsx:186
-msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
-msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldeaktivitäten werden hier angezeigt."
+#: src/components/token-detail/token-overview-content.tsx:337
+msgid "Token approvals, denials, push requests, and enrollment activity will appear here."
+msgstr "Token-Genehmigungen, Ablehnungen, Push-Anfragen und Registrierungsaktivitäten werden hier angezeigt."
 
-#: src/app/index.tsx:588
+#: src/components/token-detail/token-overview-content.tsx:186
+#~ msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
+#~ msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldeaktivitäten werden hier angezeigt."
+
+#: src/app/index.tsx:598
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
 

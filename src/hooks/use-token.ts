@@ -1,5 +1,7 @@
 import { deleteTokenPrivateKey } from "@/services/token-rollout";
+import { useActivityStore } from "@/stores/activity";
 import { useTokenStore } from "@/stores/token";
+import { ActivityType } from "@/types/activity";
 import { PushTokenRolloutState } from "@/types/token";
 import { parseTokenFromUri } from "@/utils/token";
 import { useCallback } from "react";
@@ -22,22 +24,46 @@ export function useToken() {
   const updateToken = useTokenStore(selectUpdateToken);
   const removeToken = useTokenStore(selectRemoveToken);
   const rolloutTokenFromStore = useTokenStore(selectRolloutToken);
+  const addActivity = useActivityStore((state) => state.addActivity);
+  const clearTokenActivities = useActivityStore(
+    (state) => state.clearTokenActivities,
+  );
 
   const createTokenFromURI = useCallback(
-    (uri: string) => {
+    async (uri: string) => {
       const newToken = parseTokenFromUri(uri);
 
-      addToken(newToken);
+      if (tokens.some((token) => token.id === newToken.id)) {
+        return;
+      }
 
-      // Trigger rollout for the newly added token
-      rolloutTokenFromStore(newToken.id).catch((error) => {
+      addToken(newToken);
+      addActivity({
+        tokenId: newToken.id,
+        type: ActivityType.EnrollmentStarted,
+        timestamp: Date.now(),
+      });
+
+      try {
+        await rolloutTokenFromStore(newToken.id);
+        addActivity({
+          tokenId: newToken.id,
+          type: ActivityType.EnrollmentCompleted,
+          timestamp: Date.now(),
+        });
+      } catch (error) {
+        addActivity({
+          tokenId: newToken.id,
+          type: ActivityType.EnrollmentFailed,
+          timestamp: Date.now(),
+        });
         console.error(
           `Failed to rollout newly added token ${newToken.id}:`,
           error,
         );
-      });
+      }
     },
-    [addToken, rolloutTokenFromStore],
+    [addActivity, addToken, rolloutTokenFromStore, tokens],
   );
 
   const rolloutToken = useCallback(
@@ -56,9 +82,29 @@ export function useToken() {
         updateToken(id, { rolloutState: PushTokenRolloutState.Pending });
       }
 
-      await rolloutTokenFromStore(id);
+      addActivity({
+        tokenId: id,
+        type: ActivityType.EnrollmentStarted,
+        timestamp: Date.now(),
+      });
+
+      try {
+        await rolloutTokenFromStore(id);
+        addActivity({
+          tokenId: id,
+          type: ActivityType.EnrollmentCompleted,
+          timestamp: Date.now(),
+        });
+      } catch (error) {
+        addActivity({
+          tokenId: id,
+          type: ActivityType.EnrollmentFailed,
+          timestamp: Date.now(),
+        });
+        throw error;
+      }
     },
-    [tokens, updateToken, rolloutTokenFromStore],
+    [addActivity, tokens, updateToken, rolloutTokenFromStore],
   );
 
   const deleteToken = useCallback(
@@ -79,8 +125,9 @@ export function useToken() {
       }
 
       removeToken(id);
+      clearTokenActivities(id);
     },
-    [tokens, removeToken],
+    [clearTokenActivities, tokens, removeToken],
   );
 
   return {
