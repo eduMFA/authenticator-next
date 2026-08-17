@@ -20,6 +20,30 @@ jobs:
       platform: ios
       profile: production
 
+  build_android_apk:
+    name: Build Android production APK
+    needs: [build_android]
+    type: build
+    params:
+      platform: android
+      profile: production-apk
+
+  publish_github_release:
+    name: Publish APK to GitHub
+    needs: [build_android_apk]
+    env:
+      RELEASE_REPOSITORY: ${{ github.repository }}
+      RELEASE_TAG: ${{ github.ref_name }}
+    steps:
+      - uses: eas/checkout
+      - uses: eas/download_build
+        id: download_apk
+        with:
+          build_id: ${{ needs.build_android_apk.outputs.build_id }}
+          extensions: [apk]
+      - name: Create or update GitHub release
+        run: node scripts/publish-github-release.mjs "${{ steps.download_apk.outputs.artifact_path }}" release
+
   require_approval:
     name: Approve production submission
     needs: [build_android, build_ios]
