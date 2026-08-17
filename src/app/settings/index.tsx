@@ -59,7 +59,10 @@ export default function SettingsScreen() {
         contentContainerStyle={styles.content}
       >
         <Section title={t`Appearance`}>
-          <SettingsRow icon="circle.lefthalf.filled" label={t`Theme`} />
+          <SettingsRow
+            icon={{ android: "contrast", ios: "circle.lefthalf.filled" }}
+            label={t`Theme`}
+          />
           <View style={styles.themeOptions}>
             {themeOptions.map((option) => {
               const selected = option.value === themePreference;
@@ -92,7 +95,7 @@ export default function SettingsScreen() {
 
         <Section title={t`General`}>
           <SettingsRow
-            icon="hand.tap"
+            icon={{ android: "touch_app", ios: "hand.tap" }}
             label={t`Haptics`}
             trailing={
               <Host matchContents>
@@ -107,7 +110,7 @@ export default function SettingsScreen() {
           <Divider />
           <SettingsRow
             detail={t`Change the app language in system settings`}
-            icon="globe"
+            icon={{ android: "language", ios: "globe" }}
             label={t`Language`}
             onPress={() => void Linking.openSettings()}
           />
@@ -115,7 +118,7 @@ export default function SettingsScreen() {
 
         <Section title={t`About`}>
           <SettingsRow
-            icon="star"
+            icon={{ android: "star", ios: "star" }}
             label={t`Review eduMFA`}
             onPress={() =>
               openUrl(
@@ -127,25 +130,28 @@ export default function SettingsScreen() {
           />
           <Divider />
           <SettingsRow
-            icon="hand.raised"
+            icon={{ android: "privacy_tip", ios: "hand.raised" }}
             label={t`Privacy policy`}
             onPress={() => openUrl(SETTINGS_LINKS.privacy)}
           />
           <Divider />
           <SettingsRow
-            icon="chevron.left.forwardslash.chevron.right"
+            icon={{
+              android: "code",
+              ios: "chevron.left.forwardslash.chevron.right",
+            }}
             label={t`GitHub`}
             onPress={() => openUrl(SETTINGS_LINKS.github)}
           />
           <Divider />
           <SettingsRow
-            icon="safari"
+            icon={{ android: "public", ios: "safari" }}
             label={t`Website`}
             onPress={() => openUrl(SETTINGS_LINKS.website)}
           />
           <Divider />
           <SettingsRow
-            icon="doc.text"
+            icon={{ android: "description", ios: "doc.text" }}
             label={t`Open-source licenses`}
             onPress={() => router.navigate("/settings/licenses")}
           />
@@ -154,7 +160,7 @@ export default function SettingsScreen() {
         <Section title={t`Privacy`}>
           <SettingsRow
             detail={t`Send anonymized crash and error diagnostics`}
-            icon="waveform.path.ecg"
+            icon={{ android: "monitoring", ios: "waveform.path.ecg" }}
             label={t`Crash and error reports`}
             trailing={
               <Host matchContents>

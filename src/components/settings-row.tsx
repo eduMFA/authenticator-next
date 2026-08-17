@@ -1,13 +1,13 @@
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
-import { SymbolView, type SFSymbol } from "expo-symbols";
+import { SymbolView, type AndroidSymbol, type SFSymbol } from "expo-symbols";
 import type { ReactNode } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { ThemedText } from "./themed-text";
 
 type SettingsRowProps = {
   detail?: string;
-  icon: SFSymbol;
+  icon: { android: AndroidSymbol; ios: SFSymbol };
   label: string;
   onPress?: () => void;
   trailing?: ReactNode;
@@ -38,7 +38,7 @@ export function SettingsRow({
       {trailing ??
         (onPress ? (
           <SymbolView
-            name="chevron.right"
+            name={{ android: "chevron_right", ios: "chevron.right" }}
             size={14}
             tintColor={theme.textSecondary}
           />
