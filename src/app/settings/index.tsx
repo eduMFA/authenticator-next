@@ -5,6 +5,8 @@ import { SETTINGS_LINKS } from "@/constants/settings";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore, type ThemePreference } from "@/stores/settings";
+import { Host, Switch } from "@expo/ui";
+import { accessibilityLabel } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import * as Application from "expo-application";
 import * as Linking from "expo-linking";
@@ -14,7 +16,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Switch,
   View,
 } from "react-native";
 
@@ -94,11 +95,13 @@ export default function SettingsScreen() {
             icon="hand.tap"
             label={t`Haptics`}
             trailing={
-              <Switch
-                accessibilityLabel={t`Haptics`}
-                onValueChange={setHapticsEnabled}
-                value={hapticsEnabled}
-              />
+              <Host matchContents>
+                <Switch
+                  onValueChange={setHapticsEnabled}
+                  value={hapticsEnabled}
+                  modifiers={[accessibilityLabel(t`Haptics`)]}
+                />
+              </Host>
             }
           />
           <Divider />
@@ -154,11 +157,13 @@ export default function SettingsScreen() {
             icon="waveform.path.ecg"
             label={t`Crash and error reports`}
             trailing={
-              <Switch
-                accessibilityLabel={t`Crash and error reports`}
-                onValueChange={setCrashReportsEnabled}
-                value={crashReportsEnabled}
-              />
+              <Host matchContents>
+                <Switch
+                  onValueChange={setCrashReportsEnabled}
+                  value={crashReportsEnabled}
+                  modifiers={[accessibilityLabel(t`Crash and error reports`)]}
+                />
+              </Host>
             }
           />
         </Section>
