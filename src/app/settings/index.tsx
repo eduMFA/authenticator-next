@@ -80,7 +80,10 @@ export default function SettingsScreen() {
                   ]}
                 >
                   <ThemedText
+                    adjustsFontSizeToFit
                     fontSize={Typography.fontSize14}
+                    minimumFontScale={0.7}
+                    numberOfLines={1}
                     style={{
                       color: selected ? theme.textOnBranding : theme.text,
                     }}
