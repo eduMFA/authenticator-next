@@ -19,6 +19,7 @@ import { useLingui } from "@lingui/react/macro";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AppState,
+  BackHandler,
   Linking,
   PanResponder,
   ScrollView,
@@ -214,6 +215,25 @@ export function OnboardingSequence() {
   useEffect(() => {
     configureHaptics();
   }, []);
+
+  useEffect(() => {
+    if (process.env.EXPO_OS !== "android" || stepIndex === 0) {
+      return;
+    }
+
+    const subscription = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        playHaptic((presets) => presets.System.impactLight());
+        goToStep(stepIndex - 1, SWIPE_SLIDE_EASING);
+        return true;
+      },
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [goToStep, stepIndex]);
 
   useEffect(() => {
     if (stepIndex !== 1) {
