@@ -63,7 +63,7 @@ msgstr "Kamerazugriff ist deaktiviert"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/components/onboarding-sequence.tsx:97
+#: src/components/onboarding-sequence.tsx:98
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
 
@@ -99,8 +99,8 @@ msgid "Dismiss"
 msgstr "Schließen"
 
 #: src/components/onboarding-sequence/step-actions.tsx:137
-msgid "Do not share reports"
-msgstr "Berichte nicht teilen"
+msgid "Don't share anonymous reports"
+msgstr "Anonyme Berichte nicht teilen"
 
 #: src/app/index.tsx:239
 #: src/app/token/[tokenId].tsx:184
@@ -118,10 +118,6 @@ msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen
 #: src/components/onboarding-sequence/step-actions.tsx:105
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
-
-#: src/components/onboarding-sequence.tsx:90
-msgid "Enable notifications to receive approval requests."
-msgstr "Aktiviere Benachrichtigungen, um Freigabeanfragen zu erhalten."
 
 #: src/app/index.tsx:615
 msgid "Enable notifications to receive push approval requests on this device."
@@ -153,11 +149,15 @@ msgstr "Registrierung wird abgeschlossen"
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
-#: src/components/onboarding-sequence.tsx:332
+#: src/components/onboarding-sequence.tsx:91
+msgid "Get notified when a sign-in needs your approval."
+msgstr "Lass dich benachrichtigen, wenn eine Anmeldung deine Genehmigung erfordert."
+
+#: src/components/onboarding-sequence.tsx:352
 msgid "Get started"
 msgstr "Loslegen"
 
-#: src/components/onboarding-sequence.tsx:96
+#: src/components/onboarding-sequence.tsx:97
 msgid "Help improve eduMFA"
 msgstr "Hilf, eduMFA zu verbessern"
 
@@ -165,7 +165,7 @@ msgstr "Hilf, eduMFA zu verbessern"
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 msgstr "Teile Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Sie enthalten niemals Token-Geheimnisse, Passwörter oder Namen von Einrichtungen."
 
-#: src/components/onboarding-sequence.tsx:83
+#: src/components/onboarding-sequence.tsx:84
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 msgstr "Bewahre deine Authentifizierungs-Token an einem Ort auf und genehmige Anmeldungen sicher von diesem Gerät aus."
 
@@ -187,7 +187,7 @@ msgstr "Bezeichnung erforderlich"
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
 
-#: src/components/onboarding-sequence.tsx:89
+#: src/components/onboarding-sequence.tsx:90
 msgid "Never miss a sign-in request"
 msgstr "Keine Anmeldeanfrage verpassen"
 
@@ -211,7 +211,7 @@ msgstr "Noch keine Token vorhanden"
 msgid "Not now"
 msgstr "Nicht jetzt"
 
-#: src/components/onboarding-sequence.tsx:88
+#: src/components/onboarding-sequence.tsx:89
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
@@ -396,11 +396,11 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#: src/components/onboarding-sequence.tsx:81
+#: src/components/onboarding-sequence.tsx:82
 msgid "Welcome"
 msgstr "Willkommen"
 
-#: src/components/onboarding-sequence.tsx:82
+#: src/components/onboarding-sequence.tsx:83
 msgid "Welcome to eduMFA"
 msgstr "Willkommen bei eduMFA"
 
@@ -408,7 +408,7 @@ msgstr "Willkommen bei eduMFA"
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "Du kannst jetzt Anmeldeanfragen empfangen und freigeben."
 
-#: src/components/onboarding-sequence.tsx:95
+#: src/components/onboarding-sequence.tsx:96
 msgid "Your choice"
 msgstr "Deine Wahl"
 

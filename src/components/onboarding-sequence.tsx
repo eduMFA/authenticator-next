@@ -88,7 +88,7 @@ export function OnboardingSequence() {
         id: "notifications",
         kicker: t`Notifications`,
         title: t`Never miss a sign-in request`,
-        body: t`Enable notifications to receive approval requests.`,
+        body: t`Get notified when a sign-in needs your approval.`,
         accent: onboardingStepAccents[1],
       },
       {

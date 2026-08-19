@@ -63,7 +63,7 @@ msgstr "Camera access is turned off"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/components/onboarding-sequence.tsx:97
+#: src/components/onboarding-sequence.tsx:98
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Choose whether to share anonymous crash and error reports."
 
@@ -99,8 +99,8 @@ msgid "Dismiss"
 msgstr "Dismiss"
 
 #: src/components/onboarding-sequence/step-actions.tsx:137
-msgid "Do not share reports"
-msgstr "Do not share reports"
+msgid "Don't share anonymous reports"
+msgstr "Don't share anonymous reports"
 
 #: src/app/index.tsx:239
 #: src/app/token/[tokenId].tsx:184
@@ -118,10 +118,6 @@ msgstr "Enable camera access in Settings to scan QR codes."
 #: src/components/onboarding-sequence/step-actions.tsx:105
 msgid "Enable notifications"
 msgstr "Enable notifications"
-
-#: src/components/onboarding-sequence.tsx:90
-msgid "Enable notifications to receive approval requests."
-msgstr "Enable notifications to receive approval requests."
 
 #: src/app/index.tsx:615
 msgid "Enable notifications to receive push approval requests on this device."
@@ -153,11 +149,15 @@ msgstr "Finalizing enrollment"
 msgid "Generating keys"
 msgstr "Generating keys"
 
-#: src/components/onboarding-sequence.tsx:332
+#: src/components/onboarding-sequence.tsx:91
+msgid "Get notified when a sign-in needs your approval."
+msgstr "Get notified when a sign-in needs your approval."
+
+#: src/components/onboarding-sequence.tsx:352
 msgid "Get started"
 msgstr "Get started"
 
-#: src/components/onboarding-sequence.tsx:96
+#: src/components/onboarding-sequence.tsx:97
 msgid "Help improve eduMFA"
 msgstr "Help improve eduMFA"
 
@@ -165,7 +165,7 @@ msgstr "Help improve eduMFA"
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 msgstr "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 
-#: src/components/onboarding-sequence.tsx:83
+#: src/components/onboarding-sequence.tsx:84
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 msgstr "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 
@@ -187,7 +187,7 @@ msgstr "Label required"
 msgid "Last failed"
 msgstr "Last failed"
 
-#: src/components/onboarding-sequence.tsx:89
+#: src/components/onboarding-sequence.tsx:90
 msgid "Never miss a sign-in request"
 msgstr "Never miss a sign-in request"
 
@@ -211,7 +211,7 @@ msgstr "No tokens yet"
 msgid "Not now"
 msgstr "Not now"
 
-#: src/components/onboarding-sequence.tsx:88
+#: src/components/onboarding-sequence.tsx:89
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -396,11 +396,11 @@ msgstr "Update the display name for this token."
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
 
-#: src/components/onboarding-sequence.tsx:81
+#: src/components/onboarding-sequence.tsx:82
 msgid "Welcome"
 msgstr "Welcome"
 
-#: src/components/onboarding-sequence.tsx:82
+#: src/components/onboarding-sequence.tsx:83
 msgid "Welcome to eduMFA"
 msgstr "Welcome to eduMFA"
 
@@ -408,7 +408,7 @@ msgstr "Welcome to eduMFA"
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "You’re ready to receive and approve sign-in requests."
 
-#: src/components/onboarding-sequence.tsx:95
+#: src/components/onboarding-sequence.tsx:96
 msgid "Your choice"
 msgstr "Your choice"
 

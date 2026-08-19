@@ -134,7 +134,7 @@ export function CrashReportsStepActions({
       <ActionButton
         accentColor={accentColor}
         icon={{ ios: "xmark", android: "close" }}
-        label={t`Do not share reports`}
+        label={t`Don't share anonymous reports`}
         onPress={onDecline}
       />
       <ActionButton
