@@ -14,18 +14,21 @@ const SENSITIVE_FIELD_NAME_PATTERN =
 const OTP_AUTH_URI_PATTERN = /otpauth:\/\/[^\s"'<>)]*/gi;
 
 let sentryInitialized = false;
+let sentryTrackingEnabled = false;
 
 export function setSentryTrackingEnabled(enabled: boolean): void {
   if (enabled) {
-    initSentry();
+    if (!sentryTrackingEnabled) {
+      initSentry(true);
+    }
     return;
   }
 
-  if (!sentryInitialized) {
+  if (!sentryTrackingEnabled) {
     return;
   }
 
-  sentryInitialized = false;
+  sentryTrackingEnabled = false;
 
   void Sentry.close().catch((error: unknown) => {
     if (__DEV__) {
@@ -34,16 +37,13 @@ export function setSentryTrackingEnabled(enabled: boolean): void {
   });
 }
 
-function initSentry(): void {
-  if (sentryInitialized) {
-    return;
-  }
-
+function initSentry(enabled: boolean): void {
   const enableNative = !isRunningInExpoGo();
 
   Sentry.init({
     dsn: SENTRY_DSN,
     environment: SENTRY_ENVIRONMENT,
+    enabled,
     debug: false,
     sendDefaultPii: false,
     sampleRate: 1,
@@ -76,11 +76,18 @@ function initSentry(): void {
   });
 
   sentryInitialized = true;
+  sentryTrackingEnabled = enabled;
 }
 
 export function withSentryRoot<P extends Record<string, unknown>>(
   component: ComponentType<P>,
 ): ComponentType<P> {
+  if (!sentryInitialized) {
+    // Sentry.wrap expects the SDK to be initialized synchronously. Persisted
+    // consent is only available later, so bootstrap without collecting data.
+    initSentry(false);
+  }
+
   return Sentry.wrap(component);
 }
 
