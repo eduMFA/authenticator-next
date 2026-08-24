@@ -9,12 +9,14 @@ import { TextButton } from "./text-button";
 
 type WelcomeStepActionsProps = {
   accentColor: string;
+  compact?: boolean;
   label: string;
   onContinue: () => void;
 };
 
 export function WelcomeStepActions({
   accentColor,
+  compact = false,
   label,
   onContinue,
 }: WelcomeStepActionsProps) {
@@ -22,6 +24,7 @@ export function WelcomeStepActions({
     <View style={styles.buttonStack}>
       <ActionButton
         accentColor={accentColor}
+        compact={compact}
         icon={{ ios: "arrow.right", android: "arrow_forward" }}
         label={label}
         onPress={onContinue}
@@ -32,6 +35,7 @@ export function WelcomeStepActions({
 
 type NotificationStepActionsProps = {
   accentColor: string;
+  compact?: boolean;
   hasNotificationPermission: boolean;
   isCheckingPermission: boolean;
   isRequestingPermission: boolean;
@@ -45,6 +49,7 @@ type NotificationStepActionsProps = {
 
 export function NotificationStepActions({
   accentColor,
+  compact = false,
   hasNotificationPermission: hasNotificationsEnabled,
   isCheckingPermission,
   isRequestingPermission,
@@ -63,12 +68,14 @@ export function NotificationStepActions({
     return (
       <View style={styles.buttonStack}>
         <StatusCard
+          compact={compact}
           description={t`You’re ready to receive and approve sign-in requests.`}
           title={t`Notifications are enabled`}
           variant="success"
         />
         <ActionButton
           accentColor={accentColor}
+          compact={compact}
           icon={{ ios: "arrow.right", android: "arrow_forward" }}
           label={t`Continue`}
           onPress={onContinue}
@@ -81,12 +88,14 @@ export function NotificationStepActions({
     return (
       <View style={[styles.buttonStack, styles.buttonStackCompact]}>
         <StatusCard
+          compact={compact}
           description={t`Turn on notifications in Settings so you can respond when a request arrives.`}
           title={t`Sign-in requests may go unnoticed`}
           variant="error"
         />
         <ActionButton
           accentColor={accentColor}
+          compact={compact}
           icon={{ ios: "gearshape.fill", android: "settings" }}
           label={t`Open notification settings`}
           onPress={onOpenSettings}
@@ -100,6 +109,7 @@ export function NotificationStepActions({
     <View style={styles.buttonStack}>
       <ActionButton
         accentColor={accentColor}
+        compact={compact}
         icon={{ ios: "bell.fill", android: "notifications" }}
         isLoading={isRequestingPermission || isCheckingPermission}
         label={t`Enable notifications`}
@@ -111,12 +121,14 @@ export function NotificationStepActions({
 
 type CrashReportsStepActionsProps = {
   accentColor: string;
+  compact?: boolean;
   onDecline: () => void;
   onOptIn: () => void;
 };
 
 export function CrashReportsStepActions({
   accentColor,
+  compact = false,
   onDecline,
   onOptIn,
 }: CrashReportsStepActionsProps) {
@@ -125,6 +137,7 @@ export function CrashReportsStepActions({
   return (
     <View style={styles.buttonStack}>
       <StatusCard
+        compact={compact}
         description={t`Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names.`}
         icon={{ ios: "hand.raised.fill", android: "privacy_tip" }}
         iconPlacement="side"
@@ -133,12 +146,14 @@ export function CrashReportsStepActions({
       />
       <ActionButton
         accentColor={accentColor}
+        compact={compact}
         icon={{ ios: "xmark", android: "close" }}
         label={t`Don't share anonymous reports`}
         onPress={onDecline}
       />
       <ActionButton
         accentColor={accentColor}
+        compact={compact}
         icon={{ ios: "checkmark.shield.fill", android: "verified_user" }}
         label={t`Share anonymous reports`}
         onPress={onOptIn}

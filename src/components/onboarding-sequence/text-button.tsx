@@ -10,7 +10,11 @@ type TextButtonProps = {
 
 export function TextButton({ color, label, onPress }: TextButtonProps) {
   return (
-    <Pressable onPress={onPress} style={styles.textButton}>
+    <Pressable
+      accessibilityRole="button"
+      onPress={onPress}
+      style={styles.textButton}
+    >
       <ThemedText
         fontSize={Typography.fontSize14}
         fontWeight="semiBold"
@@ -24,10 +28,11 @@ export function TextButton({ color, label, onPress }: TextButtonProps) {
 
 const styles = StyleSheet.create({
   textButton: {
+    alignItems: "center",
     alignSelf: "center",
-    minHeight: 28,
+    justifyContent: "center",
+    minHeight: 44,
     paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
   },
   textButtonLabel: {
     lineHeight: Typography.fontSize14 * 1.25,

@@ -41,6 +41,7 @@ type StatusCardProps = {
   children?: ReactNode;
   icon?: IconName;
   iconPlacement?: "title" | "side";
+  compact?: boolean;
 };
 
 export function StatusCard({
@@ -50,11 +51,16 @@ export function StatusCard({
   children,
   icon = variantIcons[variant],
   iconPlacement = "title",
+  compact = false,
 }: StatusCardProps) {
   const theme = useTheme();
   const colors = getVariantColors(variant, theme);
   const iconElement = (
-    <SymbolView name={icon} size={18} tintColor={colors.accent} />
+    <SymbolView
+      name={icon}
+      size={compact ? 16 : 18}
+      tintColor={colors.accent}
+    />
   );
 
   return (
@@ -64,30 +70,49 @@ export function StatusCard({
       layout={LinearTransition.duration(180).easing(Easing.out(Easing.cubic))}
       style={[
         styles.statusCard,
+        compact && styles.statusCardCompact,
         {
           backgroundColor: colors.background,
           borderColor: colors.accent,
         },
       ]}
     >
-      <View style={styles.statusContentRow}>
+      <View
+        style={[
+          styles.statusContentRow,
+          compact && styles.statusContentRowCompact,
+        ]}
+      >
         <View style={styles.statusText}>
           <View style={styles.statusTitleRow}>
             {iconPlacement === "title" ? iconElement : null}
-            <ThemedText fontSize={Typography.fontSize16} fontWeight="bold">
+            <ThemedText
+              fontSize={compact ? Typography.fontSize14 : Typography.fontSize16}
+              fontWeight="bold"
+              style={styles.statusTitle}
+            >
               {title}
             </ThemedText>
           </View>
           <ThemedText
-            fontSize={Typography.fontSize14}
-            style={styles.statusDescription}
+            fontSize={compact ? Typography.fontSize12 : Typography.fontSize14}
+            style={[
+              styles.statusDescription,
+              compact && styles.statusDescriptionCompact,
+            ]}
           >
             {description}
           </ThemedText>
           {children}
         </View>
         {iconPlacement === "side" ? (
-          <View style={[styles.statusSideIcon, { borderColor: colors.accent }]}>
+          <View
+            style={[
+              styles.statusSideIcon,
+              compact && styles.statusSideIconCompact,
+              { borderColor: colors.accent },
+            ]}
+          >
             {iconElement}
           </View>
         ) : null}
@@ -130,14 +155,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: Spacing.lg,
   },
+  statusCardCompact: {
+    padding: Spacing.md,
+  },
   statusContentRow: {
     alignItems: "center",
     flexDirection: "row",
     gap: Spacing.lg,
   },
+  statusContentRowCompact: {
+    gap: Spacing.md,
+  },
   statusDescription: {
     lineHeight: 20,
     marginTop: Spacing.sm,
+  },
+  statusDescriptionCompact: {
+    lineHeight: Typography.fontSize12 * 1.4,
+    marginTop: Spacing.xs,
   },
   statusSideIcon: {
     alignItems: "center",
@@ -148,8 +183,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 42,
   },
+  statusSideIconCompact: {
+    height: 36,
+    width: 36,
+  },
   statusText: {
     flex: 1,
+    minWidth: 0,
+  },
+  statusTitle: {
+    flexShrink: 1,
   },
   statusTitleRow: {
     alignItems: "center",

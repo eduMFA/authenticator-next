@@ -19,6 +19,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type ActionButtonProps = {
   accentColor: string;
+  compact?: boolean;
   icon: IconName;
   isLoading?: boolean;
   label: string;
@@ -28,6 +29,7 @@ type ActionButtonProps = {
 
 export function ActionButton({
   accentColor,
+  compact = false,
   icon,
   isLoading = false,
   label,
@@ -53,12 +55,15 @@ export function ActionButton({
 
   return (
     <AnimatedPressable
+      accessibilityRole="button"
+      accessibilityState={{ busy: isLoading, disabled: isLoading }}
       disabled={isLoading}
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={[
         styles.actionButton,
+        compact && styles.actionButtonCompact,
         {
           backgroundColor: isPrimary ? accentColor : theme.transparent,
           borderColor: isNeutral ? theme.border : accentColor,
@@ -70,12 +75,20 @@ export function ActionButton({
       {isLoading ? (
         <ActivityIndicator color={foregroundColor} />
       ) : (
-        <SymbolView name={icon} size={18} tintColor={foregroundColor} />
+        <SymbolView
+          name={icon}
+          size={compact ? 16 : 18}
+          tintColor={foregroundColor}
+        />
       )}
       <ThemedText
-        fontSize={Typography.fontSize16}
+        fontSize={compact ? Typography.fontSize14 : Typography.fontSize16}
         fontWeight="semiBold"
-        style={[styles.actionLabel, { color: foregroundColor }]}
+        style={[
+          styles.actionLabel,
+          compact && styles.actionLabelCompact,
+          { color: foregroundColor },
+        ]}
       >
         {label}
       </ThemedText>
@@ -95,11 +108,18 @@ const styles = StyleSheet.create({
     minHeight: 56,
     paddingHorizontal: Spacing.lg,
   },
+  actionButtonCompact: {
+    minHeight: 48,
+    paddingHorizontal: Spacing.md,
+  },
   actionButtonLoading: {
     opacity: 0.72,
   },
   actionLabel: {
     lineHeight: Typography.fontSize16 * 1.25,
     textAlign: "center",
+  },
+  actionLabelCompact: {
+    lineHeight: Typography.fontSize14 * 1.25,
   },
 });
