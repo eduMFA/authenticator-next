@@ -5,7 +5,9 @@ import {
   getToken,
   onTokenRefresh,
 } from "@react-native-firebase/messaging";
+import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import { Platform } from "react-native";
 import { create } from "zustand";
 
 type NotificationState = {
@@ -31,6 +33,13 @@ let initializationPromise: Promise<string | null> | null = null;
 
 async function getCurrentFcmToken(): Promise<string | null> {
   await setupNotificationCategories();
+
+  // iOS simulators cannot obtain an APNs token. RNFirebase intentionally skips
+  // registration there, so attempting to register or get an FCM token only rejects.
+  if (Platform.OS === "ios" && !Device.isDevice) {
+    return null;
+  }
+
   return await getToken(getMessaging());
 }
 
