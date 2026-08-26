@@ -40,7 +40,14 @@
       "expo-notifications",
       "expo-router",
       "expo-dev-client",
-      "@react-native-firebase/app",
+      [
+        "@react-native-firebase/app",
+        {
+          "ios": {
+            "disableSPM": true
+          }
+        }
+      ],
       "@react-native-firebase/messaging",
       [
         "@sentry/react-native/expo",
@@ -87,8 +94,7 @@
             "enableShrinkResourcesInReleaseBuilds": true
           },
           "ios": {
-            "useFrameworks": "static",
-            "forceStaticLinking": ["RNFBApp", "RNFBMessaging", "FastSquircle"]
+            "useFrameworks": "dynamic"
           }
         }
       ]
