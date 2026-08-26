@@ -9,16 +9,16 @@ import type {
   NotificationResponseData,
   PushRequestHandler,
 } from "@/types/notification";
-import { i18n } from "@lingui/core";
-import { t } from "@lingui/core/macro";
 import type { PushRequest, PushRequestData } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
+import { i18n } from "@lingui/core";
+import { t } from "@lingui/core/macro";
+import type { RemoteMessage } from "@react-native-firebase/messaging";
 import {
   getMessaging,
   onMessage,
   setBackgroundMessageHandler,
 } from "@react-native-firebase/messaging";
-import type { FirebaseMessagingTypes } from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
@@ -102,9 +102,7 @@ export function validatePushRequestData(
  * Parses a Firebase message into a PushRequest object
  * Returns null if the message is not a valid push authentication notification
  */
-export function parsePushRequest(
-  message: FirebaseMessagingTypes.RemoteMessage,
-): PushRequest | null {
+export function parsePushRequest(message: RemoteMessage): PushRequest | null {
   const { category, data, messageId, sentTime } = message;
 
   // Check if this is a push authentication notification
