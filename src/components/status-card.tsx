@@ -41,7 +41,8 @@ type StatusCardProps = {
   children?: ReactNode;
   icon?: IconName;
   iconPlacement?: "title" | "side";
-  compact?: boolean;
+  maxFontSizeMultiplier?: number;
+  scale?: number;
 };
 
 export function StatusCard({
@@ -51,16 +52,13 @@ export function StatusCard({
   children,
   icon = variantIcons[variant],
   iconPlacement = "title",
-  compact = false,
+  maxFontSizeMultiplier,
+  scale = 1,
 }: StatusCardProps) {
   const theme = useTheme();
   const colors = getVariantColors(variant, theme);
   const iconElement = (
-    <SymbolView
-      name={icon}
-      size={compact ? 16 : 18}
-      tintColor={colors.accent}
-    />
+    <SymbolView name={icon} size={18 * scale} tintColor={colors.accent} />
   );
 
   return (
@@ -70,35 +68,35 @@ export function StatusCard({
       layout={LinearTransition.duration(180).easing(Easing.out(Easing.cubic))}
       style={[
         styles.statusCard,
-        compact && styles.statusCardCompact,
         {
           backgroundColor: colors.background,
           borderColor: colors.accent,
+          padding: Spacing.lg * scale,
         },
       ]}
     >
-      <View
-        style={[
-          styles.statusContentRow,
-          compact && styles.statusContentRowCompact,
-        ]}
-      >
+      <View style={[styles.statusContentRow, { gap: Spacing.lg * scale }]}>
         <View style={styles.statusText}>
           <View style={styles.statusTitleRow}>
             {iconPlacement === "title" ? iconElement : null}
             <ThemedText
-              fontSize={compact ? Typography.fontSize14 : Typography.fontSize16}
+              fontSize={Typography.fontSize16 * scale}
               fontWeight="bold"
+              maxFontSizeMultiplier={maxFontSizeMultiplier}
               style={styles.statusTitle}
             >
               {title}
             </ThemedText>
           </View>
           <ThemedText
-            fontSize={compact ? Typography.fontSize12 : Typography.fontSize14}
+            fontSize={Typography.fontSize14 * scale}
+            maxFontSizeMultiplier={maxFontSizeMultiplier}
             style={[
               styles.statusDescription,
-              compact && styles.statusDescriptionCompact,
+              {
+                lineHeight: Typography.fontSize14 * scale * 1.4,
+                marginTop: Spacing.sm * scale,
+              },
             ]}
           >
             {description}
@@ -109,8 +107,11 @@ export function StatusCard({
           <View
             style={[
               styles.statusSideIcon,
-              compact && styles.statusSideIconCompact,
-              { borderColor: colors.accent },
+              {
+                borderColor: colors.accent,
+                height: 42 * scale,
+                width: 42 * scale,
+              },
             ]}
           >
             {iconElement}
@@ -155,24 +156,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: Spacing.lg,
   },
-  statusCardCompact: {
-    padding: Spacing.md,
-  },
   statusContentRow: {
     alignItems: "center",
     flexDirection: "row",
     gap: Spacing.lg,
   },
-  statusContentRowCompact: {
-    gap: Spacing.md,
-  },
   statusDescription: {
     lineHeight: 20,
     marginTop: Spacing.sm,
-  },
-  statusDescriptionCompact: {
-    lineHeight: Typography.fontSize12 * 1.4,
-    marginTop: Spacing.xs,
   },
   statusSideIcon: {
     alignItems: "center",
@@ -182,10 +173,6 @@ const styles = StyleSheet.create({
     height: 42,
     justifyContent: "center",
     width: 42,
-  },
-  statusSideIconCompact: {
-    height: 36,
-    width: 36,
   },
   statusText: {
     flex: 1,

@@ -8,12 +8,16 @@ import { isLiquidGlassAvailable } from "expo-glass-effect/build/isLiquidGlassAva
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
 
-const ANDROID_TEXT_STYLE = Platform.select({
+const ANDROID_EXPANDED_TEXT_STYLE = Platform.select({
   android: { fontSize: 20 },
+});
+const ANDROID_COMPACT_TEXT_STYLE = Platform.select({
+  android: { fontSize: 16 },
 });
 
 export type UploadQRCodeButtonProps = {
   onQRCodeScanned: (result: Camera.BarcodeScanningResult | null) => void;
+  size?: "compact" | "expanded";
 };
 
 export async function pickAndScanQRCode(
@@ -37,8 +41,10 @@ export async function pickAndScanQRCode(
 
 export function UploadQRCodeButton({
   onQRCodeScanned,
+  size = "expanded",
 }: UploadQRCodeButtonProps) {
   const { t } = useLingui();
+  const isCompact = size === "compact";
 
   return (
     <Host matchContents={{ vertical: true }}>
@@ -51,7 +57,7 @@ export function UploadQRCodeButton({
           buttonStyle(
             isLiquidGlassAvailable() ? "glassProminent" : "borderedProminent",
           ),
-          composeHeight(100),
+          composeHeight(isCompact ? 56 : 100),
         ]}
       >
         <Row alignment="center" spacing={6}>
@@ -63,7 +69,14 @@ export function UploadQRCodeButton({
             })}
             accessibilityLabel={t`QR code scanner`}
           />
-          <Text numberOfLines={1} textStyle={ANDROID_TEXT_STYLE}>
+          <Text
+            numberOfLines={1}
+            textStyle={
+              isCompact
+                ? ANDROID_COMPACT_TEXT_STYLE
+                : ANDROID_EXPANDED_TEXT_STYLE
+            }
+          >
             {t`Upload QR Code`}
           </Text>
           <Spacer flexible />

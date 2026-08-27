@@ -1,4 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
+import { ONBOARDING_MAX_FONT_SIZE_MULTIPLIER } from "@/constants/onboarding";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { SymbolView } from "expo-symbols";
@@ -19,21 +20,21 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type ActionButtonProps = {
   accentColor: string;
-  compact?: boolean;
   icon: IconName;
   isLoading?: boolean;
   label: string;
   onPress: () => void;
+  scale?: number;
   variant?: "neutral" | "primary" | "secondary";
 };
 
 export function ActionButton({
   accentColor,
-  compact = false,
   icon,
   isLoading = false,
   label,
   onPress,
+  scale = 1,
   variant = "primary",
 }: ActionButtonProps) {
   const theme = useTheme();
@@ -63,10 +64,11 @@ export function ActionButton({
       onPressOut={handlePressOut}
       style={[
         styles.actionButton,
-        compact && styles.actionButtonCompact,
         {
           backgroundColor: isPrimary ? accentColor : theme.transparent,
           borderColor: isNeutral ? theme.border : accentColor,
+          minHeight: Math.max(44, 56 * scale),
+          paddingHorizontal: Spacing.lg * scale,
         },
         isLoading && styles.actionButtonLoading,
         animatedStyle,
@@ -75,19 +77,18 @@ export function ActionButton({
       {isLoading ? (
         <ActivityIndicator color={foregroundColor} />
       ) : (
-        <SymbolView
-          name={icon}
-          size={compact ? 16 : 18}
-          tintColor={foregroundColor}
-        />
+        <SymbolView name={icon} size={18 * scale} tintColor={foregroundColor} />
       )}
       <ThemedText
-        fontSize={compact ? Typography.fontSize14 : Typography.fontSize16}
+        fontSize={Typography.fontSize16 * scale}
         fontWeight="semiBold"
+        maxFontSizeMultiplier={ONBOARDING_MAX_FONT_SIZE_MULTIPLIER}
         style={[
           styles.actionLabel,
-          compact && styles.actionLabelCompact,
-          { color: foregroundColor },
+          {
+            color: foregroundColor,
+            lineHeight: Typography.fontSize16 * scale * 1.25,
+          },
         ]}
       >
         {label}
@@ -105,21 +106,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: Spacing.sm,
     justifyContent: "center",
-    minHeight: 56,
-    paddingHorizontal: Spacing.lg,
-  },
-  actionButtonCompact: {
-    minHeight: 48,
-    paddingHorizontal: Spacing.md,
   },
   actionButtonLoading: {
     opacity: 0.72,
   },
   actionLabel: {
-    lineHeight: Typography.fontSize16 * 1.25,
     textAlign: "center",
-  },
-  actionLabelCompact: {
-    lineHeight: Typography.fontSize14 * 1.25,
   },
 });

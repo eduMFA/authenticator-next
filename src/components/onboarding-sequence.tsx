@@ -1,11 +1,18 @@
 import { ThemedText } from "@/components/themed-text";
 import {
+  ONBOARDING_MAX_FONT_SIZE_MULTIPLIER,
   ONBOARDING_PANEL_GAP,
   ONBOARDING_STEP_COUNT,
   onboardingProgressInputRange,
   onboardingStepAccents,
 } from "@/constants/onboarding";
-import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import {
+  getResponsiveScale,
+  Radii,
+  Spacing,
+  StaticColors,
+  Typography,
+} from "@/constants/theme";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore } from "@/stores/settings";
@@ -22,7 +29,6 @@ import {
   BackHandler,
   Linking,
   PanResponder,
-  ScrollView,
   StyleSheet,
   useColorScheme,
   useWindowDimensions,
@@ -48,32 +54,7 @@ import {
 
 const BUTTON_SLIDE_EASING = Easing.inOut(Easing.cubic);
 const SWIPE_SLIDE_EASING = Easing.out(Easing.cubic);
-const HERO_MIN_LAYOUT_HEIGHT = 560;
-const HERO_MAX_LAYOUT_HEIGHT = 1100;
-const HERO_MIN_WRAP_HEIGHT = 132;
-const HERO_MAX_WRAP_HEIGHT = 216;
-const HERO_MIN_BACKGROUND_HEIGHT = 120;
-const HERO_MAX_BACKGROUND_HEIGHT = 200;
-const HERO_MIN_PADDING = Spacing.sm;
-const HERO_MAX_PADDING = Spacing.xl;
-const HERO_MIN_CONTENT_SCALE = 0.6;
-const HERO_MIN_WELCOME_SCALE = 0.72;
-const HERO_MAX_CONTENT_SCALE = 1;
-
-function interpolateClamped(
-  value: number,
-  inputMinimum: number,
-  inputMaximum: number,
-  outputMinimum: number,
-  outputMaximum: number,
-) {
-  const progress = Math.max(
-    0,
-    Math.min(1, (value - inputMinimum) / (inputMaximum - inputMinimum)),
-  );
-
-  return outputMinimum + (outputMaximum - outputMinimum) * progress;
-}
+const VISUAL_CONTENT_WIDTH = 220;
 
 export function OnboardingSequence() {
   const [stepIndex, setStepIndex] = useState(0);
@@ -101,55 +82,11 @@ export function OnboardingSequence() {
   const { bottom, top } = useSafeAreaInsets();
   const { height, width } = useWindowDimensions();
   const usableHeight = height - top - bottom;
-  const isCompactLayout = usableHeight < 720;
-  const heroWrapHeight = interpolateClamped(
-    usableHeight,
-    HERO_MIN_LAYOUT_HEIGHT,
-    HERO_MAX_LAYOUT_HEIGHT,
-    HERO_MIN_WRAP_HEIGHT,
-    HERO_MAX_WRAP_HEIGHT,
+  const layoutScale = getResponsiveScale(width, usableHeight);
+  const visualScale = Math.min(
+    layoutScale,
+    (width - Spacing.xl * 4) / VISUAL_CONTENT_WIDTH,
   );
-  const heroBackgroundHeight = interpolateClamped(
-    usableHeight,
-    HERO_MIN_LAYOUT_HEIGHT,
-    HERO_MAX_LAYOUT_HEIGHT,
-    HERO_MIN_BACKGROUND_HEIGHT,
-    HERO_MAX_BACKGROUND_HEIGHT,
-  );
-  const heroPadding = interpolateClamped(
-    usableHeight,
-    HERO_MIN_LAYOUT_HEIGHT,
-    HERO_MAX_LAYOUT_HEIGHT,
-    HERO_MIN_PADDING,
-    HERO_MAX_PADDING,
-  );
-  const heroContentScale = interpolateClamped(
-    usableHeight,
-    HERO_MIN_LAYOUT_HEIGHT,
-    HERO_MAX_LAYOUT_HEIGHT,
-    HERO_MIN_CONTENT_SCALE,
-    HERO_MAX_CONTENT_SCALE,
-  );
-  const welcomeContentScale = interpolateClamped(
-    usableHeight,
-    HERO_MIN_LAYOUT_HEIGHT,
-    HERO_MAX_LAYOUT_HEIGHT,
-    HERO_MIN_WELCOME_SCALE,
-    HERO_MAX_CONTENT_SCALE,
-  );
-  const kickerFontSize = isCompactLayout
-    ? Typography.fontSize12
-    : Typography.fontSize14;
-  const titleFontSize = interpolateClamped(
-    usableHeight,
-    HERO_MIN_LAYOUT_HEIGHT,
-    720,
-    Typography.fontSize28,
-    Typography.fontSize34,
-  );
-  const bodyFontSize = isCompactLayout
-    ? Typography.fontSize14
-    : Typography.fontSize16;
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
   const steps = useMemo<OnboardingStep[]>(
     () => [
@@ -399,7 +336,6 @@ export function OnboardingSequence() {
       return (
         <NotificationStepActions
           accentColor={contentAccentColor}
-          compact={isCompactLayout}
           isCheckingPermission={isCheckingPermission}
           isRequestingPermission={isRequestingPermission}
           onContinue={handleContinue}
@@ -408,6 +344,7 @@ export function OnboardingSequence() {
           onSkip={handleSkipNotifications}
           hasNotificationPermission={hasNotificationPermission}
           permissionStatus={notificationPermissionStatus}
+          scale={layoutScale}
           textColor={textColor}
         />
       );
@@ -417,9 +354,9 @@ export function OnboardingSequence() {
       return (
         <CrashReportsStepActions
           accentColor={contentAccentColor}
-          compact={isCompactLayout}
           onDecline={handleDeclineCrashReports}
           onOptIn={handleOptInCrashReports}
+          scale={layoutScale}
         />
       );
     }
@@ -427,9 +364,9 @@ export function OnboardingSequence() {
     return (
       <WelcomeStepActions
         accentColor={contentAccentColor}
-        compact={isCompactLayout}
         label={t`Get started`}
         onContinue={handleContinue}
+        scale={layoutScale}
       />
     );
   };
@@ -442,7 +379,7 @@ export function OnboardingSequence() {
           backgroundColor,
           height,
           paddingBottom: bottom,
-          paddingTop: top + (isCompactLayout ? Spacing.md : Spacing.xl),
+          paddingTop: top + Spacing.lg,
         },
       ]}
     >
@@ -480,29 +417,15 @@ export function OnboardingSequence() {
 
             return (
               <View key={contentStep.id} style={[styles.panel, { width }]}>
-                <View
-                  style={[
-                    styles.panelContent,
-                    isCompactLayout && styles.panelContentCompact,
-                  ]}
-                >
-                  <ScrollView
-                    bounces={false}
-                    contentContainerStyle={[
-                      styles.panelBody,
-                      isCompactLayout && styles.panelBodyCompact,
-                    ]}
-                    showsVerticalScrollIndicator={false}
-                    style={styles.panelBodyScroll}
-                  >
-                    <View style={[styles.heroWrap, { height: heroWrapHeight }]}>
+                <View style={styles.panelContent}>
+                  <View style={styles.panelBody}>
+                    <View style={styles.heroWrap}>
                       <View
                         style={[
                           styles.visualCard,
                           {
                             backgroundColor: cardColor,
-                            height: heroBackgroundHeight,
-                            padding: heroPadding,
+                            padding: Spacing.xl,
                           },
                         ]}
                       >
@@ -512,10 +435,7 @@ export function OnboardingSequence() {
                             {
                               transform: [
                                 {
-                                  scale:
-                                    contentStepIndex === 0
-                                      ? welcomeContentScale
-                                      : heroContentScale,
+                                  scale: visualScale,
                                 },
                               ],
                             },
@@ -533,44 +453,57 @@ export function OnboardingSequence() {
                       </View>
                     </View>
 
-                    <View
-                      style={[
-                        styles.copy,
-                        isCompactLayout && styles.copyCompact,
-                      ]}
-                    >
+                    <View style={styles.copy}>
                       <ThemedText
-                        fontSize={kickerFontSize}
+                        fontSize={Typography.fontSize14 * layoutScale}
                         fontWeight="semiBold"
+                        maxFontSizeMultiplier={
+                          ONBOARDING_MAX_FONT_SIZE_MULTIPLIER
+                        }
                         style={[styles.kicker, { color: contentAccentColor }]}
                       >
                         {contentStep.kicker}
                       </ThemedText>
                       <ThemedText
                         adjustsFontSizeToFit
-                        fontSize={titleFontSize}
+                        fontSize={Typography.fontSize34 * layoutScale}
                         fontWeight="bold"
-                        minimumFontScale={Typography.fontSize28 / titleFontSize}
+                        maxFontSizeMultiplier={
+                          ONBOARDING_MAX_FONT_SIZE_MULTIPLIER
+                        }
+                        minimumFontScale={
+                          Typography.fontSize28 /
+                          (Typography.fontSize34 * layoutScale)
+                        }
                         numberOfLines={2}
                         style={[
                           styles.title,
-                          { lineHeight: titleFontSize * 1.1 },
+                          {
+                            lineHeight:
+                              Typography.fontSize34 * layoutScale * 1.1,
+                          },
                         ]}
                       >
                         {contentStep.title}
                       </ThemedText>
                       <ThemedText
                         themeColor="textSecondary"
-                        fontSize={bodyFontSize}
+                        fontSize={Typography.fontSize16 * layoutScale}
+                        maxFontSizeMultiplier={
+                          ONBOARDING_MAX_FONT_SIZE_MULTIPLIER
+                        }
                         style={[
                           styles.body,
-                          { lineHeight: bodyFontSize * 1.45 },
+                          {
+                            lineHeight:
+                              Typography.fontSize16 * layoutScale * 1.45,
+                          },
                         ]}
                       >
                         {contentStep.body}
                       </ThemedText>
                     </View>
-                  </ScrollView>
+                  </View>
 
                   {renderStepActions(contentStepIndex)}
                 </View>
@@ -594,14 +527,14 @@ const styles = StyleSheet.create({
   },
   copy: {
     alignItems: "center",
-    gap: Spacing.md,
-  },
-  copyCompact: {
     gap: Spacing.sm,
   },
   heroWrap: {
     alignItems: "center",
+    flex: 1,
     justifyContent: "center",
+    maxHeight: 160,
+    minHeight: 72,
     width: "100%",
   },
   kicker: {
@@ -615,30 +548,21 @@ const styles = StyleSheet.create({
   },
   panelBody: {
     alignItems: "center",
-    flexGrow: 1,
-    gap: Spacing.xl,
-    justifyContent: "center",
-    width: "100%",
-  },
-  panelBodyCompact: {
-    gap: Spacing.md,
-  },
-  panelBodyScroll: {
     flex: 1,
+    gap: Spacing.md,
+    justifyContent: "center",
+    minHeight: 0,
     width: "100%",
   },
   panelContent: {
-    alignItems: "center",
+    alignSelf: "center",
     flex: 1,
-    gap: Spacing.xl,
+    gap: Spacing.md,
     justifyContent: "space-between",
     maxWidth: 520,
     paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.sm,
     width: "100%",
-  },
-  panelContentCompact: {
-    gap: Spacing.md,
-    paddingBottom: Spacing.xl,
   },
   progressSegment: {
     borderRadius: Radii.sm,
@@ -669,6 +593,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderCurve: "continuous",
     borderRadius: Radii.md,
+    flex: 1,
     justifyContent: "center",
     width: "100%",
   },

@@ -218,3 +218,27 @@ export const StaticColors = {
   black: "#000000",
   grey: "#ADB5BD",
 } as const;
+
+type ResponsiveScaleOptions = {
+  minimum?: number;
+  referenceHeight?: number;
+  referenceWidth?: number;
+};
+
+export function getResponsiveScale(
+  width: number,
+  height: number,
+  {
+    minimum = 0.82,
+    referenceHeight = 850,
+    referenceWidth = 430,
+  }: ResponsiveScaleOptions = {},
+) {
+  return Math.min(
+    1,
+    Math.max(
+      minimum,
+      Math.min(width / referenceWidth, height / referenceHeight),
+    ),
+  );
+}

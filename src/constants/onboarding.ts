@@ -3,6 +3,7 @@ import { Spacing } from "@/constants/theme";
 export type OnboardingStepAccent = { light: string; dark: string };
 
 export const ONBOARDING_PANEL_GAP = Spacing.xl * 3;
+export const ONBOARDING_MAX_FONT_SIZE_MULTIPLIER = 1.15;
 
 export const onboardingStepAccents: OnboardingStepAccent[] = [
   { light: "#0066FF", dark: "#58A6FF" },
