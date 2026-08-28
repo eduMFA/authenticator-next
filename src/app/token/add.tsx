@@ -16,9 +16,10 @@ import { Trans } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AppState,
+  type LayoutChangeEvent,
   Platform,
   StyleSheet,
   useWindowDimensions,
@@ -38,8 +39,15 @@ export default function AddToken() {
   const theme = useTheme();
   const { height, width } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
-  const layoutScale = getResponsiveScale(width, height - top - bottom);
+  const [contentSize, setContentSize] = useState({
+    height: height - top - bottom,
+    width,
+  });
+  const layoutScale = getResponsiveScale(contentSize.width, contentSize.height);
   const uploadButtonSize = layoutScale < 0.95 ? "compact" : "expanded";
+  const contentGap = Spacing.lg + Spacing.sm * layoutScale;
+  const contentTopPadding =
+    Platform.OS === "ios" ? 56 + Spacing.md : Spacing.md;
   const borderColor = theme.border;
   const transparentColor = theme.transparent;
   const tabBarBackgroundColor = theme.background;
@@ -83,6 +91,22 @@ export default function AddToken() {
   const shouldShowPermissionSplash =
     !permission?.granted && (permission?.canAskAgain ?? true);
 
+  const handleContentLayout = useCallback((event: LayoutChangeEvent) => {
+    const { height: contentHeight, width: contentWidth } =
+      event.nativeEvent.layout;
+
+    setContentSize((currentSize) => {
+      if (
+        currentSize.height === contentHeight &&
+        currentSize.width === contentWidth
+      ) {
+        return currentSize;
+      }
+
+      return { height: contentHeight, width: contentWidth };
+    });
+  }, []);
+
   const content = shouldShowPermissionSplash ? (
     <CameraPermissionSplash
       disabled={isRequestingPermission}
@@ -91,39 +115,53 @@ export default function AddToken() {
       }}
     />
   ) : (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header} collapsable={false}>
-        <ThemedText
-          fontWeight="bold"
-          fontSize={Typography.fontSize28 * layoutScale}
-          maxFontSizeMultiplier={1.15}
-          style={styles.title}
-        >
-          <Trans>Pair new Push Token</Trans>
-        </ThemedText>
-      </View>
-      <View style={styles.scanner}>
-        <QRCodeScanner
-          permission={permission}
+    <SafeAreaView edges={["bottom", "left", "right"]} style={styles.safeArea}>
+      <View
+        style={[
+          styles.container,
+          {
+            gap: contentGap,
+            paddingTop: contentTopPadding,
+          },
+        ]}
+      >
+        <View collapsable={false}>
+          <ThemedText
+            fontWeight="bold"
+            fontSize={Typography.fontSize28 * layoutScale}
+            maxFontSizeMultiplier={1.15}
+            style={styles.title}
+          >
+            <Trans>Pair new Push Token</Trans>
+          </ThemedText>
+        </View>
+        <View style={styles.scanner}>
+          <QRCodeScanner
+            permission={permission}
+            onQRCodeScanned={handleQRCodeScanned}
+          />
+        </View>
+        <View style={[styles.splitter, { gap: Spacing.lg * layoutScale }]}>
+          <View
+            style={[styles.splitterLine, { backgroundColor: borderColor }]}
+          />
+          <ThemedText
+            style={{ color: borderColor }}
+            fontSize={Typography.fontSize16 * layoutScale}
+            fontWeight="bold"
+            maxFontSizeMultiplier={1.15}
+          >
+            <Trans>OR</Trans>
+          </ThemedText>
+          <View
+            style={[styles.splitterLine, { backgroundColor: borderColor }]}
+          />
+        </View>
+        <UploadQRCodeButton
           onQRCodeScanned={handleQRCodeScanned}
+          size={uploadButtonSize}
         />
       </View>
-      <View style={[styles.splitter, { gap: Spacing.lg * layoutScale }]}>
-        <View style={[styles.splitterLine, { backgroundColor: borderColor }]} />
-        <ThemedText
-          style={{ color: borderColor }}
-          fontSize={Typography.fontSize16 * layoutScale}
-          fontWeight="bold"
-          maxFontSizeMultiplier={1.15}
-        >
-          <Trans>OR</Trans>
-        </ThemedText>
-        <View style={[styles.splitterLine, { backgroundColor: borderColor }]} />
-      </View>
-      <UploadQRCodeButton
-        onQRCodeScanned={handleQRCodeScanned}
-        size={uploadButtonSize}
-      />
     </SafeAreaView>
   );
 
@@ -137,6 +175,7 @@ export default function AddToken() {
         />
       </Stack.Toolbar>
       <ThemedView
+        onLayout={handleContentLayout}
         style={styles.sheet}
         type={isLiquidGlassAvailable() ? "transparent" : "background"}
       >
@@ -149,11 +188,12 @@ export default function AddToken() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    gap: Spacing.lg,
+    paddingBottom: Spacing.lg,
     paddingHorizontal: Spacing.xl,
-    paddingTop: Spacing.sm,
   },
-  header: {},
+  safeArea: {
+    flex: 1,
+  },
   scanner: {
     borderRadius: Radii.xl,
     flex: 1,

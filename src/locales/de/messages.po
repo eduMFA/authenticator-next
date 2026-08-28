@@ -245,11 +245,11 @@ msgstr "Einstellungen öffnen"
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
-#: src/app/token/add.tsx:119
+#: src/app/token/add.tsx:154
 msgid "OR"
 msgstr "ODER"
 
-#: src/app/token/add.tsx:102
+#: src/app/token/add.tsx:135
 msgid "Pair new Push Token"
 msgstr "Neues Push-Token koppeln"
 
