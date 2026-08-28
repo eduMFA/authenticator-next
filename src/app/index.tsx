@@ -445,7 +445,10 @@ export default function Tokens() {
 
   const androidAddFab =
     Platform.OS === "android" ? (
-      <AndroidHost matchContents style={styles.fabHost}>
+      <AndroidHost
+        matchContents
+        style={[styles.fabHost, { bottom: bottom + Spacing.lg }]}
+      >
         <Box modifiers={[imePadding()]}>
           <ExtendedFloatingActionButton
             expanded={tokens.length === 0}
@@ -642,7 +645,6 @@ export const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
   },
   fabHost: {
-    bottom: Spacing.lg,
     position: "absolute",
     right: Spacing.lg,
     zIndex: 10,

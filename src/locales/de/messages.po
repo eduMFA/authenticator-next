@@ -25,13 +25,13 @@ msgstr "Akzeptieren"
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"
 
-#: src/app/index.tsx:460
-#: src/app/index.tsx:520
-#: src/app/index.tsx:522
+#: src/app/index.tsx:463
+#: src/app/index.tsx:523
+#: src/app/index.tsx:525
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:492
+#: src/app/index.tsx:495
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -39,7 +39,7 @@ msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem
 msgid "Allow camera access"
 msgstr "Kamerazugriff erlauben"
 
-#: src/components/onboarding-sequence/step-actions.tsx:144
+#: src/components/onboarding-sequence/step-actions.tsx:152
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
@@ -63,11 +63,11 @@ msgstr "Kamerazugriff ist deaktiviert"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/components/onboarding-sequence.tsx:174
+#: src/components/onboarding-sequence.tsx:111
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
 
-#: src/components/onboarding-sequence/step-actions.tsx:80
+#: src/components/onboarding-sequence/step-actions.tsx:81
 #: src/components/token-add/camera-permission-splash.tsx:64
 msgid "Continue"
 msgstr "Weiter"
@@ -77,7 +77,7 @@ msgid "Decline"
 msgstr "Ablehnen"
 
 #: src/app/index.tsx:253
-#: src/app/token/[tokenId].tsx:192
+#: src/app/token/[tokenId].tsx:200
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Löschen"
@@ -98,12 +98,12 @@ msgstr "Details"
 msgid "Dismiss"
 msgstr "Schließen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:151
+#: src/components/onboarding-sequence/step-actions.tsx:159
 msgid "Don't share anonymous reports"
 msgstr "Anonyme Berichte nicht teilen"
 
 #: src/app/index.tsx:239
-#: src/app/token/[tokenId].tsx:184
+#: src/app/token/[tokenId].tsx:192
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -115,11 +115,11 @@ msgstr "Token bearbeiten"
 msgid "Enable camera access in Settings to scan QR codes."
 msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen."
 
-#: src/components/onboarding-sequence/step-actions.tsx:115
+#: src/components/onboarding-sequence/step-actions.tsx:122
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:615
+#: src/app/index.tsx:618
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -131,7 +131,7 @@ msgstr "Registriert"
 msgid "Enrollment response failed"
 msgstr "Registrierungsantwort fehlgeschlagen"
 
-#: src/app/token/[tokenId].tsx:122
+#: src/app/token/[tokenId].tsx:130
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
@@ -149,23 +149,23 @@ msgstr "Registrierung wird abgeschlossen"
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
-#: src/components/onboarding-sequence.tsx:167
+#: src/components/onboarding-sequence.tsx:104
 msgid "Get notified when a sign-in needs your approval."
 msgstr "Lass dich benachrichtigen, wenn eine Anmeldung deine Genehmigung erfordert."
 
-#: src/components/onboarding-sequence.tsx:431
+#: src/components/onboarding-sequence.tsx:367
 msgid "Get started"
 msgstr "Loslegen"
 
-#: src/components/onboarding-sequence.tsx:173
+#: src/components/onboarding-sequence.tsx:110
 msgid "Help improve eduMFA"
 msgstr "Hilf, eduMFA zu verbessern"
 
-#: src/components/onboarding-sequence/step-actions.tsx:141
+#: src/components/onboarding-sequence/step-actions.tsx:148
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 msgstr "Teile Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Sie enthalten niemals Token-Geheimnisse, Passwörter oder Namen von Einrichtungen."
 
-#: src/components/onboarding-sequence.tsx:160
+#: src/components/onboarding-sequence.tsx:97
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 msgstr "Bewahre deine Authentifizierungs-Token an einem Ort auf und genehmige Anmeldungen sicher von diesem Gerät aus."
 
@@ -179,7 +179,7 @@ msgstr "Schlüsselgenerierung fehlgeschlagen"
 msgid "Label"
 msgstr "Bezeichnung"
 
-#: src/app/token/[tokenId].tsx:122
+#: src/app/token/[tokenId].tsx:130
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
@@ -187,7 +187,7 @@ msgstr "Bezeichnung erforderlich"
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
 
-#: src/components/onboarding-sequence.tsx:166
+#: src/components/onboarding-sequence.tsx:103
 msgid "Never miss a sign-in request"
 msgstr "Keine Anmeldeanfrage verpassen"
 
@@ -199,27 +199,27 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:581
+#: src/app/index.tsx:584
 msgid "No tokens found"
 msgstr "Keine Token gefunden"
 
-#: src/app/index.tsx:484
+#: src/app/index.tsx:487
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
-#: src/components/onboarding-sequence/step-actions.tsx:103
+#: src/components/onboarding-sequence/step-actions.tsx:108
 msgid "Not now"
 msgstr "Nicht jetzt"
 
-#: src/components/onboarding-sequence.tsx:165
+#: src/components/onboarding-sequence.tsx:102
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:614
+#: src/app/index.tsx:617
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
-#: src/components/onboarding-sequence/step-actions.tsx:73
+#: src/components/onboarding-sequence/step-actions.tsx:74
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
@@ -227,7 +227,7 @@ msgstr "Benachrichtigungen sind aktiviert"
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
-#: src/components/onboarding-sequence/step-actions.tsx:100
+#: src/components/onboarding-sequence/step-actions.tsx:102
 msgid "Open notification settings"
 msgstr "Benachrichtigungseinstellungen öffnen"
 
@@ -239,11 +239,11 @@ msgstr "Einstellungen öffnen"
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
-#: src/app/token/add.tsx:98
+#: src/app/token/add.tsx:119
 msgid "OR"
 msgstr "ODER"
 
-#: src/app/token/add.tsx:83
+#: src/app/token/add.tsx:102
 msgid "Pair new Push Token"
 msgstr "Neues Push-Token koppeln"
 
@@ -255,7 +255,7 @@ msgstr "Ausstehend"
 msgid "Place the QR code inside the frame"
 msgstr "Platziere den QR-Code im Rahmen"
 
-#: src/components/token-add/upload-qr-code-button.tsx:64
+#: src/components/token-add/upload-qr-code-button.tsx:70
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
@@ -264,7 +264,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:624
+#: src/app/index.tsx:627
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -300,7 +300,7 @@ msgstr "Rollout läuft..."
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
-#: src/app/token/[tokenId].tsx:177
+#: src/app/token/[tokenId].tsx:185
 msgid "Save"
 msgstr "Speichern"
 
@@ -324,11 +324,11 @@ msgstr "Servernachricht"
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:158
+#: src/components/onboarding-sequence/step-actions.tsx:166
 msgid "Share anonymous reports"
 msgstr "Anonyme Berichte teilen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:93
+#: src/components/onboarding-sequence/step-actions.tsx:95
 msgid "Sign-in requests may go unnoticed"
 msgstr "Anmeldeanfragen können unbemerkt bleiben"
 
@@ -380,11 +380,11 @@ msgstr "Token"
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldeaktivitäten werden hier angezeigt."
 
-#: src/app/index.tsx:588
+#: src/app/index.tsx:591
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
 
-#: src/components/onboarding-sequence/step-actions.tsx:92
+#: src/components/onboarding-sequence/step-actions.tsx:93
 msgid "Turn on notifications in Settings so you can respond when a request arrives."
 msgstr "Aktiviere Benachrichtigungen in den Einstellungen, damit du reagieren kannst, sobald eine Anfrage eingeht."
 
@@ -392,15 +392,15 @@ msgstr "Aktiviere Benachrichtigungen in den Einstellungen, damit du reagieren ka
 msgid "Update the display name for this token."
 msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 
-#: src/components/token-add/upload-qr-code-button.tsx:67
+#: src/components/token-add/upload-qr-code-button.tsx:80
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#: src/components/onboarding-sequence.tsx:158
+#: src/components/onboarding-sequence.tsx:95
 msgid "Welcome"
 msgstr "Willkommen"
 
-#: src/components/onboarding-sequence.tsx:159
+#: src/components/onboarding-sequence.tsx:96
 msgid "Welcome to eduMFA"
 msgstr "Willkommen bei eduMFA"
 
@@ -408,7 +408,7 @@ msgstr "Willkommen bei eduMFA"
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "Du kannst jetzt Anmeldeanfragen empfangen und freigeben."
 
-#: src/components/onboarding-sequence.tsx:172
+#: src/components/onboarding-sequence.tsx:109
 msgid "Your choice"
 msgstr "Deine Wahl"
 

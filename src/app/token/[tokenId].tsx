@@ -25,11 +25,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 function TokenScrollView({
   animationKey,
   children,
+  contentBottomInset,
   contentTopInset,
   keyboardShouldPersistTaps,
 }: {
   animationKey: string;
   children: ReactNode;
+  contentBottomInset: number;
   contentTopInset: number;
   keyboardShouldPersistTaps?: "always" | "handled" | "never";
 }) {
@@ -40,7 +42,13 @@ function TokenScrollView({
     <Animated.ScrollView
       key={animationKey}
       automaticallyAdjustContentInsets
-      contentContainerStyle={[styles.content, { paddingTop: contentTopInset }]}
+      contentContainerStyle={[
+        styles.content,
+        {
+          paddingBottom: Spacing.xl + contentBottomInset,
+          paddingTop: contentTopInset,
+        },
+      ]}
       contentInsetAdjustmentBehavior="automatic"
       entering={FadeIn.duration(180)}
       exiting={FadeOut.duration(120)}
@@ -63,7 +71,7 @@ export default function TokenDetails() {
   const token = tokens.find((item) => item.id === tokenId);
   const router = useRouter();
   const colorScheme = useColorScheme() || "light";
-  const { top } = useSafeAreaInsets();
+  const { bottom, top } = useSafeAreaInsets();
   const { t } = useLingui();
   const theme = useTheme();
   const transparentColor = theme.transparent;
@@ -203,6 +211,7 @@ export default function TokenDetails() {
       {!token ? null : isEditingActive && activeEditableFields ? (
         <TokenScrollView
           animationKey="edit"
+          contentBottomInset={Platform.OS === "android" ? bottom : 0}
           contentTopInset={Platform.OS === "android" ? top : 0}
           keyboardShouldPersistTaps="handled"
         >
@@ -215,6 +224,7 @@ export default function TokenDetails() {
       ) : (
         <TokenScrollView
           animationKey="overview"
+          contentBottomInset={Platform.OS === "android" ? bottom : 0}
           contentTopInset={Platform.OS === "android" ? top : 0}
         >
           <TokenOverviewContent token={token} onRetryRollout={retryRollout} />
@@ -227,7 +237,6 @@ export default function TokenDetails() {
 const styles = StyleSheet.create({
   content: {
     gap: Spacing.xl,
-    paddingBottom: Spacing.xl,
     paddingHorizontal: Spacing.xl,
   },
   scroll: {
