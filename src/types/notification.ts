@@ -1,6 +1,9 @@
 import type { PushRequest, PushRequestData } from "@/types/push-request";
 import type * as Notifications from "expo-notifications";
 
+export type PushNotificationCapability =
+  "supported" | "ios-simulator" | "google-play-services-unavailable";
+
 export type NotificationAction = "ACCEPT" | "DECLINE" | "TAP";
 
 export type NotificationResponseData = {

@@ -1,8 +1,10 @@
 import { notificationPermissionOptions } from "@/constants/notification";
+import type { PushNotificationCapability } from "@/types/notification";
 import { setupNotificationCategories } from "@/utils/notification";
 import {
   getMessaging,
   getToken,
+  isSupported,
   onTokenRefresh,
 } from "@react-native-firebase/messaging";
 import * as Device from "expo-device";
@@ -15,6 +17,7 @@ type NotificationState = {
   isInitialized: boolean;
   isInitializing: boolean;
   permissionStatus: Notifications.NotificationPermissionsStatus | null;
+  pushCapability: PushNotificationCapability | null;
 };
 
 type NotificationActions = {
@@ -31,16 +34,29 @@ type NotificationStore = NotificationState & NotificationActions;
 let tokenRefreshUnsubscribe: (() => void) | null = null;
 let initializationPromise: Promise<string | null> | null = null;
 
-async function getCurrentFcmToken(): Promise<string | null> {
-  await setupNotificationCategories();
-
-  // iOS simulators cannot obtain an APNs token. RNFirebase intentionally skips
-  // registration there, so attempting to register or get an FCM token only rejects.
+async function getPushCapability(): Promise<PushNotificationCapability> {
   if (Platform.OS === "ios" && !Device.isDevice) {
-    return null;
+    return "ios-simulator";
   }
 
-  return await getToken(getMessaging());
+  if (Platform.OS === "android" && !(await isSupported(getMessaging()))) {
+    return "google-play-services-unavailable";
+  }
+
+  return "supported";
+}
+
+async function getPushRegistration(): Promise<{
+  capability: PushNotificationCapability;
+  token: string | null;
+}> {
+  await setupNotificationCategories();
+  const capability = await getPushCapability();
+
+  return {
+    capability,
+    token: capability === "supported" ? await getToken(getMessaging()) : null,
+  };
 }
 
 function subscribeToTokenRefresh(setFcmToken: (token: string) => void) {
@@ -56,6 +72,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   isInitialized: false,
   isInitializing: false,
   permissionStatus: null,
+  pushCapability: null,
 
   /**
    * Initialize notification system - should only be called once at app startup
@@ -81,7 +98,8 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
 
     initializationPromise = (async () => {
       const settings = await Notifications.getPermissionsAsync();
-      const token = await getCurrentFcmToken();
+      const { capability: pushCapability, token } = await getPushRegistration();
+      console.log("Push capability:", pushCapability);
 
       if (!token) {
         console.warn("Failed to get FCM token");
@@ -90,6 +108,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
           isInitializing: false,
           isInitialized: true,
           permissionStatus: settings,
+          pushCapability,
         });
         return null;
       }
@@ -101,6 +120,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
         isInitialized: true,
         isInitializing: false,
         permissionStatus: settings,
+        pushCapability,
       });
 
       subscribeToTokenRefresh((newToken) => set({ fcmToken: newToken }));
@@ -122,9 +142,9 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
   checkPermissions: async () => {
     try {
       const settings = await Notifications.getPermissionsAsync();
-      const token = await getCurrentFcmToken();
+      const { capability: pushCapability, token } = await getPushRegistration();
 
-      set({ fcmToken: token, permissionStatus: settings });
+      set({ fcmToken: token, permissionStatus: settings, pushCapability });
 
       return settings;
     } catch (error) {
@@ -174,6 +194,7 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       isInitialized: false,
       isInitializing: false,
       permissionStatus: null,
+      pushCapability: null,
     });
   },
 }));

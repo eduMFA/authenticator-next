@@ -1,6 +1,7 @@
 import { StatusCard } from "@/components/status-card";
 import { ONBOARDING_MAX_FONT_SIZE_MULTIPLIER } from "@/constants/onboarding";
 import { Spacing } from "@/constants/theme";
+import type { PushNotificationCapability } from "@/types/notification";
 import { isNotificationPermissionPending } from "@/utils/notification";
 import { useLingui } from "@lingui/react/macro";
 import * as Notifications from "expo-notifications";
@@ -44,6 +45,7 @@ type NotificationStepActionsProps = {
   onOpenSettings: () => void;
   onSkip: () => void;
   permissionStatus: Notifications.NotificationPermissionsStatus | null;
+  pushCapability: PushNotificationCapability | null;
   scale: number;
   textColor: ColorValue;
 };
@@ -58,12 +60,35 @@ export function NotificationStepActions({
   onOpenSettings,
   onSkip,
   permissionStatus,
+  pushCapability,
   scale,
   textColor,
 }: NotificationStepActionsProps) {
   const { t } = useLingui();
   const hasNotificationDecision =
     !isNotificationPermissionPending(permissionStatus);
+
+  if (pushCapability === "google-play-services-unavailable") {
+    return (
+      <View style={styles.buttonStack}>
+        <StatusCard
+          description={t`Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests.`}
+          icon={{ ios: "arrow.down.circle.fill", android: "refresh" }}
+          maxFontSizeMultiplier={ONBOARDING_MAX_FONT_SIZE_MULTIPLIER}
+          scale={scale}
+          title={t`Pull to refresh for requests`}
+          variant="danger"
+        />
+        <ActionButton
+          accentColor={accentColor}
+          icon={{ ios: "arrow.right", android: "arrow_forward" }}
+          label={t`Continue`}
+          onPress={onContinue}
+          scale={scale}
+        />
+      </View>
+    );
+  }
 
   if (hasNotificationsEnabled) {
     return (

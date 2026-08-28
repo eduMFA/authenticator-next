@@ -44,6 +44,7 @@ import { imePadding } from "@expo/ui/jetpack-compose/modifiers";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
+import * as Linking from "expo-linking";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { useCallback, useMemo, useState } from "react";
@@ -51,6 +52,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   RefreshControl,
   StyleSheet,
   useWindowDimensions,
@@ -75,6 +77,7 @@ export default function Tokens() {
   const {
     hasPermission: hasNotificationPermission,
     isInitialized: isNotificationInitialized,
+    pushCapability,
   } = useNotificationStatus();
   const [isManualRefreshPolling, setIsManualRefreshPolling] = useState(false);
   const { width } = useWindowDimensions();
@@ -102,7 +105,16 @@ export default function Tokens() {
   const emptyStateButtonWidth = Math.min(320, width - Spacing.xl * 2);
   const showToolbarAddButton = tokens.length > 0;
   const showNotificationNotice =
-    isNotificationInitialized && !hasNotificationPermission;
+    isNotificationInitialized &&
+    (!hasNotificationPermission ||
+      pushCapability === "google-play-services-unavailable");
+  const handleOpenNotificationSettings = useCallback(() => {
+    Linking.openSettings().catch((error: unknown) => {
+      if (__DEV__) {
+        console.warn("Could not open notification settings:", error);
+      }
+    });
+  }, []);
   const stackHeaderStyle = useMemo(
     () => ({
       backgroundColor: isLiquidGlassAvailable()
@@ -612,11 +624,31 @@ export default function Tokens() {
           ListHeaderComponent={
             showNotificationNotice && !searchQuery ? (
               <View style={styles.notificationNotice}>
-                <StatusCard
-                  variant="danger"
-                  title={t`Notifications are disabled`}
-                  description={t`Enable notifications to receive push approval requests on this device.`}
-                />
+                <Pressable
+                  disabled={
+                    pushCapability === "google-play-services-unavailable"
+                  }
+                  onPress={handleOpenNotificationSettings}
+                >
+                  <StatusCard
+                    variant="danger"
+                    title={
+                      pushCapability === "google-play-services-unavailable"
+                        ? t`Pull to refresh for requests`
+                        : t`Notifications are disabled`
+                    }
+                    description={
+                      pushCapability === "google-play-services-unavailable"
+                        ? t`Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests.`
+                        : t`Enable notifications to receive push approval requests on this device.`
+                    }
+                    icon={
+                      pushCapability === "google-play-services-unavailable"
+                        ? { ios: "arrow.down.circle.fill", android: "refresh" }
+                        : undefined
+                    }
+                  />
+                </Pressable>
               </View>
             ) : null
           }

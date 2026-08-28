@@ -66,6 +66,7 @@ export function OnboardingSequence() {
     getFcmToken,
     hasPermission: hasNotificationPermission,
     permissionStatus: notificationPermissionStatus,
+    pushCapability,
     requestPermissions: requestNotificationPermission,
   } = useNotificationStatus();
   const completeOnboarding = useSettingsStore(
@@ -345,6 +346,7 @@ export function OnboardingSequence() {
           hasNotificationPermission={hasNotificationPermission}
           permissionStatus={notificationPermissionStatus}
           scale={layoutScale}
+          pushCapability={pushCapability}
           textColor={textColor}
         />
       );
