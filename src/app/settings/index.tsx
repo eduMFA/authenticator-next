@@ -18,6 +18,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 function openUrl(url: string): void {
   void Linking.openURL(url);
@@ -26,6 +27,7 @@ function openUrl(url: string): void {
 export default function SettingsScreen() {
   const router = useRouter();
   const { t } = useLingui();
+  const { bottom } = useSafeAreaInsets();
   const theme = useTheme();
   const crashReportsEnabled = useSettingsStore(
     (state) => state.crashReportsEnabled,
@@ -56,7 +58,10 @@ export default function SettingsScreen() {
     <>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: Spacing.md * 2 + bottom },
+        ]}
       >
         <Section title={t`Appearance`}>
           <SettingsRow
@@ -228,7 +233,6 @@ const styles = StyleSheet.create({
   content: {
     gap: Spacing.xl,
     padding: Spacing.lg,
-    paddingBottom: Spacing.xl * 2,
   },
   divider: {
     height: StyleSheet.hairlineWidth,

@@ -5,9 +5,11 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import * as Linking from "expo-linking";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function LicenseScreen() {
   const { t } = useLingui();
+  const { bottom } = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const item = OPEN_SOURCE_LICENSES.find((license) => license.id === id);
 
@@ -16,7 +18,10 @@ export default function LicenseScreen() {
       <>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
-          contentContainerStyle={styles.content}
+          contentContainerStyle={[
+            styles.content,
+            { paddingBottom: Spacing.xl * 2 + bottom },
+          ]}
         >
           <ThemedText selectable>
             <Trans>License information is unavailable.</Trans>
@@ -34,7 +39,10 @@ export default function LicenseScreen() {
     <>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: Spacing.xl * 2 + bottom },
+        ]}
       >
         <ThemedText fontSize={Typography.fontSize20} fontWeight="semiBold">
           {item.name}
@@ -67,7 +75,6 @@ const styles = StyleSheet.create({
   content: {
     gap: Spacing.md,
     padding: Spacing.lg,
-    paddingBottom: Spacing.xl * 2,
   },
   licenseText: {
     fontFamily: "ui-monospace",

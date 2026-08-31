@@ -7,18 +7,23 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { FlatList, Pressable, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function LicensesScreen() {
   const router = useRouter();
   const theme = useTheme();
   const { t } = useLingui();
+  const { bottom } = useSafeAreaInsets();
   const licenseCount = OPEN_SOURCE_LICENSES.length;
 
   return (
     <>
       <FlatList
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: Spacing.xl * 2 + bottom },
+        ]}
         data={OPEN_SOURCE_LICENSES}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
@@ -83,7 +88,6 @@ export default function LicensesScreen() {
 const styles = StyleSheet.create({
   content: {
     padding: Spacing.lg,
-    paddingBottom: Spacing.xl * 2,
   },
   detail: {
     alignItems: "flex-end",
