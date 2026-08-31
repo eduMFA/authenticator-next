@@ -38,6 +38,7 @@ export function useNotificationStatus() {
   const permissionStatus = useNotificationStore(
     (state) => state.permissionStatus,
   );
+  const pushCapability = useNotificationStore((state) => state.pushCapability);
   const initialize = useNotificationStore((state) => state.initialize);
   const checkPermissions = useNotificationStore(
     (state) => state.checkPermissions,
@@ -58,6 +59,7 @@ export function useNotificationStatus() {
     isInitialized,
     isInitializing,
     permissionStatus,
+    pushCapability,
     requestPermissions,
     reset,
   };

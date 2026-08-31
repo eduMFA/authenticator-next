@@ -41,6 +41,8 @@ type StatusCardProps = {
   children?: ReactNode;
   icon?: IconName;
   iconPlacement?: "title" | "side";
+  maxFontSizeMultiplier?: number;
+  scale?: number;
 };
 
 export function StatusCard({
@@ -50,11 +52,13 @@ export function StatusCard({
   children,
   icon = variantIcons[variant],
   iconPlacement = "title",
+  maxFontSizeMultiplier,
+  scale = 1,
 }: StatusCardProps) {
   const theme = useTheme();
   const colors = getVariantColors(variant, theme);
   const iconElement = (
-    <SymbolView name={icon} size={18} tintColor={colors.accent} />
+    <SymbolView name={icon} size={18 * scale} tintColor={colors.accent} />
   );
 
   return (
@@ -67,27 +71,49 @@ export function StatusCard({
         {
           backgroundColor: colors.background,
           borderColor: colors.accent,
+          padding: Spacing.lg * scale,
         },
       ]}
     >
-      <View style={styles.statusContentRow}>
+      <View style={[styles.statusContentRow, { gap: Spacing.lg * scale }]}>
         <View style={styles.statusText}>
           <View style={styles.statusTitleRow}>
             {iconPlacement === "title" ? iconElement : null}
-            <ThemedText fontSize={Typography.fontSize16} fontWeight="bold">
+            <ThemedText
+              fontSize={Typography.fontSize16 * scale}
+              fontWeight="bold"
+              maxFontSizeMultiplier={maxFontSizeMultiplier}
+              style={styles.statusTitle}
+            >
               {title}
             </ThemedText>
           </View>
           <ThemedText
-            fontSize={Typography.fontSize14}
-            style={styles.statusDescription}
+            fontSize={Typography.fontSize14 * scale}
+            maxFontSizeMultiplier={maxFontSizeMultiplier}
+            style={[
+              styles.statusDescription,
+              {
+                lineHeight: Typography.fontSize14 * scale * 1.4,
+                marginTop: Spacing.sm * scale,
+              },
+            ]}
           >
             {description}
           </ThemedText>
           {children}
         </View>
         {iconPlacement === "side" ? (
-          <View style={[styles.statusSideIcon, { borderColor: colors.accent }]}>
+          <View
+            style={[
+              styles.statusSideIcon,
+              {
+                borderColor: colors.accent,
+                height: 42 * scale,
+                width: 42 * scale,
+              },
+            ]}
+          >
             {iconElement}
           </View>
         ) : null}
@@ -150,6 +176,10 @@ const styles = StyleSheet.create({
   },
   statusText: {
     flex: 1,
+    minWidth: 0,
+  },
+  statusTitle: {
+    flexShrink: 1,
   },
   statusTitleRow: {
     alignItems: "center",

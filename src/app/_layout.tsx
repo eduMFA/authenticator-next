@@ -157,7 +157,15 @@ function RootLayoutContent() {
   }
 
   if (!hasCompletedOnboarding) {
-    return <OnboardingSequence />;
+    return (
+      <>
+        <StatusBar
+          backgroundColor={theme.background}
+          barStyle={statusBarStyle}
+        />
+        <OnboardingSequence />
+      </>
+    );
   }
 
   return (

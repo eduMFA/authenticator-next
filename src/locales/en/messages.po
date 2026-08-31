@@ -17,7 +17,7 @@ msgstr ""
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} requests are waiting. Review each one separately."
 
-#: src/app/settings/index.tsx:113
+#: src/app/settings/index.tsx:122
 msgid "About"
 msgstr "About"
 
@@ -29,13 +29,13 @@ msgstr "Accept"
 msgid "Activity Log"
 msgstr "Activity Log"
 
-#: src/app/index.tsx:470
-#: src/app/index.tsx:530
-#: src/app/index.tsx:532
+#: src/app/index.tsx:485
+#: src/app/index.tsx:545
+#: src/app/index.tsx:547
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:502
+#: src/app/index.tsx:517
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
@@ -43,11 +43,11 @@ msgstr "Add your first eduMFA token to approve sign-ins securely from this devic
 msgid "Allow camera access"
 msgstr "Allow camera access"
 
-#: src/components/onboarding-sequence/step-actions.tsx:131
+#: src/components/onboarding-sequence/step-actions.tsx:177
 msgid "Anonymous reports"
 msgstr "Anonymous reports"
 
-#: src/app/settings/index.tsx:60
+#: src/app/settings/index.tsx:61
 msgid "Appearance"
 msgstr "Appearance"
 
@@ -59,7 +59,7 @@ msgstr "Approve"
 msgid "Are you sure you want to delete this token?"
 msgstr "Are you sure you want to delete this token?"
 
-#: src/app/settings/index.tsx:49
+#: src/app/settings/index.tsx:50
 msgid "Automatic"
 msgstr "Automatic"
 
@@ -75,25 +75,26 @@ msgstr "Camera access is turned off"
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/app/settings/index.tsx:106
+#: src/app/settings/index.tsx:115
 msgid "Change the app language in system settings"
 msgstr "Change the app language in system settings"
 
-#: src/components/onboarding-sequence.tsx:97
+#: src/components/onboarding-sequence.tsx:112
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Choose whether to share anonymous crash and error reports."
 
-#: src/components/onboarding-sequence/step-actions.tsx:73
+#: src/components/onboarding-sequence/step-actions.tsx:85
+#: src/components/onboarding-sequence/step-actions.tsx:106
 #: src/components/token-add/camera-permission-splash.tsx:64
 msgid "Continue"
 msgstr "Continue"
 
-#: src/app/settings/index.tsx:155
-#: src/app/settings/index.tsx:158
+#: src/app/settings/index.tsx:167
+#: src/app/settings/index.tsx:173
 msgid "Crash and error reports"
 msgstr "Crash and error reports"
 
-#: src/app/settings/index.tsx:51
+#: src/app/settings/index.tsx:52
 msgid "Dark"
 msgstr "Dark"
 
@@ -101,8 +102,8 @@ msgstr "Dark"
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:254
-#: src/app/token/[tokenId].tsx:192
+#: src/app/index.tsx:266
+#: src/app/token/[tokenId].tsx:200
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
 msgstr "Delete"
@@ -124,11 +125,15 @@ msgid "Dismiss"
 msgstr "Dismiss"
 
 #: src/components/onboarding-sequence/step-actions.tsx:137
-msgid "Do not share reports"
-msgstr "Do not share reports"
+#~ msgid "Do not share reports"
+#~ msgstr "Do not share reports"
 
-#: src/app/index.tsx:240
-#: src/app/token/[tokenId].tsx:184
+#: src/components/onboarding-sequence/step-actions.tsx:184
+msgid "Don't share anonymous reports"
+msgstr "Don't share anonymous reports"
+
+#: src/app/index.tsx:252
+#: src/app/token/[tokenId].tsx:192
 msgid "Edit"
 msgstr "Edit"
 
@@ -144,15 +149,15 @@ msgstr "eduMFA uses {licenseCount} open-source packages. Package details are gen
 msgid "Enable camera access in Settings to scan QR codes."
 msgstr "Enable camera access in Settings to scan QR codes."
 
-#: src/components/onboarding-sequence/step-actions.tsx:105
+#: src/components/onboarding-sequence/step-actions.tsx:147
 msgid "Enable notifications"
 msgstr "Enable notifications"
 
 #: src/components/onboarding-sequence.tsx:90
-msgid "Enable notifications to receive approval requests."
-msgstr "Enable notifications to receive approval requests."
+#~ msgid "Enable notifications to receive approval requests."
+#~ msgstr "Enable notifications to receive approval requests."
 
-#: src/app/index.tsx:625
+#: src/app/index.tsx:653
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Enable notifications to receive push approval requests on this device."
 
@@ -164,7 +169,7 @@ msgstr "Enrolled"
 msgid "Enrollment response failed"
 msgstr "Enrollment response failed"
 
-#: src/app/token/[tokenId].tsx:122
+#: src/app/token/[tokenId].tsx:130
 msgid "Enter a label for this token."
 msgstr "Enter a label for this token."
 
@@ -178,7 +183,7 @@ msgstr "Failed to add token"
 msgid "Finalizing enrollment"
 msgstr "Finalizing enrollment"
 
-#: src/app/settings/index.tsx:92
+#: src/app/settings/index.tsx:99
 msgid "General"
 msgstr "General"
 
@@ -186,28 +191,37 @@ msgstr "General"
 msgid "Generating keys"
 msgstr "Generating keys"
 
-#: src/components/onboarding-sequence.tsx:332
+#: src/components/onboarding-sequence.tsx:105
+msgid "Get notified when a sign-in needs your approval."
+msgstr "Get notified when a sign-in needs your approval."
+
+#: src/components/onboarding-sequence.tsx:369
 msgid "Get started"
 msgstr "Get started"
 
-#: src/app/settings/index.tsx:134
+#: src/app/settings/index.tsx:146
 msgid "GitHub"
 msgstr "GitHub"
 
-#: src/app/settings/index.tsx:95
-#: src/app/settings/index.tsx:98
+#: src/app/index.tsx:652
+#: src/components/onboarding-sequence/step-actions.tsx:75
+msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
+msgstr "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
+
+#: src/app/settings/index.tsx:102
+#: src/app/settings/index.tsx:108
 msgid "Haptics"
 msgstr "Haptics"
 
-#: src/components/onboarding-sequence.tsx:96
+#: src/components/onboarding-sequence.tsx:111
 msgid "Help improve eduMFA"
 msgstr "Help improve eduMFA"
 
-#: src/components/onboarding-sequence/step-actions.tsx:128
+#: src/components/onboarding-sequence/step-actions.tsx:173
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 msgstr "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 
-#: src/components/onboarding-sequence.tsx:83
+#: src/components/onboarding-sequence.tsx:98
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 msgstr "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 
@@ -221,11 +235,11 @@ msgstr "Key generation failed"
 msgid "Label"
 msgstr "Label"
 
-#: src/app/token/[tokenId].tsx:122
+#: src/app/token/[tokenId].tsx:130
 msgid "Label required"
 msgstr "Label required"
 
-#: src/app/settings/index.tsx:108
+#: src/app/settings/index.tsx:117
 msgid "Language"
 msgstr "Language"
 
@@ -241,11 +255,11 @@ msgstr "License"
 msgid "License information is unavailable."
 msgstr "License information is unavailable."
 
-#: src/app/settings/index.tsx:50
+#: src/app/settings/index.tsx:51
 msgid "Light"
 msgstr "Light"
 
-#: src/components/onboarding-sequence.tsx:89
+#: src/components/onboarding-sequence.tsx:104
 msgid "Never miss a sign-in request"
 msgstr "Never miss a sign-in request"
 
@@ -257,27 +271,27 @@ msgstr "No interactions yet"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:591
+#: src/app/index.tsx:606
 msgid "No tokens found"
 msgstr "No tokens found"
 
-#: src/app/index.tsx:494
+#: src/app/index.tsx:509
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
-#: src/components/onboarding-sequence/step-actions.tsx:94
+#: src/components/onboarding-sequence/step-actions.tsx:133
 msgid "Not now"
 msgstr "Not now"
 
-#: src/components/onboarding-sequence.tsx:88
+#: src/components/onboarding-sequence.tsx:103
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/app/index.tsx:624
+#: src/app/index.tsx:648
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
-#: src/components/onboarding-sequence/step-actions.tsx:67
+#: src/components/onboarding-sequence/step-actions.tsx:99
 msgid "Notifications are enabled"
 msgstr "Notifications are enabled"
 
@@ -285,7 +299,7 @@ msgstr "Notifications are enabled"
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Only approve if you started this sign-in. If you are unsure, deny it."
 
-#: src/components/onboarding-sequence/step-actions.tsx:91
+#: src/components/onboarding-sequence/step-actions.tsx:127
 msgid "Open notification settings"
 msgstr "Open notification settings"
 
@@ -297,16 +311,16 @@ msgstr "Open Settings"
 msgid "Open with your Authenticator App"
 msgstr "Open with your Authenticator App"
 
-#: src/app/settings/index.tsx:146
+#: src/app/settings/index.tsx:158
 #: src/app/settings/licenses.tsx:78
 msgid "Open-source licenses"
 msgstr "Open-source licenses"
 
-#: src/app/token/add.tsx:98
+#: src/app/token/add.tsx:154
 msgid "OR"
 msgstr "OR"
 
-#: src/app/token/add.tsx:83
+#: src/app/token/add.tsx:135
 msgid "Pair new Push Token"
 msgstr "Pair new Push Token"
 
@@ -318,11 +332,11 @@ msgstr "Pending"
 msgid "Place the QR code inside the frame"
 msgstr "Place the QR code inside the frame"
 
-#: src/app/settings/index.tsx:151
+#: src/app/settings/index.tsx:163
 msgid "Privacy"
 msgstr "Privacy"
 
-#: src/app/settings/index.tsx:128
+#: src/app/settings/index.tsx:137
 msgid "Privacy policy"
 msgstr "Privacy policy"
 
@@ -330,7 +344,12 @@ msgstr "Privacy policy"
 msgid "Project website"
 msgstr "Project website"
 
-#: src/components/token-add/upload-qr-code-button.tsx:64
+#: src/app/index.tsx:647
+#: src/components/onboarding-sequence/step-actions.tsx:79
+msgid "Pull to refresh for requests"
+msgstr "Pull to refresh for requests"
+
+#: src/components/token-add/upload-qr-code-button.tsx:70
 msgid "QR code scanner"
 msgstr "QR code scanner"
 
@@ -339,7 +358,7 @@ msgstr "QR code scanner"
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:634
+#: src/app/index.tsx:669
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
@@ -355,14 +374,14 @@ msgstr "Registration failed"
 msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
-#: src/app/index.tsx:234
+#: src/app/index.tsx:246
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
-#: src/app/settings/index.tsx:116
+#: src/app/settings/index.tsx:125
 msgid "Review eduMFA"
 msgstr "Review eduMFA"
 
@@ -379,7 +398,7 @@ msgstr "Rolling out..."
 msgid "Rollout Failed"
 msgstr "Rollout Failed"
 
-#: src/app/token/[tokenId].tsx:177
+#: src/app/token/[tokenId].tsx:185
 msgid "Save"
 msgstr "Save"
 
@@ -387,11 +406,11 @@ msgstr "Save"
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:299
+#: src/app/index.tsx:311
 msgid "Search tokens"
 msgstr "Search tokens"
 
-#: src/app/settings/index.tsx:153
+#: src/app/settings/index.tsx:165
 msgid "Send anonymized crash and error diagnostics"
 msgstr "Send anonymized crash and error diagnostics"
 
@@ -407,15 +426,15 @@ msgstr "Server message"
 msgid "Server registration failed"
 msgstr "Server registration failed"
 
-#: src/app/settings/index.tsx:175
+#: src/app/settings/index.tsx:189
 msgid "Settings"
 msgstr "Settings"
 
-#: src/components/onboarding-sequence/step-actions.tsx:143
+#: src/components/onboarding-sequence/step-actions.tsx:191
 msgid "Share anonymous reports"
 msgstr "Share anonymous reports"
 
-#: src/components/onboarding-sequence/step-actions.tsx:85
+#: src/components/onboarding-sequence/step-actions.tsx:120
 msgid "Sign-in requests may go unnoticed"
 msgstr "Sign-in requests may go unnoticed"
 
@@ -443,7 +462,7 @@ msgstr "The server response could not be parsed or did not include the expected 
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 
-#: src/app/settings/index.tsx:61
+#: src/app/settings/index.tsx:64
 msgid "Theme"
 msgstr "Theme"
 
@@ -471,11 +490,11 @@ msgstr "Token"
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token approvals, denials, refresh events, and enrollment activity will appear here."
 
-#: src/app/index.tsx:598
+#: src/app/index.tsx:613
 msgid "Try another token name, issuer, or serial number."
 msgstr "Try another token name, issuer, or serial number."
 
-#: src/components/onboarding-sequence/step-actions.tsx:84
+#: src/components/onboarding-sequence/step-actions.tsx:118
 msgid "Turn on notifications in Settings so you can respond when a request arrives."
 msgstr "Turn on notifications in Settings so you can respond when a request arrives."
 
@@ -483,7 +502,7 @@ msgstr "Turn on notifications in Settings so you can respond when a request arri
 msgid "Update the display name for this token."
 msgstr "Update the display name for this token."
 
-#: src/components/token-add/upload-qr-code-button.tsx:67
+#: src/components/token-add/upload-qr-code-button.tsx:80
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
 
@@ -491,23 +510,23 @@ msgstr "Upload QR Code"
 msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
 
-#: src/app/settings/index.tsx:140
+#: src/app/settings/index.tsx:152
 msgid "Website"
 msgstr "Website"
 
-#: src/components/onboarding-sequence.tsx:81
+#: src/components/onboarding-sequence.tsx:96
 msgid "Welcome"
 msgstr "Welcome"
 
-#: src/components/onboarding-sequence.tsx:82
+#: src/components/onboarding-sequence.tsx:97
 msgid "Welcome to eduMFA"
 msgstr "Welcome to eduMFA"
 
-#: src/components/onboarding-sequence/step-actions.tsx:66
+#: src/components/onboarding-sequence/step-actions.tsx:97
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "You’re ready to receive and approve sign-in requests."
 
-#: src/components/onboarding-sequence.tsx:95
+#: src/components/onboarding-sequence.tsx:110
 msgid "Your choice"
 msgstr "Your choice"
 

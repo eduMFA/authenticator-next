@@ -3,7 +3,12 @@ import { ThemedView } from "@/components/themed-view";
 import { CameraPermissionSplash } from "@/components/token-add/camera-permission-splash";
 import QRCodeScanner from "@/components/token-add/qr-code-scanner";
 import { UploadQRCodeButton } from "@/components/token-add/upload-qr-code-button";
-import { Radii, Spacing, Typography } from "@/constants/theme";
+import {
+  getResponsiveScale,
+  Radii,
+  Spacing,
+  Typography,
+} from "@/constants/theme";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
 import { useTheme } from "@/hooks/use-theme";
 import ArrowBackSymbol from "@expo/material-symbols/arrow_back.xml";
@@ -11,9 +16,19 @@ import { Trans } from "@lingui/react/macro";
 import * as Camera from "expo-camera";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Stack, useRouter } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
-import { AppState, Platform, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  AppState,
+  type LayoutChangeEvent,
+  Platform,
+  StyleSheet,
+  useWindowDimensions,
+  View,
+} from "react-native";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 export default function AddToken() {
   const router = useRouter();
@@ -22,6 +37,17 @@ export default function AddToken() {
     Camera.useCameraPermissions({});
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
   const theme = useTheme();
+  const { height, width } = useWindowDimensions();
+  const { bottom, top } = useSafeAreaInsets();
+  const [contentSize, setContentSize] = useState({
+    height: height - top - bottom,
+    width,
+  });
+  const layoutScale = getResponsiveScale(contentSize.width, contentSize.height);
+  const uploadButtonSize = layoutScale < 0.95 ? "compact" : "expanded";
+  const contentGap = Spacing.lg + Spacing.sm * layoutScale;
+  const contentTopPadding =
+    Platform.OS === "ios" ? 56 + Spacing.md : Spacing.md;
   const borderColor = theme.border;
   const transparentColor = theme.transparent;
   const tabBarBackgroundColor = theme.background;
@@ -65,6 +91,22 @@ export default function AddToken() {
   const shouldShowPermissionSplash =
     !permission?.granted && (permission?.canAskAgain ?? true);
 
+  const handleContentLayout = useCallback((event: LayoutChangeEvent) => {
+    const { height: contentHeight, width: contentWidth } =
+      event.nativeEvent.layout;
+
+    setContentSize((currentSize) => {
+      if (
+        currentSize.height === contentHeight &&
+        currentSize.width === contentWidth
+      ) {
+        return currentSize;
+      }
+
+      return { height: contentHeight, width: contentWidth };
+    });
+  }, []);
+
   const content = shouldShowPermissionSplash ? (
     <CameraPermissionSplash
       disabled={isRequestingPermission}
@@ -73,33 +115,53 @@ export default function AddToken() {
       }}
     />
   ) : (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header} collapsable={false}>
-        <ThemedText
-          fontWeight="bold"
-          fontSize={Typography.fontSize28}
-          style={styles.title}
-        >
-          <Trans>Pair new Push Token</Trans>
-        </ThemedText>
-      </View>
-      <View style={styles.scanner}>
-        <QRCodeScanner
-          permission={permission}
+    <SafeAreaView edges={["bottom", "left", "right"]} style={styles.safeArea}>
+      <View
+        style={[
+          styles.container,
+          {
+            gap: contentGap,
+            paddingTop: contentTopPadding,
+          },
+        ]}
+      >
+        <View collapsable={false}>
+          <ThemedText
+            fontWeight="bold"
+            fontSize={Typography.fontSize28 * layoutScale}
+            maxFontSizeMultiplier={1.15}
+            style={styles.title}
+          >
+            <Trans>Pair new Push Token</Trans>
+          </ThemedText>
+        </View>
+        <View style={styles.scanner}>
+          <QRCodeScanner
+            permission={permission}
+            onQRCodeScanned={handleQRCodeScanned}
+          />
+        </View>
+        <View style={[styles.splitter, { gap: Spacing.lg * layoutScale }]}>
+          <View
+            style={[styles.splitterLine, { backgroundColor: borderColor }]}
+          />
+          <ThemedText
+            style={{ color: borderColor }}
+            fontSize={Typography.fontSize16 * layoutScale}
+            fontWeight="bold"
+            maxFontSizeMultiplier={1.15}
+          >
+            <Trans>OR</Trans>
+          </ThemedText>
+          <View
+            style={[styles.splitterLine, { backgroundColor: borderColor }]}
+          />
+        </View>
+        <UploadQRCodeButton
           onQRCodeScanned={handleQRCodeScanned}
+          size={uploadButtonSize}
         />
       </View>
-      <View style={styles.splitter}>
-        <View style={[styles.splitterLine, { backgroundColor: borderColor }]} />
-        <ThemedText
-          style={[styles.splitterText, { color: borderColor }]}
-          fontWeight="bold"
-        >
-          <Trans>OR</Trans>
-        </ThemedText>
-        <View style={[styles.splitterLine, { backgroundColor: borderColor }]} />
-      </View>
-      <UploadQRCodeButton onQRCodeScanned={handleQRCodeScanned} />
     </SafeAreaView>
   );
 
@@ -113,6 +175,7 @@ export default function AddToken() {
         />
       </Stack.Toolbar>
       <ThemedView
+        onLayout={handleContentLayout}
         style={styles.sheet}
         type={isLiquidGlassAvailable() ? "transparent" : "background"}
       >
@@ -124,18 +187,17 @@ export default function AddToken() {
 
 const styles = StyleSheet.create({
   container: {
-    alignContent: "center",
     flex: 1,
-    justifyContent: "center",
-    marginTop: Platform.select({ ios: 0, android: 30 }),
+    paddingBottom: Spacing.lg,
     paddingHorizontal: Spacing.xl,
   },
-  header: {
-    marginBottom: Spacing.lg,
+  safeArea: {
+    flex: 1,
   },
   scanner: {
     borderRadius: Radii.xl,
-    height: 300,
+    flex: 1,
+    minHeight: 200,
     overflow: "hidden",
     width: "100%",
   },
@@ -145,14 +207,10 @@ const styles = StyleSheet.create({
   splitter: {
     alignItems: "center",
     flexDirection: "row",
-    marginVertical: 16,
   },
   splitterLine: {
     flex: 1,
     height: 1,
-  },
-  splitterText: {
-    marginHorizontal: Spacing.lg,
   },
   title: {
     textAlign: "center",

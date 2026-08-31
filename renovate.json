@@ -1,5 +1,31 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "schedule": ["monthly"]
+  "schedule": ["monthly"],
+  "packageRules": [
+    {
+      "description": "Let Expo manage SDK-compatible dependencies",
+      "matchPackageNames": [
+        "expo",
+        "/^expo-/",
+        "/^@expo\\//",
+        "react",
+        "react-dom",
+        "react-native",
+        "react-native-reanimated",
+        "react-native-safe-area-context",
+        "react-native-screens",
+        "react-native-worklets",
+        "@react-native-async-storage/async-storage",
+        "@sentry/react-native",
+        "@types/jest",
+        "@types/react",
+        "eslint-config-expo",
+        "jest",
+        "jest-expo",
+        "typescript"
+      ],
+      "enabled": false
+    }
+  ]
 }

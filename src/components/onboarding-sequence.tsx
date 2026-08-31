@@ -1,11 +1,18 @@
 import { ThemedText } from "@/components/themed-text";
 import {
+  ONBOARDING_MAX_FONT_SIZE_MULTIPLIER,
   ONBOARDING_PANEL_GAP,
   ONBOARDING_STEP_COUNT,
   onboardingProgressInputRange,
   onboardingStepAccents,
 } from "@/constants/onboarding";
-import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
+import {
+  getResponsiveScale,
+  Radii,
+  Spacing,
+  StaticColors,
+  Typography,
+} from "@/constants/theme";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore } from "@/stores/settings";
@@ -19,9 +26,9 @@ import { useLingui } from "@lingui/react/macro";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AppState,
+  BackHandler,
   Linking,
   PanResponder,
-  ScrollView,
   StyleSheet,
   useColorScheme,
   useWindowDimensions,
@@ -47,6 +54,7 @@ import {
 
 const BUTTON_SLIDE_EASING = Easing.inOut(Easing.cubic);
 const SWIPE_SLIDE_EASING = Easing.out(Easing.cubic);
+const VISUAL_CONTENT_WIDTH = 220;
 
 export function OnboardingSequence() {
   const [stepIndex, setStepIndex] = useState(0);
@@ -58,6 +66,7 @@ export function OnboardingSequence() {
     getFcmToken,
     hasPermission: hasNotificationPermission,
     permissionStatus: notificationPermissionStatus,
+    pushCapability,
     requestPermissions: requestNotificationPermission,
   } = useNotificationStatus();
   const completeOnboarding = useSettingsStore(
@@ -73,6 +82,12 @@ export function OnboardingSequence() {
   const borderColor = theme.border;
   const { bottom, top } = useSafeAreaInsets();
   const { height, width } = useWindowDimensions();
+  const usableHeight = height - top - bottom;
+  const layoutScale = getResponsiveScale(width, usableHeight);
+  const visualScale = Math.min(
+    layoutScale,
+    (width - Spacing.xl * 4) / VISUAL_CONTENT_WIDTH,
+  );
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
   const steps = useMemo<OnboardingStep[]>(
     () => [
@@ -87,7 +102,7 @@ export function OnboardingSequence() {
         id: "notifications",
         kicker: t`Notifications`,
         title: t`Never miss a sign-in request`,
-        body: t`Enable notifications to receive approval requests.`,
+        body: t`Get notified when a sign-in needs your approval.`,
         accent: onboardingStepAccents[1],
       },
       {
@@ -216,6 +231,25 @@ export function OnboardingSequence() {
   }, []);
 
   useEffect(() => {
+    if (process.env.EXPO_OS !== "android" || stepIndex === 0) {
+      return;
+    }
+
+    const subscription = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        playHaptic((presets) => presets.System.impactLight());
+        goToStep(stepIndex - 1, SWIPE_SLIDE_EASING);
+        return true;
+      },
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, [goToStep, stepIndex]);
+
+  useEffect(() => {
     if (stepIndex !== 1) {
       return;
     }
@@ -311,6 +345,8 @@ export function OnboardingSequence() {
           onSkip={handleSkipNotifications}
           hasNotificationPermission={hasNotificationPermission}
           permissionStatus={notificationPermissionStatus}
+          scale={layoutScale}
+          pushCapability={pushCapability}
           textColor={textColor}
         />
       );
@@ -322,6 +358,7 @@ export function OnboardingSequence() {
           accentColor={contentAccentColor}
           onDecline={handleDeclineCrashReports}
           onOptIn={handleOptInCrashReports}
+          scale={layoutScale}
         />
       );
     }
@@ -331,6 +368,7 @@ export function OnboardingSequence() {
         accentColor={contentAccentColor}
         label={t`Get started`}
         onContinue={handleContinue}
+        scale={layoutScale}
       />
     );
   };
@@ -343,7 +381,7 @@ export function OnboardingSequence() {
           backgroundColor,
           height,
           paddingBottom: bottom,
-          paddingTop: top + Spacing.xl,
+          paddingTop: top + Spacing.lg,
         },
       ]}
     >
@@ -382,58 +420,92 @@ export function OnboardingSequence() {
             return (
               <View key={contentStep.id} style={[styles.panel, { width }]}>
                 <View style={styles.panelContent}>
-                  <ScrollView
-                    bounces={false}
-                    contentContainerStyle={styles.panelBody}
-                    showsVerticalScrollIndicator={false}
-                    style={styles.panelBodyScroll}
-                  >
+                  <View style={styles.panelBody}>
                     <View style={styles.heroWrap}>
                       <View
                         style={[
                           styles.visualCard,
-                          contentStepIndex === 0 && styles.welcomeVisualCard,
                           {
                             backgroundColor: cardColor,
-                            borderColor,
+                            padding: Spacing.xl,
                           },
                         ]}
                       >
-                        {contentStepIndex === 0 ? (
-                          <WelcomeVisualContent logoColor={logoColor} />
-                        ) : (
-                          <VisualCardContent
-                            accentColor={contentAccentColor}
-                            index={contentStepIndex}
-                          />
-                        )}
+                        <View
+                          style={[
+                            styles.visualContentFrame,
+                            {
+                              transform: [
+                                {
+                                  scale: visualScale,
+                                },
+                              ],
+                            },
+                          ]}
+                        >
+                          {contentStepIndex === 0 ? (
+                            <WelcomeVisualContent logoColor={logoColor} />
+                          ) : (
+                            <VisualCardContent
+                              accentColor={contentAccentColor}
+                              index={contentStepIndex}
+                            />
+                          )}
+                        </View>
                       </View>
                     </View>
 
                     <View style={styles.copy}>
                       <ThemedText
-                        fontSize={Typography.fontSize14}
+                        fontSize={Typography.fontSize14 * layoutScale}
                         fontWeight="semiBold"
+                        maxFontSizeMultiplier={
+                          ONBOARDING_MAX_FONT_SIZE_MULTIPLIER
+                        }
                         style={[styles.kicker, { color: contentAccentColor }]}
                       >
                         {contentStep.kicker}
                       </ThemedText>
                       <ThemedText
-                        fontSize={Typography.fontSize34}
+                        adjustsFontSizeToFit
+                        fontSize={Typography.fontSize34 * layoutScale}
                         fontWeight="bold"
-                        style={styles.title}
+                        maxFontSizeMultiplier={
+                          ONBOARDING_MAX_FONT_SIZE_MULTIPLIER
+                        }
+                        minimumFontScale={
+                          Typography.fontSize28 /
+                          (Typography.fontSize34 * layoutScale)
+                        }
+                        numberOfLines={2}
+                        style={[
+                          styles.title,
+                          {
+                            lineHeight:
+                              Typography.fontSize34 * layoutScale * 1.1,
+                          },
+                        ]}
                       >
                         {contentStep.title}
                       </ThemedText>
                       <ThemedText
                         themeColor="textSecondary"
-                        fontSize={Typography.fontSize16}
-                        style={styles.body}
+                        fontSize={Typography.fontSize16 * layoutScale}
+                        maxFontSizeMultiplier={
+                          ONBOARDING_MAX_FONT_SIZE_MULTIPLIER
+                        }
+                        style={[
+                          styles.body,
+                          {
+                            lineHeight:
+                              Typography.fontSize16 * layoutScale * 1.45,
+                          },
+                        ]}
                       >
                         {contentStep.body}
                       </ThemedText>
                     </View>
-                  </ScrollView>
+                  </View>
 
                   {renderStepActions(contentStepIndex)}
                 </View>
@@ -457,12 +529,14 @@ const styles = StyleSheet.create({
   },
   copy: {
     alignItems: "center",
-    gap: Spacing.md,
+    gap: Spacing.sm,
   },
   heroWrap: {
     alignItems: "center",
-    height: 188,
+    flex: 1,
     justifyContent: "center",
+    maxHeight: 160,
+    minHeight: 72,
     width: "100%",
   },
   kicker: {
@@ -476,22 +550,20 @@ const styles = StyleSheet.create({
   },
   panelBody: {
     alignItems: "center",
-    flexGrow: 1,
-    gap: Spacing.xl,
-    justifyContent: "center",
-    width: "100%",
-  },
-  panelBodyScroll: {
     flex: 1,
+    gap: Spacing.md,
+    justifyContent: "center",
+    minHeight: 0,
     width: "100%",
   },
   panelContent: {
-    alignItems: "center",
+    alignSelf: "center",
     flex: 1,
-    gap: Spacing.xl,
+    gap: Spacing.md,
     justifyContent: "space-between",
     maxWidth: 520,
     paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.sm,
     width: "100%",
   },
   progressSegment: {
@@ -523,14 +595,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderCurve: "continuous",
     borderRadius: Radii.md,
-    borderWidth: 1,
-    height: 172,
+    flex: 1,
     justifyContent: "center",
-    padding: Spacing.lg,
     width: "100%",
   },
-  welcomeVisualCard: {
-    borderWidth: 0,
-    paddingVertical: Spacing.sm,
+  visualContentFrame: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

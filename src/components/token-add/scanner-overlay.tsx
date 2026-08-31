@@ -120,11 +120,12 @@ const styles = StyleSheet.create({
     top: 0,
   },
   scanWindow: {
+    aspectRatio: 1,
     backgroundColor: scanWindowBackgroundColor,
     borderColor: scanWindowBorderColor,
     borderRadius: Radii.xl,
     borderWidth: 1,
-    height: 188,
-    width: 188,
+    maxWidth: 240,
+    width: "60%",
   },
 });
