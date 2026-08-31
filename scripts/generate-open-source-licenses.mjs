@@ -47,9 +47,23 @@ function repositoryUrl(packageJson) {
 }
 
 function licenseText(packageDirectory, packageJson) {
-  const licenseFile = readdirSync(packageDirectory).find((fileName) =>
-    /^(licen[cs]e|copying|notice)(\..*)?$/i.test(fileName),
-  );
+  const licenseFile = readdirSync(packageDirectory)
+    .filter((fileName) =>
+      /^(licen[cs]e|copying|notice)(\..*)?$/i.test(fileName),
+    )
+    .sort((left, right) => {
+      const priority = (fileName) => {
+        if (/^licen[cs]e(\..*)?$/i.test(fileName)) {
+          return 0;
+        }
+        if (/^copying(\..*)?$/i.test(fileName)) {
+          return 1;
+        }
+        return 2;
+      };
+
+      return priority(left) - priority(right) || left.localeCompare(right);
+    })[0];
 
   if (licenseFile) {
     return readFileSync(join(packageDirectory, licenseFile), "utf8").trim();
