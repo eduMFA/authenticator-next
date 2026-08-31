@@ -124,10 +124,6 @@ msgstr "Details"
 msgid "Dismiss"
 msgstr "Schließen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:137
-#~ msgid "Do not share reports"
-#~ msgstr "Berichte nicht teilen"
-
 #: src/components/onboarding-sequence/step-actions.tsx:184
 msgid "Don't share anonymous reports"
 msgstr "Anonyme Berichte nicht teilen"
@@ -152,10 +148,6 @@ msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen
 #: src/components/onboarding-sequence/step-actions.tsx:147
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
-
-#: src/components/onboarding-sequence.tsx:90
-#~ msgid "Enable notifications to receive approval requests."
-#~ msgstr "Aktiviere Benachrichtigungen, um Freigabeanfragen zu erhalten."
 
 #: src/app/index.tsx:653
 msgid "Enable notifications to receive push approval requests on this device."
