@@ -17,7 +17,7 @@ msgstr ""
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
-#: src/app/settings/index.tsx:122
+#: src/app/settings/index.tsx:127
 msgid "About"
 msgstr "Über"
 
@@ -47,7 +47,7 @@ msgstr "Kamerazugriff erlauben"
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
-#: src/app/settings/index.tsx:61
+#: src/app/settings/index.tsx:66
 msgid "Appearance"
 msgstr "Darstellung"
 
@@ -59,7 +59,7 @@ msgstr "Freigeben"
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
 
-#: src/app/settings/index.tsx:50
+#: src/app/settings/index.tsx:52
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -75,7 +75,7 @@ msgstr "Kamerazugriff ist deaktiviert"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: src/app/settings/index.tsx:115
+#: src/app/settings/index.tsx:120
 msgid "Change the app language in system settings"
 msgstr "App-Sprache in den Systemeinstellungen ändern"
 
@@ -89,12 +89,12 @@ msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest
 msgid "Continue"
 msgstr "Weiter"
 
-#: src/app/settings/index.tsx:167
-#: src/app/settings/index.tsx:173
+#: src/app/settings/index.tsx:172
+#: src/app/settings/index.tsx:178
 msgid "Crash and error reports"
 msgstr "Absturz- und Fehlerberichte"
 
-#: src/app/settings/index.tsx:52
+#: src/app/settings/index.tsx:54
 msgid "Dark"
 msgstr "Dunkel"
 
@@ -141,7 +141,7 @@ msgstr "Bearbeiten"
 msgid "Edit token"
 msgstr "Token bearbeiten"
 
-#: src/app/settings/licenses.tsx:26
+#: src/app/settings/licenses.tsx:31
 msgid "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
 msgstr "eduMFA verwendet {licenseCount} Open-Source-Pakete. Die Paketdetails werden aus den installierten Produktionsabhängigkeiten generiert."
 
@@ -183,7 +183,7 @@ msgstr "Token konnte nicht hinzugefügt werden"
 msgid "Finalizing enrollment"
 msgstr "Registrierung wird abgeschlossen"
 
-#: src/app/settings/index.tsx:99
+#: src/app/settings/index.tsx:104
 msgid "General"
 msgstr "Allgemein"
 
@@ -199,7 +199,7 @@ msgstr "Lass dich benachrichtigen, wenn eine Anmeldung deine Genehmigung erforde
 msgid "Get started"
 msgstr "Loslegen"
 
-#: src/app/settings/index.tsx:146
+#: src/app/settings/index.tsx:151
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -208,8 +208,8 @@ msgstr "GitHub"
 msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
 msgstr "Google Play-Dienste sind nicht verfügbar, daher können Anfragen nicht automatisch eingehen. Ziehe die Token-Liste nach unten, um nach ausstehenden Anfragen zu suchen."
 
-#: src/app/settings/index.tsx:102
-#: src/app/settings/index.tsx:108
+#: src/app/settings/index.tsx:107
+#: src/app/settings/index.tsx:113
 msgid "Haptics"
 msgstr "Haptik"
 
@@ -239,7 +239,7 @@ msgstr "Bezeichnung"
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
-#: src/app/settings/index.tsx:117
+#: src/app/settings/index.tsx:122
 msgid "Language"
 msgstr "Sprache"
 
@@ -247,15 +247,15 @@ msgstr "Sprache"
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
 
-#: src/app/settings/license.tsx:25
+#: src/app/settings/license.tsx:30
 msgid "License"
 msgstr "Lizenz"
 
-#: src/app/settings/license.tsx:22
+#: src/app/settings/license.tsx:27
 msgid "License information is unavailable."
 msgstr "Lizenzinformationen sind nicht verfügbar."
 
-#: src/app/settings/index.tsx:51
+#: src/app/settings/index.tsx:53
 msgid "Light"
 msgstr "Hell"
 
@@ -311,8 +311,8 @@ msgstr "Einstellungen öffnen"
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
-#: src/app/settings/index.tsx:158
-#: src/app/settings/licenses.tsx:78
+#: src/app/settings/index.tsx:163
+#: src/app/settings/licenses.tsx:83
 msgid "Open-source licenses"
 msgstr "Open-Source-Lizenzen"
 
@@ -332,15 +332,15 @@ msgstr "Ausstehend"
 msgid "Place the QR code inside the frame"
 msgstr "Platziere den QR-Code im Rahmen"
 
-#: src/app/settings/index.tsx:163
+#: src/app/settings/index.tsx:168
 msgid "Privacy"
 msgstr "Datenschutz"
 
-#: src/app/settings/index.tsx:137
+#: src/app/settings/index.tsx:142
 msgid "Privacy policy"
 msgstr "Datenschutzerklärung"
 
-#: src/app/settings/license.tsx:53
+#: src/app/settings/license.tsx:61
 msgid "Project website"
 msgstr "Projektwebsite"
 
@@ -381,7 +381,7 @@ msgstr "Antwortverarbeitung fehlgeschlagen"
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
-#: src/app/settings/index.tsx:125
+#: src/app/settings/index.tsx:130
 msgid "Review eduMFA"
 msgstr "eduMFA bewerten"
 
@@ -410,7 +410,7 @@ msgstr "Authenticator-Apps suchen"
 msgid "Search tokens"
 msgstr "Token suchen"
 
-#: src/app/settings/index.tsx:165
+#: src/app/settings/index.tsx:170
 msgid "Send anonymized crash and error diagnostics"
 msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
 
@@ -426,7 +426,7 @@ msgstr "Servernachricht"
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
-#: src/app/settings/index.tsx:189
+#: src/app/settings/index.tsx:194
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -462,7 +462,7 @@ msgstr "Die Serverantwort konnte nicht verarbeitet werden oder enthielt nicht da
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
-#: src/app/settings/index.tsx:64
+#: src/app/settings/index.tsx:69
 msgid "Theme"
 msgstr "Erscheinungsbild"
 
@@ -506,11 +506,11 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
 
-#: src/app/settings/license.tsx:43
+#: src/app/settings/license.tsx:51
 msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
 
-#: src/app/settings/index.tsx:152
+#: src/app/settings/index.tsx:157
 msgid "Website"
 msgstr "Webseite"
 
