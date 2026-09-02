@@ -17,6 +17,10 @@ msgstr ""
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
+#: src/app/settings/index.tsx:127
+msgid "About"
+msgstr "Über"
+
 #: src/utils/notification.ts:61
 msgid "Accept"
 msgstr "Akzeptieren"
@@ -25,13 +29,13 @@ msgstr "Akzeptieren"
 msgid "Activity Log"
 msgstr "Aktivitätsprotokoll"
 
-#: src/app/index.tsx:475
-#: src/app/index.tsx:535
-#: src/app/index.tsx:537
+#: src/app/index.tsx:485
+#: src/app/index.tsx:545
+#: src/app/index.tsx:547
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:507
+#: src/app/index.tsx:517
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -43,6 +47,10 @@ msgstr "Kamerazugriff erlauben"
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
+#: src/app/settings/index.tsx:66
+msgid "Appearance"
+msgstr "Darstellung"
+
 #: src/components/push-request-popup.tsx:284
 msgid "Approve"
 msgstr "Freigeben"
@@ -50,6 +58,10 @@ msgstr "Freigeben"
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Möchtest du diesen Token wirklich löschen?"
+
+#: src/app/settings/index.tsx:52
+msgid "Automatic"
+msgstr "Automatisch"
 
 #: src/components/token-add/camera-permission-splash.tsx:44
 msgid "Camera access is required to scan the QR code and pair a token."
@@ -63,6 +75,10 @@ msgstr "Kamerazugriff ist deaktiviert"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: src/app/settings/index.tsx:120
+msgid "Change the app language in system settings"
+msgstr "App-Sprache in den Systemeinstellungen ändern"
+
 #: src/components/onboarding-sequence.tsx:112
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
@@ -73,11 +89,20 @@ msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest
 msgid "Continue"
 msgstr "Weiter"
 
+#: src/app/settings/index.tsx:172
+#: src/app/settings/index.tsx:178
+msgid "Crash and error reports"
+msgstr "Absturz- und Fehlerberichte"
+
+#: src/app/settings/index.tsx:54
+msgid "Dark"
+msgstr "Dunkel"
+
 #: src/utils/notification.ts:69
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:265
+#: src/app/index.tsx:266
 #: src/app/token/[tokenId].tsx:200
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -103,7 +128,7 @@ msgstr "Schließen"
 msgid "Don't share anonymous reports"
 msgstr "Anonyme Berichte nicht teilen"
 
-#: src/app/index.tsx:251
+#: src/app/index.tsx:252
 #: src/app/token/[tokenId].tsx:192
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -111,6 +136,10 @@ msgstr "Bearbeiten"
 #: src/components/token-detail/token-edit-content.tsx:33
 msgid "Edit token"
 msgstr "Token bearbeiten"
+
+#: src/app/settings/licenses.tsx:31
+msgid "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
+msgstr "eduMFA verwendet {licenseCount} Open-Source-Pakete. Die Paketdetails werden aus den installierten Produktionsabhängigkeiten generiert."
 
 #: src/components/token-add/camera-permission-denied.tsx:40
 msgid "Enable camera access in Settings to scan QR codes."
@@ -120,7 +149,7 @@ msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:643
+#: src/app/index.tsx:653
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -146,6 +175,10 @@ msgstr "Token konnte nicht hinzugefügt werden"
 msgid "Finalizing enrollment"
 msgstr "Registrierung wird abgeschlossen"
 
+#: src/app/settings/index.tsx:104
+msgid "General"
+msgstr "Allgemein"
+
 #: src/components/token-detail/token-detail-utils.ts:77
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
@@ -158,10 +191,19 @@ msgstr "Lass dich benachrichtigen, wenn eine Anmeldung deine Genehmigung erforde
 msgid "Get started"
 msgstr "Loslegen"
 
-#: src/app/index.tsx:642
+#: src/app/settings/index.tsx:151
+msgid "GitHub"
+msgstr "GitHub"
+
+#: src/app/index.tsx:652
 #: src/components/onboarding-sequence/step-actions.tsx:75
 msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
 msgstr "Google Play-Dienste sind nicht verfügbar, daher können Anfragen nicht automatisch eingehen. Ziehe die Token-Liste nach unten, um nach ausstehenden Anfragen zu suchen."
+
+#: src/app/settings/index.tsx:107
+#: src/app/settings/index.tsx:113
+msgid "Haptics"
+msgstr "Haptik"
 
 #: src/components/onboarding-sequence.tsx:111
 msgid "Help improve eduMFA"
@@ -189,9 +231,25 @@ msgstr "Bezeichnung"
 msgid "Label required"
 msgstr "Bezeichnung erforderlich"
 
+#: src/app/settings/index.tsx:122
+msgid "Language"
+msgstr "Sprache"
+
 #: src/components/token-detail/token-overview-content.tsx:157
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
+
+#: src/app/settings/license.tsx:30
+msgid "License"
+msgstr "Lizenz"
+
+#: src/app/settings/license.tsx:27
+msgid "License information is unavailable."
+msgstr "Lizenzinformationen sind nicht verfügbar."
+
+#: src/app/settings/index.tsx:53
+msgid "Light"
+msgstr "Hell"
 
 #: src/components/onboarding-sequence.tsx:104
 msgid "Never miss a sign-in request"
@@ -205,11 +263,11 @@ msgstr "Noch keine Interaktionen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:596
+#: src/app/index.tsx:606
 msgid "No tokens found"
 msgstr "Keine Token gefunden"
 
-#: src/app/index.tsx:499
+#: src/app/index.tsx:509
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -221,7 +279,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:638
+#: src/app/index.tsx:648
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -245,6 +303,11 @@ msgstr "Einstellungen öffnen"
 msgid "Open with your Authenticator App"
 msgstr "Öffnen mit deiner Authenticator-App"
 
+#: src/app/settings/index.tsx:163
+#: src/app/settings/licenses.tsx:83
+msgid "Open-source licenses"
+msgstr "Open-Source-Lizenzen"
+
 #: src/app/token/add.tsx:154
 msgid "OR"
 msgstr "ODER"
@@ -261,7 +324,19 @@ msgstr "Ausstehend"
 msgid "Place the QR code inside the frame"
 msgstr "Platziere den QR-Code im Rahmen"
 
-#: src/app/index.tsx:637
+#: src/app/settings/index.tsx:168
+msgid "Privacy"
+msgstr "Datenschutz"
+
+#: src/app/settings/index.tsx:142
+msgid "Privacy policy"
+msgstr "Datenschutzerklärung"
+
+#: src/app/settings/license.tsx:61
+msgid "Project website"
+msgstr "Projektwebsite"
+
+#: src/app/index.tsx:647
 #: src/components/onboarding-sequence/step-actions.tsx:79
 msgid "Pull to refresh for requests"
 msgstr "Nach unten ziehen, um Anfragen abzurufen"
@@ -275,7 +350,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:659
+#: src/app/index.tsx:669
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -291,12 +366,16 @@ msgstr "Registrierung fehlgeschlagen"
 msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
-#: src/app/index.tsx:245
+#: src/app/index.tsx:246
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
+
+#: src/app/settings/index.tsx:130
+msgid "Review eduMFA"
+msgstr "eduMFA bewerten"
 
 #: src/components/push-request-popup.tsx:197
 msgid "Review sign-in"
@@ -319,9 +398,13 @@ msgstr "Speichern"
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:310
+#: src/app/index.tsx:311
 msgid "Search tokens"
 msgstr "Token suchen"
+
+#: src/app/settings/index.tsx:170
+msgid "Send anonymized crash and error diagnostics"
+msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
 
 #: src/components/token-detail/token-overview-content.tsx:169
 msgid "Serial"
@@ -334,6 +417,10 @@ msgstr "Servernachricht"
 #: src/components/token-detail/token-detail-utils.ts:55
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
+
+#: src/app/settings/index.tsx:194
+msgid "Settings"
+msgstr "Einstellungen"
 
 #: src/components/onboarding-sequence/step-actions.tsx:191
 msgid "Share anonymous reports"
@@ -367,6 +454,10 @@ msgstr "Die Serverantwort konnte nicht verarbeitet werden oder enthielt nicht da
 msgid "The token version is not supported by this app. Please update the app to the latest version or contact your institution for assistance."
 msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualisiere die App auf die neueste Version oder kontaktiere deine Institution für Unterstützung."
 
+#: src/app/settings/index.tsx:69
+msgid "Theme"
+msgstr "Erscheinungsbild"
+
 #: src/components/token-detail/token-detail-utils.ts:21
 msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
 msgstr "Dieses Token konnte nicht aktualisiert werden, weil der Push-Dienst nicht erreichbar war. Prüfe deine Verbindung oder versuche es später erneut."
@@ -391,7 +482,7 @@ msgstr "Token"
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token-Genehmigungen, Ablehnungen, Aktualisierungsereignisse und Anmeldeaktivitäten werden hier angezeigt."
 
-#: src/app/index.tsx:603
+#: src/app/index.tsx:613
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
 
@@ -406,6 +497,14 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 #: src/components/token-add/upload-qr-code-button.tsx:80
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
+
+#: src/app/settings/license.tsx:51
+msgid "Version {itemVersion} · {itemLicense}"
+msgstr "Version {itemVersion} · {itemLicense}"
+
+#: src/app/settings/index.tsx:157
+msgid "Website"
+msgstr "Webseite"
 
 #: src/components/onboarding-sequence.tsx:96
 msgid "Welcome"

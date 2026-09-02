@@ -1,0 +1,264 @@
+import { SettingsRow } from "@/components/settings-row";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { SETTINGS_LINKS } from "@/constants/settings";
+import { Radii, Spacing, Typography } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
+import { useSettingsStore, type ThemePreference } from "@/stores/settings";
+import { Host, Switch } from "@expo/ui";
+import { accessibilityLabel } from "@expo/ui/swift-ui/modifiers";
+import { useLingui } from "@lingui/react/macro";
+import * as Application from "expo-application";
+import * as Linking from "expo-linking";
+import { Stack, useRouter } from "expo-router";
+import {
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+function openUrl(url: string): void {
+  void Linking.openURL(url);
+}
+
+export default function SettingsScreen() {
+  const router = useRouter();
+  const { t } = useLingui();
+  const { bottom } = useSafeAreaInsets();
+  const theme = useTheme();
+  const crashReportsEnabled = useSettingsStore(
+    (state) => state.crashReportsEnabled,
+  );
+  const hapticsEnabled = useSettingsStore((state) => state.hapticsEnabled);
+  const themePreference = useSettingsStore((state) => state.themePreference);
+  const setCrashReportsEnabled = useSettingsStore(
+    (state) => state.setCrashReportsEnabled,
+  );
+  const setHapticsEnabled = useSettingsStore(
+    (state) => state.setHapticsEnabled,
+  );
+  const setThemePreference = useSettingsStore(
+    (state) => state.setThemePreference,
+  );
+  const version = Application.nativeApplicationVersion ?? "1.0.0";
+  const build = Application.nativeBuildVersion;
+  const themeOptions: readonly {
+    label: string;
+    value: ThemePreference;
+  }[] = [
+    { label: t`Automatic`, value: "automatic" },
+    { label: t`Light`, value: "light" },
+    { label: t`Dark`, value: "dark" },
+  ];
+
+  return (
+    <>
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: Spacing.md * 2 + bottom },
+        ]}
+      >
+        <Section title={t`Appearance`}>
+          <SettingsRow
+            icon={{ android: "contrast", ios: "circle.lefthalf.filled" }}
+            label={t`Theme`}
+          />
+          <View style={styles.themeOptions}>
+            {themeOptions.map((option) => {
+              const selected = option.value === themePreference;
+              return (
+                <Pressable
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected }}
+                  key={option.value}
+                  onPress={() => setThemePreference(option.value)}
+                  style={[
+                    styles.themeOption,
+                    {
+                      backgroundColor: selected ? theme.branding : theme.fill,
+                    },
+                  ]}
+                >
+                  <ThemedText
+                    adjustsFontSizeToFit
+                    fontSize={Typography.fontSize14}
+                    minimumFontScale={0.7}
+                    numberOfLines={1}
+                    style={{
+                      color: selected ? theme.textOnBranding : theme.text,
+                    }}
+                  >
+                    {option.label}
+                  </ThemedText>
+                </Pressable>
+              );
+            })}
+          </View>
+        </Section>
+
+        <Section title={t`General`}>
+          <SettingsRow
+            icon={{ android: "touch_app", ios: "hand.tap" }}
+            label={t`Haptics`}
+            trailing={
+              <Host matchContents>
+                <Switch
+                  onValueChange={setHapticsEnabled}
+                  value={hapticsEnabled}
+                  modifiers={[accessibilityLabel(t`Haptics`)]}
+                />
+              </Host>
+            }
+          />
+          <Divider />
+          <SettingsRow
+            detail={t`Change the app language in system settings`}
+            icon={{ android: "language", ios: "globe" }}
+            label={t`Language`}
+            onPress={() => void Linking.openSettings()}
+          />
+        </Section>
+
+        <Section title={t`About`}>
+          <SettingsRow
+            icon={{ android: "star", ios: "star" }}
+            label={t`Review eduMFA`}
+            onPress={() =>
+              openUrl(
+                Platform.OS === "ios"
+                  ? SETTINGS_LINKS.reviewIos
+                  : SETTINGS_LINKS.reviewAndroid,
+              )
+            }
+          />
+          <Divider />
+          <SettingsRow
+            icon={{ android: "privacy_tip", ios: "hand.raised" }}
+            label={t`Privacy policy`}
+            onPress={() => openUrl(SETTINGS_LINKS.privacy)}
+          />
+          <Divider />
+          <SettingsRow
+            icon={{
+              android: "code",
+              ios: "chevron.left.forwardslash.chevron.right",
+            }}
+            label={t`GitHub`}
+            onPress={() => openUrl(SETTINGS_LINKS.github)}
+          />
+          <Divider />
+          <SettingsRow
+            icon={{ android: "public", ios: "safari" }}
+            label={t`Website`}
+            onPress={() => openUrl(SETTINGS_LINKS.website)}
+          />
+          <Divider />
+          <SettingsRow
+            icon={{ android: "description", ios: "doc.text" }}
+            label={t`Open-source licenses`}
+            onPress={() => router.navigate("/settings/licenses")}
+          />
+        </Section>
+
+        <Section title={t`Privacy`}>
+          <SettingsRow
+            detail={t`Send anonymized crash and error diagnostics`}
+            icon={{ android: "monitoring", ios: "waveform.path.ecg" }}
+            label={t`Crash and error reports`}
+            trailing={
+              <Host matchContents>
+                <Switch
+                  onValueChange={setCrashReportsEnabled}
+                  value={crashReportsEnabled}
+                  modifiers={[accessibilityLabel(t`Crash and error reports`)]}
+                />
+              </Host>
+            }
+          />
+        </Section>
+
+        <ThemedText
+          fontSize={Typography.fontSize12}
+          style={styles.version}
+          themeColor="textSecondary"
+        >
+          eduMFA {version}
+          {build ? ` (${build})` : ""}
+        </ThemedText>
+      </ScrollView>
+      <Stack.Screen.Title>{t`Settings`}</Stack.Screen.Title>
+    </>
+  );
+}
+
+function Section({
+  children,
+  title,
+}: {
+  children: React.ReactNode;
+  title: string;
+}) {
+  return (
+    <View style={styles.section}>
+      <ThemedText
+        fontSize={Typography.fontSize14}
+        style={styles.sectionTitle}
+        themeColor="textSecondary"
+      >
+        {title}
+      </ThemedText>
+      <ThemedView type="backgroundSecondary" style={styles.card}>
+        {children}
+      </ThemedView>
+    </View>
+  );
+}
+
+function Divider() {
+  const theme = useTheme();
+  return <View style={[styles.divider, { backgroundColor: theme.border }]} />;
+}
+
+const styles = StyleSheet.create({
+  card: {
+    borderCurve: "continuous",
+    borderRadius: Radii.xl,
+    overflow: "hidden",
+  },
+  content: {
+    gap: Spacing.xl,
+    padding: Spacing.lg,
+  },
+  divider: {
+    height: StyleSheet.hairlineWidth,
+    marginLeft: 52,
+  },
+  section: {
+    gap: Spacing.sm,
+  },
+  sectionTitle: {
+    paddingHorizontal: Spacing.lg,
+  },
+  themeOption: {
+    alignItems: "center",
+    borderCurve: "continuous",
+    borderRadius: Radii.md,
+    flex: 1,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.sm,
+  },
+  themeOptions: {
+    flexDirection: "row",
+    gap: Spacing.sm,
+    paddingBottom: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+  },
+  version: {
+    textAlign: "center",
+  },
+});

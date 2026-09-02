@@ -2,6 +2,7 @@ import {
   refreshHapticRippleDistances,
   refreshHapticThreshold,
 } from "@/constants/haptics";
+import { useSettingsStore } from "@/stores/settings";
 import { Presets, Settings } from "react-native-pulsar";
 
 export function configureHaptics() {
@@ -16,6 +17,10 @@ export function configureHaptics() {
 }
 
 export function playHaptic(selectPreset: (presets: typeof Presets) => void) {
+  if (!useSettingsStore.getState().hapticsEnabled) {
+    return;
+  }
+
   try {
     selectPreset(Presets);
   } catch (error) {

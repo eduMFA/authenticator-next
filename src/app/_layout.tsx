@@ -19,6 +19,7 @@ import * as Linking from "expo-linking";
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 import { useEffect, useRef } from "react";
 import {
+  Appearance,
   AppState,
   AppStateStatus,
   Platform,
@@ -62,8 +63,15 @@ function RootLayoutContent() {
     (state) => state.hasCompletedOnboarding,
   );
   const hasHydratedSettings = useSettingsStore((state) => state.hasHydrated);
+  const themePreference = useSettingsStore((state) => state.themePreference);
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
+
+  useEffect(() => {
+    Appearance.setColorScheme(
+      themePreference === "automatic" ? "unspecified" : themePreference,
+    );
+  }, [themePreference]);
 
   const theme = useTheme();
   const tabBarBackgroundColor = theme.background;
@@ -173,6 +181,27 @@ function RootLayoutContent() {
                   Tokens
                 </ThemedText>
               ) : undefined,
+          }}
+        />
+        <Stack.Screen
+          name="settings/index"
+          options={{
+            headerTransparent: Platform.OS === "ios",
+            title: "Settings",
+          }}
+        />
+        <Stack.Screen
+          name="settings/licenses"
+          options={{
+            headerTransparent: Platform.OS === "ios",
+            title: "Open-source licenses",
+          }}
+        />
+        <Stack.Screen
+          name="settings/license"
+          options={{
+            headerTransparent: Platform.OS === "ios",
+            title: "License",
           }}
         />
         <Stack.Screen

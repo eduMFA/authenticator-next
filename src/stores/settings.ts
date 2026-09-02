@@ -4,11 +4,14 @@ import { Settings as PulsarSettings } from "react-native-pulsar";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
+export type ThemePreference = "automatic" | "dark" | "light";
+
 type SettingsState = {
   crashReportsEnabled: boolean;
   hapticsEnabled: boolean;
   hasCompletedOnboarding: boolean;
   hasHydrated: boolean;
+  themePreference: ThemePreference;
 };
 
 type SettingsActions = {
@@ -17,13 +20,18 @@ type SettingsActions = {
   setCrashReportsEnabled: (enabled: boolean) => void;
   setHapticsEnabled: (enabled: boolean) => void;
   setHasHydrated: (hasHydrated: boolean) => void;
+  setThemePreference: (preference: ThemePreference) => void;
 };
 
 type SettingsStore = SettingsState & SettingsActions;
 
 type PersistedSettings = Pick<
   SettingsState,
-  "crashReportsEnabled" | "hapticsEnabled" | "hasCompletedOnboarding"
+  | "crashReportsEnabled"
+  | "hapticsEnabled"
+  | "hapticsEnabled"
+  | "hasCompletedOnboarding"
+  | "themePreference"
 >;
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -33,6 +41,7 @@ export const useSettingsStore = create<SettingsStore>()(
       hapticsEnabled: true,
       hasCompletedOnboarding: false,
       hasHydrated: false,
+      themePreference: "automatic",
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),
       resetOnboarding: () => set({ hasCompletedOnboarding: false }),
       setCrashReportsEnabled: (enabled) => {
@@ -44,6 +53,7 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ hapticsEnabled: enabled });
       },
       setHasHydrated: (hasHydrated) => set({ hasHydrated }),
+      setThemePreference: (themePreference) => set({ themePreference }),
     }),
     {
       name: "settings-storage",
@@ -52,6 +62,7 @@ export const useSettingsStore = create<SettingsStore>()(
         crashReportsEnabled: state.crashReportsEnabled,
         hapticsEnabled: state.hapticsEnabled,
         hasCompletedOnboarding: state.hasCompletedOnboarding,
+        themePreference: state.themePreference,
       }),
       onRehydrateStorage: () => (state) => {
         state?.setHasHydrated(true);
