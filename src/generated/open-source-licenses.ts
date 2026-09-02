@@ -693,12 +693,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.4.43"
   },
   {
-    "id": "@expo/cli@57.0.18",
+    "id": "@expo/cli@57.0.21",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/cli",
     "url": "https://github.com/expo/expo/tree/main/packages/@expo/cli",
-    "version": "57.0.18"
+    "version": "57.0.21"
   },
   {
     "id": "@expo/code-signing-certificates@0.0.6",
@@ -757,12 +757,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.1"
   },
   {
-    "id": "@expo/env@2.4.2",
+    "id": "@expo/env@2.4.3",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2023-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/env",
     "url": "https://github.com/expo/expo/tree/main/packages/@expo/env#readme",
-    "version": "2.4.2"
+    "version": "2.4.3"
   },
   {
     "id": "@expo/expo-modules-macros-plugin@0.6.1",
@@ -773,12 +773,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.6.1"
   },
   {
-    "id": "@expo/fingerprint@0.20.10",
+    "id": "@expo/fingerprint@0.20.12",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/fingerprint",
     "url": "https://github.com/expo/expo/tree/main/packages/@expo/fingerprint#readme",
-    "version": "0.20.10"
+    "version": "0.20.12"
   },
   {
     "id": "@expo/image-utils@0.11.5",
@@ -789,12 +789,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.11.5"
   },
   {
-    "id": "@expo/inline-modules@0.1.6",
+    "id": "@expo/inline-modules@0.1.7",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/inline-modules",
     "url": "https://github.com/expo/expo",
-    "version": "0.1.6"
+    "version": "0.1.7"
   },
   {
     "id": "@expo/json-file@11.0.1",
@@ -805,20 +805,20 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "11.0.1"
   },
   {
-    "id": "@expo/local-build-cache-provider@57.0.7",
+    "id": "@expo/local-build-cache-provider@57.0.8",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/local-build-cache-provider",
     "url": "https://github.com/expo/expo/tree/main/packages/@expo/local-build-cache-provider#readme",
-    "version": "57.0.7"
+    "version": "57.0.8"
   },
   {
-    "id": "@expo/log-box@57.0.3",
+    "id": "@expo/log-box@57.0.4",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/log-box",
     "url": "https://github.com/expo/expo/tree/main/packages/@expo/log-box",
-    "version": "57.0.3"
+    "version": "57.0.4"
   },
   {
     "id": "@expo/material-symbols@0.1.1",
@@ -837,12 +837,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "56.0.2"
   },
   {
-    "id": "@expo/metro-config@57.0.10",
+    "id": "@expo/metro-config@57.0.12",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/metro-config",
     "url": "https://github.com/expo/expo/tree/main/packages/@expo/metro-config#readme",
-    "version": "57.0.10"
+    "version": "57.0.12"
   },
   {
     "id": "@expo/metro-file-map@57.0.2",
@@ -853,12 +853,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.2"
   },
   {
-    "id": "@expo/metro-runtime@57.0.13",
+    "id": "@expo/metro-runtime@57.0.15",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/metro-runtime",
     "url": "https://github.com/expo/expo/tree/main/packages/@expo/metro-runtime",
-    "version": "57.0.13"
+    "version": "57.0.15"
   },
   {
     "id": "@expo/osascript@2.7.1",
@@ -885,12 +885,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.8.1"
   },
   {
-    "id": "@expo/prebuild-config@57.0.14",
+    "id": "@expo/prebuild-config@57.0.15",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/prebuild-config",
     "url": "https://github.com/expo/expo/tree/main/packages/@expo/prebuild-config#readme",
-    "version": "57.0.14"
+    "version": "57.0.15"
   },
   {
     "id": "@expo/require-utils@57.0.5",
@@ -901,12 +901,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.5"
   },
   {
-    "id": "@expo/router-server@57.0.7",
+    "id": "@expo/router-server@57.0.9",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "@expo/router-server",
     "url": "https://docs.expo.dev/routing/introduction/",
-    "version": "57.0.7"
+    "version": "57.0.9"
   },
   {
     "id": "@expo/schema-utils@57.0.2",
@@ -941,12 +941,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "9.3.2"
   },
   {
-    "id": "@expo/ui@57.0.13",
+    "id": "@expo/ui@57.0.15",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@expo/ui",
     "url": "https://docs.expo.dev/versions/latest/sdk/ui/",
-    "version": "57.0.13"
+    "version": "57.0.15"
   },
   {
     "id": "@expo/ws-tunnel@2.0.0",
@@ -1877,20 +1877,20 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "2.2.0"
   },
   {
-    "id": "@react-native-firebase/app@26.3.2",
+    "id": "@react-native-firebase/app@26.3.3",
     "license": "Apache-2.0",
     "licenseText": "Apache-2.0 License\n------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io>\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this library except in compliance with the License.\n\nYou may obtain a copy of the Apache-2.0 License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n\nCreative Commons Attribution 3.0 License\n----------------------------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io>\n\nDocumentation and other instructional materials provided for this project\n(including on a separate documentation repository or it's documentation website) are\nlicensed under the Creative Commons Attribution 3.0 License. Code samples/blocks\ncontained therein are licensed under the Apache License, Version 2.0 (the \"License\"), as above.\n\nYou may obtain a copy of the Creative Commons Attribution 3.0 License at\n\n    https://creativecommons.org/licenses/by/3.0/",
     "name": "@react-native-firebase/app",
     "url": "https://github.com/invertase/react-native-firebase",
-    "version": "26.3.2"
+    "version": "26.3.3"
   },
   {
-    "id": "@react-native-firebase/messaging@26.3.2",
+    "id": "@react-native-firebase/messaging@26.3.3",
     "license": "Apache-2.0",
     "licenseText": "Apache-2.0 License\n------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io> & Contributors\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this library except in compliance with the License.\n\nYou may obtain a copy of the Apache-2.0 License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n\nCreative Commons Attribution 3.0 License\n----------------------------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io> & Contributors\n\nDocumentation and other instructional materials provided for this project\n(including on a separate documentation repository or it's documentation website) are\nlicensed under the Creative Commons Attribution 3.0 License. Code samples/blocks\ncontained therein are licensed under the Apache License, Version 2.0 (the \"License\"), as above.\n\nYou may obtain a copy of the Creative Commons Attribution 3.0 License at\n\n    https://creativecommons.org/licenses/by/3.0/",
     "name": "@react-native-firebase/messaging",
     "url": "https://github.com/invertase/react-native-firebase",
-    "version": "26.3.2"
+    "version": "26.3.3"
   },
   {
     "id": "@react-native-masked-view/masked-view@0.3.2",
@@ -1901,100 +1901,100 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.3.2"
   },
   {
-    "id": "@react-native/assets-registry@0.86.2",
+    "id": "@react-native/assets-registry@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/assets-registry",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/assets#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/babel-plugin-codegen@0.86.2",
+    "id": "@react-native/babel-plugin-codegen@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/babel-plugin-codegen",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/babel-plugin-codegen#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/codegen@0.86.2",
+    "id": "@react-native/codegen@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/codegen",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/react-native-codegen#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/community-cli-plugin@0.86.2",
+    "id": "@react-native/community-cli-plugin@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/community-cli-plugin",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/community-cli-plugin#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/debugger-frontend@0.86.2",
+    "id": "@react-native/debugger-frontend@0.86.3",
     "license": "BSD-3-Clause",
     "licenseText": "This package declares the BSD-3-Clause license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/debugger-frontend",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/debugger-frontend#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/debugger-shell@0.86.2",
+    "id": "@react-native/debugger-shell@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/debugger-shell",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/debugger-shell#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/dev-middleware@0.86.2",
+    "id": "@react-native/dev-middleware@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/dev-middleware",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/dev-middleware#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/gradle-plugin@0.86.2",
+    "id": "@react-native/gradle-plugin@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/gradle-plugin",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/gradle-plugin#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/js-polyfills@0.86.2",
+    "id": "@react-native/js-polyfills@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/js-polyfills",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/polyfills#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/normalize-colors@0.86.2",
+    "id": "@react-native/normalize-colors@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/normalize-colors",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/normalize-color#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@react-native/virtualized-lists@0.86.2",
+    "id": "@react-native/virtualized-lists@0.86.3",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "@react-native/virtualized-lists",
     "url": "https://github.com/react/react-native/tree/HEAD/packages/virtualized-lists#readme",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
-    "id": "@scure/base@2.3.0",
+    "id": "@scure/base@2.4.0",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2022 Paul Miller (https://paulmillr.com)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the “Software”), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.",
     "name": "@scure/base",
     "url": "https://paulmillr.com/noble/#scure",
-    "version": "2.3.0"
+    "version": "2.4.0"
   },
   {
     "id": "@sentry-internal/browser-utils@10.37.0",
@@ -2285,12 +2285,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "6.0.2"
   },
   {
-    "id": "agent-cli-detector@0.1.6",
+    "id": "agent-cli-detector@0.1.7",
     "license": "MIT",
     "licenseText": "MIT License\n\nCopyright (c) 2026 David Mokos\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "agent-cli-detector",
     "url": "https://github.com/expo/agent-cli-detector#readme",
-    "version": "0.1.6"
+    "version": "0.1.7"
   },
   {
     "id": "anser@1.4.10",
@@ -2493,12 +2493,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "1.2.0"
   },
   {
-    "id": "babel-preset-expo@57.0.8",
+    "id": "babel-preset-expo@57.0.10",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "babel-preset-expo",
     "url": "https://github.com/expo/expo/tree/main/packages/babel-preset-expo#readme",
-    "version": "57.0.8"
+    "version": "57.0.10"
   },
   {
     "id": "babel-preset-jest@29.6.3",
@@ -3197,12 +3197,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "29.7.0"
   },
   {
-    "id": "expo@57.0.16",
+    "id": "expo@57.0.19",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo",
     "url": "https://github.com/expo/expo/tree/main/packages/expo",
-    "version": "57.0.16"
+    "version": "57.0.19"
   },
   {
     "id": "expo-application@57.0.2",
@@ -3213,12 +3213,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.2"
   },
   {
-    "id": "expo-asset@57.0.14",
+    "id": "expo-asset@57.0.16",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-asset",
     "url": "https://docs.expo.dev/versions/latest/sdk/asset/",
-    "version": "57.0.14"
+    "version": "57.0.16"
   },
   {
     "id": "expo-blur@57.0.2",
@@ -3229,12 +3229,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.2"
   },
   {
-    "id": "expo-build-properties@57.0.14",
+    "id": "expo-build-properties@57.0.16",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-build-properties",
     "url": "https://docs.expo.dev/versions/latest/sdk/build-properties",
-    "version": "57.0.14"
+    "version": "57.0.16"
   },
   {
     "id": "expo-camera@57.0.4",
@@ -3245,36 +3245,36 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.4"
   },
   {
-    "id": "expo-constants@57.0.14",
+    "id": "expo-constants@57.0.17",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-constants",
     "url": "https://docs.expo.dev/versions/latest/sdk/constants/",
-    "version": "57.0.14"
+    "version": "57.0.17"
   },
   {
-    "id": "expo-dev-client@57.0.15",
+    "id": "expo-dev-client@57.0.18",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-dev-client",
     "url": "https://docs.expo.dev/versions/latest/sdk/dev-client/",
-    "version": "57.0.15"
+    "version": "57.0.18"
   },
   {
-    "id": "expo-dev-launcher@57.0.15",
+    "id": "expo-dev-launcher@57.0.19",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-dev-launcher",
     "url": "https://docs.expo.dev",
-    "version": "57.0.15"
+    "version": "57.0.19"
   },
   {
-    "id": "expo-dev-menu@57.0.15",
+    "id": "expo-dev-menu@57.0.18",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-dev-menu",
     "url": "https://docs.expo.dev",
-    "version": "57.0.15"
+    "version": "57.0.18"
   },
   {
     "id": "expo-dev-menu-interface@57.0.0",
@@ -3293,20 +3293,20 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.1"
   },
   {
-    "id": "expo-file-system@57.0.5",
+    "id": "expo-file-system@57.0.6",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-file-system",
     "url": "https://docs.expo.dev/versions/latest/sdk/filesystem/",
-    "version": "57.0.5"
+    "version": "57.0.6"
   },
   {
-    "id": "expo-font@57.0.1",
+    "id": "expo-font@57.0.3",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-font",
     "url": "https://docs.expo.dev/versions/latest/sdk/font/",
-    "version": "57.0.1"
+    "version": "57.0.3"
   },
   {
     "id": "expo-glass-effect@57.0.1",
@@ -3317,12 +3317,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.1"
   },
   {
-    "id": "expo-image@57.0.3",
+    "id": "expo-image@57.0.4",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-image",
     "url": "https://docs.expo.dev/versions/latest/sdk/image/",
-    "version": "57.0.3"
+    "version": "57.0.4"
   },
   {
     "id": "expo-image-loader@57.0.1",
@@ -3333,12 +3333,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.1"
   },
   {
-    "id": "expo-image-picker@57.0.13",
+    "id": "expo-image-picker@57.0.15",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-image-picker",
     "url": "https://docs.expo.dev/versions/latest/sdk/imagepicker/",
-    "version": "57.0.13"
+    "version": "57.0.15"
   },
   {
     "id": "expo-json-utils@57.0.1",
@@ -3357,12 +3357,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.1"
   },
   {
-    "id": "expo-linking@57.0.7",
+    "id": "expo-linking@57.0.9",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-linking",
     "url": "https://docs.expo.dev/versions/latest/sdk/linking",
-    "version": "57.0.7"
+    "version": "57.0.9"
   },
   {
     "id": "expo-localization@57.0.1",
@@ -3381,44 +3381,44 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.1"
   },
   {
-    "id": "expo-modules-autolinking@57.0.11",
+    "id": "expo-modules-autolinking@57.0.12",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-modules-autolinking",
     "url": "https://github.com/expo/expo/tree/main/packages/expo-modules-autolinking#readme",
-    "version": "57.0.11"
+    "version": "57.0.12"
   },
   {
-    "id": "expo-modules-core@57.0.13",
+    "id": "expo-modules-core@57.0.15",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-modules-core",
     "url": "https://github.com/expo/expo/tree/main/packages/expo-modules-core",
-    "version": "57.0.13"
+    "version": "57.0.15"
   },
   {
-    "id": "expo-modules-jsi@57.0.5",
+    "id": "expo-modules-jsi@57.0.7",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-modules-jsi",
     "url": "https://github.com/expo/expo/tree/main/packages/expo-modules-jsi",
-    "version": "57.0.5"
+    "version": "57.0.7"
   },
   {
-    "id": "expo-notifications@57.0.14",
+    "id": "expo-notifications@57.0.16",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-notifications",
     "url": "https://docs.expo.dev/versions/latest/sdk/notifications/",
-    "version": "57.0.14"
+    "version": "57.0.16"
   },
   {
-    "id": "expo-router@57.0.16",
+    "id": "expo-router@57.0.18",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "expo-router",
     "url": "https://docs.expo.dev/routing/introduction/",
-    "version": "57.0.16"
+    "version": "57.0.18"
   },
   {
     "id": "expo-server@57.0.3",
@@ -3445,12 +3445,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "57.0.2"
   },
   {
-    "id": "expo-system-ui@57.0.2",
+    "id": "expo-system-ui@57.0.3",
     "license": "MIT",
     "licenseText": "The MIT License (MIT)\n\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "expo-system-ui",
     "url": "https://docs.expo.dev/versions/latest/sdk/system-ui",
-    "version": "57.0.2"
+    "version": "57.0.3"
   },
   {
     "id": "expo-updates-interface@57.0.1",
@@ -3701,12 +3701,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "2.0.4"
   },
   {
-    "id": "hermes-compiler@250829098.0.16",
+    "id": "hermes-compiler@250829098.0.17",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "hermes-compiler",
     "url": "ssh://git@github.com/facebook/hermes",
-    "version": "250829098.0.16"
+    "version": "250829098.0.17"
   },
   {
     "id": "hermes-estree@0.36.0",
@@ -3827,14 +3827,6 @@ export const OPEN_SOURCE_LICENSES = [
     "name": "ignore",
     "url": "git@github.com:kaelzhang/node-ignore",
     "version": "5.3.2"
-  },
-  {
-    "id": "image-size@1.2.1",
-    "license": "MIT",
-    "licenseText": "The MIT License (MIT)\n\nCopyright © 2013-Present Aditya Yadav, http://netroy.in\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
-    "name": "image-size",
-    "url": "https://github.com/image-size/image-size",
-    "version": "1.2.1"
   },
   {
     "id": "import-local@3.2.0",
@@ -4485,28 +4477,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "2.0.0"
   },
   {
-    "id": "metro@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
-  },
-  {
     "id": "metro@0.84.5",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "metro",
     "url": "https://github.com/react/metro",
     "version": "0.84.5"
-  },
-  {
-    "id": "metro-babel-transformer@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-babel-transformer",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
   },
   {
     "id": "metro-babel-transformer@0.84.5",
@@ -4517,28 +4493,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.84.5"
   },
   {
-    "id": "metro-cache@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-cache",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
-  },
-  {
     "id": "metro-cache@0.84.5",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "metro-cache",
     "url": "https://github.com/react/metro",
     "version": "0.84.5"
-  },
-  {
-    "id": "metro-cache-key@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-cache-key",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
   },
   {
     "id": "metro-cache-key@0.84.5",
@@ -4549,28 +4509,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.84.5"
   },
   {
-    "id": "metro-config@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-config",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
-  },
-  {
     "id": "metro-config@0.84.5",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "metro-config",
     "url": "https://github.com/react/metro",
     "version": "0.84.5"
-  },
-  {
-    "id": "metro-core@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-core",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
   },
   {
     "id": "metro-core@0.84.5",
@@ -4581,28 +4525,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.84.5"
   },
   {
-    "id": "metro-file-map@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-file-map",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
-  },
-  {
     "id": "metro-file-map@0.84.5",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "metro-file-map",
     "url": "https://github.com/react/metro",
     "version": "0.84.5"
-  },
-  {
-    "id": "metro-minify-terser@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-minify-terser",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
   },
   {
     "id": "metro-minify-terser@0.84.5",
@@ -4613,28 +4541,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.84.5"
   },
   {
-    "id": "metro-resolver@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-resolver",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
-  },
-  {
     "id": "metro-resolver@0.84.5",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "metro-resolver",
     "url": "https://github.com/react/metro",
     "version": "0.84.5"
-  },
-  {
-    "id": "metro-runtime@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-runtime",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
   },
   {
     "id": "metro-runtime@0.84.5",
@@ -4645,28 +4557,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.84.5"
   },
   {
-    "id": "metro-source-map@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-source-map",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
-  },
-  {
     "id": "metro-source-map@0.84.5",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "metro-source-map",
     "url": "https://github.com/react/metro",
     "version": "0.84.5"
-  },
-  {
-    "id": "metro-symbolicate@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-symbolicate",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
   },
   {
     "id": "metro-symbolicate@0.84.5",
@@ -4677,28 +4573,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "0.84.5"
   },
   {
-    "id": "metro-transform-plugins@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-transform-plugins",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
-  },
-  {
     "id": "metro-transform-plugins@0.84.5",
     "license": "MIT",
     "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
     "name": "metro-transform-plugins",
     "url": "https://github.com/react/metro",
     "version": "0.84.5"
-  },
-  {
-    "id": "metro-transform-worker@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "metro-transform-worker",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
   },
   {
     "id": "metro-transform-worker@0.84.5",
@@ -4939,14 +4819,6 @@ export const OPEN_SOURCE_LICENSES = [
     "name": "nullthrows",
     "url": "https://github.com/zertosh/nullthrows",
     "version": "1.1.1"
-  },
-  {
-    "id": "ob1@0.84.4",
-    "license": "MIT",
-    "licenseText": "This package declares the MIT license. The full license text was not included in its installed package distribution.",
-    "name": "ob1",
-    "url": "https://github.com/facebook/metro",
-    "version": "0.84.4"
   },
   {
     "id": "ob1@0.84.5",
@@ -5253,14 +5125,6 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "7.1.3"
   },
   {
-    "id": "queue@6.0.2",
-    "license": "MIT",
-    "licenseText": "The MIT License (MIT)\nCopyright (c) 2014 Jesse Tane <jesse.tane@gmail.com>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
-    "name": "queue",
-    "url": "https://github.com/jessetane/queue",
-    "version": "6.0.2"
-  },
-  {
     "id": "range-parser@1.2.1",
     "license": "MIT",
     "licenseText": "(The MIT License)\n\nCopyright (c) 2012-2014 TJ Holowaychuk <tj@vision-media.ca>\nCopyright (c) 2015-2016 Douglas Christopher Wilson <doug@somethingdoug.com\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n'Software'), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.",
@@ -5333,12 +5197,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "19.2.8"
   },
   {
-    "id": "react-native@0.86.2",
+    "id": "react-native@0.86.3",
     "license": "MIT",
     "licenseText": "MIT License\n\nCopyright (c) Meta Platforms, Inc. and affiliates.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
     "name": "react-native",
     "url": "https://reactnative.dev/",
-    "version": "0.86.2"
+    "version": "0.86.3"
   },
   {
     "id": "react-native-drawer-layout@4.2.10",
