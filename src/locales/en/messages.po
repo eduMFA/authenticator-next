@@ -39,6 +39,11 @@ msgstr "Add token"
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
+#: src/components/feedback-form.android.tsx:111
+#: src/components/feedback-form.ios.tsx:130
+msgid "Add your name and email if you would like us to contact you with follow-up questions or updates about your feedback."
+msgstr "Add your name and email if you would like us to contact you with follow-up questions or updates about your feedback."
+
 #: src/components/token-add/camera-permission-splash.tsx:37
 msgid "Allow camera access"
 msgstr "Allow camera access"
@@ -63,6 +68,10 @@ msgstr "Are you sure you want to delete this token?"
 msgid "Automatic"
 msgstr "Automatic"
 
+#: src/hooks/use-feedback-form.ts:21
+msgid "Bug report"
+msgstr "Bug report"
+
 #: src/components/token-add/camera-permission-splash.tsx:44
 msgid "Camera access is required to scan the QR code and pair a token."
 msgstr "Camera access is required to scan the QR code and pair a token."
@@ -79,9 +88,22 @@ msgstr "Cancel"
 msgid "Change the app language in system settings"
 msgstr "Change the app language in system settings"
 
+#: src/components/feedback-form.ios.tsx:95
+msgid "Choose the category that best matches your feedback. Your message and optional contact details will be sent to eduMFA through Sentry."
+msgstr "Choose the category that best matches your feedback. Your message and optional contact details will be sent to eduMFA through Sentry."
+
 #: src/components/onboarding-sequence.tsx:112
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Choose whether to share anonymous crash and error reports."
+
+#: src/components/feedback-form.android.tsx:81
+#: src/components/feedback-form.ios.tsx:83
+msgid "Close"
+msgstr "Close"
+
+#: src/components/feedback-form.ios.tsx:127
+msgid "Contact (optional)"
+msgstr "Contact (optional)"
 
 #: src/components/onboarding-sequence/step-actions.tsx:85
 #: src/components/onboarding-sequence/step-actions.tsx:106
@@ -89,8 +111,8 @@ msgstr "Choose whether to share anonymous crash and error reports."
 msgid "Continue"
 msgstr "Continue"
 
-#: src/app/settings/index.tsx:172
 #: src/app/settings/index.tsx:178
+#: src/app/settings/index.tsx:184
 msgid "Crash and error reports"
 msgstr "Crash and error reports"
 
@@ -128,6 +150,11 @@ msgstr "Dismiss"
 msgid "Don't share anonymous reports"
 msgstr "Don't share anonymous reports"
 
+#: src/components/feedback-form.android.tsx:66
+#: src/components/feedback-form.ios.tsx:54
+msgid "Done"
+msgstr "Done"
+
 #: src/app/index.tsx:252
 #: src/app/token/[tokenId].tsx:192
 msgid "Edit"
@@ -140,6 +167,11 @@ msgstr "Edit token"
 #: src/app/settings/licenses.tsx:31
 msgid "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
 msgstr "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
+
+#: src/components/feedback-form.android.tsx:134
+#: src/components/feedback-form.ios.tsx:144
+msgid "Email (optional)"
+msgstr "Email (optional)"
 
 #: src/components/token-add/camera-permission-denied.tsx:40
 msgid "Enable camera access in Settings to scan QR codes."
@@ -165,17 +197,47 @@ msgstr "Enrollment response failed"
 msgid "Enter a label for this token."
 msgstr "Enter a label for this token."
 
+#: src/hooks/use-feedback-form.ts:29
+msgid "Enter a valid email address."
+msgstr "Enter a valid email address."
+
 #: src/hooks/use-handle-token-uri.ts:50
 #: src/hooks/use-handle-token-uri.ts:60
 #: src/hooks/use-handle-token-uri.ts:92
 msgid "Failed to add token"
 msgstr "Failed to add token"
 
+#: src/hooks/use-feedback-form.ts:23
+msgid "Feature request"
+msgstr "Feature request"
+
+#: src/app/settings/index.tsx:130
+msgid "Feedback"
+msgstr "Feedback"
+
+#: src/app/settings/index.tsx:128
+#~ msgid "Feedback (Expo UI)"
+#~ msgstr "Feedback (Expo UI)"
+
+#: src/hooks/use-feedback-form.ts:70
+msgid "Feedback could not be sent. Please try again."
+msgstr "Feedback could not be sent. Please try again."
+
+#: src/components/feedback-form.ios.tsx:90
+msgid "Feedback details"
+msgstr "Feedback details"
+
+#: src/components/feedback-form.android.tsx:92
+#: src/components/feedback-form.ios.tsx:100
+msgid "Feedback type"
+msgstr "Feedback type"
+
 #: src/components/token-detail/token-detail-utils.ts:85
 msgid "Finalizing enrollment"
 msgstr "Finalizing enrollment"
 
 #: src/app/settings/index.tsx:104
+#: src/hooks/use-feedback-form.ts:22
 msgid "General"
 msgstr "General"
 
@@ -191,7 +253,7 @@ msgstr "Get notified when a sign-in needs your approval."
 msgid "Get started"
 msgstr "Get started"
 
-#: src/app/settings/index.tsx:151
+#: src/app/settings/index.tsx:157
 msgid "GitHub"
 msgstr "GitHub"
 
@@ -251,6 +313,11 @@ msgstr "License information is unavailable."
 msgid "Light"
 msgstr "Light"
 
+#: src/components/feedback-form.android.tsx:120
+#: src/components/feedback-form.ios.tsx:136
+msgid "Name (optional)"
+msgstr "Name (optional)"
+
 #: src/components/onboarding-sequence.tsx:104
 msgid "Never miss a sign-in request"
 msgstr "Never miss a sign-in request"
@@ -303,7 +370,7 @@ msgstr "Open Settings"
 msgid "Open with your Authenticator App"
 msgstr "Open with your Authenticator App"
 
-#: src/app/settings/index.tsx:163
+#: src/app/settings/index.tsx:169
 #: src/app/settings/licenses.tsx:83
 msgid "Open-source licenses"
 msgstr "Open-source licenses"
@@ -324,11 +391,15 @@ msgstr "Pending"
 msgid "Place the QR code inside the frame"
 msgstr "Place the QR code inside the frame"
 
-#: src/app/settings/index.tsx:168
+#: src/hooks/use-feedback-form.ts:50
+msgid "Please describe your feedback."
+msgstr "Please describe your feedback."
+
+#: src/app/settings/index.tsx:174
 msgid "Privacy"
 msgstr "Privacy"
 
-#: src/app/settings/index.tsx:142
+#: src/app/settings/index.tsx:148
 msgid "Privacy policy"
 msgstr "Privacy policy"
 
@@ -373,7 +444,7 @@ msgstr "Response parsing failed"
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
-#: src/app/settings/index.tsx:130
+#: src/app/settings/index.tsx:136
 msgid "Review eduMFA"
 msgstr "Review eduMFA"
 
@@ -402,9 +473,15 @@ msgstr "Search Authenticator Apps"
 msgid "Search tokens"
 msgstr "Search tokens"
 
-#: src/app/settings/index.tsx:170
+#: src/app/settings/index.tsx:176
 msgid "Send anonymized crash and error diagnostics"
 msgstr "Send anonymized crash and error diagnostics"
+
+#: src/app/settings/feedback.tsx:23
+#: src/components/feedback-form.android.tsx:77
+#: src/components/feedback-form.ios.tsx:79
+msgid "Send feedback"
+msgstr "Send feedback"
 
 #: src/components/token-detail/token-overview-content.tsx:169
 msgid "Serial"
@@ -418,7 +495,7 @@ msgstr "Server message"
 msgid "Server registration failed"
 msgstr "Server registration failed"
 
-#: src/app/settings/index.tsx:194
+#: src/app/settings/index.tsx:200
 msgid "Settings"
 msgstr "Settings"
 
@@ -433,6 +510,20 @@ msgstr "Sign-in requests may go unnoticed"
 #: src/components/token-detail/token-overview-content.tsx:168
 msgid "Status"
 msgstr "Status"
+
+#: src/components/feedback-form.android.tsx:163
+#: src/components/feedback-form.ios.tsx:170
+msgid "Submit feedback"
+msgstr "Submit feedback"
+
+#: src/components/feedback-form.android.tsx:89
+msgid "Tell us what worked well or what we can improve."
+msgstr "Tell us what worked well or what we can improve."
+
+#: src/components/feedback-form.android.tsx:60
+#: src/components/feedback-form.ios.tsx:50
+msgid "Thank you for your feedback"
+msgstr "Thank you for your feedback"
 
 #: src/components/token-detail/token-detail-utils.ts:49
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
@@ -502,7 +593,7 @@ msgstr "Upload QR Code"
 msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
 
-#: src/app/settings/index.tsx:157
+#: src/app/settings/index.tsx:163
 msgid "Website"
 msgstr "Website"
 
@@ -514,6 +605,11 @@ msgstr "Welcome"
 msgid "Welcome to eduMFA"
 msgstr "Welcome to eduMFA"
 
+#: src/components/feedback-form.android.tsx:151
+#: src/components/feedback-form.ios.tsx:115
+msgid "What would you like us to know?"
+msgstr "What would you like us to know?"
+
 #: src/components/onboarding-sequence/step-actions.tsx:97
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "You’re ready to receive and approve sign-in requests."
@@ -522,6 +618,15 @@ msgstr "You’re ready to receive and approve sign-in requests."
 msgid "Your choice"
 msgstr "Your choice"
 
+#: src/components/feedback-form.android.tsx:63
+#: src/components/feedback-form.ios.tsx:52
+msgid "Your feedback was submitted successfully."
+msgstr "Your feedback was submitted successfully."
+
 #: src/hooks/use-handle-token-uri.ts:36
 msgid "Your image did not contain a QR code."
 msgstr "Your image did not contain a QR code."
+
+#: src/components/feedback-form.android.tsx:160
+msgid "Your message and optional contact details will be sent to eduMFA through Sentry."
+msgstr "Your message and optional contact details will be sent to eduMFA through Sentry."

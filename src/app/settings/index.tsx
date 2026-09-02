@@ -126,6 +126,12 @@ export default function SettingsScreen() {
 
         <Section title={t`About`}>
           <SettingsRow
+            icon={{ android: "feedback", ios: "bubble.left.and.bubble.right" }}
+            label={t`Feedback`}
+            onPress={() => router.navigate("/settings/feedback")}
+          />
+          <Divider />
+          <SettingsRow
             icon={{ android: "star", ios: "star" }}
             label={t`Review eduMFA`}
             onPress={() =>
