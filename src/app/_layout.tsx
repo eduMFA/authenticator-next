@@ -198,6 +198,32 @@ function RootLayoutContent() {
           }}
         />
         <Stack.Screen
+          name="settings/feedback"
+          options={{
+            headerTransparent: Platform.OS === "ios" ? true : false,
+            title: "",
+            presentation:
+              Platform.OS === "ios"
+                ? isLiquidGlassAvailable() && osName !== "iPadOS"
+                  ? "formSheet"
+                  : "modal"
+                : "modal",
+            sheetAllowedDetents: [1],
+            sheetInitialDetentIndex: 0,
+            gestureEnabled: false,
+            contentStyle: {
+              backgroundColor: isLiquidGlassAvailable()
+                ? "transparent"
+                : tabBarBackgroundColor,
+            },
+            headerBlurEffect: isLiquidGlassAvailable()
+              ? undefined
+              : colorScheme === "dark"
+                ? "dark"
+                : "light",
+          }}
+        />
+        <Stack.Screen
           name="settings/license"
           options={{
             headerTransparent: Platform.OS === "ios",
