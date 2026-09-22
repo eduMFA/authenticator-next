@@ -21,9 +21,26 @@ export function SettingsRow({
   trailing,
 }: SettingsRowProps) {
   const theme = useTheme();
+  const iconView = (
+    <SymbolView name={icon} size={22} tintColor={theme.textSecondary} />
+  );
   const content = (
     <>
-      <SymbolView name={icon} size={22} tintColor={theme.textSecondary} />
+      {process.env.EXPO_OS === "ios" ? (
+        <View
+          style={[
+            styles.iosIconContainer,
+            {
+              backgroundColor: theme.fill,
+              borderColor: theme.border,
+            },
+          ]}
+        >
+          {iconView}
+        </View>
+      ) : (
+        iconView
+      )}
       <View style={styles.copy}>
         <ThemedText fontSize={Typography.fontSize16}>{label}</ThemedText>
         {detail ? (
@@ -65,6 +82,16 @@ const styles = StyleSheet.create({
   copy: {
     flex: 1,
     gap: Spacing.xxs,
+  },
+  iosIconContainer: {
+    alignItems: "center",
+    borderCurve: "continuous",
+    borderRadius: 9,
+    borderWidth: StyleSheet.hairlineWidth,
+    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.16)",
+    height: 32,
+    justifyContent: "center",
+    width: 32,
   },
   pressed: {
     opacity: 0.55,

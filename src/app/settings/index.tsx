@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
   },
   divider: {
     height: StyleSheet.hairlineWidth,
-    marginLeft: 52,
+    marginLeft: process.env.EXPO_OS === "ios" ? 60 : 52,
   },
   section: {
     gap: Spacing.sm,
