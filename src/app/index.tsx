@@ -41,14 +41,19 @@ import {
   ExtendedFloatingActionButton,
   Text,
 } from "@expo/ui/jetpack-compose";
-import { imePadding } from "@expo/ui/jetpack-compose/modifiers";
+import { imePadding, padding } from "@expo/ui/jetpack-compose/modifiers";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import * as Linking from "expo-linking";
-import { Stack, useLocalSearchParams, useRouter } from "expo-router";
+import {
+  Stack,
+  useIsFocused,
+  useLocalSearchParams,
+  useRouter,
+} from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -72,6 +77,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function Tokens() {
   const router = useRouter();
   const { tokens, rolloutToken } = useToken();
+  const isScreenFocused = useIsFocused();
   const devMenu = useDevMenu();
   const confirmDeleteToken = useDeleteTokenConfirmation();
   const { isPolling, pollChallenges } = useChallengePolling();
@@ -81,6 +87,7 @@ export default function Tokens() {
     pushCapability,
   } = useNotificationStatus();
   const [isManualRefreshPolling, setIsManualRefreshPolling] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const { width } = useWindowDimensions();
   const { bottom } = useSafeAreaInsets();
   const theme = useTheme();
@@ -98,6 +105,24 @@ export default function Tokens() {
     Platform.OS === "android" ? theme.branding : theme.text;
   const refreshControlProgressBackgroundColor =
     Platform.OS === "android" ? theme.backgroundSecondary : undefined;
+
+  useEffect(() => {
+    if (Platform.OS !== "android") {
+      return;
+    }
+
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setIsKeyboardVisible(true);
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setIsKeyboardVisible(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const params = useLocalSearchParams<{ q?: string }>();
 
@@ -465,13 +490,22 @@ export default function Tokens() {
     </Stack.Toolbar>
   ) : null;
 
+  const shouldAvoidBottomInset = isKeyboardVisible && Keyboard.isVisible();
+  const usesLegacyAndroidInsets =
+    Platform.OS === "android" &&
+    typeof Platform.Version === "number" &&
+    Platform.Version < 29;
+  const fabSpacing =
+    shouldAvoidBottomInset && usesLegacyAndroidInsets ? Spacing.xl : Spacing.lg;
+  const androidFabHostStyle = [
+    styles.fabHost,
+    { bottom: shouldAvoidBottomInset ? 0 : bottom },
+  ];
+
   const androidAddFab =
-    Platform.OS === "android" ? (
-      <AndroidHost
-        matchContents
-        style={[styles.fabHost, { bottom: bottom + Spacing.lg }]}
-      >
-        <Box modifiers={[imePadding()]}>
+    Platform.OS === "android" && isScreenFocused ? (
+      <AndroidHost matchContents style={androidFabHostStyle}>
+        <Box modifiers={[imePadding(), padding(0, 0, 0, fabSpacing)]}>
           <ExtendedFloatingActionButton
             expanded={tokens.length === 0}
             onClick={() => {
