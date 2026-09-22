@@ -29,13 +29,13 @@ msgstr "Accept"
 msgid "Activity Log"
 msgstr "Activity Log"
 
-#: src/app/index.tsx:485
-#: src/app/index.tsx:545
-#: src/app/index.tsx:547
+#: src/app/index.tsx:581
+#: src/app/index.tsx:644
+#: src/app/index.tsx:646
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:517
+#: src/app/index.tsx:616
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
 
@@ -102,7 +102,7 @@ msgstr "Dark"
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:266
+#: src/app/index.tsx:300
 #: src/app/token/[tokenId].tsx:200
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -128,7 +128,7 @@ msgstr "Dismiss"
 msgid "Don't share anonymous reports"
 msgstr "Don't share anonymous reports"
 
-#: src/app/index.tsx:252
+#: src/app/index.tsx:286
 #: src/app/token/[tokenId].tsx:192
 msgid "Edit"
 msgstr "Edit"
@@ -149,7 +149,7 @@ msgstr "Enable camera access in Settings to scan QR codes."
 msgid "Enable notifications"
 msgstr "Enable notifications"
 
-#: src/app/index.tsx:653
+#: src/app/index.tsx:754
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Enable notifications to receive push approval requests on this device."
 
@@ -195,7 +195,7 @@ msgstr "Get started"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: src/app/index.tsx:652
+#: src/app/index.tsx:753
 #: src/components/onboarding-sequence/step-actions.tsx:75
 msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
 msgstr "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
@@ -263,11 +263,11 @@ msgstr "No interactions yet"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:606
+#: src/app/index.tsx:707
 msgid "No tokens found"
 msgstr "No tokens found"
 
-#: src/app/index.tsx:509
+#: src/app/index.tsx:608
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
@@ -279,7 +279,7 @@ msgstr "Not now"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/app/index.tsx:648
+#: src/app/index.tsx:749
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
@@ -336,7 +336,7 @@ msgstr "Privacy policy"
 msgid "Project website"
 msgstr "Project website"
 
-#: src/app/index.tsx:647
+#: src/app/index.tsx:748
 #: src/components/onboarding-sequence/step-actions.tsx:79
 msgid "Pull to refresh for requests"
 msgstr "Pull to refresh for requests"
@@ -350,7 +350,7 @@ msgstr "QR code scanner"
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:669
+#: src/app/index.tsx:770
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
@@ -366,7 +366,7 @@ msgstr "Registration failed"
 msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
-#: src/app/index.tsx:246
+#: src/app/index.tsx:280
 #: src/components/token-detail/token-overview-content.tsx:105
 #: src/components/token-detail/token-overview-content.tsx:115
 #: src/components/token-detail/token-overview-content.tsx:117
@@ -398,7 +398,8 @@ msgstr "Save"
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:311
+#: src/app/index.tsx:450
+#: src/app/index.tsx:515
 msgid "Search tokens"
 msgstr "Search tokens"
 
@@ -482,7 +483,7 @@ msgstr "Token"
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token approvals, denials, refresh events, and enrollment activity will appear here."
 
-#: src/app/index.tsx:613
+#: src/app/index.tsx:714
 msgid "Try another token name, issuer, or serial number."
 msgstr "Try another token name, issuer, or serial number."
 
