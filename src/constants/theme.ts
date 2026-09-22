@@ -44,6 +44,8 @@ type ThemeColors = {
   border: ColorValue;
   fill: ColorValue;
   error: ColorValue;
+  neutralBackground: ColorValue;
+  neutralBar: ColorValue;
   dangerBackground: ColorValue;
   dangerBar: ColorValue;
   errorBackground: ColorValue;
@@ -64,12 +66,14 @@ const fallbackColors = {
     border: "#D9D9D0",
     fill: "#E5E5EA",
     error: "#DC3545",
-    dangerBackground: "rgba(255, 149, 0, 0.12)",
-    dangerBar: "rgba(255, 149, 0, 0.75)",
-    errorBackground: "rgba(220, 53, 69, 0.10)",
-    successBackground: "rgba(6, 64, 43, 0.10)",
-    successBar: "rgba(6, 64, 43, 0.6)",
-    errorBar: "rgba(220, 53, 69, 0.6)",
+    neutralBackground: "#F1F3F5",
+    neutralBar: "#52606D",
+    dangerBackground: "#FFF4E5",
+    dangerBar: "#9A4D00",
+    errorBackground: "#FDECEC",
+    successBackground: "#EAF7EF",
+    successBar: "#157A3D",
+    errorBar: "#B42318",
   },
   dark: {
     branding: "#3399FF",
@@ -82,39 +86,52 @@ const fallbackColors = {
     border: "#363A3F",
     fill: "#2C2C2E",
     error: "#FF453A",
-    dangerBackground: "rgba(255, 149, 0, 0.18)",
-    dangerBar: "rgba(255, 149, 0, 0.8)",
-    errorBackground: "rgba(220, 53, 69, 0.18)",
-    successBackground: "rgba(6, 64, 43, 0.24)",
-    successBar: "rgba(6, 64, 43, 0.6)",
-    errorBar: "rgba(220, 53, 69, 0.6)",
+    neutralBackground: "#272A2E",
+    neutralBar: "#B8C0CC",
+    dangerBackground: "#332611",
+    dangerBar: "#FFAD33",
+    errorBackground: "#36191D",
+    successBackground: "#12301F",
+    successBar: "#4CD27D",
+    errorBar: "#FF6B63",
   },
 } as const satisfies Record<"light" | "dark", ThemeColors>;
 
 const iosColors = Color.ios;
-const iosThemeColors =
-  Platform.OS === "ios" && iosColors
-    ? ({
-        branding: iosColors.systemBlue,
-        textOnBranding: fallbackColors.light.textOnBranding,
-        transparent: "transparent",
-        background: iosColors.systemGroupedBackground,
-        backgroundSecondary: iosColors.secondarySystemGroupedBackground,
-        text: iosColors.label,
-        textSecondary: iosColors.secondaryLabel,
-        border: iosColors.separator,
-        fill: iosColors.secondarySystemFill,
-        error: iosColors.systemRed,
-        dangerBackground: fallbackColors.light.dangerBackground,
-        dangerBar: iosColors.systemOrange,
-        errorBackground: fallbackColors.light.errorBackground,
-        successBackground: fallbackColors.light.successBackground,
-        successBar: fallbackColors.light.successBar,
-        errorBar: fallbackColors.light.errorBar,
-      } satisfies ThemeColors)
-    : null;
+export function getIosThemeColors(
+  colorScheme: "light" | "dark",
+): ThemeColors | null {
+  if (Platform.OS !== "ios" || !iosColors) {
+    return null;
+  }
 
-export function getAndroidThemeColors(): ThemeColors | null {
+  const statusColors = fallbackColors[colorScheme];
+
+  return {
+    branding: iosColors.systemBlue,
+    textOnBranding: fallbackColors.light.textOnBranding,
+    transparent: "transparent",
+    background: iosColors.systemGroupedBackground,
+    backgroundSecondary: iosColors.secondarySystemGroupedBackground,
+    text: iosColors.label,
+    textSecondary: iosColors.secondaryLabel,
+    border: iosColors.separator,
+    fill: iosColors.secondarySystemFill,
+    error: iosColors.systemRed,
+    neutralBackground: statusColors.neutralBackground,
+    neutralBar: statusColors.neutralBar,
+    dangerBackground: statusColors.dangerBackground,
+    dangerBar: statusColors.dangerBar,
+    errorBackground: statusColors.errorBackground,
+    successBackground: statusColors.successBackground,
+    successBar: statusColors.successBar,
+    errorBar: statusColors.errorBar,
+  } satisfies ThemeColors;
+}
+
+export function getAndroidThemeColors(
+  colorScheme: "light" | "dark" = "light",
+): ThemeColors | null {
   if (Platform.OS !== "android") {
     return null;
   }
@@ -124,6 +141,8 @@ export function getAndroidThemeColors(): ThemeColors | null {
   if (!androidColors) {
     return null;
   }
+
+  const statusColors = fallbackColors[colorScheme];
 
   return {
     branding: androidColors.primary,
@@ -136,18 +155,26 @@ export function getAndroidThemeColors(): ThemeColors | null {
     border: androidColors.outline,
     fill: androidColors.surfaceVariant,
     error: androidColors.error,
-    dangerBackground: fallbackColors.light.dangerBackground,
-    dangerBar: fallbackColors.light.dangerBar,
-    errorBackground: fallbackColors.light.errorBackground,
-    successBackground: fallbackColors.light.successBackground,
-    successBar: fallbackColors.light.successBar,
-    errorBar: fallbackColors.light.errorBar,
+    neutralBackground: statusColors.neutralBackground,
+    neutralBar: statusColors.neutralBar,
+    dangerBackground: statusColors.dangerBackground,
+    dangerBar: statusColors.dangerBar,
+    errorBackground: statusColors.errorBackground,
+    successBackground: statusColors.successBackground,
+    successBar: statusColors.successBar,
+    errorBar: statusColors.errorBar,
   } satisfies ThemeColors;
 }
 
 export const Colors = {
-  light: iosThemeColors ?? getAndroidThemeColors() ?? fallbackColors.light,
-  dark: iosThemeColors ?? getAndroidThemeColors() ?? fallbackColors.dark,
+  light:
+    getIosThemeColors("light") ??
+    getAndroidThemeColors("light") ??
+    fallbackColors.light,
+  dark:
+    getIosThemeColors("dark") ??
+    getAndroidThemeColors("dark") ??
+    fallbackColors.dark,
 } as const satisfies Record<"light" | "dark", ThemeColors>;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;

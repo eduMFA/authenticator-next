@@ -139,8 +139,8 @@ function getVariantColors(
       };
     case "neutral":
       return {
-        accent: theme.border,
-        background: theme.backgroundSecondary,
+        accent: theme.neutralBar,
+        background: theme.neutralBackground,
       };
     case "success":
       return {

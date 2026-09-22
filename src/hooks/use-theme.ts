@@ -1,4 +1,8 @@
-import { Colors, getAndroidThemeColors } from "@/constants/theme";
+import {
+  Colors,
+  getAndroidThemeColors,
+  getIosThemeColors,
+} from "@/constants/theme";
 import { Platform, useColorScheme } from "react-native";
 
 export function useTheme() {
@@ -6,7 +10,11 @@ export function useTheme() {
   const theme = scheme === "dark" ? "dark" : "light";
 
   if (Platform.OS === "android") {
-    return getAndroidThemeColors() ?? Colors[theme];
+    return getAndroidThemeColors(theme) ?? Colors[theme];
+  }
+
+  if (Platform.OS === "ios") {
+    return getIosThemeColors(theme) ?? Colors[theme];
   }
 
   return Colors[theme];
