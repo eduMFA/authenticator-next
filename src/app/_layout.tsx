@@ -175,6 +175,7 @@ function RootLayoutContent() {
         <Stack.Screen
           name="index"
           options={{
+            headerShown: Platform.OS !== "android",
             headerTitle: () =>
               Platform.OS === "android" ? (
                 <ThemedText fontSize={Typography.fontSize20} fontWeight="bold">

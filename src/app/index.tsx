@@ -1,3 +1,8 @@
+import {
+  AndroidTokenSearchBar,
+  type AndroidTokenSearchBarHandle,
+} from "@/components/android-token-search-bar";
+import { AndroidDevMenuSheet } from "@/components/android-dev-menu-sheet";
 import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -13,6 +18,7 @@ import { useToken } from "@/hooks/use-token";
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import type { TokenAction } from "@/types/token-actions";
+import type { DevMenuSection } from "@/types/dev-menu";
 import {
   getRefreshHapticPullProgress,
   getRefreshHapticRipple,
@@ -53,7 +59,7 @@ import {
   useRouter,
 } from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -88,14 +94,16 @@ export default function Tokens() {
   } = useNotificationStatus();
   const [isManualRefreshPolling, setIsManualRefreshPolling] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const [isAndroidDevMenuVisible, setIsAndroidDevMenuVisible] = useState(false);
   const { width } = useWindowDimensions();
-  const { bottom } = useSafeAreaInsets();
+  const { bottom, top } = useSafeAreaInsets();
   const theme = useTheme();
   const refreshHaptics = useRealtimeComposer();
   const didPopRefreshHaptic = useSharedValue(false);
   const isRefreshPullActive = useSharedValue(false);
   const refreshPullStartOffset = useSharedValue(0);
   const refreshHapticRippleIndex = useSharedValue(-1);
+  const androidSearchBarRef = useRef<AndroidTokenSearchBarHandle>(null);
   const backgroundColor = theme.background;
   const { t } = useLingui();
   const tabBarTintColor = theme.text;
@@ -163,6 +171,7 @@ export default function Tokens() {
   }, [searchQuery, tokens]);
 
   const dismissKeyboard = () => {
+    androidSearchBarRef.current?.blur();
     Keyboard.dismiss();
   };
 
@@ -322,7 +331,112 @@ export default function Tokens() {
     />
   );
 
-  const header = (
+  const devMenuSections: DevMenuSection[] = [
+    {
+      actions: [
+        {
+          androidIcon: PlayArrowSymbol,
+          disabled: devMenu.tokenActionDisabled,
+          iosIcon: "play.fill",
+          key: "rollout-start",
+          label: "Start",
+          onPress: devMenu.rolloutFirstToken,
+        },
+        {
+          androidIcon: CheckCircleSymbol,
+          disabled: devMenu.tokenActionDisabled,
+          iosIcon: "checkmark.circle.fill",
+          key: "rollout-success",
+          label: "Demo Success",
+          onPress: devMenu.demoRolloutSuccess,
+        },
+        {
+          androidIcon: CancelSymbol,
+          disabled: devMenu.tokenActionDisabled,
+          iosIcon: "xmark.circle.fill",
+          key: "rollout-failure",
+          label: "Demo Failure",
+          onPress: devMenu.demoRolloutFailure,
+        },
+      ],
+      androidIcon: SyncSymbol,
+      iosIcon: "arrow.trianglehead.2.clockwise.rotate.90",
+      key: "rollout",
+      title: "Rollout",
+    },
+    {
+      actions: [
+        {
+          androidIcon: AddCircleSymbol,
+          iosIcon: "plus.circle.fill",
+          key: "tokens-spawn-3",
+          label: "Spawn Sample 3",
+          onPress: () => devMenu.spawnSampleTokens(3),
+        },
+        {
+          androidIcon: AddCircleSymbol,
+          iosIcon: "plus.circle.fill",
+          key: "tokens-spawn-10",
+          label: "Spawn Sample 10",
+          onPress: () => devMenu.spawnSampleTokens(10),
+        },
+        {
+          androidIcon: DeleteSymbol,
+          destructive: true,
+          disabled: devMenu.tokenActionDisabled,
+          iosIcon: "trash.fill",
+          key: "tokens-clear",
+          label: "Clear",
+          onPress: devMenu.clearAllTokens,
+        },
+      ],
+      androidIcon: KeySymbol,
+      iosIcon: "key.fill",
+      key: "tokens",
+      title: "Tokens",
+    },
+    {
+      actions: [
+        {
+          androidIcon: NotificationAddSymbol,
+          disabled: devMenu.tokenActionDisabled,
+          iosIcon: "bell.badge.fill",
+          key: "push-spawn",
+          label: "Spawn Sample",
+          onPress: devMenu.spawnSamplePushRequest,
+        },
+        {
+          androidIcon: ClearAllSymbol,
+          destructive: true,
+          iosIcon: "clear.fill",
+          key: "push-clear",
+          label: "Clear",
+          onPress: devMenu.clearPushRequests,
+        },
+      ],
+      androidIcon: NotificationsSymbol,
+      iosIcon: "bell.fill",
+      key: "push-requests",
+      title: "Push Requests",
+    },
+    {
+      actions: [
+        {
+          androidIcon: RestartAltSymbol,
+          iosIcon: "arrow.counterclockwise",
+          key: "onboarding-reset",
+          label: "Show Onboarding",
+          onPress: devMenu.resetOnboarding,
+        },
+      ],
+      androidIcon: CodeSymbol,
+      iosIcon: "hammer.fill",
+      key: "app",
+      title: "App",
+    },
+  ];
+
+  const iosHeader = (
     <>
       <Stack.Screen.Title large style={{ color: tabBarTintColor }}>
         Tokens
@@ -361,118 +475,22 @@ export default function Tokens() {
             })}
           >
             <Stack.Toolbar.Label>DEV</Stack.Toolbar.Label>
-            <Stack.Toolbar.Menu
-              icon={Icon.select({
-                ios: "arrow.trianglehead.2.clockwise.rotate.90",
-                android: SyncSymbol,
-              })}
-            >
-              <Stack.Toolbar.Label>Rollout</Stack.Toolbar.Label>
-              <Stack.Toolbar.MenuAction
-                disabled={devMenu.tokenActionDisabled}
-                icon={Icon.select({
-                  ios: "play.fill",
-                  android: PlayArrowSymbol,
-                })}
-                onPress={devMenu.rolloutFirstToken}
-              >
-                Start
-              </Stack.Toolbar.MenuAction>
-              <Stack.Toolbar.MenuAction
-                disabled={devMenu.tokenActionDisabled}
-                icon={Icon.select({
-                  ios: "checkmark.circle.fill",
-                  android: CheckCircleSymbol,
-                })}
-                onPress={devMenu.demoRolloutSuccess}
-              >
-                Demo Success
-              </Stack.Toolbar.MenuAction>
-              <Stack.Toolbar.MenuAction
-                disabled={devMenu.tokenActionDisabled}
-                icon={Icon.select({
-                  ios: "xmark.circle.fill",
-                  android: CancelSymbol,
-                })}
-                onPress={devMenu.demoRolloutFailure}
-              >
-                Demo Failure
-              </Stack.Toolbar.MenuAction>
-            </Stack.Toolbar.Menu>
-            <Stack.Toolbar.Menu
-              icon={Icon.select({
-                ios: "key.fill",
-                android: KeySymbol,
-              })}
-            >
-              <Stack.Toolbar.Label>Tokens</Stack.Toolbar.Label>
-              <Stack.Toolbar.MenuAction
-                icon={Icon.select({
-                  ios: "plus.circle.fill",
-                  android: AddCircleSymbol,
-                })}
-                onPress={() => devMenu.spawnSampleTokens(3)}
-              >
-                Spawn Sample 3
-              </Stack.Toolbar.MenuAction>
-              <Stack.Toolbar.MenuAction
-                icon={Icon.select({
-                  ios: "plus.circle.fill",
-                  android: AddCircleSymbol,
-                })}
-                onPress={() => devMenu.spawnSampleTokens(10)}
-              >
-                Spawn Sample 10
-              </Stack.Toolbar.MenuAction>
-              <Stack.Toolbar.MenuAction
-                destructive
-                disabled={devMenu.tokenActionDisabled}
-                icon={Icon.select({
-                  ios: "trash.fill",
-                  android: DeleteSymbol,
-                })}
-                onPress={devMenu.clearAllTokens}
-              >
-                Clear
-              </Stack.Toolbar.MenuAction>
-            </Stack.Toolbar.Menu>
-            <Stack.Toolbar.Menu
-              icon={Icon.select({
-                ios: "bell.fill",
-                android: NotificationsSymbol,
-              })}
-            >
-              <Stack.Toolbar.Label>Push Requests</Stack.Toolbar.Label>
-              <Stack.Toolbar.MenuAction
-                disabled={devMenu.tokenActionDisabled}
-                icon={Icon.select({
-                  ios: "bell.badge.fill",
-                  android: NotificationAddSymbol,
-                })}
-                onPress={devMenu.spawnSamplePushRequest}
-              >
-                Spawn Sample
-              </Stack.Toolbar.MenuAction>
-              <Stack.Toolbar.MenuAction
-                destructive
-                icon={Icon.select({
-                  ios: "clear.fill",
-                  android: ClearAllSymbol,
-                })}
-                onPress={devMenu.clearPushRequests}
-              >
-                Clear
-              </Stack.Toolbar.MenuAction>
-            </Stack.Toolbar.Menu>
-            <Stack.Toolbar.MenuAction
-              icon={Icon.select({
-                ios: "arrow.counterclockwise",
-                android: RestartAltSymbol,
-              })}
-              onPress={devMenu.resetOnboarding}
-            >
-              Show Onboarding
-            </Stack.Toolbar.MenuAction>
+            {devMenuSections.map((section) => (
+              <Stack.Toolbar.Menu icon={section.iosIcon} key={section.key}>
+                <Stack.Toolbar.Label>{section.title}</Stack.Toolbar.Label>
+                {section.actions.map((action) => (
+                  <Stack.Toolbar.MenuAction
+                    destructive={action.destructive}
+                    disabled={action.disabled}
+                    icon={action.iosIcon}
+                    key={action.key}
+                    onPress={action.onPress}
+                  >
+                    {action.label}
+                  </Stack.Toolbar.MenuAction>
+                ))}
+              </Stack.Toolbar.Menu>
+            ))}
           </Stack.Toolbar.Menu>
         )}
         {Platform.OS === "ios" &&
@@ -483,12 +501,56 @@ export default function Tokens() {
     </>
   );
 
+  const header =
+    Platform.OS === "android" ? (
+      <View
+        style={[
+          styles.androidSearchHeader,
+          { backgroundColor, paddingTop: top + Spacing.sm },
+        ]}
+      >
+        <AndroidTokenSearchBar
+          ref={androidSearchBarRef}
+          query={searchText}
+          placeholder={t`Search tokens`}
+          onDevMenuPress={
+            __DEV__
+              ? () => {
+                  dismissKeyboard();
+                  setIsAndroidDevMenuVisible(true);
+                }
+              : undefined
+          }
+          onSettingsPress={() => {
+            dismissKeyboard();
+            router.navigate("/settings");
+          }}
+          onQueryChange={(query) => {
+            router.setParams({ q: query });
+          }}
+        />
+      </View>
+    ) : (
+      iosHeader
+    );
+
   const footer = isLiquidGlassAvailable() ? (
     <Stack.Toolbar placement="bottom">
       <Stack.Toolbar.SearchBarSlot />
       {showToolbarAddButton && toolbarAddButton}
     </Stack.Toolbar>
   ) : null;
+
+  const androidDevMenuSheet =
+    Platform.OS === "android" && __DEV__ ? (
+      <AndroidDevMenuSheet
+        sections={devMenuSections}
+        visible={isAndroidDevMenuVisible}
+        onDismissRequest={() => {
+          setIsAndroidDevMenuVisible(false);
+        }}
+      />
+    ) : null;
 
   const shouldAvoidBottomInset = isKeyboardVisible && Keyboard.isVisible();
   const usesLegacyAndroidInsets =
@@ -527,7 +589,10 @@ export default function Tokens() {
     return (
       <>
         {header}
-        <ThemedView style={styles.noTokenContainer}>
+        <ThemedView
+          onTouchStart={dismissKeyboard}
+          style={styles.noTokenContainer}
+        >
           <ThemedView type="backgroundSecondary" style={styles.noTokenIcon}>
             <SymbolView
               name={{ ios: "lock.shield", android: "shield_lock" }}
@@ -585,6 +650,7 @@ export default function Tokens() {
           )}
         </ThemedView>
         {androidAddFab}
+        {androidDevMenuSheet}
         {footer}
       </>
     );
@@ -599,6 +665,7 @@ export default function Tokens() {
           contentInsetAdjustmentBehavior="automatic"
           onScroll={onRefreshScroll}
           onScrollBeginDrag={dismissKeyboard}
+          onTouchStart={dismissKeyboard}
           scrollEventThrottle={16}
           keyboardShouldPersistTaps="handled"
           style={{ backgroundColor }}
@@ -710,12 +777,17 @@ export default function Tokens() {
         />
       </KeyboardAvoidingView>
       {androidAddFab}
+      {androidDevMenuSheet}
       {footer}
     </>
   );
 }
 
 export const styles = StyleSheet.create({
+  androidSearchHeader: {
+    paddingBottom: Spacing.sm,
+    paddingHorizontal: Spacing.lg,
+  },
   contentContainer: {
     flexGrow: 1,
     paddingHorizontal: Spacing.lg,
