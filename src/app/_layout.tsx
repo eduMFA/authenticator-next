@@ -171,7 +171,16 @@ function RootLayoutContent() {
   return (
     <>
       <StatusBar backgroundColor={theme.background} barStyle={statusBarStyle} />
-      <Stack>
+      <Stack
+        screenOptions={
+          process.env.EXPO_OS === "android"
+            ? {
+                contentStyle: { backgroundColor: theme.background },
+                headerStyle: { backgroundColor: theme.background },
+              }
+            : undefined
+        }
+      >
         <Stack.Screen
           name="index"
           options={{
