@@ -186,6 +186,7 @@ function RootLayoutContent() {
         <Stack.Screen
           name="settings/index"
           options={{
+            headerShadowVisible: false,
             headerTransparent: Platform.OS === "ios",
             title: "Settings",
           }}
@@ -207,6 +208,7 @@ function RootLayoutContent() {
         <Stack.Screen
           name="token/add"
           options={{
+            headerShadowVisible: false,
             headerTransparent: Platform.OS === "ios" ? true : false,
             title: "",
             presentation:
