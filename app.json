@@ -94,6 +94,7 @@
             "enableShrinkResourcesInReleaseBuilds": true
           },
           "ios": {
+            "enableSceneSupport": true,
             "useFrameworks": "dynamic"
           }
         }
