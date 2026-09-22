@@ -1,4 +1,9 @@
-import type { Breadcrumb, ErrorEvent, Exception } from "@sentry/react-native";
+import type {
+  Breadcrumb,
+  ErrorEvent,
+  Exception,
+  SendFeedbackParams,
+} from "@sentry/react-native";
 import * as Sentry from "@sentry/react-native";
 import { isRunningInExpoGo } from "expo";
 import type { ComponentType } from "react";
@@ -16,6 +21,8 @@ const OTP_AUTH_URI_PATTERN = /otpauth:\/\/[^\s"'<>)]*/gi;
 let sentryInitialized = false;
 let sentryTrackingEnabled = false;
 
+export type UserFeedbackType = "bug_report" | "feature_request" | "general";
+
 export function setSentryTrackingEnabled(enabled: boolean): void {
   if (enabled) {
     if (!sentryTrackingEnabled) {
@@ -29,6 +36,7 @@ export function setSentryTrackingEnabled(enabled: boolean): void {
   }
 
   sentryTrackingEnabled = false;
+  sentryInitialized = false;
 
   void Sentry.close().catch((error: unknown) => {
     if (__DEV__) {
@@ -37,13 +45,32 @@ export function setSentryTrackingEnabled(enabled: boolean): void {
   });
 }
 
-function initSentry(enabled: boolean): void {
-  const enableNative = !isRunningInExpoGo();
+export function submitUserFeedback(
+  feedback: Pick<SendFeedbackParams, "email" | "message" | "name">,
+  type: UserFeedbackType,
+): void {
+  if (!sentryTrackingEnabled) {
+    // Explicit feedback is allowed independently of automatic reporting.
+    // Other events remain blocked by beforeSend below.
+    initSentry(false);
+  }
+
+  Sentry.withScope((scope) => {
+    scope.setTag("feedback.type", type);
+    return Sentry.captureFeedback({
+      ...feedback,
+      source: "settings",
+    });
+  });
+}
+
+function initSentry(trackingEnabled: boolean): void {
+  const enableNative = trackingEnabled && !isRunningInExpoGo();
 
   Sentry.init({
     dsn: SENTRY_DSN,
     environment: SENTRY_ENVIRONMENT,
-    enabled,
+    enabled: true,
     debug: false,
     sendDefaultPii: false,
     sampleRate: 1,
@@ -72,11 +99,18 @@ function initSentry(enabled: boolean): void {
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: 0,
     beforeBreadcrumb: sanitizeBreadcrumb,
-    beforeSend: sanitizeEvent,
+    beforeSend: (event) => {
+      if (event.type === "feedback") {
+        return event;
+      }
+
+      return sentryTrackingEnabled ? sanitizeEvent(event) : null;
+    },
+    integrations: [Sentry.feedbackIntegration({})],
   });
 
   sentryInitialized = true;
-  sentryTrackingEnabled = enabled;
+  sentryTrackingEnabled = trackingEnabled;
 }
 
 export function withSentryRoot<P extends Record<string, unknown>>(
