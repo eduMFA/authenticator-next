@@ -94,6 +94,7 @@ export default function Tokens() {
   } = useNotificationStatus();
   const [isManualRefreshPolling, setIsManualRefreshPolling] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isAndroidDevMenuVisible, setIsAndroidDevMenuVisible] = useState(false);
   const { width } = useWindowDimensions();
   const { bottom, top } = useSafeAreaInsets();
@@ -448,10 +449,16 @@ export default function Tokens() {
           tintColor={tabBarTintColor}
           textColor={tabBarTintColor}
           placeholder={t`Search tokens`}
+          onBlur={() => {
+            setIsSearchFocused(false);
+          }}
           onChangeText={(event) => {
             router.setParams({
               q: event.nativeEvent.text,
             });
+          }}
+          onFocus={() => {
+            setIsSearchFocused(true);
           }}
         />
       ) : null}
@@ -513,6 +520,7 @@ export default function Tokens() {
           ref={androidSearchBarRef}
           query={searchText}
           placeholder={t`Search tokens`}
+          onFocusChange={setIsSearchFocused}
           onDevMenuPress={
             __DEV__
               ? () => {
@@ -733,7 +741,7 @@ export default function Tokens() {
             </Animated.View>
           }
           ListHeaderComponent={
-            showNotificationNotice && !searchQuery ? (
+            showNotificationNotice && !searchQuery && !isSearchFocused ? (
               <View style={styles.notificationNotice}>
                 <Pressable
                   disabled={

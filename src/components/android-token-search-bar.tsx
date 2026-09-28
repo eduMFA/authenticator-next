@@ -67,6 +67,7 @@ export type AndroidTokenSearchBarHandle = {
 
 type AndroidTokenSearchBarProps = {
   onDevMenuPress?: () => void;
+  onFocusChange?: (focused: boolean) => void;
   onQueryChange: (query: string) => void;
   onSettingsPress: () => void;
   placeholder: string;
@@ -77,7 +78,14 @@ export const AndroidTokenSearchBar = forwardRef<
   AndroidTokenSearchBarHandle,
   AndroidTokenSearchBarProps
 >(function AndroidTokenSearchBar(
-  { onDevMenuPress, onQueryChange, onSettingsPress, placeholder, query },
+  {
+    onDevMenuPress,
+    onFocusChange,
+    onQueryChange,
+    onSettingsPress,
+    placeholder,
+    query,
+  },
   forwardedRef,
 ) {
   const theme = useTheme();
@@ -152,6 +160,7 @@ export const AndroidTokenSearchBar = forwardRef<
   const handleFocusChanged = (focused: boolean) => {
     isFocusedRef.current = focused;
     setIsFocused(focused);
+    onFocusChange?.(focused);
   };
 
   const containerColor = theme.backgroundSecondary;
