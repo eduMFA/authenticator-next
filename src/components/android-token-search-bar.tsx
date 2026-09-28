@@ -21,6 +21,7 @@ import {
 import {
   fillMaxWidth,
   height,
+  padding,
   size,
   weight,
 } from "@expo/ui/jetpack-compose/modifiers";
@@ -60,6 +61,11 @@ const searchTextStyle = {
   fontSize: Typography.fontSize16,
   fontWeight: "500",
 } as const;
+const appNameTextStyle = {
+  fontFamily: Typography.fontFamilyBold,
+  fontSize: Typography.fontSize20,
+  fontWeight: "700",
+} as const;
 
 export type AndroidTokenSearchBarHandle = {
   blur: () => void;
@@ -72,6 +78,7 @@ type AndroidTokenSearchBarProps = {
   onSettingsPress: () => void;
   placeholder: string;
   query: string;
+  searchEnabled: boolean;
 };
 
 export const AndroidTokenSearchBar = forwardRef<
@@ -85,6 +92,7 @@ export const AndroidTokenSearchBar = forwardRef<
     onSettingsPress,
     placeholder,
     query,
+    searchEnabled,
   },
   forwardedRef,
 ) {
@@ -146,6 +154,15 @@ export const AndroidTokenSearchBar = forwardRef<
     }
   }, [nativeQuery, query]);
 
+  useEffect(() => {
+    if (searchEnabled) {
+      return;
+    }
+
+    dismissInput();
+    onFocusChange?.(false);
+  }, [dismissInput, onFocusChange, searchEnabled]);
+
   const handleClose = () => {
     if (query) {
       nativeQuery.set("");
@@ -172,90 +189,100 @@ export const AndroidTokenSearchBar = forwardRef<
         verticalAlignment="center"
         modifiers={[fillMaxWidth(), height(56)]}
       >
-        <TextField
-          ref={inputRef}
-          value={nativeQuery}
-          singleLine
-          shape={Shape.Pill({})}
-          colors={{
-            cursorColor: theme.branding,
-            focusedContainerColor: containerColor,
-            unfocusedContainerColor: containerColor,
-            focusedIndicatorColor: containerColor,
-            unfocusedIndicatorColor: containerColor,
-            focusedPlaceholderColor: theme.textSecondary,
-            unfocusedPlaceholderColor: theme.textSecondary,
-            focusedTextColor: theme.text,
-            unfocusedTextColor: theme.text,
-          }}
-          keyboardOptions={{ imeAction: "search" }}
-          textStyle={searchTextStyle}
-          keyboardActions={{
-            onSearch: () => {
-              dismissInput();
-            },
-          }}
-          modifiers={[weight(1), height(56)]}
-          onFocusChanged={handleFocusChanged}
-          onValueChange={onQueryChange}
-        >
-          <TextField.LeadingIcon>
-            <RNHostView matchContents>
-              <View style={styles.leadingIconContainer}>
-                <ReactNativeTextInput
-                  ref={keyboardDismissTargetRef}
-                  accessibilityElementsHidden
-                  caretHidden
-                  importantForAccessibility="no-hide-descendants"
-                  showSoftInputOnFocus={false}
-                  style={styles.keyboardDismissTarget}
-                />
-                <Animated.View
-                  pointerEvents="none"
-                  style={[styles.leadingIcon, logoAnimatedStyle]}
-                >
-                  <View style={styles.logoContainer}>
-                    <Image
-                      accessibilityLabel="eduMFA"
-                      contentFit="contain"
-                      source={logoSource}
-                      style={[styles.logo, { tintColor: theme.text }]}
-                    />
-                  </View>
-                </Animated.View>
-                <Animated.View
-                  pointerEvents="none"
-                  style={[styles.leadingIcon, searchAnimatedStyle]}
-                >
-                  <SymbolView
-                    name={{ ios: "magnifyingglass", android: "search" }}
-                    size={24}
-                    tintColor={theme.text}
+        {searchEnabled ? (
+          <TextField
+            ref={inputRef}
+            value={nativeQuery}
+            singleLine
+            shape={Shape.Pill({})}
+            colors={{
+              cursorColor: theme.branding,
+              focusedContainerColor: containerColor,
+              unfocusedContainerColor: containerColor,
+              focusedIndicatorColor: containerColor,
+              unfocusedIndicatorColor: containerColor,
+              focusedPlaceholderColor: theme.textSecondary,
+              unfocusedPlaceholderColor: theme.textSecondary,
+              focusedTextColor: theme.text,
+              unfocusedTextColor: theme.text,
+            }}
+            keyboardOptions={{ imeAction: "search" }}
+            textStyle={searchTextStyle}
+            keyboardActions={{
+              onSearch: () => {
+                dismissInput();
+              },
+            }}
+            modifiers={[weight(1), height(56)]}
+            onFocusChanged={handleFocusChanged}
+            onValueChange={onQueryChange}
+          >
+            <TextField.LeadingIcon>
+              <RNHostView matchContents>
+                <View style={styles.leadingIconContainer}>
+                  <ReactNativeTextInput
+                    ref={keyboardDismissTargetRef}
+                    accessibilityElementsHidden
+                    caretHidden
+                    importantForAccessibility="no-hide-descendants"
+                    showSoftInputOnFocus={false}
+                    style={styles.keyboardDismissTarget}
                   />
-                </Animated.View>
-              </View>
-            </RNHostView>
-          </TextField.LeadingIcon>
-          <TextField.Placeholder>
-            <Text style={searchTextStyle}>{placeholder}</Text>
-          </TextField.Placeholder>
-          <TextField.TrailingIcon>
-            <AnimatedVisibility
-              visible={isFocused}
-              enterTransition={iconEnterTransition}
-              exitTransition={reverseIconExitTransition}
-            >
-              <IconButton onClick={handleClose} modifiers={[size(40, 40)]}>
-                <Icon
-                  contentDescription={query ? "Clear search" : "Close search"}
-                  source={CloseSymbol}
-                  tint={theme.textSecondary}
-                  size={22}
-                />
-              </IconButton>
-            </AnimatedVisibility>
-          </TextField.TrailingIcon>
-        </TextField>
+                  <Animated.View
+                    pointerEvents="none"
+                    style={[styles.leadingIcon, logoAnimatedStyle]}
+                  >
+                    <View style={styles.logoContainer}>
+                      <Image
+                        accessibilityLabel="eduMFA"
+                        contentFit="contain"
+                        source={logoSource}
+                        style={[styles.logo, { tintColor: theme.text }]}
+                      />
+                    </View>
+                  </Animated.View>
+                  <Animated.View
+                    pointerEvents="none"
+                    style={[styles.leadingIcon, searchAnimatedStyle]}
+                  >
+                    <SymbolView
+                      name={{ ios: "magnifyingglass", android: "search" }}
+                      size={24}
+                      tintColor={theme.text}
+                    />
+                  </Animated.View>
+                </View>
+              </RNHostView>
+            </TextField.LeadingIcon>
+            <TextField.Placeholder>
+              <Text style={searchTextStyle}>{placeholder}</Text>
+            </TextField.Placeholder>
+            <TextField.TrailingIcon>
+              <AnimatedVisibility
+                visible={isFocused}
+                enterTransition={iconEnterTransition}
+                exitTransition={reverseIconExitTransition}
+              >
+                <IconButton onClick={handleClose} modifiers={[size(40, 40)]}>
+                  <Icon
+                    contentDescription={query ? "Clear search" : "Close search"}
+                    source={CloseSymbol}
+                    tint={theme.textSecondary}
+                    size={22}
+                  />
+                </IconButton>
+              </AnimatedVisibility>
+            </TextField.TrailingIcon>
+          </TextField>
+        ) : (
+          <Text
+            color={theme.text as string}
+            modifiers={[weight(1), padding(16, 0, 0, 0)]}
+            style={appNameTextStyle}
+          >
+            eduMFA
+          </Text>
+        )}
         {onDevMenuPress ? (
           <IconButton onClick={onDevMenuPress} modifiers={[size(48, 48)]}>
             <Icon

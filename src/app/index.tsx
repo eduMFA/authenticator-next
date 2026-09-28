@@ -520,6 +520,7 @@ export default function Tokens() {
           ref={androidSearchBarRef}
           query={searchText}
           placeholder={t`Search tokens`}
+          searchEnabled={tokens.length > 0}
           onFocusChange={setIsSearchFocused}
           onDevMenuPress={
             __DEV__
