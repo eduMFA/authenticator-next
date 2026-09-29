@@ -1,9 +1,10 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { keepAppNameTogether } from "@/constants/branding";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { OPEN_SOURCE_LICENSES } from "@/generated/open-source-licenses";
 import { useTheme } from "@/hooks/use-theme";
-import { Trans, useLingui } from "@lingui/react/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Stack, useRouter } from "expo-router";
 import { SymbolView } from "expo-symbols";
 import { FlatList, Pressable, StyleSheet, View } from "react-native";
@@ -28,10 +29,9 @@ export default function LicensesScreen() {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <ThemedText style={styles.intro} themeColor="textSecondary">
-            <Trans>
-              eduMFA uses {licenseCount} open-source packages. Package details
-              are generated from the installed production dependency graph.
-            </Trans>
+            {keepAppNameTogether(
+              t`eduMFA Push uses ${licenseCount} open-source packages. Package details are generated from the installed production dependency graph.`,
+            )}
           </ThemedText>
         }
         ItemSeparatorComponent={() => (

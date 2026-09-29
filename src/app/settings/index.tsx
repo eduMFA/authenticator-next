@@ -1,6 +1,7 @@
 import { SettingsRow } from "@/components/settings-row";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
+import { keepAppNameTogether } from "@/constants/branding";
 import { SETTINGS_LINKS } from "@/constants/settings";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -16,6 +17,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -133,7 +135,7 @@ export default function SettingsScreen() {
           <Divider />
           <SettingsRow
             icon={{ android: "star", ios: "star" }}
-            label={t`Review eduMFA`}
+            label={keepAppNameTogether(t`Review eduMFA Push`)}
             onPress={() =>
               openUrl(
                 Platform.OS === "ios"
@@ -193,7 +195,8 @@ export default function SettingsScreen() {
           style={styles.version}
           themeColor="textSecondary"
         >
-          eduMFA {version}
+          eduMFA{"\u00A0"}
+          <Text style={{ color: theme.branding }}>Push</Text> {version}
           {build ? ` (${build})` : ""}
         </ThemedText>
       </ScrollView>

@@ -1,4 +1,4 @@
-# eduMFA Authenticator
+# eduMFA Push
 
 This app is the client-side implementation of eduMFA's [`edupush` token type](https://edumfa.readthedocs.io/en/latest/tokens/tokentypes/edupush.html). It enrolls push tokens and lets users approve or deny sign-in requests from their eduMFA server.
 

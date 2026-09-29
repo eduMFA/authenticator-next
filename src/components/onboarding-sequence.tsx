@@ -30,6 +30,7 @@ import {
   Linking,
   PanResponder,
   StyleSheet,
+  Text,
   useColorScheme,
   useWindowDimensions,
   View,
@@ -94,7 +95,7 @@ export function OnboardingSequence() {
       {
         id: "welcome",
         kicker: t`Welcome`,
-        title: t`Welcome to eduMFA`,
+        title: t`Welcome to eduMFA Push`,
         body: t`Keep your authentication tokens in one place and approve sign-ins securely from this device.`,
         accent: onboardingStepAccents[0],
       },
@@ -486,7 +487,14 @@ export function OnboardingSequence() {
                           },
                         ]}
                       >
-                        {contentStep.title}
+                        {contentStep.title.split("eduMFA Push")[0]}
+                        {contentStep.title.includes("eduMFA Push") ? (
+                          <>
+                            eduMFA{"\u00A0"}
+                            <Text style={{ color: theme.branding }}>Push</Text>
+                            {contentStep.title.split("eduMFA Push")[1]}
+                          </>
+                        ) : null}
                       </ThemedText>
                       <ThemedText
                         themeColor="textSecondary"
