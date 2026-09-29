@@ -206,8 +206,8 @@ msgid "Haptics"
 msgstr "Haptics"
 
 #: src/components/onboarding-sequence.tsx:111
-msgid "Help improve eduMFA"
-msgstr "Help improve eduMFA"
+msgid "Help improve the app"
+msgstr "Help improve the app"
 
 #: src/components/onboarding-sequence/step-actions.tsx:173
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."

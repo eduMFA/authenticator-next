@@ -108,7 +108,7 @@ export function OnboardingSequence() {
       {
         id: "privacy",
         kicker: t`Your choice`,
-        title: t`Help improve eduMFA`,
+        title: t`Help improve the app`,
         body: t`Choose whether to share anonymous crash and error reports.`,
         accent: onboardingStepAccents[2],
       },
