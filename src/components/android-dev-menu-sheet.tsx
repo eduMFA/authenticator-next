@@ -13,6 +13,7 @@ import {
   clickable,
   fillMaxWidth,
   padding,
+  verticalScroll,
 } from "@expo/ui/jetpack-compose/modifiers";
 import { Fragment } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
@@ -52,7 +53,9 @@ export function AndroidDevMenuSheet({
         onDismissRequest={onDismissRequest}
         skipPartiallyExpanded
       >
-        <Column modifiers={[fillMaxWidth(), padding(0, 0, 0, 24)]}>
+        <Column
+          modifiers={[fillMaxWidth(), verticalScroll(), padding(0, 0, 0, 24)]}
+        >
           <Text
             color={theme.text as string}
             modifiers={[padding(24, 8, 24, 12)]}
