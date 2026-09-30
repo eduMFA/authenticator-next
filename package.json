@@ -17,7 +17,10 @@
     "test": "jest",
     "lint": "expo lint",
     "clean-ios": "watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache",
-    "full-clean-ios": "rm -rf node_modules && bun pm cache rm && bun i && watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache"
+    "full-clean-ios": "rm -rf node_modules && bun pm cache rm && bun i && watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache",
+    "test:coverage": "jest --coverage --runInBand",
+    "typecheck": "tsc --noEmit",
+    "test:watch": "jest --watchAll --coverage=false"
   },
   "dependencies": {
     "@expo-google-fonts/inter": "^0.4.2",
@@ -50,7 +53,6 @@
     "expo-splash-screen": "~57.0.9",
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
-    "jest": "~29.7.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
@@ -75,13 +77,43 @@
     "eslint-plugin-lingui": "^0.14.0",
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-react-native": "^5.0.0",
+    "jest": "~29.7.0",
+    "jest-expo": "~57.0.0",
     "prettier": "^3.9.8",
     "typescript": "~6.0.3"
   },
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@sentry/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
-    ]
+      "node_modules/(?!(\\.bun/|(jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/.*|@scure/.*|@lingui/.*|@messageformat/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg))"
+    ],
+    "clearMocks": true,
+    "restoreMocks": true,
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.ts"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "collectCoverageFrom": [
+      "src/services/**/*.ts",
+      "src/utils/**/*.ts",
+      "src/stores/**/*.ts",
+      "src/types/token.ts",
+      "src/errors/**/*.ts",
+      "src/components/token-detail/token-detail-utils.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 95,
+        "branches": 90,
+        "functions": 95,
+        "lines": 95
+      }
+    },
+    "transform": {
+      "^.+\\.[jt]sx?$": "babel-jest",
+      "^.+\\.mjs$": "babel-jest"
+    }
   }
 }
