@@ -25,6 +25,19 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Tests
+
+```bash
+bun run test --runInBand
+bun run test:watch
+bun run test:coverage
+bun run typecheck
+```
+
+Jest uses the Expo preset with mocked native APIs and network responses. The suite covers all services, stores, utilities, rollout state helpers, errors, and token detail helpers. Coverage includes untested files within those directories and enforces at least 95% statements, lines, and functions, plus 90% branches. Screens, UI components, hooks, and native RSA implementations are outside this unit coverage scope.
+
+The HTML report is available at `coverage/lcov-report/index.html`. Pull requests run the suite with coverage checks.
+
 ## Releases
 
 Releases are tag-driven through EAS Workflows. The `main` branch is the development branch and does not publish store builds by itself.
