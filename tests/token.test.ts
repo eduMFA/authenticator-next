@@ -111,7 +111,7 @@ describe("enrollment URI parsing", () => {
       parseTokenResponse(
         response(200, { detail: { public_key: "abc\ndef\n" } }),
       ),
-    ).resolves.toBe("abcdef");
+    ).resolves.toEqual({ serverPublicKey: "abcdef" });
     await expect(parseTokenResponse(response())).rejects.toThrow();
   });
 });

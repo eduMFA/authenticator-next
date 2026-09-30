@@ -68,6 +68,9 @@ export function useChallengePolling(): UseChallengePollingResult {
 
       for (const tokenResult of result.tokenResults ?? []) {
         updateToken(tokenResult.tokenId, {
+          ...(tokenResult.success && tokenResult.imageUrl !== undefined
+            ? { imageUrl: tokenResult.imageUrl ?? undefined }
+            : {}),
           lastRefreshResult: {
             status: tokenResult.success
               ? PushTokenRefreshStatus.Success

@@ -1,3 +1,4 @@
+import { parseImageUrl } from "@/utils/token-image";
 import { EDUMFA_PROTOCOL, OTP_PROTOCOL } from "@/constants/auth";
 import { DEFAULT_TOKEN_TTL } from "@/constants/token";
 import {
@@ -173,8 +174,15 @@ export const parseIssuer = (uri: URL) => {
   return undefined;
 };
 
-export const parseTokenResponse = async (response: Response) => {
-  const data = await response.json();
-  const key = data.detail.public_key.replaceAll("\n", "");
-  return key;
+export const parseTokenResponse = async (
+  response: Response,
+): Promise<{ serverPublicKey: string; imageUrl?: string | null }> => {
+  const data: { detail: { public_key: string; image?: unknown } } =
+    await response.json();
+  const serverPublicKey = data.detail.public_key.replaceAll("\n", "");
+  const imageUrl = parseImageUrl(data.detail.image);
+  return {
+    serverPublicKey,
+    ...(imageUrl !== undefined ? { imageUrl } : {}),
+  };
 };

@@ -143,10 +143,11 @@ export async function performTokenRollout(
     currentStep = PushTokenRolloutState.ParsingResponse;
     updateState(id, { rolloutState: currentStep });
 
-    const serverPublicKey = await parseTokenResponse(response);
+    const { serverPublicKey, imageUrl } = await parseTokenResponse(response);
     updateState(id, {
       rolloutState: PushTokenRolloutState.Completed,
       serverPublicKey,
+      ...(imageUrl !== undefined ? { imageUrl: imageUrl ?? undefined } : {}),
     });
 
     return { success: true, serverPublicKey };
