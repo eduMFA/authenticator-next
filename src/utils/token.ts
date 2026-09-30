@@ -12,14 +12,6 @@ import { PushTokenRolloutState } from "@/types/token";
 const parseTokenV1 = (url: URL) => {
   const pushToken: Partial<PushToken> = {};
 
-  const imageParam = url.searchParams.get("imageUri");
-  if (imageParam != null) {
-    try {
-      pushToken["imageUrl"] = new URL(imageParam).toString();
-    } catch {
-      throw new InvalidUrlError("The provided image URL is invalid.");
-    }
-  }
   const { label, issuer } = parseLabelAndIssuer(url);
   pushToken["label"] = label;
   pushToken["issuer"] = issuer;
