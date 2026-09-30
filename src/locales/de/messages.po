@@ -39,10 +39,10 @@ msgstr "Token hinzufügen"
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
-#: src/components/feedback-form.android.tsx:111
+#: src/components/feedback-form.android.tsx:145
 #: src/components/feedback-form.ios.tsx:130
-msgid "Add your name and email if you would like us to contact you with follow-up questions or updates about your feedback."
-msgstr "Gib deinen Namen und deine E-Mail-Adresse an, wenn wir dich bei Rückfragen oder Neuigkeiten zu deinem Feedback kontaktieren dürfen."
+#~ msgid "Add your name and email if you would like us to contact you with follow-up questions or updates about your feedback."
+#~ msgstr "Gib deinen Namen und deine E-Mail-Adresse an, wenn wir dich bei Rückfragen oder Neuigkeiten zu deinem Feedback kontaktieren dürfen."
 
 #: src/components/token-add/camera-permission-splash.tsx:37
 msgid "Allow camera access"
@@ -72,6 +72,24 @@ msgstr "Automatisch"
 msgid "Bug report"
 msgstr "Fehlerbericht"
 
+#: src/components/feedback-form.android.tsx:189
+#: src/components/feedback-form.ios.tsx:171
+#~ msgid "By sending feedback, you agree to the processing of your data as described in our Privacy Policy."
+#~ msgstr "Mit dem Senden des Feedbacks stimmst du der Verarbeitung deiner Daten gemäß unserer Datenschutzerklärung zu."
+
+#: src/components/feedback-form.android.tsx:202
+msgid "By sending feedback, you agree to the processing of your data under our"
+msgstr "Mit dem Senden des Feedbacks akzeptierst du die Verarbeitung deiner Daten gemäß unserer"
+
+#: src/components/feedback-form.ios.tsx:172
+msgid "By sending feedback, you agree to the processing of your data under our [Privacy policy](https://edumfa.io/app-privacy)."
+msgstr "Mit dem Senden des Feedbacks stimmst du der Verarbeitung deiner Daten gemäß unserer [Datenschutzerklärung](https://edumfa.io/app-privacy) zu."
+
+#: src/components/feedback-form.android.tsx:196
+#: src/components/feedback-form.ios.tsx:173
+#~ msgid "By sending feedback, you agree to the processing of your data."
+#~ msgstr "Mit dem Senden des Feedbacks stimmst du der Verarbeitung deiner Daten zu."
+
 #: src/components/token-add/camera-permission-splash.tsx:44
 msgid "Camera access is required to scan the QR code and pair a token."
 msgstr "Kamerazugriff ist erforderlich, um den QR-Code zu scannen und einen Token zu koppeln."
@@ -89,19 +107,20 @@ msgid "Change the app language in system settings"
 msgstr "App-Sprache in den Systemeinstellungen ändern"
 
 #: src/components/feedback-form.ios.tsx:95
-msgid "Choose the category that best matches your feedback. Your message and optional contact details will be sent to eduMFA through Sentry."
-msgstr "Wähle die Kategorie, die am besten zu deinem Feedback passt. Deine Nachricht und optionalen Kontaktdaten werden über Sentry an eduMFA gesendet."
+#~ msgid "Choose the category that best matches your feedback. Your message and optional contact details will be sent to eduMFA through Sentry."
+#~ msgstr "Wähle die Kategorie, die am besten zu deinem Feedback passt. Deine Nachricht und optionalen Kontaktdaten werden über Sentry an eduMFA gesendet."
 
 #: src/components/onboarding-sequence.tsx:112
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
 
-#: src/components/feedback-form.android.tsx:81
+#: src/components/feedback-form.android.tsx:94
 #: src/components/feedback-form.ios.tsx:83
 msgid "Close"
 msgstr "Schließen"
 
-#: src/components/feedback-form.ios.tsx:127
+#: src/components/feedback-form.android.tsx:163
+#: src/components/feedback-form.ios.tsx:122
 msgid "Contact (optional)"
 msgstr "Kontakt (optional)"
 
@@ -150,7 +169,7 @@ msgstr "Schließen"
 msgid "Don't share anonymous reports"
 msgstr "Anonyme Berichte nicht teilen"
 
-#: src/components/feedback-form.android.tsx:66
+#: src/components/feedback-form.android.tsx:79
 #: src/components/feedback-form.ios.tsx:54
 msgid "Done"
 msgstr "Fertig"
@@ -168,8 +187,8 @@ msgstr "Token bearbeiten"
 msgid "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
 msgstr "eduMFA verwendet {licenseCount} Open-Source-Pakete. Die Paketdetails werden aus den installierten Produktionsabhängigkeiten generiert."
 
-#: src/components/feedback-form.android.tsx:134
-#: src/components/feedback-form.ios.tsx:144
+#: src/components/feedback-form.android.tsx:188
+#: src/components/feedback-form.ios.tsx:139
 msgid "Email (optional)"
 msgstr "E-Mail (optional)"
 
@@ -219,12 +238,14 @@ msgstr "Feedback"
 msgid "Feedback could not be sent. Please try again."
 msgstr "Feedback konnte nicht gesendet werden. Bitte versuche es erneut."
 
+#: src/components/feedback-form.android.tsx:101
 #: src/components/feedback-form.ios.tsx:90
 msgid "Feedback details"
 msgstr "Feedback-Details"
 
-#: src/components/feedback-form.android.tsx:92
-#: src/components/feedback-form.ios.tsx:100
+#: src/components/feedback-form.android.tsx:114
+#: src/components/feedback-form.android.tsx:118
+#: src/components/feedback-form.ios.tsx:95
 msgid "Feedback type"
 msgstr "Feedback-Typ"
 
@@ -309,10 +330,15 @@ msgstr "Lizenzinformationen sind nicht verfügbar."
 msgid "Light"
 msgstr "Hell"
 
-#: src/components/feedback-form.android.tsx:120
-#: src/components/feedback-form.ios.tsx:136
+#: src/components/feedback-form.android.tsx:174
+#: src/components/feedback-form.ios.tsx:131
 msgid "Name (optional)"
 msgstr "Name (optional)"
+
+#: src/components/feedback-form.android.tsx:165
+#: src/components/feedback-form.ios.tsx:125
+msgid "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
+msgstr "Name und E-Mail-Adresse sind optional. Sie ermöglichen es uns, dich bei Rückfragen zu deinem Feedback zu kontaktieren."
 
 #: src/components/onboarding-sequence.tsx:104
 msgid "Never miss a sign-in request"
@@ -396,6 +422,7 @@ msgid "Privacy"
 msgstr "Datenschutz"
 
 #: src/app/settings/index.tsx:148
+#: src/components/feedback-form.android.tsx:203
 msgid "Privacy policy"
 msgstr "Datenschutzerklärung"
 
@@ -475,7 +502,7 @@ msgid "Send anonymized crash and error diagnostics"
 msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
 
 #: src/app/settings/feedback.tsx:23
-#: src/components/feedback-form.android.tsx:77
+#: src/components/feedback-form.android.tsx:90
 #: src/components/feedback-form.ios.tsx:79
 msgid "Send feedback"
 msgstr "Feedback senden"
@@ -508,16 +535,16 @@ msgstr "Anmeldeanfragen können unbemerkt bleiben"
 msgid "Status"
 msgstr "Status"
 
-#: src/components/feedback-form.android.tsx:163
-#: src/components/feedback-form.ios.tsx:170
+#: src/components/feedback-form.android.tsx:206
+#: src/components/feedback-form.ios.tsx:183
 msgid "Submit feedback"
 msgstr "Feedback senden"
 
-#: src/components/feedback-form.android.tsx:89
-msgid "Tell us what worked well or what we can improve."
-msgstr "Teile uns mit, was gut funktioniert hat oder was wir verbessern können."
+#: src/components/feedback-form.android.tsx:98
+#~ msgid "Tell us what worked well or what we can improve."
+#~ msgstr "Teile uns mit, was gut funktioniert hat oder was wir verbessern können."
 
-#: src/components/feedback-form.android.tsx:60
+#: src/components/feedback-form.android.tsx:73
 #: src/components/feedback-form.ios.tsx:50
 msgid "Thank you for your feedback"
 msgstr "Vielen Dank für dein Feedback"
@@ -602,8 +629,8 @@ msgstr "Willkommen"
 msgid "Welcome to eduMFA"
 msgstr "Willkommen bei eduMFA"
 
-#: src/components/feedback-form.android.tsx:151
-#: src/components/feedback-form.ios.tsx:115
+#: src/components/feedback-form.android.tsx:154
+#: src/components/feedback-form.ios.tsx:110
 msgid "What would you like us to know?"
 msgstr "Was möchtest du uns mitteilen?"
 
@@ -615,7 +642,7 @@ msgstr "Du kannst jetzt Anmeldeanfragen empfangen und freigeben."
 msgid "Your choice"
 msgstr "Deine Wahl"
 
-#: src/components/feedback-form.android.tsx:63
+#: src/components/feedback-form.android.tsx:76
 #: src/components/feedback-form.ios.tsx:52
 msgid "Your feedback was submitted successfully."
 msgstr "Dein Feedback wurde erfolgreich übermittelt."
@@ -624,6 +651,6 @@ msgstr "Dein Feedback wurde erfolgreich übermittelt."
 msgid "Your image did not contain a QR code."
 msgstr "Dein Bild enthielt keinen QR-Code."
 
-#: src/components/feedback-form.android.tsx:160
-msgid "Your message and optional contact details will be sent to eduMFA through Sentry."
-msgstr "Deine Nachricht und optionalen Kontaktdaten werden über Sentry an eduMFA gesendet."
+#: src/components/feedback-form.android.tsx:194
+#~ msgid "Your message and optional contact details will be sent to eduMFA through Sentry."
+#~ msgstr "Deine Nachricht und optionalen Kontaktdaten werden über Sentry an eduMFA gesendet."

@@ -1,36 +1,43 @@
 import type { FeedbackFormProps } from "@/components/feedback-form.types";
+import { SETTINGS_LINKS } from "@/constants/settings";
 import { Spacing } from "@/constants/theme";
 import { useFeedbackForm } from "@/hooks/use-feedback-form";
+import ArrowDropDownSymbol from "@expo/material-symbols/arrow_drop_down.xml";
 import CloseSymbol from "@expo/material-symbols/close.xml";
 import {
   Button,
+  DropdownMenuItem,
+  ExposedDropdownMenu,
+  ExposedDropdownMenuBox,
   Host,
   Icon,
   IconButton,
   LazyColumn,
   OutlinedTextField,
   Row,
-  SegmentedButton,
-  SingleChoiceSegmentedButtonRow,
   Spacer,
   Text,
+  useNativeState,
 } from "@expo/ui/jetpack-compose";
 import {
+  clickable,
   fillMaxSize,
   fillMaxWidth,
   imePadding,
+  menuAnchor,
   weight,
 } from "@expo/ui/jetpack-compose/modifiers";
 import { useLingui } from "@lingui/react/macro";
+import * as Linking from "expo-linking";
+import { useState } from "react";
 import { StyleSheet } from "react-native";
 
 const FULL_WIDTH = [fillMaxWidth()];
 const textStyles = {
-  body: { typography: "bodyMedium" },
   caption: { typography: "bodySmall" },
   headline: { typography: "headlineSmall" },
-  label: { typography: "labelLarge" },
-  segmentedLabel: { typography: "labelSmall" },
+  privacyLink: { textDecoration: "underline" },
+  sectionTitle: { typography: "titleMedium" },
   successBody: { typography: "bodyLarge" },
 } as const;
 
@@ -40,6 +47,12 @@ export function FeedbackForm({
 }: FeedbackFormProps) {
   const { t } = useLingui();
   const form = useFeedbackForm();
+  const selectedFeedbackType =
+    form.feedbackTypes.find((option) => option.value === form.feedbackType) ??
+    form.feedbackTypes[0];
+  const feedbackTypeLabel = useNativeState(selectedFeedbackType.label);
+  const [isFeedbackTypeMenuExpanded, setIsFeedbackTypeMenuExpanded] =
+    useState(false);
 
   return (
     <Host style={styles.host} useViewportSizeMeasurement>
@@ -85,30 +98,71 @@ export function FeedbackForm({
                 </IconButton>
               </Row>
             ) : null}
-            <Text style={textStyles.body}>
-              {t`Tell us what worked well or what we can improve.`}
-            </Text>
+            <Text style={textStyles.sectionTitle}>{t`Feedback details`}</Text>
+            <ExposedDropdownMenuBox
+              expanded={isFeedbackTypeMenuExpanded}
+              modifiers={FULL_WIDTH}
+              onExpandedChange={setIsFeedbackTypeMenuExpanded}
+            >
+              <OutlinedTextField
+                modifiers={[fillMaxWidth(), menuAnchor()]}
+                readOnly
+                singleLine
+                value={feedbackTypeLabel}
+              >
+                <OutlinedTextField.Label>
+                  <Text>{t`Feedback type`}</Text>
+                </OutlinedTextField.Label>
+                <OutlinedTextField.TrailingIcon>
+                  <Icon
+                    contentDescription={t`Feedback type`}
+                    size={24}
+                    source={ArrowDropDownSymbol}
+                  />
+                </OutlinedTextField.TrailingIcon>
+              </OutlinedTextField>
+              <ExposedDropdownMenu
+                expanded={isFeedbackTypeMenuExpanded}
+                onDismissRequest={() => setIsFeedbackTypeMenuExpanded(false)}
+              >
+                {form.feedbackTypes.map((option) => (
+                  <DropdownMenuItem
+                    key={option.value}
+                    onClick={() => {
+                      form.setFeedbackType(option.value);
+                      feedbackTypeLabel.set(option.label);
+                      setIsFeedbackTypeMenuExpanded(false);
+                    }}
+                  >
+                    <DropdownMenuItem.Text>
+                      <Text>{option.label}</Text>
+                    </DropdownMenuItem.Text>
+                  </DropdownMenuItem>
+                ))}
+              </ExposedDropdownMenu>
+            </ExposedDropdownMenuBox>
 
-            <Text style={textStyles.label}>{t`Feedback type`}</Text>
-            <SingleChoiceSegmentedButtonRow modifiers={FULL_WIDTH}>
-              {form.feedbackTypes.map((option) => (
-                <SegmentedButton
-                  key={option.value}
-                  modifiers={[weight(1)]}
-                  onClick={() => form.setFeedbackType(option.value)}
-                  selected={option.value === form.feedbackType}
-                >
-                  <SegmentedButton.Label>
-                    <Text maxLines={1} style={textStyles.segmentedLabel}>
-                      {option.label}
-                    </Text>
-                  </SegmentedButton.Label>
-                </SegmentedButton>
-              ))}
-            </SingleChoiceSegmentedButtonRow>
+            <OutlinedTextField
+              isError={Boolean(form.messageError || form.submissionError)}
+              maxLength={2000}
+              maxLines={4}
+              minLines={4}
+              modifiers={FULL_WIDTH}
+              onValueChange={form.changeMessage}
+            >
+              <OutlinedTextField.Label>
+                <Text>{t`What would you like us to know?`}</Text>
+              </OutlinedTextField.Label>
+              {form.messageError || form.submissionError ? (
+                <OutlinedTextField.SupportingText>
+                  <Text>{form.messageError ?? form.submissionError}</Text>
+                </OutlinedTextField.SupportingText>
+              ) : null}
+            </OutlinedTextField>
 
+            <Text style={textStyles.sectionTitle}>{t`Contact (optional)`}</Text>
             <Text style={textStyles.caption}>
-              {t`Add your name and email if you would like us to contact you with follow-up questions or updates about your feedback.`}
+              {t`Name and email are optional. They allow us to contact you with follow-up questions about your feedback.`}
             </Text>
             <OutlinedTextField
               keyboardOptions={{ capitalization: "words", imeAction: "next" }}
@@ -139,25 +193,14 @@ export function FeedbackForm({
                 </OutlinedTextField.SupportingText>
               ) : null}
             </OutlinedTextField>
-            <OutlinedTextField
-              isError={Boolean(form.messageError || form.submissionError)}
-              maxLength={2000}
-              maxLines={4}
-              minLines={4}
-              modifiers={FULL_WIDTH}
-              onValueChange={form.changeMessage}
+            <Text
+              modifiers={[
+                clickable(() => void Linking.openURL(SETTINGS_LINKS.privacy)),
+              ]}
+              style={textStyles.caption}
             >
-              <OutlinedTextField.Label>
-                <Text>{t`What would you like us to know?`}</Text>
-              </OutlinedTextField.Label>
-              {form.messageError || form.submissionError ? (
-                <OutlinedTextField.SupportingText>
-                  <Text>{form.messageError ?? form.submissionError}</Text>
-                </OutlinedTextField.SupportingText>
-              ) : null}
-            </OutlinedTextField>
-            <Text style={textStyles.caption}>
-              {t`Your message and optional contact details will be sent to eduMFA through Sentry.`}
+              {t`By sending feedback, you agree to the processing of your data under our`}{" "}
+              <Text style={textStyles.privacyLink}>{t`Privacy policy`}</Text>.
             </Text>
             <Button modifiers={FULL_WIDTH} onClick={form.submit}>
               <Text>{t`Submit feedback`}</Text>

@@ -90,11 +90,6 @@ export function FeedbackForm({
                   <Text>{t`Feedback details`}</Text>
                 )
               }
-              footer={
-                <Text>
-                  {t`Choose the category that best matches your feedback. Your message and optional contact details will be sent to eduMFA through Sentry.`}
-                </Text>
-              }
             >
               <Picker
                 label={t`Feedback type`}
@@ -127,7 +122,7 @@ export function FeedbackForm({
               header={<Text>{t`Contact (optional)`}</Text>}
               footer={
                 <Text>
-                  {t`Add your name and email if you would like us to contact you with follow-up questions or updates about your feedback.`}
+                  {t`Name and email are optional. They allow us to contact you with follow-up questions about your feedback.`}
                 </Text>
               }
             >
@@ -151,10 +146,10 @@ export function FeedbackForm({
                 <Text modifiers={ERROR_MODIFIERS}>{form.emailError}</Text>
               ) : null}
             </Section>
-            <Button
+            <VStack
+              alignment="leading"
+              spacing={Spacing.sm}
               modifiers={[
-                buttonStyle("glassProminent"),
-                controlSize("large"),
                 listRowBackground("clear"),
                 listRowInsets({
                   bottom: Spacing.xl * 2,
@@ -163,14 +158,33 @@ export function FeedbackForm({
                   trailing: Spacing.lg,
                 }),
               ]}
-              onPress={form.submit}
             >
-              <HStack modifiers={[frame({ maxWidth: 1000 })]}>
-                <Spacer />
-                <Text>{t`Submit feedback`}</Text>
-                <Spacer />
-              </HStack>
-            </Button>
+              <Text
+                markdownEnabled
+                modifiers={[
+                  font({ textStyle: "footnote" }),
+                  foregroundStyle({
+                    type: "hierarchical",
+                    style: "secondary",
+                  }),
+                ]}
+              >
+                {t`By sending feedback, you agree to the processing of your data under our [Privacy policy](https://edumfa.io/app-privacy).`}
+              </Text>
+              <Button
+                modifiers={[
+                  buttonStyle("glassProminent"),
+                  controlSize("large"),
+                ]}
+                onPress={form.submit}
+              >
+                <HStack modifiers={[frame({ maxWidth: 1000 })]}>
+                  <Spacer />
+                  <Text>{t`Submit feedback`}</Text>
+                  <Spacer />
+                </HStack>
+              </Button>
+            </VStack>
           </>
         )}
       </Form>
