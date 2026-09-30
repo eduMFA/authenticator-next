@@ -211,6 +211,7 @@ function RootLayoutContent() {
         <Stack.Screen
           name="settings/feedback"
           options={{
+            headerShadowVisible: false,
             headerTransparent: Platform.OS === "ios" ? true : false,
             title: "",
             presentation:
