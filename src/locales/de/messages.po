@@ -39,11 +39,6 @@ msgstr "Token hinzufügen"
 msgid "Add your first eduMFA token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
-#: src/components/feedback-form.android.tsx:145
-#: src/components/feedback-form.ios.tsx:130
-#~ msgid "Add your name and email if you would like us to contact you with follow-up questions or updates about your feedback."
-#~ msgstr "Gib deinen Namen und deine E-Mail-Adresse an, wenn wir dich bei Rückfragen oder Neuigkeiten zu deinem Feedback kontaktieren dürfen."
-
 #: src/components/token-add/camera-permission-splash.tsx:37
 msgid "Allow camera access"
 msgstr "Kamerazugriff erlauben"
@@ -72,11 +67,6 @@ msgstr "Automatisch"
 msgid "Bug report"
 msgstr "Fehlerbericht"
 
-#: src/components/feedback-form.android.tsx:189
-#: src/components/feedback-form.ios.tsx:171
-#~ msgid "By sending feedback, you agree to the processing of your data as described in our Privacy Policy."
-#~ msgstr "Mit dem Senden des Feedbacks stimmst du der Verarbeitung deiner Daten gemäß unserer Datenschutzerklärung zu."
-
 #: src/components/feedback-form.android.tsx:202
 msgid "By sending feedback, you agree to the processing of your data under our"
 msgstr "Mit dem Senden des Feedbacks akzeptierst du die Verarbeitung deiner Daten gemäß unserer"
@@ -84,11 +74,6 @@ msgstr "Mit dem Senden des Feedbacks akzeptierst du die Verarbeitung deiner Date
 #: src/components/feedback-form.ios.tsx:172
 msgid "By sending feedback, you agree to the processing of your data under our [Privacy policy](https://edumfa.io/app-privacy)."
 msgstr "Mit dem Senden des Feedbacks stimmst du der Verarbeitung deiner Daten gemäß unserer [Datenschutzerklärung](https://edumfa.io/app-privacy) zu."
-
-#: src/components/feedback-form.android.tsx:196
-#: src/components/feedback-form.ios.tsx:173
-#~ msgid "By sending feedback, you agree to the processing of your data."
-#~ msgstr "Mit dem Senden des Feedbacks stimmst du der Verarbeitung deiner Daten zu."
 
 #: src/components/token-add/camera-permission-splash.tsx:44
 msgid "Camera access is required to scan the QR code and pair a token."
@@ -105,10 +90,6 @@ msgstr "Abbrechen"
 #: src/app/settings/index.tsx:120
 msgid "Change the app language in system settings"
 msgstr "App-Sprache in den Systemeinstellungen ändern"
-
-#: src/components/feedback-form.ios.tsx:95
-#~ msgid "Choose the category that best matches your feedback. Your message and optional contact details will be sent to eduMFA through Sentry."
-#~ msgstr "Wähle die Kategorie, die am besten zu deinem Feedback passt. Deine Nachricht und optionalen Kontaktdaten werden über Sentry an eduMFA gesendet."
 
 #: src/components/onboarding-sequence.tsx:112
 msgid "Choose whether to share anonymous crash and error reports."
@@ -540,10 +521,6 @@ msgstr "Status"
 msgid "Submit feedback"
 msgstr "Feedback senden"
 
-#: src/components/feedback-form.android.tsx:98
-#~ msgid "Tell us what worked well or what we can improve."
-#~ msgstr "Teile uns mit, was gut funktioniert hat oder was wir verbessern können."
-
 #: src/components/feedback-form.android.tsx:73
 #: src/components/feedback-form.ios.tsx:50
 msgid "Thank you for your feedback"
@@ -650,7 +627,3 @@ msgstr "Dein Feedback wurde erfolgreich übermittelt."
 #: src/hooks/use-handle-token-uri.ts:36
 msgid "Your image did not contain a QR code."
 msgstr "Dein Bild enthielt keinen QR-Code."
-
-#: src/components/feedback-form.android.tsx:194
-#~ msgid "Your message and optional contact details will be sent to eduMFA through Sentry."
-#~ msgstr "Deine Nachricht und optionalen Kontaktdaten werden über Sentry an eduMFA gesendet."
