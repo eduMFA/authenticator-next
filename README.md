@@ -1,6 +1,6 @@
 # eduMFA Authenticator
 
-This is the Expo app for the eduMFA authenticator.
+This app is the client-side implementation of eduMFA's [`edupush` token type](https://edumfa.readthedocs.io/en/latest/tokens/tokentypes/edupush.html). It enrolls push tokens and lets users approve or deny sign-in requests from their eduMFA server.
 
 ## Get started
 
@@ -10,20 +10,33 @@ This is the Expo app for the eduMFA authenticator.
    bun install
    ```
 
-2. Start the app
+2. Generate the native projects
 
    ```bash
-   bunx expo start
+   bunx expo prebuild
    ```
 
-In the output, you'll find options to open the app in a
+   The app requires native dependencies, including React Native Firebase. [Expo Prebuild](https://docs.expo.dev/workflow/prebuild/) generates the Android and iOS projects and applies their native configuration.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+3. Build and run a development app
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+   With Android Studio or Xcode installed, run the command for your platform:
+
+   ```bash
+   bun run android
+   # or, on macOS
+   bun run ios
+   ```
+
+4. Start the development server for subsequent sessions
+
+   ```bash
+   bunx expo start --dev-client
+   ```
+
+Open the installed development app on your device, Android emulator, or iOS simulator. Regenerate and rebuild the native app when native dependencies or app configuration change.
+
+You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
 ## Tests
 
