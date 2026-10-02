@@ -22,7 +22,7 @@ import {
   isNotificationPermissionEnabled,
   isNotificationPermissionPending,
 } from "@/utils/notification";
-import { useLingui } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AppState,
@@ -30,6 +30,7 @@ import {
   Linking,
   PanResponder,
   StyleSheet,
+  Text,
   useColorScheme,
   useWindowDimensions,
   View,
@@ -55,6 +56,17 @@ import {
 const BUTTON_SLIDE_EASING = Easing.inOut(Easing.cubic);
 const SWIPE_SLIDE_EASING = Easing.out(Easing.cubic);
 const VISUAL_CONTENT_WIDTH = 220;
+
+function OnboardingAppName() {
+  const theme = useTheme();
+
+  return (
+    <Text>
+      eduMFA{"\u00A0"}
+      <Text style={{ color: theme.branding }}>Push</Text>
+    </Text>
+  );
+}
 
 export function OnboardingSequence() {
   const [stepIndex, setStepIndex] = useState(0);
@@ -94,7 +106,11 @@ export function OnboardingSequence() {
       {
         id: "welcome",
         kicker: t`Welcome`,
-        title: t`Welcome to eduMFA`,
+        title: (
+          <Trans>
+            Welcome to <OnboardingAppName />
+          </Trans>
+        ),
         body: t`Keep your authentication tokens in one place and approve sign-ins securely from this device.`,
         accent: onboardingStepAccents[0],
       },

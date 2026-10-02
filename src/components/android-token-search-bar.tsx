@@ -234,7 +234,7 @@ export const AndroidTokenSearchBar = forwardRef<
                   >
                     <View style={styles.logoContainer}>
                       <Image
-                        accessibilityLabel="eduMFA"
+                        accessibilityLabel="eduMFA Push"
                         contentFit="contain"
                         source={logoSource}
                         style={[styles.logo, { tintColor: theme.text }]}
@@ -280,7 +280,7 @@ export const AndroidTokenSearchBar = forwardRef<
             modifiers={[weight(1), padding(16, 0, 0, 0)]}
             style={appNameTextStyle}
           >
-            eduMFA
+            eduMFA <Text color={theme.branding}>Push</Text>
           </Text>
         )}
         {onDevMenuPress ? (

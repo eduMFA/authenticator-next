@@ -16,6 +16,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  Text,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -133,7 +134,7 @@ export default function SettingsScreen() {
           <Divider />
           <SettingsRow
             icon={{ android: "star", ios: "star" }}
-            label={t`Review eduMFA`}
+            label={t`Review eduMFA Push`}
             onPress={() =>
               openUrl(
                 Platform.OS === "ios"
@@ -193,7 +194,7 @@ export default function SettingsScreen() {
           style={styles.version}
           themeColor="textSecondary"
         >
-          eduMFA {version}
+          eduMFA <Text style={{ color: theme.branding }}>Push</Text> {version}
           {build ? ` (${build})` : ""}
         </ThemedText>
       </ScrollView>

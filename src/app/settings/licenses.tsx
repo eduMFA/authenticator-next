@@ -29,8 +29,9 @@ export default function LicensesScreen() {
         ListHeaderComponent={
           <ThemedText style={styles.intro} themeColor="textSecondary">
             <Trans>
-              eduMFA uses {licenseCount} open-source packages. Package details
-              are generated from the installed production dependency graph.
+              eduMFA Push uses {licenseCount} open-source packages. Package
+              details are generated from the installed production dependency
+              graph.
             </Trans>
           </ThemedText>
         }

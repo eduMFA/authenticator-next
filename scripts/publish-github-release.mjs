@@ -56,7 +56,7 @@ if (releaseResponse.status === 404) {
 }
 
 const release = await releaseResponse.json();
-const assetName = `edumfa-${tag.replaceAll("/", "-")}.apk`;
+const assetName = `edumfa-push-${tag.replaceAll("/", "-")}.apk`;
 const existingAsset = release.assets.find((asset) => asset.name === assetName);
 
 if (existingAsset) {

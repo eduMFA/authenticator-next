@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "authenticator-next",
+      "name": "edumfa-push",
       "dependencies": {
         "@expo-google-fonts/inter": "^0.4.2",
         "@expo/material-symbols": "^0.1.1",

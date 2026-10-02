@@ -1,6 +1,6 @@
 import type { OnboardingStepAccent } from "@/constants/onboarding";
 import { SymbolView } from "expo-symbols";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 export type IconName = ComponentProps<typeof SymbolView>["name"];
 
@@ -9,7 +9,7 @@ export type OnboardingStep = {
   body: string;
   id: "welcome" | "notifications" | "privacy";
   kicker: string;
-  title: string;
+  title: ReactNode;
 };
 
 export type EasingFunction = (value: number) => number;
