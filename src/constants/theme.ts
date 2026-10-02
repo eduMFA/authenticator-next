@@ -13,6 +13,7 @@ import { ColorValue, Platform } from "react-native";
 
 const SPACE_SCALE = 1.33;
 const FONT_SCALE = 1.2;
+export const BRAND_COLOR = "#246FEE";
 
 const isIpad = Device.osName === "iPadOS";
 export const spaceScale = (value: number) =>
@@ -34,8 +35,8 @@ export function useInterFonts() {
 }
 
 type ThemeColors = {
-  branding: ColorValue;
-  textOnBranding: ColorValue;
+  branding: string;
+  textOnBranding: string;
   transparent: ColorValue;
   background: ColorValue;
   backgroundSecondary: ColorValue;
@@ -56,7 +57,7 @@ type ThemeColors = {
 
 const fallbackColors = {
   light: {
-    branding: "#0066FF",
+    branding: BRAND_COLOR,
     textOnBranding: "#FFFFFF",
     transparent: "rgba(255,255,255,0)",
     background: "#FFFFFF",
@@ -76,7 +77,7 @@ const fallbackColors = {
     errorBar: "#B42318",
   },
   dark: {
-    branding: "#3399FF",
+    branding: BRAND_COLOR,
     textOnBranding: "#FFFFFF",
     transparent: "rgba(0,0,0,0)",
     background: "#000000",
@@ -108,7 +109,7 @@ export function getIosThemeColors(
   const statusColors = fallbackColors[colorScheme];
 
   return {
-    branding: iosColors.systemBlue,
+    branding: statusColors.branding,
     textOnBranding: fallbackColors.light.textOnBranding,
     transparent: "transparent",
     background: iosColors.systemGroupedBackground,
@@ -145,8 +146,8 @@ export function getAndroidThemeColors(
   const statusColors = fallbackColors[colorScheme];
 
   return {
-    branding: androidColors.primary,
-    textOnBranding: androidColors.onPrimary,
+    branding: statusColors.branding,
+    textOnBranding: statusColors.textOnBranding,
     transparent: "transparent",
     background: androidColors.background,
     backgroundSecondary: androidColors.surfaceContainerHigh,
