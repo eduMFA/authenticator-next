@@ -622,7 +622,10 @@ export default function Tokens() {
             style={styles.noTokenDescription}
             themeColor="textSecondary"
           >
-            {t`Add your first eduMFA Push token to approve sign-ins securely from this device.`}
+            <Trans>
+              Add your first eduMFA Push token to approve sign-ins securely from
+              this device.
+            </Trans>
           </ThemedText>
           {Platform.OS === "ios" && (
             <Host

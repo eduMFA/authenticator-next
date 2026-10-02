@@ -30,8 +30,8 @@ msgid "Activity Log"
 msgstr "Activity Log"
 
 #: src/app/index.tsx:590
-#: src/app/index.tsx:650
-#: src/app/index.tsx:652
+#: src/app/index.tsx:653
+#: src/app/index.tsx:655
 msgid "Add token"
 msgstr "Add token"
 
@@ -189,7 +189,7 @@ msgstr "Enable camera access in Settings to scan QR codes."
 msgid "Enable notifications"
 msgstr "Enable notifications"
 
-#: src/app/index.tsx:760
+#: src/app/index.tsx:763
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Enable notifications to receive push approval requests on this device."
 
@@ -263,7 +263,7 @@ msgstr "Get started"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: src/app/index.tsx:759
+#: src/app/index.tsx:762
 #: src/components/onboarding-sequence/step-actions.tsx:75
 msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
 msgstr "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
@@ -341,7 +341,7 @@ msgstr "No interactions yet"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:713
+#: src/app/index.tsx:716
 msgid "No tokens found"
 msgstr "No tokens found"
 
@@ -357,7 +357,7 @@ msgstr "Not now"
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/app/index.tsx:755
+#: src/app/index.tsx:758
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
@@ -382,7 +382,7 @@ msgid "Open with your Authenticator App"
 msgstr "Open with your Authenticator App"
 
 #: src/app/settings/index.tsx:170
-#: src/app/settings/licenses.tsx:80
+#: src/app/settings/licenses.tsx:84
 msgid "Open-source licenses"
 msgstr "Open-source licenses"
 
@@ -419,7 +419,7 @@ msgstr "Privacy policy"
 msgid "Project website"
 msgstr "Project website"
 
-#: src/app/index.tsx:754
+#: src/app/index.tsx:757
 #: src/components/onboarding-sequence/step-actions.tsx:79
 msgid "Pull to refresh for requests"
 msgstr "Pull to refresh for requests"
@@ -433,7 +433,7 @@ msgstr "QR code scanner"
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:776
+#: src/app/index.tsx:779
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
@@ -512,7 +512,7 @@ msgstr "Server message"
 msgid "Server registration failed"
 msgstr "Server registration failed"
 
-#: src/app/settings/index.tsx:202
+#: src/app/settings/index.tsx:201
 msgid "Settings"
 msgstr "Settings"
 
@@ -586,7 +586,7 @@ msgstr "Token"
 msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
 msgstr "Token approvals, denials, refresh events, and enrollment activity will appear here."
 
-#: src/app/index.tsx:720
+#: src/app/index.tsx:723
 msgid "Try another token name, issuer, or serial number."
 msgstr "Try another token name, issuer, or serial number."
 

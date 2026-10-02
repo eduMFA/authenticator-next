@@ -194,8 +194,7 @@ export default function SettingsScreen() {
           style={styles.version}
           themeColor="textSecondary"
         >
-          eduMFA{"\u00A0"}
-          <Text style={{ color: theme.branding }}>Push</Text> {version}
+          eduMFA <Text style={{ color: theme.branding }}>Push</Text> {version}
           {build ? ` (${build})` : ""}
         </ThemedText>
       </ScrollView>

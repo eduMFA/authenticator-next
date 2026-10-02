@@ -280,8 +280,7 @@ export const AndroidTokenSearchBar = forwardRef<
             modifiers={[weight(1), padding(16, 0, 0, 0)]}
             style={appNameTextStyle}
           >
-            eduMFA{"\u00A0"}
-            <Text color={theme.branding}>Push</Text>
+            eduMFA <Text color={theme.branding}>Push</Text>
           </Text>
         )}
         {onDevMenuPress ? (
