@@ -7,7 +7,6 @@ import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenListItem } from "@/components/token-list-item";
-import { keepAppNameTogether } from "@/constants/branding";
 import { refreshHapticAbortDistance } from "@/constants/haptics";
 import { Radii, Spacing, StaticColors, Typography } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
@@ -623,9 +622,7 @@ export default function Tokens() {
             style={styles.noTokenDescription}
             themeColor="textSecondary"
           >
-            {keepAppNameTogether(
-              t`Add your first eduMFA Push token to approve sign-ins securely from this device.`,
-            )}
+            {t`Add your first eduMFA Push token to approve sign-ins securely from this device.`}
           </ThemedText>
           {Platform.OS === "ios" && (
             <Host

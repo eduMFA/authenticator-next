@@ -1,6 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { keepAppNameTogether } from "@/constants/branding";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { OPEN_SOURCE_LICENSES } from "@/generated/open-source-licenses";
 import { useTheme } from "@/hooks/use-theme";
@@ -29,9 +28,7 @@ export default function LicensesScreen() {
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <ThemedText style={styles.intro} themeColor="textSecondary">
-            {keepAppNameTogether(
-              t`eduMFA Push uses ${licenseCount} open-source packages. Package details are generated from the installed production dependency graph.`,
-            )}
+            {t`eduMFA Push uses ${licenseCount} open-source packages. Package details are generated from the installed production dependency graph.`}
           </ThemedText>
         }
         ItemSeparatorComponent={() => (

@@ -1,7 +1,6 @@
 import { SettingsRow } from "@/components/settings-row";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { keepAppNameTogether } from "@/constants/branding";
 import { SETTINGS_LINKS } from "@/constants/settings";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
@@ -135,7 +134,7 @@ export default function SettingsScreen() {
           <Divider />
           <SettingsRow
             icon={{ android: "star", ios: "star" }}
-            label={keepAppNameTogether(t`Review eduMFA Push`)}
+            label={t`Review eduMFA Push`}
             onPress={() =>
               openUrl(
                 Platform.OS === "ios"
