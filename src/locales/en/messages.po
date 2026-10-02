@@ -95,7 +95,7 @@ msgstr "Cancel"
 msgid "Change the app language in system settings"
 msgstr "Change the app language in system settings"
 
-#: src/components/onboarding-sequence.tsx:113
+#: src/components/onboarding-sequence.tsx:128
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Choose whether to share anonymous crash and error reports."
 
@@ -251,11 +251,11 @@ msgstr "General"
 msgid "Generating keys"
 msgstr "Generating keys"
 
-#: src/components/onboarding-sequence.tsx:106
+#: src/components/onboarding-sequence.tsx:121
 msgid "Get notified when a sign-in needs your approval."
 msgstr "Get notified when a sign-in needs your approval."
 
-#: src/components/onboarding-sequence.tsx:370
+#: src/components/onboarding-sequence.tsx:385
 msgid "Get started"
 msgstr "Get started"
 
@@ -277,11 +277,11 @@ msgstr "Haptics"
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 msgstr "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 
-#: src/components/onboarding-sequence.tsx:112
+#: src/components/onboarding-sequence.tsx:127
 msgid "Help improve the app"
 msgstr "Help improve the app"
 
-#: src/components/onboarding-sequence.tsx:99
+#: src/components/onboarding-sequence.tsx:114
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 msgstr "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 
@@ -329,7 +329,7 @@ msgstr "Name (optional)"
 msgid "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
 msgstr "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
 
-#: src/components/onboarding-sequence.tsx:105
+#: src/components/onboarding-sequence.tsx:120
 msgid "Never miss a sign-in request"
 msgstr "Never miss a sign-in request"
 
@@ -353,7 +353,7 @@ msgstr "No tokens yet"
 msgid "Not now"
 msgstr "Not now"
 
-#: src/components/onboarding-sequence.tsx:104
+#: src/components/onboarding-sequence.tsx:119
 msgid "Notifications"
 msgstr "Notifications"
 
@@ -610,17 +610,21 @@ msgstr "Version {itemVersion} · {itemLicense}"
 msgid "Website"
 msgstr "Website"
 
-#: src/components/onboarding-sequence.tsx:97
+#: src/components/onboarding-sequence.tsx:108
 msgid "Welcome"
 msgstr "Welcome"
+
+#: src/components/onboarding-sequence.tsx:110
+msgid "Welcome to <0/>"
+msgstr "Welcome to <0/>"
 
 #: src/components/onboarding-sequence.tsx:97
 #~ msgid "Welcome to eduMFA"
 #~ msgstr "Welcome to eduMFA"
 
 #: src/components/onboarding-sequence.tsx:98
-msgid "Welcome to eduMFA Push"
-msgstr "Welcome to eduMFA Push"
+#~ msgid "Welcome to eduMFA Push"
+#~ msgstr "Welcome to eduMFA Push"
 
 #: src/components/feedback-form.android.tsx:154
 #: src/components/feedback-form.ios.tsx:110
@@ -631,7 +635,7 @@ msgstr "What would you like us to know?"
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "You’re ready to receive and approve sign-in requests."
 
-#: src/components/onboarding-sequence.tsx:111
+#: src/components/onboarding-sequence.tsx:126
 msgid "Your choice"
 msgstr "Your choice"
 
