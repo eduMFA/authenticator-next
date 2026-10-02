@@ -39,10 +39,6 @@ msgstr "Add token"
 msgid "Add your first eduMFA Push token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA Push token to approve sign-ins securely from this device."
 
-#: src/app/index.tsx:625
-#~ msgid "Add your first eduMFA token to approve sign-ins securely from this device."
-#~ msgstr "Add your first eduMFA token to approve sign-ins securely from this device."
-
 #: src/components/token-add/camera-permission-splash.tsx:37
 msgid "Allow camera access"
 msgstr "Allow camera access"
@@ -171,10 +167,6 @@ msgstr "Edit token"
 #: src/app/settings/licenses.tsx:31
 msgid "eduMFA Push uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
 msgstr "eduMFA Push uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
-
-#: src/app/settings/licenses.tsx:31
-#~ msgid "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
-#~ msgstr "eduMFA uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
 
 #: src/components/feedback-form.android.tsx:188
 #: src/components/feedback-form.ios.tsx:139
@@ -456,10 +448,6 @@ msgstr "Response parsing failed"
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
-#: src/app/settings/index.tsx:136
-#~ msgid "Review eduMFA"
-#~ msgstr "Review eduMFA"
-
 #: src/app/settings/index.tsx:137
 msgid "Review eduMFA Push"
 msgstr "Review eduMFA Push"
@@ -617,14 +605,6 @@ msgstr "Welcome"
 #: src/components/onboarding-sequence.tsx:110
 msgid "Welcome to <0/>"
 msgstr "Welcome to <0/>"
-
-#: src/components/onboarding-sequence.tsx:97
-#~ msgid "Welcome to eduMFA"
-#~ msgstr "Welcome to eduMFA"
-
-#: src/components/onboarding-sequence.tsx:98
-#~ msgid "Welcome to eduMFA Push"
-#~ msgstr "Welcome to eduMFA Push"
 
 #: src/components/feedback-form.android.tsx:154
 #: src/components/feedback-form.ios.tsx:110
