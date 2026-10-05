@@ -9,6 +9,7 @@ export function useFeedbackForm() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState<string | null>(null);
   const [feedbackType, setFeedbackType] = useState<UserFeedbackType>("general");
+  const [includeLogs, setIncludeLogs] = useState(false);
   const [message, setMessage] = useState("");
   const [messageError, setMessageError] = useState<string | null>(null);
   const [name, setName] = useState("");
@@ -42,6 +43,11 @@ export function useFeedbackForm() {
 
   const validateCurrentEmail = () => setEmailError(validateEmail(email));
 
+  const changeFeedbackType = (type: UserFeedbackType) => {
+    setFeedbackType(type);
+    setIncludeLogs(type === "bug_report");
+  };
+
   const submit = () => {
     const trimmedMessage = message.trim();
     const nextEmailError = validateEmail(email);
@@ -63,6 +69,7 @@ export function useFeedbackForm() {
           name: name.trim() || undefined,
         },
         feedbackType,
+        includeLogs,
       );
       setSubmitted(true);
     } catch (error) {
@@ -77,8 +84,10 @@ export function useFeedbackForm() {
     emailError,
     feedbackType,
     feedbackTypes,
+    includeLogs,
     messageError,
-    setFeedbackType,
+    setFeedbackType: changeFeedbackType,
+    setIncludeLogs,
     setName,
     submissionError,
     submit,

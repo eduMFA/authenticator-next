@@ -11,6 +11,7 @@ import {
   Spacer,
   Text,
   TextField,
+  Toggle,
   VStack,
 } from "@expo/ui/swift-ui";
 import {
@@ -116,6 +117,13 @@ export function FeedbackForm({
               {form.submissionError ? (
                 <Text modifiers={ERROR_MODIFIERS}>{form.submissionError}</Text>
               ) : null}
+              <Toggle
+                isOn={form.includeLogs}
+                onIsOnChange={form.setIncludeLogs}
+              >
+                <Text>{t`Include logs`}</Text>
+                <Text>{t`Logs provide more context and help us find the cause of the issue.`}</Text>
+              </Toggle>
             </Section>
 
             <Section

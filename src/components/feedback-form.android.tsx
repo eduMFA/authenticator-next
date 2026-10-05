@@ -16,6 +16,7 @@ import {
   OutlinedTextField,
   Row,
   Spacer,
+  Switch,
   Text,
   useNativeState,
 } from "@expo/ui/jetpack-compose";
@@ -160,6 +161,16 @@ export function FeedbackForm({
               ) : null}
             </OutlinedTextField>
 
+            <Row modifiers={FULL_WIDTH} verticalAlignment="center">
+              <Text modifiers={[weight(1)]}>{t`Include logs`}</Text>
+              <Switch
+                value={form.includeLogs}
+                onCheckedChange={form.setIncludeLogs}
+              />
+            </Row>
+            <Text style={textStyles.caption}>
+              {t`Logs provide more context and help us find the cause of the issue.`}
+            </Text>
             <Text style={textStyles.sectionTitle}>{t`Contact (optional)`}</Text>
             <Text style={textStyles.caption}>
               {t`Name and email are optional. They allow us to contact you with follow-up questions about your feedback.`}

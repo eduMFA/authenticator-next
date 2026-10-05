@@ -63,15 +63,15 @@ msgstr "Möchtest du diesen Token wirklich löschen?"
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: src/hooks/use-feedback-form.ts:21
+#: src/hooks/use-feedback-form.ts:22
 msgid "Bug report"
 msgstr "Fehlerbericht"
 
-#: src/components/feedback-form.android.tsx:202
+#: src/components/feedback-form.android.tsx:213
 msgid "By sending feedback, you agree to the processing of your data under our"
 msgstr "Mit dem Senden des Feedbacks akzeptierst du die Verarbeitung deiner Daten gemäß unserer"
 
-#: src/components/feedback-form.ios.tsx:172
+#: src/components/feedback-form.ios.tsx:180
 msgid "By sending feedback, you agree to the processing of your data under our [Privacy policy](https://edumfa.io/app-privacy)."
 msgstr "Mit dem Senden des Feedbacks stimmst du der Verarbeitung deiner Daten gemäß unserer [Datenschutzerklärung](https://edumfa.io/app-privacy) zu."
 
@@ -95,13 +95,13 @@ msgstr "App-Sprache in den Systemeinstellungen ändern"
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
 
-#: src/components/feedback-form.android.tsx:94
-#: src/components/feedback-form.ios.tsx:83
+#: src/components/feedback-form.android.tsx:95
+#: src/components/feedback-form.ios.tsx:84
 msgid "Close"
 msgstr "Schließen"
 
-#: src/components/feedback-form.android.tsx:163
-#: src/components/feedback-form.ios.tsx:122
+#: src/components/feedback-form.android.tsx:174
+#: src/components/feedback-form.ios.tsx:130
 msgid "Contact (optional)"
 msgstr "Kontakt (optional)"
 
@@ -150,8 +150,8 @@ msgstr "Schließen"
 msgid "Don't share anonymous reports"
 msgstr "Anonyme Berichte nicht teilen"
 
-#: src/components/feedback-form.android.tsx:79
-#: src/components/feedback-form.ios.tsx:54
+#: src/components/feedback-form.android.tsx:80
+#: src/components/feedback-form.ios.tsx:55
 msgid "Done"
 msgstr "Fertig"
 
@@ -168,8 +168,8 @@ msgstr "Token bearbeiten"
 msgid "eduMFA Push uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
 msgstr "eduMFA Push verwendet {licenseCount} Open-Source-Pakete. Die Paketdetails werden aus den installierten Produktionsabhängigkeiten generiert."
 
-#: src/components/feedback-form.android.tsx:188
-#: src/components/feedback-form.ios.tsx:139
+#: src/components/feedback-form.android.tsx:199
+#: src/components/feedback-form.ios.tsx:147
 msgid "Email (optional)"
 msgstr "E-Mail (optional)"
 
@@ -197,7 +197,7 @@ msgstr "Registrierungsantwort fehlgeschlagen"
 msgid "Enter a label for this token."
 msgstr "Gib eine Bezeichnung für dieses Token ein."
 
-#: src/hooks/use-feedback-form.ts:29
+#: src/hooks/use-feedback-form.ts:30
 msgid "Enter a valid email address."
 msgstr "Gib eine gültige E-Mail-Adresse ein."
 
@@ -207,7 +207,7 @@ msgstr "Gib eine gültige E-Mail-Adresse ein."
 msgid "Failed to add token"
 msgstr "Token konnte nicht hinzugefügt werden"
 
-#: src/hooks/use-feedback-form.ts:23
+#: src/hooks/use-feedback-form.ts:24
 msgid "Feature request"
 msgstr "Funktionswunsch"
 
@@ -215,18 +215,18 @@ msgstr "Funktionswunsch"
 msgid "Feedback"
 msgstr "Feedback"
 
-#: src/hooks/use-feedback-form.ts:70
+#: src/hooks/use-feedback-form.ts:77
 msgid "Feedback could not be sent. Please try again."
 msgstr "Feedback konnte nicht gesendet werden. Bitte versuche es erneut."
 
-#: src/components/feedback-form.android.tsx:101
-#: src/components/feedback-form.ios.tsx:90
+#: src/components/feedback-form.android.tsx:102
+#: src/components/feedback-form.ios.tsx:91
 msgid "Feedback details"
 msgstr "Feedback-Details"
 
-#: src/components/feedback-form.android.tsx:114
-#: src/components/feedback-form.android.tsx:118
-#: src/components/feedback-form.ios.tsx:95
+#: src/components/feedback-form.android.tsx:115
+#: src/components/feedback-form.android.tsx:119
+#: src/components/feedback-form.ios.tsx:96
 msgid "Feedback type"
 msgstr "Feedback-Typ"
 
@@ -235,7 +235,7 @@ msgid "Finalizing enrollment"
 msgstr "Registrierung wird abgeschlossen"
 
 #: src/app/settings/index.tsx:105
-#: src/hooks/use-feedback-form.ts:22
+#: src/hooks/use-feedback-form.ts:23
 msgid "General"
 msgstr "Allgemein"
 
@@ -272,6 +272,11 @@ msgstr "Teile Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern
 #: src/components/onboarding-sequence.tsx:127
 msgid "Help improve the app"
 msgstr "Hilf, die App zu verbessern"
+
+#: src/components/feedback-form.android.tsx:165
+#: src/components/feedback-form.ios.tsx:124
+msgid "Include logs"
+msgstr "Protokolle einschließen"
 
 #: src/components/onboarding-sequence.tsx:114
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
@@ -311,13 +316,18 @@ msgstr "Lizenzinformationen sind nicht verfügbar."
 msgid "Light"
 msgstr "Hell"
 
-#: src/components/feedback-form.android.tsx:174
-#: src/components/feedback-form.ios.tsx:131
+#: src/components/feedback-form.android.tsx:172
+#: src/components/feedback-form.ios.tsx:125
+msgid "Logs provide more context and help us find the cause of the issue."
+msgstr "Protokolle liefern mehr Kontext und helfen uns, die Ursache des Problems zu finden."
+
+#: src/components/feedback-form.android.tsx:185
+#: src/components/feedback-form.ios.tsx:139
 msgid "Name (optional)"
 msgstr "Name (optional)"
 
-#: src/components/feedback-form.android.tsx:165
-#: src/components/feedback-form.ios.tsx:125
+#: src/components/feedback-form.android.tsx:176
+#: src/components/feedback-form.ios.tsx:133
 msgid "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
 msgstr "Name und E-Mail-Adresse sind optional. Sie ermöglichen es uns, dich bei Rückfragen zu deinem Feedback zu kontaktieren."
 
@@ -394,7 +404,7 @@ msgstr "Ausstehend"
 msgid "Place the QR code inside the frame"
 msgstr "Platziere den QR-Code im Rahmen"
 
-#: src/hooks/use-feedback-form.ts:50
+#: src/hooks/use-feedback-form.ts:56
 msgid "Please describe your feedback."
 msgstr "Bitte beschreibe dein Feedback."
 
@@ -403,7 +413,7 @@ msgid "Privacy"
 msgstr "Datenschutz"
 
 #: src/app/settings/index.tsx:149
-#: src/components/feedback-form.android.tsx:203
+#: src/components/feedback-form.android.tsx:214
 msgid "Privacy policy"
 msgstr "Datenschutzerklärung"
 
@@ -483,8 +493,8 @@ msgid "Send anonymized crash and error diagnostics"
 msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
 
 #: src/app/settings/feedback.tsx:23
-#: src/components/feedback-form.android.tsx:90
-#: src/components/feedback-form.ios.tsx:79
+#: src/components/feedback-form.android.tsx:91
+#: src/components/feedback-form.ios.tsx:80
 msgid "Send feedback"
 msgstr "Feedback senden"
 
@@ -516,13 +526,13 @@ msgstr "Anmeldeanfragen können unbemerkt bleiben"
 msgid "Status"
 msgstr "Status"
 
-#: src/components/feedback-form.android.tsx:206
-#: src/components/feedback-form.ios.tsx:183
+#: src/components/feedback-form.android.tsx:217
+#: src/components/feedback-form.ios.tsx:191
 msgid "Submit feedback"
 msgstr "Feedback senden"
 
-#: src/components/feedback-form.android.tsx:73
-#: src/components/feedback-form.ios.tsx:50
+#: src/components/feedback-form.android.tsx:74
+#: src/components/feedback-form.ios.tsx:51
 msgid "Thank you for your feedback"
 msgstr "Vielen Dank für dein Feedback"
 
@@ -606,8 +616,8 @@ msgstr "Willkommen"
 msgid "Welcome to <0/>"
 msgstr "Willkommen bei <0/>"
 
-#: src/components/feedback-form.android.tsx:154
-#: src/components/feedback-form.ios.tsx:110
+#: src/components/feedback-form.android.tsx:155
+#: src/components/feedback-form.ios.tsx:111
 msgid "What would you like us to know?"
 msgstr "Was möchtest du uns mitteilen?"
 
@@ -619,8 +629,8 @@ msgstr "Du kannst jetzt Anmeldeanfragen empfangen und freigeben."
 msgid "Your choice"
 msgstr "Deine Wahl"
 
-#: src/components/feedback-form.android.tsx:76
-#: src/components/feedback-form.ios.tsx:52
+#: src/components/feedback-form.android.tsx:77
+#: src/components/feedback-form.ios.tsx:53
 msgid "Your feedback was submitted successfully."
 msgstr "Dein Feedback wurde erfolgreich übermittelt."
 

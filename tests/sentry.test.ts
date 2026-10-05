@@ -15,6 +15,10 @@ jest.mock("@sentry/react-native", () => ({
   feedbackIntegration: jest.fn(() => ({})),
   withScope: jest.fn(),
   captureFeedback: jest.fn(),
+  captureEvent: jest.fn(() => "diagnostic-event-id"),
+  getIsolationScope: jest.fn(() => ({
+    getScopeData: () => ({ breadcrumbs: [] }),
+  })),
 }));
 beforeEach(() => {
   setSentryTrackingEnabled(false);
@@ -65,14 +69,16 @@ test("disables native reporting in Expo Go and tolerates close errors", async ()
 });
 test("allows explicit feedback with reporting disabled", async () => {
   const setTag = jest.fn();
-  jest
-    .mocked(Sentry.withScope)
-    .mockImplementationOnce((callback) =>
-      callback({ setTag } as unknown as Sentry.Scope),
-    );
+  jest.mocked(Sentry.withScope).mockImplementationOnce((callback) =>
+    callback({
+      setTag,
+      getScopeData: () => ({ breadcrumbs: [] }),
+    } as unknown as Sentry.Scope),
+  );
   submitUserFeedback(
     { message: "Feature request", email: "user@example.org", name: "User" },
     "feature_request",
+    true,
   );
   expect(setTag).toHaveBeenCalledWith("feedback.type", "feature_request");
   expect(Sentry.captureFeedback).toHaveBeenCalledWith({
@@ -80,14 +86,89 @@ test("allows explicit feedback with reporting disabled", async () => {
     email: "user@example.org",
     name: "User",
     source: "settings",
+    associatedEventId: "diagnostic-event-id",
   });
+  const diagnostic = jest.mocked(Sentry.captureEvent).mock.calls[0];
+  expect(diagnostic).toBeDefined();
+  expect(
+    await options().beforeSend?.(diagnostic![0] as ErrorEvent, diagnostic![1]!),
+  ).toMatchObject({ message: "User feedback diagnostics" });
+  expect(
+    await options().beforeSend?.(
+      { type: undefined, message: "Automatic error" },
+      {},
+    ),
+  ).toBeNull();
   const feedback = { type: "feedback" } as unknown as ErrorEvent;
   expect(await options().beforeSend?.(feedback, {})).toBe(feedback);
   setSentryTrackingEnabled(true);
   jest.clearAllMocks();
-  submitUserFeedback({ message: "Bug" }, "bug_report");
+  submitUserFeedback({ message: "Bug" }, "bug_report", true);
   expect(Sentry.init).not.toHaveBeenCalled();
 });
+test("links feedback to an event with bounded, sanitized breadcrumbs", () => {
+  const breadcrumbs = Array.from({ length: 35 }, (_, timestamp) => ({
+    timestamp,
+    message: "Failed otpauth://totp/account?secret=private",
+    data: { authorization: "private", safe: true },
+  }));
+  jest.mocked(Sentry.withScope).mockImplementationOnce((callback) =>
+    callback({
+      setTag: jest.fn(),
+      getScopeData: () => ({ breadcrumbs }),
+    } as unknown as Sentry.Scope),
+  );
+
+  submitUserFeedback({ message: "Bug" }, "bug_report", true);
+
+  expect(Sentry.captureEvent).toHaveBeenCalledWith(
+    {
+      message: "User feedback diagnostics",
+      level: "info",
+      fingerprint: ["user-feedback-diagnostics", "bug_report"],
+      breadcrumbs: breadcrumbs.slice(-30).map(({ timestamp }) => ({
+        timestamp,
+        message: "Failed otpauth://[Filtered]",
+        data: { authorization: "[Filtered]", safe: true },
+      })),
+    },
+    { data: { feedbackDiagnostics: true } },
+  );
+  expect(Sentry.captureFeedback).toHaveBeenCalledWith({
+    message: "Bug",
+    source: "settings",
+    associatedEventId: "diagnostic-event-id",
+  });
+});
+test.each([false, undefined])(
+  "omits diagnostics and inherited breadcrumbs when includeLogs is %s",
+  (includeLogs) => {
+    const addEventProcessor = jest.fn();
+    jest.mocked(Sentry.withScope).mockImplementationOnce((callback) =>
+      callback({
+        setTag: jest.fn(),
+        addEventProcessor,
+      } as unknown as Sentry.Scope),
+    );
+
+    submitUserFeedback({ message: "Bug" }, "bug_report", includeLogs);
+
+    expect(Sentry.captureEvent).not.toHaveBeenCalled();
+    expect(Sentry.captureFeedback).toHaveBeenCalledWith({
+      message: "Bug",
+      source: "settings",
+    });
+    const processor = addEventProcessor.mock.calls[0]?.[0] as Parameters<
+      Sentry.Scope["addEventProcessor"]
+    >[0];
+    expect(
+      processor(
+        { message: "Feedback", breadcrumbs: [{ message: "Private log" }] },
+        {},
+      ),
+    ).toEqual({ message: "Feedback", breadcrumbs: undefined });
+  },
+);
 test("sanitizes sensitive fields, auth URIs, circular structures and event metadata", async () => {
   setSentryTrackingEnabled(true);
   const circular: Record<string, unknown> = {};

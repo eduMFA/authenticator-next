@@ -48,6 +48,7 @@ export function setSentryTrackingEnabled(enabled: boolean): void {
 export function submitUserFeedback(
   feedback: Pick<SendFeedbackParams, "email" | "message" | "name">,
   type: UserFeedbackType,
+  includeLogs = false,
 ): void {
   if (!sentryTrackingEnabled) {
     // Explicit feedback is allowed independently of automatic reporting.
@@ -57,9 +58,35 @@ export function submitUserFeedback(
 
   Sentry.withScope((scope) => {
     scope.setTag("feedback.type", type);
+    if (!includeLogs) {
+      // Feedback inherits breadcrumbs from both scopes unless explicitly removed.
+      scope.addEventProcessor((event) => ({
+        ...event,
+        breadcrumbs: undefined,
+      }));
+      return Sentry.captureFeedback({ ...feedback, source: "settings" });
+    }
+    const breadcrumbs = [
+      ...Sentry.getIsolationScope().getScopeData().breadcrumbs,
+      ...scope.getScopeData().breadcrumbs,
+    ]
+      .slice(-30)
+      .map(sanitizeBreadcrumb);
+
+    const associatedEventId = Sentry.captureEvent(
+      {
+        message: "User feedback diagnostics",
+        level: "info",
+        breadcrumbs,
+        fingerprint: ["user-feedback-diagnostics", type],
+      },
+      { data: { feedbackDiagnostics: true } },
+    );
+
     return Sentry.captureFeedback({
       ...feedback,
       source: "settings",
+      associatedEventId,
     });
   });
 }
@@ -99,12 +126,14 @@ function initSentry(trackingEnabled: boolean): void {
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: 0,
     beforeBreadcrumb: sanitizeBreadcrumb,
-    beforeSend: (event) => {
+    beforeSend: (event, hint) => {
       if (event.type === "feedback") {
         return event;
       }
 
-      return sentryTrackingEnabled ? sanitizeEvent(event) : null;
+      return sentryTrackingEnabled || hint.data?.feedbackDiagnostics === true
+        ? sanitizeEvent(event)
+        : null;
     },
     integrations: [Sentry.feedbackIntegration({})],
   });
