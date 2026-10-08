@@ -94,7 +94,8 @@ export function validatePushRequestData(
     typeof d.serial === "string" &&
     typeof d.signature === "string" &&
     typeof d.sslverify === "string" &&
-    typeof d.title === "string"
+    typeof d.title === "string" &&
+    typeof d.url === "string"
   );
 }
 
@@ -103,14 +104,10 @@ export function validatePushRequestData(
  * Returns null if the message is not a valid push authentication notification
  */
 export function parsePushRequest(message: RemoteMessage): PushRequest | null {
-  const { category, data, messageId, sentTime } = message;
+  const { data, messageId, sentTime } = message;
 
-  // Check if this is a push authentication notification
-  if (!data || category !== PUSH_AUTHENTICATION_CATEGORY) {
-    console.log("Notification is not a PUSH_AUTHENTICATION category");
-    return null;
-  }
-
+  // Android messages have no top-level category; on iOS it is optional APNs metadata.
+  // Identify authentication requests by their payload. The receiver verifies the signature.
   // Validate the data structure
   if (!validatePushRequestData(data)) {
     console.error("Invalid push request data structure", data);
@@ -122,13 +119,13 @@ export function parsePushRequest(message: RemoteMessage): PushRequest | null {
     id: messageId || `${data.nonce}-${Date.now()}`, // Fallback id if messageId is missing
     status: PushRequestStatus.Pending,
     sentAt: sentTime || Date.now(),
-    nonce: data.nonce as string,
-    question: data.question as string,
-    serial: data.serial as string,
-    signature: data.signature as string,
-    sslverify: data.sslverify as string,
-    title: data.title as string,
-    url: data.url as string,
+    nonce: data.nonce,
+    question: data.question,
+    serial: data.serial,
+    signature: data.signature,
+    sslverify: data.sslverify,
+    title: data.title,
+    url: data.url,
   };
 
   return pushRequest;

@@ -146,6 +146,8 @@ test.each([
   { ...request, signature: null },
   { ...request, sslverify: true },
   { ...request, title: 1 },
+  { ...request, url: undefined },
+  { ...request, url: 1 },
 ])("rejects invalid request data %p", (data) => {
   expect(validatePushRequestData(data)).toBe(false);
   expect(parsePushRequestFromNotificationData(data, "fallback")).toBeNull();
@@ -169,9 +171,19 @@ test("parses Firebase and local notification requests", () => {
 });
 test("ignores unrelated and malformed messages", () => {
   expect(parsePushRequest({})).toBeNull();
-  expect(parsePushRequest({ ...message, category: "other" })).toBeNull();
+  expect(parsePushRequest({ data: { category: "other" } })).toBeNull();
   expect(parsePushRequest({ ...message, data: {} })).toBeNull();
 });
+test.each([undefined, "other"])(
+  "accepts signed request payloads with category %p",
+  (category) => {
+    expect(parsePushRequest({ ...message, category })).toEqual({
+      ...request,
+      id: "message",
+      sentAt: 123,
+    });
+  },
+);
 test.each([
   ["ACCEPT", "ACCEPT"],
   ["DECLINE", "DECLINE"],
@@ -230,10 +242,11 @@ test("foreground and background listeners deliver only valid messages", async ()
   const foreground = jest.mocked(onMessage).mock.calls[0][1];
   const background = jest.mocked(setBackgroundMessageHandler).mock.calls[0][1];
   await foreground(message);
+  await foreground({ ...message, category: undefined });
   await foreground({});
   await background(message);
   await background({});
-  expect(handler).toHaveBeenCalledTimes(2);
+  expect(handler).toHaveBeenCalledTimes(3);
 });
 test("dispatches known notification actions and removes listener", () => {
   const remove = jest.fn();
