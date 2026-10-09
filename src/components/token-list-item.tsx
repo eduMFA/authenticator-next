@@ -281,6 +281,7 @@ const TokenListItemContent = memo(function TokenListItemContent({
 const styles = StyleSheet.create({
   progressBar: {
     flex: 1,
+    opacity: 0.6,
   },
   progressBarBlur: {
     borderRadius: Radii.pill,
