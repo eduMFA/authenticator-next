@@ -48,12 +48,18 @@ describe("enrollment URI parsing", () => {
       ttl: 42,
       sslVerify: false,
       pin: true,
-      imageUrl: "https://example.org/image",
     });
     expect(
       parseTokenFromUri(uri({ sslverify: "1", pin: "False" }, "Account")).pin,
     ).toBeUndefined();
     expect(parseTokenFromUri(uri({}, "Account")).issuer).toBeUndefined();
+  });
+  test.each(["1", "2"])("ignores QR image URLs for version %s", (v) => {
+    for (const image of ["https://example.org/image.png", "invalid"]) {
+      const parsed = parseTokenFromUri(uri({ v, imageUri: image, image }));
+      expect(parsed.id).toBe("serial");
+      expect(parsed).not.toHaveProperty("imageUrl");
+    }
   });
   test.each(["serial", "url", "enrollment_credential"])(
     "rejects missing %s",
@@ -63,12 +69,12 @@ describe("enrollment URI parsing", () => {
       );
     },
   );
-  test.each<Record<string, string>>([
-    { url: "invalid" },
-    { imageUri: "invalid" },
-  ])("rejects invalid nested URLs %p", (params) => {
-    expect(() => parseTokenFromUri(uri(params))).toThrow(InvalidUrlError);
-  });
+  test.each<Record<string, string>>([{ url: "invalid" }])(
+    "rejects invalid nested URLs %p",
+    (params) => {
+      expect(() => parseTokenFromUri(uri(params))).toThrow(InvalidUrlError);
+    },
+  );
   test.each(["", "bad", "3"])("rejects unsupported version %s", (v) => {
     expect(() => parseTokenFromUri(uri({ v }))).toThrow(
       UnsupportedVersionError,
@@ -111,7 +117,7 @@ describe("enrollment URI parsing", () => {
       parseTokenResponse(
         response(200, { detail: { public_key: "abc\ndef\n" } }),
       ),
-    ).resolves.toBe("abcdef");
+    ).resolves.toEqual({ serverPublicKey: "abcdef" });
     await expect(parseTokenResponse(response())).rejects.toThrow();
   });
 });
