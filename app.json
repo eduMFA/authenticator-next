@@ -17,7 +17,8 @@
         "usesNonExemptEncryption": false
       },
       "entitlements": {
-        "aps-environment": "production"
+        "aps-environment": "production",
+        "com.apple.developer.usernotifications.time-sensitive": true
       },
       "infoPlist": {
         "UIBackgroundModes": ["remote-notification", "fetch"]
