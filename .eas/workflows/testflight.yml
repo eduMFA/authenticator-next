@@ -12,5 +12,5 @@ jobs:
     type: testflight
     params:
       asc_build_id: ${{ app_store_connect.build_upload.build.id }}
-      external_groups: ["External Testers"]
+      external_groups: ["Public Testflight"]
       changelog: Beta release
