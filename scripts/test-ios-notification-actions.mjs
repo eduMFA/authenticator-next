@@ -10,6 +10,7 @@ const temporaryDirectory = await mkdtemp(
 try {
   const paths = [
     "modules/edumfa-rsa/ios/EduMfaRsaCrypto.swift",
+    "modules/edumfa-notifications/ios/EduMfaNotificationJournal.swift",
     "modules/edumfa-notifications/ios/EduMfaNotificationActions.swift",
     "tests/native-notification-actions.swift",
   ];
