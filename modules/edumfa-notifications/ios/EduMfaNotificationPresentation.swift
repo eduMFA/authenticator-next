@@ -21,8 +21,8 @@ enum EduMfaNotificationPresentation {
     }
     await actions.expireRequests()
     center.removeDeliveredNotifications(withIdentifiers: dismiss)
-    let count = await actions.pendingRequests().count
     do {
+      let count = try await actions.badgeCount()
       try await center.setBadgeCount(count)
     } catch {
       NSLog("[eduMFA] Could not update notification badge: %@", error.localizedDescription)

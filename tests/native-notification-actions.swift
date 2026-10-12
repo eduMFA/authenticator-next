@@ -184,7 +184,68 @@ let migrated = EduMfaNotificationActions(defaults: legacyDefaults, usesKeychain:
 let migratedResults = try await migrated.synchronize(NotificationSnapshot(tokens: tokens, requests: [delivered, mirrored]))
 try expect(migratedResults.first?.status == "accepted", "Migration lost a native completion")
 try expect(await migrated.pendingRequests().count == 1, "Migration lost mirrored pending requests")
-try expect(legacyDefaults.data(forKey: "eduMFA.notificationJournal") != nil, "Single journal was not saved")
+try expect(legacyDefaults.data(forKey: "eduMFA.notificationState") != nil, "Single journal was not saved")
 try expect(legacyDefaults.object(forKey: "eduMFA.notificationRequests") == nil &&
            legacyDefaults.object(forKey: "eduMFA.notificationResults") == nil, "Legacy stores were not removed")
+
+// Separate app/extension stores reload one locked file. Arrivals must count
+// across backends, deduplicate redelivery, and preserve actions taken elsewhere.
+let folder = FileManager.default.temporaryDirectory.appendingPathComponent(suite)
+defer { try? FileManager.default.removeItem(at: folder) }
+let appDefaults = UserDefaults(suiteName: suite + ".app")!
+let extensionDefaults = UserDefaults(suiteName: suite + ".extension")!
+defer {
+  appDefaults.removePersistentDomain(forName: suite + ".app")
+  extensionDefaults.removePersistentDomain(forName: suite + ".extension")
+}
+let appStore = NotificationJournalStore(defaults: appDefaults, directory: folder)
+let extensionStore = NotificationJournalStore(defaults: extensionDefaults, directory: folder)
+let sharedActions = EduMfaNotificationActions(
+  usesKeychain: false, store: appStore, verify: { _, _ in true },
+  sign: { message, _ in Data(message.utf8).base64EncodedString() },
+  send: { try await transport.respond($0) }
+)
+_ = try await sharedActions.synchronize(NotificationSnapshot(tokens: tokens + [secondBackend], requests: []))
+let arrival = sampleRequest(nonce: "arrival")
+try expect(try extensionStore.recordArrival(arrival, verify: { _, _ in true }) == 1, "Arrival badge not set")
+try expect(try extensionStore.recordArrival(other, verify: { _, _ in true }) == 2, "Arrival failed to aggregate backends")
+try expect(try extensionStore.recordArrival(arrival, verify: { _, _ in true }) == 2, "Redelivery double-counted")
+try expect(try extensionStore.recordArrival(sampleRequest(nonce: "invalid"), verify: { _, _ in false }) == nil, "Invalid signature changed badge")
+try expect(try extensionStore.recordArrival(old, verify: { _, _ in true }) == 2, "Expired arrival counted")
+try expect(try await sharedActions.badgeCount() == 2, "App cache missed extension arrivals")
+
+async let completing = sharedActions.submit(arrival, action: "ACCEPT")
+try await Task.sleep(nanoseconds: 5_000_000)
+let concurrent = sampleRequest(nonce: "during-action")
+_ = try extensionStore.recordArrival(concurrent, verify: { _, _ in true })
+try expect(await completing, "Shared action failed")
+try expect(try appStore.read().pendingCount == 2, "Action overwrote an extension arrival")
+_ = try await sharedActions.synchronize(NotificationSnapshot(tokens: tokens + [secondBackend], requests: [arrival]))
+try expect(try extensionStore.recordArrival(arrival, verify: { _, _ in true }) == 2, "Redelivery resurrected accepted request")
+try expect(await sharedActions.knownRequest(arrival.key)?.status == "accepted", "Stale app snapshot overwrote shared outcome")
+
+let beforeConcurrent = try appStore.read().pendingCount
+try await withThrowingTaskGroup(of: Void.self) { group in
+  for index in 0..<20 {
+    group.addTask {
+      let independentStore = NotificationJournalStore(
+        defaults: UserDefaults(suiteName: suite + ".extension")!, directory: folder
+      )
+      _ = try independentStore.recordArrival(sampleRequest(nonce: "parallel-\(index)"), verify: { _, _ in true })
+    }
+  }
+  try await group.waitForAll()
+}
+try expect(try appStore.read().pendingCount == beforeConcurrent + 20, "Concurrent arrivals lost updates")
+
+// Even if the extension creates the shared file first, the app's legacy
+// completed journal must migrate on its first shared transaction.
+let migrationFolder = folder.appendingPathComponent("migration")
+let emptyExtension = NotificationJournalStore(defaults: extensionDefaults, directory: migrationFolder)
+try expect(try emptyExtension.recordArrival(arrival, verify: { _, _ in true }) == nil, "Unknown enrollment changed badge")
+let savedEntry = NotificationJournalEntry(request: completed, isNative: true)
+appDefaults.set(try JSONEncoder().encode([savedEntry]), forKey: "eduMFA.notificationJournal")
+let migratingApp = NotificationJournalStore(defaults: appDefaults, directory: migrationFolder)
+try migratingApp.transaction { state in state.tokens = tokens }
+try expect(try emptyExtension.read().entries[completed.key]?.request.status == "accepted", "Extension-first startup lost legacy completion")
 print("Native notification action regression tests passed")

@@ -2,105 +2,6 @@ import Foundation
 import Security
 import EduMfaRsa
 
-struct NotificationToken: Codable, Sendable {
-  let id: String
-  let callbackUrl: String
-  let serverPublicKey: String
-}
-
-struct NotificationPushRequest: Codable, Sendable {
-  let id: String
-  var status: String
-  var sentAt: Double
-  let nonce: String
-  let question: String
-  let serial: String
-  let signature: String
-  let sslverify: String
-  let title: String
-  let url: String
-
-  var key: String { serial + "\u{0}" + nonce }
-  var isCompleted: Bool { status == "accepted" || status == "declined" }
-  var isExpired: Bool { Date().timeIntervalSince1970 * 1000 - sentAt >= 120_000 }
-  var signedData: String {
-    "\(nonce)|\(url)|\(serial)|\(question)|\(title)|\(sslverify == "1" ? 1 : 0)"
-  }
-
-  static func from(userInfo: [AnyHashable: Any], identifier: String, date: Date) throws -> Self {
-    var data = userInfo["body"] as? [String: Any] ?? userInfo.reduce(into: [String: Any]()) {
-      if let key = $1.key as? String { $0[key] = $1.value }
-    }
-    data["id"] = identifier
-    data["status"] = "pending"
-    data["sentAt"] = date.timeIntervalSince1970 * 1000
-    return try JSONDecoder().decode(Self.self, from: JSONSerialization.data(withJSONObject: data))
-  }
-}
-
-enum NotificationActionError: Error {
-  case invalidAction, invalidSignature, unknownToken, expired, invalidCallback, server(Int), keychain(OSStatus)
-}
-
-// RFC 4648, matching the backend's padded Base32 signatures.
-enum NotificationBase32 {
-  static let alphabet = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567".utf8)
-
-  static func decode(_ value: String) throws -> Data {
-    let bytes = Array(value.utf8)
-    guard !bytes.isEmpty, bytes.count % 8 == 0 else { throw NotificationActionError.invalidSignature }
-    var accumulator = 0
-    var bits = 0
-    var output = Data()
-    var padding = false
-    for byte in bytes {
-      if byte == 61 { padding = true; continue }
-      guard !padding, let index = alphabet.firstIndex(of: byte) else {
-        throw NotificationActionError.invalidSignature
-      }
-      accumulator = (accumulator << 5) | index
-      bits += 5
-      if bits >= 8 {
-        bits -= 8
-        output.append(UInt8((accumulator >> bits) & 255))
-        accumulator &= (1 << bits) - 1
-      }
-    }
-    guard encode(output) == value else { throw NotificationActionError.invalidSignature }
-    return output
-  }
-
-  static func encode(_ value: Data) -> String {
-    var accumulator = 0
-    var bits = 0
-    var output: [UInt8] = []
-    for byte in value {
-      accumulator = (accumulator << 8) | Int(byte)
-      bits += 8
-      while bits >= 5 {
-        bits -= 5
-        output.append(alphabet[(accumulator >> bits) & 31])
-      }
-      accumulator &= (1 << bits) - 1
-    }
-    if bits > 0 { output.append(alphabet[(accumulator << (5 - bits)) & 31]) }
-    while output.count % 8 != 0 { output.append(61) }
-    return String(decoding: output, as: UTF8.self)
-  }
-}
-
-struct NotificationSnapshot: Codable {
-  let tokens: [NotificationToken]
-  let requests: [NotificationPushRequest]
-}
-
-// App snapshots may remove mirrored entries. Native entries are retained for
-// recovery, including actions taken before JavaScript starts.
-private struct NotificationJournalEntry: Codable {
-  var request: NotificationPushRequest
-  var isNative: Bool
-}
-
 enum NotificationTokenVault {
   private static var query: [String: Any] {
     [String(kSecClass): kSecClassGenericPassword,
@@ -145,7 +46,7 @@ actor EduMfaNotificationActions {
   private var tokens: [NotificationToken] = []
   private var journal: [String: NotificationJournalEntry] = [:]
   private var inFlight: [String: Task<Bool, Never>] = [:]
-  private let defaults: UserDefaults
+  private let store: NotificationJournalStore
   private let usesKeychain: Bool
   private let verify: Verify
   private let sign: Sign
@@ -154,6 +55,7 @@ actor EduMfaNotificationActions {
   init(
     defaults: UserDefaults = .standard,
     usesKeychain: Bool = true,
+    store: NotificationJournalStore? = nil,
     verify: @escaping Verify = { request, token in
       try EduMfaRsaCrypto().verify(
         message: request.signedData,
@@ -175,33 +77,22 @@ actor EduMfaNotificationActions {
       return (response as? HTTPURLResponse)?.statusCode ?? 0
     }
   ) {
-    self.defaults = defaults
+    self.store = store ?? NotificationJournalStore(
+      defaults: defaults,
+      appGroup: usesKeychain ? Bundle.main.object(forInfoDictionaryKey: "EduMfaNotificationAppGroup") as? String : nil
+    )
     self.usesKeychain = usesKeychain
     self.verify = verify
     self.sign = sign
     self.send = send
-    if let data = defaults.data(forKey: "eduMFA.notificationJournal"),
-       let saved = try? JSONDecoder().decode([NotificationJournalEntry].self, from: data) {
-      for entry in saved { journal[entry.request.key] = entry }
-    } else {
-      // Preserve requests and Watch outcomes from the previous two-store format.
-      for (key, native) in [("eduMFA.notificationRequests", false), ("eduMFA.notificationResults", true)] {
-        guard let data = defaults.data(forKey: key),
-              let saved = try? JSONDecoder().decode([NotificationPushRequest].self, from: data) else { continue }
-        for request in saved {
-          var recovered = request
-          if let current = journal[request.key]?.request, current.isCompleted {
-            recovered = current
-          }
-          journal[request.key] = NotificationJournalEntry(
-            request: recovered, isNative: native
-          )
-        }
-      }
+    if let state = try? self.store.read() {
+      journal = state.entries
+      tokens = state.tokens
     }
   }
 
   func synchronize(_ snapshot: NotificationSnapshot) throws -> [NotificationPushRequest] {
+    try reload()
     if usesKeychain { try NotificationTokenVault.save(snapshot.tokens) }
     tokens = snapshot.tokens
     var next = Dictionary(snapshot.requests.map {
@@ -217,29 +108,38 @@ actor EduMfaNotificationActions {
       next[entry.request.key] = entry
     }
     journal = next
-    try persist()
+    try persist(tokens: snapshot.tokens)
     return actionResults()
   }
 
   func pendingRequests() -> [NotificationPushRequest] {
-    journal.values.map(\.request).filter { request in
+    try? reload()
+    return journal.values.map(\.request).filter { request in
       request.status == "pending" && !request.isExpired && tokens.contains { $0.id == request.serial }
     }
   }
 
-  func knownRequest(_ key: String) -> NotificationPushRequest? { journal[key]?.request }
+  func knownRequest(_ key: String) -> NotificationPushRequest? {
+    try? reload()
+    return journal[key]?.request
+  }
+
+  func badgeCount() throws -> Int { try store.read().pendingCount }
 
   func actionResults() -> [NotificationPushRequest] {
-    journal.values.filter(\.isNative).map(\.request)
+    try? reload()
+    return journal.values.filter(\.isNative).map(\.request)
   }
 
   func recordDelivered(_ request: NotificationPushRequest) {
+    guard (try? reload()) != nil else { return }
     guard journal[request.key] == nil, isTrusted(request) else { return }
     record(request)
     try? persist()
   }
 
   func expireRequests() {
+    guard (try? reload()) != nil else { return }
     for var request in journal.values.map(\.request) where request.status == "pending" && request.isExpired {
       request.status = "expired"
       record(request)
@@ -265,6 +165,7 @@ actor EduMfaNotificationActions {
     var request = incoming
     var trusted = false
     do {
+      try reload()
       guard action == "ACCEPT" || action == "DECLINE" else { throw NotificationActionError.invalidAction }
       // Reload the secure snapshot on cold launches, before any JavaScript exists.
       if usesKeychain { tokens = try NotificationTokenVault.load() }
@@ -318,9 +219,26 @@ actor EduMfaNotificationActions {
     journal[request.key] = NotificationJournalEntry(request: request, isNative: true)
   }
 
-  private func persist() throws {
-    defaults.set(try JSONEncoder().encode(Array(journal.values)), forKey: "eduMFA.notificationJournal")
-    defaults.removeObject(forKey: "eduMFA.notificationRequests")
-    defaults.removeObject(forKey: "eduMFA.notificationResults")
+  private func reload() throws {
+    let state = try store.read()
+    tokens = state.tokens
+    journal = state.entries
+  }
+
+  private func persist(tokens enrolled: [NotificationToken]? = nil) throws {
+    let saved = try store.transaction { state in
+      let cutoff = Date().timeIntervalSince1970 * 1000 - 86_400_000
+      for entry in state.entries.values where entry.isNative && entry.request.sentAt > cutoff {
+        let cached = journal[entry.request.key]?.request
+        if cached == nil || (cached?.status == "pending" && entry.request.status != "pending") {
+          journal[entry.request.key] = entry
+        }
+      }
+      state.entries = journal
+      if let enrolled { state.tokens = enrolled }
+      return state
+    }
+    journal = saved.entries
+    tokens = saved.tokens
   }
 }
