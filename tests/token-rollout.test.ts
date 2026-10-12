@@ -174,3 +174,36 @@ test("deletes private keys and propagates deletion errors", async () => {
   jest.mocked(deleteRsaKeyPair).mockRejectedValue(new Error("locked"));
   await expect(deleteTokenPrivateKey("serial")).rejects.toThrow("locked");
 });
+
+test.each(["https://example.org/token.png", null, ""])(
+  "saves the enrollment image: %p",
+  async (image) => {
+    fetchMock.mockResolvedValue(
+      response(200, { detail: { public_key: "server\nkey", image } }),
+    );
+    await expect(
+      performTokenRollout(token, updateState),
+    ).resolves.toMatchObject({ success: true });
+    expect(updateState).toHaveBeenLastCalledWith(token.id, {
+      rolloutState: State.Completed,
+      serverPublicKey: "serverkey",
+      imageUrl: image || undefined,
+    });
+  },
+);
+
+test.each([undefined, "invalid", "file:///tmp/token.png", 42])(
+  "preserves the image when enrollment metadata is missing or invalid: %p",
+  async (image) => {
+    fetchMock.mockResolvedValue(
+      response(200, { detail: { public_key: "serverkey", image } }),
+    );
+    await expect(
+      performTokenRollout(token, updateState),
+    ).resolves.toMatchObject({ success: true });
+    expect(updateState).toHaveBeenLastCalledWith(token.id, {
+      rolloutState: State.Completed,
+      serverPublicKey: "serverkey",
+    });
+  },
+);
