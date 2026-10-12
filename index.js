@@ -1,9 +1,5 @@
-import { presentBackgroundPushRequest } from "./src/services/push-delivery";
-import { addBackgroundMessageHandler } from "./src/utils/notification";
-import { Platform } from "react-native";
+import { registerBackgroundNotifications } from "./src/services/background-notifications";
 
-if (Platform.OS === "android") {
-  addBackgroundMessageHandler(presentBackgroundPushRequest);
-}
+registerBackgroundNotifications();
 
 require("expo-router/entry");

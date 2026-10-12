@@ -1,6 +1,6 @@
+import { usePushRequestStore } from "@/stores/push-request";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
-import { usePushRequestStore } from "@/stores/push-request";
 import { useTokenStore } from "@/stores/token";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
@@ -34,7 +34,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type PushRequestPopupProps = {
   requests: PushRequest[];
-  onAction: (request: PushRequest) => Promise<void>;
+  onAction: (request: PushRequest) => Promise<boolean>;
 };
 
 export function PushRequestPopup({
@@ -45,7 +45,9 @@ export function PushRequestPopup({
     null,
   );
   const colorScheme = useColorScheme();
-  const { updatePushRequestStatus } = usePushRequestStore();
+  const updatePushRequestStatus = usePushRequestStore(
+    (state) => state.updatePushRequestStatus,
+  );
   const pendingRequests = requests.filter(
     (request) => request.status === PushRequestStatus.Pending,
   );
