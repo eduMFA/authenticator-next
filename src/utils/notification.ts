@@ -1,4 +1,5 @@
 import {
+  PUSH_AUTHENTICATION_CHANNEL,
   NOTIFICATION_ACTION_ACCEPT,
   NOTIFICATION_ACTION_DECLINE,
   PUSH_AUTHENTICATION_CATEGORY,
@@ -46,10 +47,13 @@ export function isNotificationPermissionPending(
 export async function setupNotificationCategories() {
   // Create Android notification channel
   if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("push-auth", {
-      name: "Push Authentication",
-      importance: Notifications.AndroidImportance.HIGH,
-    });
+    await Notifications.setNotificationChannelAsync(
+      PUSH_AUTHENTICATION_CHANNEL,
+      {
+        name: "Push Authentication",
+        importance: Notifications.AndroidImportance.HIGH,
+      },
+    );
   }
 
   // Set up notification categories with actions for both platforms
@@ -60,15 +64,15 @@ export async function setupNotificationCategories() {
         identifier: NOTIFICATION_ACTION_ACCEPT,
         buttonTitle: i18n._(t`Accept`),
         options: {
-          opensAppToForeground: false,
-          isAuthenticationRequired: true,
+          opensAppToForeground: Platform.OS !== "ios",
+          isAuthenticationRequired: Platform.OS !== "ios",
         },
       },
       {
         identifier: NOTIFICATION_ACTION_DECLINE,
         buttonTitle: i18n._(t`Decline`),
         options: {
-          opensAppToForeground: false,
+          opensAppToForeground: Platform.OS !== "ios",
           isDestructive: true,
         },
       },
@@ -184,13 +188,6 @@ export function getNotificationAction(
   return null;
 }
 
-export function getNotificationResponseKey(
-  response: Notifications.NotificationResponse,
-): string {
-  const { identifier } = response.notification.request;
-  return `${identifier}:${response.actionIdentifier}`;
-}
-
 /**
  * Add a listener for messages received while the app is in the foreground
  * Parses the message and returns a PushRequest if valid
@@ -201,7 +198,7 @@ export function addMessageListener(handler: PushRequestHandler) {
 
     const pushRequest = parsePushRequest(message);
     if (pushRequest) {
-      handler(pushRequest);
+      await handler(pushRequest);
     }
   });
 }
@@ -215,7 +212,7 @@ export function addBackgroundMessageHandler(handler: PushRequestHandler) {
 
     const pushRequest = parsePushRequest(message);
     if (pushRequest) {
-      handler(pushRequest);
+      await handler(pushRequest);
     }
   });
 }

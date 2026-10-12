@@ -1,35 +1,19 @@
 import { useNotificationStore } from "@/stores/notification";
-import { usePushRequestStore } from "@/stores/push-request";
-import type {
-  NotificationAction,
-  NotificationResponseData,
-} from "@/types/notification";
-import type { PushRequest } from "@/types/push-request";
-import { base32ToBase64 } from "@/utils/crypto";
 import {
-  addBackgroundMessageHandler,
+  handleNotificationResponse,
+  receivePushRequest,
+} from "@/services/push-notification";
+import {
   addMessageListener,
-  getNotificationAction,
-  getNotificationResponseData,
-  getNotificationResponseKey,
   isNotificationPermissionEnabled,
-  parsePushRequestFromNotificationData,
 } from "@/utils/notification";
-import { buildPushRequestSignedData } from "@/utils/push-request";
-import { verifyMessage } from "@/utils/rsa";
 import * as Notifications from "expo-notifications";
-import { useCallback, useEffect } from "react";
-import { useChallengePolling } from "./use-challenge-polling";
-import { useToken } from "./use-token";
-
-export type { NotificationAction } from "@/types/notification";
-
-export type NotificationActionHandler = (
-  action: NotificationAction,
-  pushRequest: PushRequest,
-) => void;
-
-const handledNotificationResponseKeys = new Set<string>();
+import { useEffect } from "react";
+import { AppState, Platform } from "react-native";
+import { usePushRequestStore } from "@/stores/push-request";
+import { useTokenStore } from "@/stores/token";
+import { synchronizeNotificationState } from "@/services/notification-state";
+import { addNativeNotificationListener } from "@/utils/native-notifications";
 
 export function useNotificationStatus() {
   const fcmToken = useNotificationStore((state) => state.fcmToken);
@@ -65,154 +49,63 @@ export function useNotificationStatus() {
   };
 }
 
-export function useNotifications(onAction?: NotificationActionHandler) {
-  const { tokens } = useToken();
+export function useNotifications() {
   const notificationStatus = useNotificationStatus();
-  const { pollChallenges } = useChallengePolling();
-
-  const { addPushRequest, getPushRequestByNonce, getPushRequestById } =
-    usePushRequestStore();
-
-  const handlePushRequest = useCallback(
-    async (pushRequest: PushRequest) => {
-      console.log("Received push request:", pushRequest.id);
-
-      const token = tokens.find((t) => t.id === pushRequest.serial);
-
-      if (!token?.serverPublicKey) {
-        console.warn(
-          "Server public key not found for token serial:",
-          pushRequest.serial,
-        );
-        return;
-      }
-
-      const signedData = buildPushRequestSignedData(pushRequest);
-      let isValid = false;
-      try {
-        isValid = await verifyMessage(
-          signedData,
-          base32ToBase64(pushRequest.signature),
-          token.serverPublicKey,
-        );
-      } catch (error) {
-        console.error("Error verifying push request signature:", error);
-        return;
-      }
-
-      if (!isValid) {
-        console.warn(
-          "Signature verification failed for push request:",
-          pushRequest.id,
-        );
-        return;
-      }
-
-      addPushRequest(pushRequest);
-    },
-    [addPushRequest, tokens],
-  );
-
-  const handleNotificationAction = useCallback(
-    async (action: NotificationAction, data: NotificationResponseData) => {
-      // Try to find the push request by id or nonce
-      const pushRequestId = data.pushRequestId;
-      const nonce = data.nonce;
-
-      await pollChallenges();
-
-      let pushRequest: PushRequest | undefined;
-
-      if (pushRequestId) {
-        pushRequest = getPushRequestById(pushRequestId);
-      }
-
-      if (!pushRequest && nonce) {
-        pushRequest = getPushRequestByNonce(nonce);
-      }
-
-      if (!pushRequest) {
-        const parsedPushRequest = parsePushRequestFromNotificationData(
-          data,
-          pushRequestId ?? nonce ?? `notification-${Date.now()}`,
-        );
-
-        if (parsedPushRequest) {
-          await handlePushRequest(parsedPushRequest);
-          pushRequest = getPushRequestByNonce(parsedPushRequest.nonce);
-        }
-      }
-
-      if (!pushRequest) {
-        console.warn("Could not find push request for notification action", {
-          pushRequestId,
-          nonce,
-        });
-        return;
-      }
-
-      // Call the external handler if provided
-      onAction?.(action, pushRequest);
-    },
-    [
-      getPushRequestById,
-      getPushRequestByNonce,
-      handlePushRequest,
-      pollChallenges,
-      onAction,
-    ],
-  );
 
   useEffect(() => {
-    // Listen for foreground messages
-    const unsubscribeMessage = addMessageListener((pushRequest) => {
-      void handlePushRequest(pushRequest);
-    });
-
-    // Set up background message handler
-    addBackgroundMessageHandler((pushRequest) => {
-      void handlePushRequest(pushRequest);
-    });
-
-    const handleNotificationResponse = (
-      response: Notifications.NotificationResponse,
-    ) => {
-      const action = getNotificationAction(response.actionIdentifier);
-      if (!action) {
-        return;
+    const unsubscribeMessage = addMessageListener(async (request) => {
+      try {
+        await receivePushRequest(request);
+      } catch (error) {
+        console.error("Push request verification failed:", error);
       }
-
-      const responseKey = getNotificationResponseKey(response);
-      if (handledNotificationResponseKeys.has(responseKey)) {
-        return;
-      }
-
-      handledNotificationResponseKeys.add(responseKey);
-
-      const data = getNotificationResponseData(response);
-      console.debug("Notification response received:", { action, data });
-      void handleNotificationAction(action, data);
+    });
+    const handleResponse = (response: Notifications.NotificationResponse) => {
+      void handleNotificationResponse(response);
     };
-
-    // Listen for notification responses (taps and action button presses)
     const responseSubscription =
-      Notifications.addNotificationResponseReceivedListener(
-        handleNotificationResponse,
-      );
-
-    // Handle notification that opened the app (when app was killed)
-    const lastResponse = Notifications.getLastNotificationResponse();
-    if (lastResponse) {
-      handleNotificationResponse(lastResponse);
-    }
+      Notifications.addNotificationResponseReceivedListener(handleResponse);
+    const handleLastResponse = () => {
+      const response = Notifications.getLastNotificationResponse();
+      if (response) handleResponse(response);
+    };
+    const reconcile = () => {
+      void synchronizeNotificationState().catch((error: unknown) => {
+        console.error("Notification state reconciliation failed:", error);
+      });
+    };
+    const unsubscribeRequests = usePushRequestStore.subscribe(reconcile);
+    const unsubscribeTokens = useTokenStore.subscribe(reconcile);
+    const unsubscribeNative =
+      Platform.OS === "ios"
+        ? addNativeNotificationListener(reconcile)
+        : () => {};
+    void synchronizeNotificationState()
+      .then(handleLastResponse)
+      .catch((error: unknown) => {
+        console.error("Initial notification reconciliation failed:", error);
+      });
+    const expiryTimer = setInterval(reconcile, 15_000);
+    const appStateSubscription = AppState.addEventListener(
+      "change",
+      (state) => {
+        if (state === "active") {
+          reconcile();
+          handleLastResponse();
+        }
+      },
+    );
 
     return () => {
       unsubscribeMessage();
       responseSubscription.remove();
+      appStateSubscription.remove();
+      unsubscribeRequests();
+      unsubscribeTokens();
+      unsubscribeNative();
+      clearInterval(expiryTimer);
     };
-  }, [handleNotificationAction, handlePushRequest]);
+  }, []);
 
-  return {
-    ...notificationStatus,
-  };
+  return notificationStatus;
 }
