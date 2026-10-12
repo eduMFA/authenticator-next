@@ -1,7 +1,7 @@
 {
   "name": "edumfa-push",
   "version": "1.0.0",
-  "main": "expo-router/entry",
+  "main": "./index.ts",
   "private": true,
   "scripts": {
     "postinstall": "bun run licenses:generate",
@@ -15,6 +15,7 @@
     "licenses:check": "bun run licenses:generate && git diff --exit-code -- src/generated/open-source-licenses.ts",
     "licenses:generate": "bun scripts/generate-open-source-licenses.mjs",
     "test": "jest",
+    "test:ios-notifications": "bun scripts/test-ios-notification-actions.mjs",
     "lint": "expo lint",
     "clean-ios": "watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache",
     "full-clean-ios": "rm -rf node_modules && bun pm cache rm && bun i && watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache",

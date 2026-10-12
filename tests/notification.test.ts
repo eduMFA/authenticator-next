@@ -15,7 +15,6 @@ import {
   cancelNotification,
   getNotificationAction,
   getNotificationResponseData,
-  getNotificationResponseKey,
   isNotificationPermissionEnabled,
   isNotificationPermissionPending,
   parsePushRequest,
@@ -192,13 +191,9 @@ test.each([
 ])("maps action %s", (identifier, expected) => {
   expect(getNotificationAction(identifier)).toBe(expected);
 });
-test("extracts response data and identifies responses by action", () => {
+test("extracts response data", () => {
   const response = notificationResponse();
   expect(getNotificationResponseData(response)).toEqual(request);
-  expect(getNotificationResponseKey(response)).toBe("notification:ACCEPT");
-  expect(getNotificationResponseKey(notificationResponse("DECLINE"))).toBe(
-    "notification:DECLINE",
-  );
   response.notification.request.content.data = null as unknown as Record<
     string,
     unknown
@@ -221,13 +216,13 @@ test.each(["android", "ios"] as const)(
       expect.objectContaining({
         identifier: "ACCEPT",
         options: {
-          opensAppToForeground: false,
-          isAuthenticationRequired: true,
+          opensAppToForeground: os !== "ios",
+          isAuthenticationRequired: os !== "ios",
         },
       }),
       expect.objectContaining({
         identifier: "DECLINE",
-        options: { opensAppToForeground: false, isDestructive: true },
+        options: { opensAppToForeground: os !== "ios", isDestructive: true },
       }),
     ]);
   },

@@ -1,0 +1,5 @@
+{
+  "key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk3lOf1IJJG/Ugcu4pLWB\nHcVmJfzmKSqMV/2tuEWMJnZlKTa7M7SB+wsT6br5wBdQ+WrfFioWAxFLoekgN0U0\nwp3fbW9v+nZhtIfcct+jkFr2WFQfVAWONmRxEmn5VL+uqCTapZNVpYWbvpfVCedX\n+IxEB3l2p7QSMHVBr+vVqgc632dJrSW14cooTCrQ56iC8rpvmeQmYGCLIDosLFRb\nGDELR3FfH7EVH3yq6yy+5Vreszr6dftVZPjbK9EcZSPywTXDS38FfFhr7RXEDJRw\nze/g9QNFI6E3XAlZLm/h46kv0kRaCIda02Ml9ios8eLLzDSGsOx16fkxOkAWwaOv\nSwIDAQAB\n-----END PUBLIC KEY-----\n",
+  "message": "nonce|https://payload.example/push|serial|Sign in?|Login|1",
+  "signature": "aVHa6w6SnhJLlS3eAUlKBpd3ipU6S4fN2q7kTr6f0I5ZZc9oHI1+kniMSIUURXaLhLjzOdmqVdnozBHyGo3KeaImuo5tiH67m7Dx7yX57sH9LJwEmeGuZdJkPoDyFpHtmqeyUUUnjgJC6fT99tsWPaFquigYVfTMmSJIm1unxEoAL2Bk4GdiZrAFxWn5FbVtu6c7P5NoudyuEAqq9qAKEfkwpZC1PsDWlDsXz2qfHio6r8y/9VROWdL03ZVLurEkYqK3zQNexQdLSaMkY0g9c5YHsX256IzKUn1N1S5uu5VV5jxjMNFFBZbkKi9+ViS11trtsQumfHt5V8z26/b71g=="
+}

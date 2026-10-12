@@ -1,5 +1,7 @@
 import * as Notifications from "expo-notifications";
 
+export const PUSH_AUTHENTICATION_CHANNEL = "push-auth";
+
 export const PUSH_AUTHENTICATION_CATEGORY = "PUSH_AUTHENTICATION";
 
 export const NOTIFICATION_ACTION_ACCEPT = "ACCEPT";

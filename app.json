@@ -39,6 +39,8 @@
       "expo-font",
       "expo-image",
       "expo-notifications",
+      "./plugins/with-firebase-notifications.cjs",
+      "./plugins/with-notification-service.cjs",
       "expo-router",
       "expo-dev-client",
       [

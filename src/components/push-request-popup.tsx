@@ -1,6 +1,5 @@
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
-import { usePushRequestStore } from "@/stores/push-request";
 import { useTokenStore } from "@/stores/token";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
@@ -34,7 +33,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type PushRequestPopupProps = {
   requests: PushRequest[];
-  onAction: (request: PushRequest) => void;
+  onAction: (request: PushRequest) => Promise<boolean>;
 };
 
 export function PushRequestPopup({
@@ -43,7 +42,6 @@ export function PushRequestPopup({
 }: PushRequestPopupProps) {
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const colorScheme = useColorScheme();
-  const { updatePushRequestStatus } = usePushRequestStore();
   const pendingRequests = requests.filter(
     (request) => request.status === PushRequestStatus.Pending,
   );
@@ -66,13 +64,14 @@ export function PushRequestPopup({
 
       setIsAnimatingOut(true);
       setTimeout(() => {
-        const updatedRequest = { ...currentRequest, status };
-        updatePushRequestStatus(updatedRequest.id, status);
-        onAction(updatedRequest);
-        setIsAnimatingOut(false);
+        void onAction({ ...currentRequest, status })
+          .catch((error: unknown) => {
+            console.error("Push request submission failed:", error);
+          })
+          .finally(() => setIsAnimatingOut(false));
       }, 200);
     },
-    [currentRequest, isAnimatingOut, onAction, updatePushRequestStatus],
+    [currentRequest, isAnimatingOut, onAction],
   );
 
   if (!currentRequest) return null;
