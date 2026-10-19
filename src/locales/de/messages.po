@@ -21,7 +21,7 @@ msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 msgid "About"
 msgstr "Über"
 
-#: src/utils/notification.ts:61
+#: src/utils/notification.ts:62
 msgid "Accept"
 msgstr "Akzeptieren"
 
@@ -120,7 +120,7 @@ msgstr "Absturz- und Fehlerberichte"
 msgid "Dark"
 msgstr "Dunkel"
 
-#: src/utils/notification.ts:69
+#: src/utils/notification.ts:70
 msgid "Decline"
 msgstr "Ablehnen"
 
@@ -431,7 +431,7 @@ msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
 #: src/components/token-detail/token-overview-content.tsx:128
-#: src/components/token-list-item.tsx:233
+#: src/components/token-list-item.tsx:234
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
@@ -466,12 +466,12 @@ msgstr "eduMFA Push bewerten"
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 
-#: src/components/token-list-item.tsx:212
+#: src/components/token-list-item.tsx:213
 msgid "Rolling out..."
 msgstr "Rollout läuft..."
 
 #: src/components/token-detail/token-detail-utils.ts:65
-#: src/components/token-list-item.tsx:212
+#: src/components/token-list-item.tsx:213
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
 
