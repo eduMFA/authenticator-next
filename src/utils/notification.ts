@@ -20,6 +20,7 @@ import {
   setBackgroundMessageHandler,
 } from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
+import { AndroidImportance, IosAuthorizationStatus } from "expo-notifications";
 import { Platform } from "react-native";
 
 export function isNotificationPermissionEnabled(
@@ -27,7 +28,7 @@ export function isNotificationPermissionEnabled(
 ): boolean {
   return Boolean(
     settings?.granted ||
-    settings?.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL,
+    settings?.ios?.status === IosAuthorizationStatus.PROVISIONAL,
   );
 }
 
@@ -48,7 +49,7 @@ export async function setupNotificationCategories() {
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("push-auth", {
       name: "Push Authentication",
-      importance: Notifications.AndroidImportance.HIGH,
+      importance: AndroidImportance.HIGH,
     });
   }
 
