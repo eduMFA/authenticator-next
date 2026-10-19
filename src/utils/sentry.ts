@@ -106,6 +106,9 @@ function initSentry(trackingEnabled: boolean): void {
     attachScreenshot: false,
     attachViewHierarchy: false,
     attachThreads: false,
+    enableMemoryIntrospection: false,
+    enableNetworkBreadcrumbs: false,
+    enableNetworkEventBreadcrumbs: false,
     enableAutoSessionTracking: false,
     enableCaptureFailedRequests: false,
     enableLogs: false,
@@ -135,7 +138,18 @@ function initSentry(trackingEnabled: boolean): void {
         ? sanitizeEvent(event)
         : null;
     },
-    integrations: [Sentry.feedbackIntegration({})],
+    integrations: [
+      Sentry.feedbackIntegration({}),
+      ...(enableNative
+        ? [
+            Sentry.turboModuleContextIntegration({
+              enableAggregateStats: false,
+              enableSpanAttribution: false,
+              slowCallThresholdMs: 0,
+            }),
+          ]
+        : []),
+    ],
   });
 
   sentryInitialized = true;

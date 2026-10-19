@@ -13,6 +13,9 @@ jest.mock("@sentry/react-native", () => ({
   close: jest.fn(() => Promise.resolve(true)),
   wrap: jest.fn((component: unknown) => component),
   feedbackIntegration: jest.fn(() => ({})),
+  turboModuleContextIntegration: jest.fn(() => ({
+    name: "TurboModuleContext",
+  })),
   withScope: jest.fn(),
   captureFeedback: jest.fn(),
   captureEvent: jest.fn(() => "diagnostic-event-id"),
@@ -40,7 +43,11 @@ test("bootstraps root without collecting errors and wraps once", async () => {
     enableNative: false,
     sendDefaultPii: false,
     tracesSampleRate: 0,
+    enableMemoryIntrospection: false,
+    enableNetworkBreadcrumbs: false,
+    enableNetworkEventBreadcrumbs: false,
   });
+  expect(Sentry.turboModuleContextIntegration).not.toHaveBeenCalled();
   expect(
     await options().beforeSend?.({ type: undefined, message: "error" }, {}),
   ).toBeNull();
@@ -50,6 +57,11 @@ test("respects consent, avoids duplicate initialization, and closes on opt-out",
   setSentryTrackingEnabled(true);
   expect(Sentry.init).toHaveBeenCalledTimes(1);
   expect(options().enableNative).toBe(true);
+  expect(Sentry.turboModuleContextIntegration).toHaveBeenCalledWith({
+    enableAggregateStats: false,
+    enableSpanAttribution: false,
+    slowCallThresholdMs: 0,
+  });
   const beforeSend = options().beforeSend;
   setSentryTrackingEnabled(false);
   setSentryTrackingEnabled(false);
