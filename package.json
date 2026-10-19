@@ -9,6 +9,7 @@
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "eas-build-on-complete": "sentry-eas-build-on-complete",
     "i18n:extract": "lingui extract",
     "i18n:compile": "lingui compile",
     "i18n:check": "bun run i18n:extract && bun run i18n:compile && git diff --exit-code -- src/locales",

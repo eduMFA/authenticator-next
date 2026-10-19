@@ -89,3 +89,15 @@ Required setup:
 - Add `GITHUB_RELEASE_TOKEN` as a secret EAS environment variable in the
   `production` environment. Use a fine-grained GitHub token for this repository
   with read/write access to Contents.
+
+EAS build failure monitoring:
+
+- The `eas-build-on-complete` script reports failed builds to Sentry. Successful
+  builds are skipped unless `SENTRY_EAS_BUILD_CAPTURE_SUCCESS=true` is set.
+- Set `SENTRY_DSN` in the EAS environments used by builds. It uses the existing
+  app project's DSN; filter by the `eas-build` environment to find build events.
+  This is separate from the `SENTRY_AUTH_TOKEN` used for source map and debug
+  symbol uploads.
+- Events include build identifiers, platform, profile, commit, version, build
+  username, and working directory. They contain a failure summary, not full build
+  logs. The hook does not change the app's runtime crash-reporting consent.
