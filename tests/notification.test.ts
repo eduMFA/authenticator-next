@@ -95,6 +95,7 @@ function notificationResponse(
           data,
           sound: null,
           categoryIdentifier: null,
+          threadIdentifier: null,
         },
       },
     },

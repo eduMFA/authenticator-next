@@ -17,6 +17,7 @@ import {
   Pressable,
   StyleSheet,
   View,
+  type ViewInstance,
 } from "react-native";
 
 import { Radii, Spacing, Typography } from "@/constants/theme";
@@ -155,7 +156,7 @@ const TokenListItemContent = memo(function TokenListItemContent({
   const backgroundColor = theme.backgroundSecondary;
   const successBarColor = theme.successBar;
   const errorBarColor = theme.errorBar;
-  const blurTargetRef = useRef<View | null>(null);
+  const blurTargetRef = useRef<ViewInstance | null>(null);
 
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;

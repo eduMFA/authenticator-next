@@ -41,15 +41,9 @@
       "expo-notifications",
       "expo-router",
       "expo-dev-client",
-      [
-        "@react-native-firebase/app",
-        {
-          "ios": {
-            "disableSPM": true
-          }
-        }
-      ],
+      "@react-native-firebase/app",
       "@react-native-firebase/messaging",
+      "./plugins/with-firebase-scene-support",
       [
         "@sentry/react-native/expo",
         {
@@ -95,7 +89,6 @@
             "enableShrinkResourcesInReleaseBuilds": true
           },
           "ios": {
-            "enableSceneSupport": true,
             "useFrameworks": "dynamic"
           }
         }

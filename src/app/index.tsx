@@ -1,8 +1,8 @@
+import { AndroidDevMenuSheet } from "@/components/android-dev-menu-sheet";
 import {
   AndroidTokenSearchBar,
   type AndroidTokenSearchBarHandle,
 } from "@/components/android-token-search-bar";
-import { AndroidDevMenuSheet } from "@/components/android-dev-menu-sheet";
 import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
@@ -15,10 +15,10 @@ import { useDevMenu } from "@/hooks/use-dev-menu";
 import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useToken } from "@/hooks/use-token";
+import type { DevMenuSection } from "@/types/dev-menu";
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import type { TokenAction } from "@/types/token-actions";
-import type { DevMenuSection } from "@/types/dev-menu";
 import {
   getRefreshHapticPullProgress,
   getRefreshHapticRipple,
@@ -770,7 +770,7 @@ export default function Tokens() {
                   />
                 </Pressable>
               </View>
-            ) : null
+            ) : undefined
           }
           refreshControl={
             <RefreshControl

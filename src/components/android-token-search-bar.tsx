@@ -40,6 +40,7 @@ import {
   Platform,
   StyleSheet,
   TextInput as ReactNativeTextInput,
+  type TextInputInstance,
   View,
 } from "react-native";
 import Animated, {
@@ -99,7 +100,7 @@ export const AndroidTokenSearchBar = forwardRef<
   const theme = useTheme();
   const nativeQuery = useNativeState(query);
   const inputRef = useRef<TextFieldRef>(null);
-  const keyboardDismissTargetRef = useRef<ReactNativeTextInput>(null);
+  const keyboardDismissTargetRef = useRef<TextInputInstance>(null);
   const isFocusedRef = useRef(false);
   const [isFocused, setIsFocused] = useState(false);
   const focusProgress = useSharedValue(0);

@@ -4,7 +4,7 @@ import { Button, Host, Row, Spacer, Text } from "@expo/ui";
 import { height as composeHeight } from "@expo/ui/jetpack-compose/modifiers";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { isLiquidGlassAvailable } from "expo-glass-effect/build/isLiquidGlassAvailable";
+import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Platform, StyleSheet, View } from "react-native";
 import { QRCodeViewfinderIcon } from "./qr-code-viewfinder-icon";
 

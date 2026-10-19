@@ -21,7 +21,6 @@ import { useEffect, useRef } from "react";
 import {
   Appearance,
   AppState,
-  AppStateStatus,
   Platform,
   StatusBar,
   useColorScheme,
@@ -52,7 +51,7 @@ function RootLayout() {
 
 function RootLayoutContent() {
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
-  const appState = useRef<AppStateStatus>(AppState.currentState);
+  const appState = useRef(AppState.currentState);
   const handledUrlsRef = useRef<Set<string>>(new Set());
   const { checkPermissions, initialize: initializeNotifications } =
     useNotificationStatus();
@@ -103,7 +102,8 @@ function RootLayoutContent() {
     }
 
     const subscription = AppState.addEventListener("change", (nextAppState) => {
-      const wasInactive = /inactive|background/.test(appState.current);
+      const wasInactive =
+        appState.current === "inactive" || appState.current === "background";
       if (wasInactive && nextAppState === "active") {
         activateCurrentLocale();
         checkPermissions();
@@ -159,10 +159,7 @@ function RootLayoutContent() {
   if (!hasCompletedOnboarding) {
     return (
       <>
-        <StatusBar
-          backgroundColor={theme.background}
-          barStyle={statusBarStyle}
-        />
+        <StatusBar barStyle={statusBarStyle} />
         <OnboardingSequence />
       </>
     );
@@ -170,7 +167,7 @@ function RootLayoutContent() {
 
   return (
     <>
-      <StatusBar backgroundColor={theme.background} barStyle={statusBarStyle} />
+      <StatusBar barStyle={statusBarStyle} />
       <Stack
         screenOptions={
           process.env.EXPO_OS === "android"
