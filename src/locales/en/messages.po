@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/push-request-popup.tsx:273
+#: src/components/push-request-popup.tsx:267
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} requests are waiting. Review each one separately."
 
@@ -47,7 +47,7 @@ msgstr "Anonymous reports"
 msgid "Appearance"
 msgstr "Appearance"
 
-#: src/components/push-request-popup.tsx:284
+#: src/components/push-request-popup.tsx:278
 msgid "Approve"
 msgstr "Approve"
 
@@ -130,7 +130,7 @@ msgstr "Delete"
 msgid "Delete token"
 msgstr "Delete token"
 
-#: src/components/push-request-popup.tsx:279
+#: src/components/push-request-popup.tsx:273
 msgid "Deny"
 msgstr "Deny"
 
@@ -359,7 +359,7 @@ msgstr "Notifications are disabled"
 msgid "Notifications are enabled"
 msgstr "Notifications are enabled"
 
-#: src/components/push-request-popup.tsx:262
+#: src/components/push-request-popup.tsx:257
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Only approve if you started this sign-in. If you are unsure, deny it."
 
@@ -454,7 +454,7 @@ msgstr "Retry Rollout"
 msgid "Review eduMFA Push"
 msgstr "Review eduMFA Push"
 
-#: src/components/push-request-popup.tsx:197
+#: src/components/push-request-popup.tsx:196
 msgid "Review sign-in"
 msgstr "Review sign-in"
 

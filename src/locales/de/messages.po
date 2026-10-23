@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:273
+#: src/components/push-request-popup.tsx:267
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
@@ -47,7 +47,7 @@ msgstr "Anonyme Berichte"
 msgid "Appearance"
 msgstr "Darstellung"
 
-#: src/components/push-request-popup.tsx:284
+#: src/components/push-request-popup.tsx:278
 msgid "Approve"
 msgstr "Freigeben"
 
@@ -130,7 +130,7 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/components/push-request-popup.tsx:279
+#: src/components/push-request-popup.tsx:273
 msgid "Deny"
 msgstr "Ablehnen"
 
@@ -359,7 +359,7 @@ msgstr "Benachrichtigungen sind deaktiviert"
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
-#: src/components/push-request-popup.tsx:262
+#: src/components/push-request-popup.tsx:257
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
@@ -454,7 +454,7 @@ msgstr "Rollout erneut versuchen"
 msgid "Review eduMFA Push"
 msgstr "eduMFA Push bewerten"
 
-#: src/components/push-request-popup.tsx:197
+#: src/components/push-request-popup.tsx:196
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 

@@ -189,7 +189,6 @@ function PopupCard({
 
         <View style={styles.heading}>
           <ThemedText
-            selectable
             fontSize={Typography.fontSize24}
             fontWeight="bold"
             style={styles.centeredText}
@@ -198,7 +197,6 @@ function PopupCard({
           </ThemedText>
           {organizationName ? (
             <ThemedText
-              selectable
               fontSize={Typography.fontSize14}
               themeColor="textSecondary"
               style={styles.centeredText}
@@ -220,7 +218,6 @@ function PopupCard({
           >
             {request.title ? (
               <ThemedText
-                selectable
                 fontSize={Typography.fontSize16}
                 fontWeight="semiBold"
               >
@@ -229,7 +226,6 @@ function PopupCard({
             ) : null}
             {request.question ? (
               <ThemedText
-                selectable
                 fontSize={Typography.fontSize14}
                 themeColor="textSecondary"
               >
@@ -238,7 +234,6 @@ function PopupCard({
             ) : null}
             {context.length > 0 ? (
               <ThemedText
-                selectable
                 fontSize={Typography.fontSize12}
                 themeColor="textSecondary"
                 numberOfLines={2}
@@ -258,14 +253,13 @@ function PopupCard({
             },
           ]}
         >
-          <ThemedText selectable fontSize={Typography.fontSize14}>
+          <ThemedText fontSize={Typography.fontSize14}>
             {t`Only approve if you started this sign-in. If you are unsure, deny it.`}
           </ThemedText>
         </View>
 
         {totalPending > 1 ? (
           <ThemedText
-            selectable
             fontSize={Typography.fontSize12}
             themeColor="textSecondary"
             style={styles.centeredText}
@@ -335,7 +329,6 @@ function ActionButton({
       disabled={disabled}
     >
       <ThemedText
-        selectable
         fontSize={Typography.fontSize16}
         fontWeight="semiBold"
         style={styles.centeredText}
