@@ -423,7 +423,7 @@ msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
 #: src/components/token-detail/token-overview-content.tsx:128
-#: src/components/token-list-item.tsx:234
+#: src/components/token-list-item.tsx:236
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 

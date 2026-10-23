@@ -16,6 +16,7 @@ import {
   Platform,
   Pressable,
   StyleSheet,
+  useColorScheme,
   View,
   type ViewInstance,
 } from "react-native";
@@ -35,8 +36,6 @@ import Animated, {
 import { TokenActionsMenu } from "./token-actions-menu";
 import { ThemedText } from "./themed-text";
 import { TokenImage } from "./token-image";
-
-const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
 // Animation timing configuration
 const PROGRESS_ANIMATION_DURATION = 500;
@@ -153,10 +152,11 @@ const TokenListItemContent = memo(function TokenListItemContent({
 }) {
   const { t } = useLingui();
   const theme = useTheme();
+  const colorScheme = useColorScheme();
+  const blurTargetRef = useRef<ViewInstance | null>(null);
   const backgroundColor = theme.backgroundSecondary;
   const successBarColor = theme.successBar;
   const errorBarColor = theme.errorBar;
-  const blurTargetRef = useRef<ViewInstance | null>(null);
 
   // Derive initial states from token
   const isCompleted = token.rolloutState === PushTokenRolloutState.Completed;
@@ -213,67 +213,74 @@ const TokenListItemContent = memo(function TokenListItemContent({
   const progressText = isRolloutFailed ? t`Rollout Failed` : t`Rolling out...`;
   return (
     <>
-      <BlurTargetView ref={blurTargetRef} style={tokenContainerStyle}>
-        <TokenImage
-          imageUrl={token.imageUrl}
-          label={token.label}
-          animated
-          size="small"
-        />
-        <View style={styles.tokenDetails}>
-          <View style={styles.titleRow}>
-            <ThemedText
-              fontSize={Typography.fontSize16}
-              numberOfLines={1}
-              style={styles.tokenLabel}
-            >
-              {token.label}
-            </ThemedText>
-            {isRefreshFailed ? (
-              <View
-                accessibilityLabel={t`Refresh failed`}
-                style={[
-                  styles.refreshBadge,
-                  { backgroundColor: errorBarColor },
-                ]}
+      <BlurTargetView ref={blurTargetRef}>
+        {/* Keep the background in the native children captured by Android's blur. */}
+        <View collapsable={false} style={tokenContainerStyle}>
+          <TokenImage
+            imageUrl={token.imageUrl}
+            label={token.label}
+            animated
+            size="small"
+          />
+          <View style={styles.tokenDetails}>
+            <View style={styles.titleRow}>
+              <ThemedText
+                fontSize={Typography.fontSize16}
+                numberOfLines={1}
+                style={styles.tokenLabel}
               >
-                <ThemedText
-                  themeColor="text"
-                  fontSize={Typography.fontSize10}
-                  fontWeight="bold"
+                {token.label}
+              </ThemedText>
+              {isRefreshFailed ? (
+                <View
+                  accessibilityLabel={t`Refresh failed`}
+                  style={[
+                    styles.refreshBadge,
+                    { backgroundColor: errorBarColor },
+                  ]}
                 >
-                  !
-                </ThemedText>
-              </View>
-            ) : null}
+                  <ThemedText
+                    themeColor="text"
+                    fontSize={Typography.fontSize10}
+                    fontWeight="bold"
+                  >
+                    !
+                  </ThemedText>
+                </View>
+              ) : null}
+            </View>
+            {token.issuer && (
+              <ThemedText
+                fontSize={Typography.fontSize14}
+                fontWeight="medium"
+                themeColor="textSecondary"
+              >
+                {token.issuer}
+              </ThemedText>
+            )}
           </View>
-          {token.issuer && (
-            <ThemedText
-              fontSize={Typography.fontSize14}
-              fontWeight="medium"
-              themeColor="textSecondary"
-            >
-              {token.issuer}
-            </ThemedText>
-          )}
         </View>
       </BlurTargetView>
       {showProgress && (
-        <AnimatedBlurView
-          style={styles.progressBarBlur}
+        <Animated.View
+          style={styles.progressBarOverlay}
           role="progressbar"
-          intensity={20}
-          blurTarget={blurTargetRef}
-          blurMethod={"dimezisBlurView"}
           entering={FadeIn}
           exiting={FadeOut}
         >
+          <BlurView
+            style={StyleSheet.absoluteFill}
+            intensity={20}
+            tint={colorScheme === "dark" ? "dark" : "light"}
+            blurTarget={blurTargetRef}
+            blurMethod="dimezisBlurView"
+          />
           <Animated.View
             style={[styles.progressBar, animatedStyles]}
             exiting={FadeOut}
           />
           <ThemedText style={styles.progressText}>{progressText}</ThemedText>
-        </AnimatedBlurView>
+        </Animated.View>
       )}
     </>
   );
@@ -284,8 +291,7 @@ const styles = StyleSheet.create({
     flex: 1,
     opacity: 0.6,
   },
-  progressBarBlur: {
-    borderRadius: Radii.pill,
+  progressBarOverlay: {
     height: "100%",
     position: "absolute",
     width: "100%",
