@@ -25,7 +25,7 @@ msgstr "About"
 msgid "Accept"
 msgstr "Accept"
 
-#: src/components/token-detail/token-overview-content.tsx:273
+#: src/components/token-detail/token-overview-content.tsx:270
 msgid "Activity Log"
 msgstr "Activity Log"
 
@@ -83,7 +83,7 @@ msgstr "Camera access is required to scan the QR code and pair a token."
 msgid "Camera access is turned off"
 msgstr "Camera access is turned off"
 
-#: src/components/token-detail/token-overview-content.tsx:151
+#: src/components/token-detail/token-overview-content.tsx:148
 #: src/hooks/use-delete-token-confirmation.ts:20
 msgid "Cancel"
 msgstr "Cancel"
@@ -96,12 +96,12 @@ msgstr "Change the app language in system settings"
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Choose whether to share anonymous crash and error reports."
 
-#: src/components/token-detail/token-overview-content.tsx:153
-#: src/components/token-detail/token-overview-content.tsx:290
+#: src/components/token-detail/token-overview-content.tsx:150
+#: src/components/token-detail/token-overview-content.tsx:287
 msgid "Clear"
 msgstr "Clear"
 
-#: src/components/token-detail/token-overview-content.tsx:148
+#: src/components/token-detail/token-overview-content.tsx:145
 msgid "Clear activity log?"
 msgstr "Clear activity log?"
 
@@ -148,7 +148,7 @@ msgstr "Delete token"
 msgid "Deny"
 msgstr "Deny"
 
-#: src/components/token-detail/token-overview-content.tsx:262
+#: src/components/token-detail/token-overview-content.tsx:259
 msgid "Details"
 msgstr "Details"
 
@@ -322,7 +322,7 @@ msgstr "Label required"
 msgid "Language"
 msgstr "Language"
 
-#: src/components/token-detail/token-overview-content.tsx:254
+#: src/components/token-detail/token-overview-content.tsx:251
 msgid "Last failed"
 msgstr "Last failed"
 
@@ -357,7 +357,7 @@ msgstr "Name and email are optional. They allow us to contact you with follow-up
 msgid "Never miss a sign-in request"
 msgstr "Never miss a sign-in request"
 
-#: src/components/token-detail/token-overview-content.tsx:330
+#: src/components/token-detail/token-overview-content.tsx:327
 msgid "No interactions yet"
 msgstr "No interactions yet"
 
@@ -464,7 +464,7 @@ msgstr "Push request received"
 msgid "QR code scanner"
 msgstr "QR code scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:225
+#: src/components/token-detail/token-overview-content.tsx:222
 #: src/components/token-list-item.tsx:234
 msgid "Refresh failed"
 msgstr "Refresh failed"
@@ -486,9 +486,9 @@ msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
 #: src/app/index.tsx:281
-#: src/components/token-detail/token-overview-content.tsx:202
-#: src/components/token-detail/token-overview-content.tsx:212
-#: src/components/token-detail/token-overview-content.tsx:214
+#: src/components/token-detail/token-overview-content.tsx:199
+#: src/components/token-detail/token-overview-content.tsx:209
+#: src/components/token-detail/token-overview-content.tsx:211
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
@@ -532,11 +532,11 @@ msgstr "Send anonymized crash and error diagnostics"
 msgid "Send feedback"
 msgstr "Send feedback"
 
-#: src/components/token-detail/token-overview-content.tsx:266
+#: src/components/token-detail/token-overview-content.tsx:263
 msgid "Serial"
 msgstr "Serial"
 
-#: src/components/token-detail/token-overview-content.tsx:237
+#: src/components/token-detail/token-overview-content.tsx:234
 msgid "Server message"
 msgstr "Server message"
 
@@ -552,7 +552,7 @@ msgstr "Settings"
 msgid "Share anonymous reports"
 msgstr "Share anonymous reports"
 
-#: src/components/token-detail/token-overview-content.tsx:319
+#: src/components/token-detail/token-overview-content.tsx:316
 msgid "Show older activity"
 msgstr "Show older activity"
 
@@ -560,7 +560,7 @@ msgstr "Show older activity"
 msgid "Sign-in requests may go unnoticed"
 msgstr "Sign-in requests may go unnoticed"
 
-#: src/components/token-detail/token-overview-content.tsx:265
+#: src/components/token-detail/token-overview-content.tsx:262
 msgid "Status"
 msgstr "Status"
 
@@ -598,7 +598,7 @@ msgstr "The token version is not supported by this app. Please update the app to
 msgid "Theme"
 msgstr "Theme"
 
-#: src/components/token-detail/token-overview-content.tsx:149
+#: src/components/token-detail/token-overview-content.tsx:146
 msgid "This permanently removes all activity for this token."
 msgstr "This permanently removes all activity for this token."
 
@@ -622,7 +622,7 @@ msgstr "This token did not finish enrollment and cannot receive push requests un
 msgid "Token"
 msgstr "Token"
 
-#: src/components/token-detail/token-overview-content.tsx:337
+#: src/components/token-detail/token-overview-content.tsx:334
 msgid "Token approvals, denials, push requests, and enrollment activity will appear here."
 msgstr "Token approvals, denials, push requests, and enrollment activity will appear here."
 

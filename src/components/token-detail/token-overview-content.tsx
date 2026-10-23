@@ -17,7 +17,7 @@ import { Button, Host, Icon, Row, Text } from "@expo/ui";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import { useCallback, useMemo, useState } from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View, type ColorValue } from "react-native";
 import {
   formatTimestamp,
   getRolloutFailureDetails,
@@ -73,10 +73,7 @@ function ActivityRow({ activity }: { activity: Activity }) {
       label: t`Push request denied`,
       color: theme.error,
     },
-  } satisfies Record<
-    ActivityType,
-    { label: string; color: (typeof theme)["branding"] }
-  >;
+  } satisfies Record<ActivityType, { label: string; color: ColorValue }>;
   const event = content[activity.type];
   const timestamp = new Date(activity.timestamp).toLocaleString(undefined, {
     dateStyle: "medium",
