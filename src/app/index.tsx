@@ -382,6 +382,14 @@ export default function Tokens() {
           onPress: () => devMenu.spawnSampleTokens(10),
         },
         {
+          androidIcon: CodeSymbol,
+          disabled: devMenu.tokenActionDisabled,
+          iosIcon: "list.bullet.rectangle.fill",
+          key: "tokens-spawn-activity",
+          label: "Spawn Activity Log",
+          onPress: devMenu.spawnAllActivityTypes,
+        },
+        {
           androidIcon: DeleteSymbol,
           destructive: true,
           disabled: devMenu.tokenActionDisabled,

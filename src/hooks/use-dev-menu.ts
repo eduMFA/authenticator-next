@@ -1,6 +1,8 @@
 import { useToken } from "@/hooks/use-token";
+import { useActivityStore } from "@/stores/activity";
 import { usePushRequestStore } from "@/stores/push-request";
 import { useSettingsStore } from "@/stores/settings";
+import { ActivityType } from "@/types/activity";
 import { PushRequestStatus, type PushRequest } from "@/types/push-request";
 import { PushTokenRolloutState, type PushToken } from "@/types/token";
 import { Alert } from "react-native";
@@ -30,6 +32,7 @@ export function useDevMenu() {
   const { tokens, addToken, deleteToken, updateToken, rolloutToken } =
     useToken();
   const { addPushRequest, clearPushRequests } = usePushRequestStore();
+  const addActivity = useActivityStore((state) => state.addActivity);
   const token = tokens[0];
   const tokenActionDisabled = !token;
   const resetOnboarding = useSettingsStore((state) => state.resetOnboarding);
@@ -132,12 +135,39 @@ export function useDevMenu() {
     addPushRequest(request);
   };
 
+  const spawnAllActivityTypes = () => {
+    if (!token) {
+      return;
+    }
+
+    const batchId = Date.now();
+    const activities = [
+      ActivityType.EnrollmentStarted,
+      ActivityType.EnrollmentCompleted,
+      ActivityType.EnrollmentFailed,
+      ActivityType.PushReceived,
+      ActivityType.PushApproved,
+      ActivityType.PushDenied,
+    ] as const;
+
+    activities.forEach((type, index) => {
+      addActivity({
+        id: `sample-activity-${batchId}-${type}`,
+        tokenId: token.id,
+        type,
+        timestamp: batchId + index,
+        title: type.startsWith("push_") ? "Sample sign-in request" : undefined,
+      });
+    });
+  };
+
   return {
     clearAllTokens,
     clearPushRequests,
     demoRolloutFailure,
     demoRolloutSuccess,
     rolloutFirstToken,
+    spawnAllActivityTypes,
     spawnSamplePushRequest,
     spawnSampleTokens,
     tokenActionDisabled,
