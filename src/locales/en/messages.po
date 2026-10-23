@@ -25,10 +25,6 @@ msgstr "About"
 msgid "Accept"
 msgstr "Accept"
 
-#: src/components/token-detail/token-overview-content.tsx:175
-msgid "Activity Log"
-msgstr "Activity Log"
-
 #: src/app/index.tsx:590
 #: src/app/index.tsx:653
 #: src/app/index.tsx:655
@@ -335,10 +331,6 @@ msgstr "Name and email are optional. They allow us to contact you with follow-up
 msgid "Never miss a sign-in request"
 msgstr "Never miss a sign-in request"
 
-#: src/components/token-detail/token-overview-content.tsx:179
-msgid "No interactions yet"
-msgstr "No interactions yet"
-
 #: src/hooks/use-handle-token-uri.ts:35
 msgid "No QR code found"
 msgstr "No QR code found"
@@ -579,10 +571,6 @@ msgstr "This token did not finish enrollment and cannot receive push requests un
 #: src/components/token-detail/token-edit-form.ios.tsx:38
 msgid "Token"
 msgstr "Token"
-
-#: src/components/token-detail/token-overview-content.tsx:186
-msgid "Token approvals, denials, refresh events, and enrollment activity will appear here."
-msgstr "Token approvals, denials, refresh events, and enrollment activity will appear here."
 
 #: src/app/index.tsx:723
 msgid "Try another token name, issuer, or serial number."

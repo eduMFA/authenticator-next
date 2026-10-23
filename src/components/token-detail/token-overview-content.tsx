@@ -169,41 +169,11 @@ export function TokenOverviewContent({
           <DetailRow label={t`Serial`} value={token.id} />
         </ThemedView>
       </View>
-
-      <View style={styles.section}>
-        <ThemedText fontSize={Typography.fontSize18} fontWeight="bold">
-          {t`Activity Log`}
-        </ThemedText>
-        <ThemedView type="backgroundSecondary" style={styles.auditPlaceholder}>
-          <ThemedText fontSize={Typography.fontSize16} fontWeight="semiBold">
-            {t`No interactions yet`}
-          </ThemedText>
-          <ThemedText
-            themeColor="textSecondary"
-            fontSize={Typography.fontSize14}
-            style={styles.auditDescription}
-          >
-            {t`Token approvals, denials, refresh events, and enrollment activity will appear here.`}
-          </ThemedText>
-        </ThemedView>
-      </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  auditDescription: {
-    lineHeight: 20,
-    marginTop: Spacing.xs,
-    textAlign: "center",
-  },
-  auditPlaceholder: {
-    alignItems: "center",
-    borderRadius: Radii.xl,
-    justifyContent: "center",
-    minHeight: 132,
-    padding: Spacing.xl,
-  },
   detailRow: {
     gap: Spacing.xs,
     paddingVertical: Spacing.md,
