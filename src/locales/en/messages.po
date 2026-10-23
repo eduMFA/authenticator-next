@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/push-request-popup.tsx:273
+#: src/components/push-request-popup.tsx:281
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} requests are waiting. Review each one separately."
 
@@ -51,7 +51,7 @@ msgstr "Anonymous reports"
 msgid "Appearance"
 msgstr "Appearance"
 
-#: src/components/push-request-popup.tsx:284
+#: src/components/push-request-popup.tsx:292
 msgid "Approve"
 msgstr "Approve"
 
@@ -134,7 +134,7 @@ msgstr "Delete"
 msgid "Delete token"
 msgstr "Delete token"
 
-#: src/components/push-request-popup.tsx:279
+#: src/components/push-request-popup.tsx:287
 msgid "Deny"
 msgstr "Deny"
 
@@ -367,7 +367,7 @@ msgstr "Notifications are disabled"
 msgid "Notifications are enabled"
 msgstr "Notifications are enabled"
 
-#: src/components/push-request-popup.tsx:262
+#: src/components/push-request-popup.tsx:270
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Only approve if you started this sign-in. If you are unsure, deny it."
 
@@ -462,7 +462,7 @@ msgstr "Retry Rollout"
 msgid "Review eduMFA Push"
 msgstr "Review eduMFA Push"
 
-#: src/components/push-request-popup.tsx:197
+#: src/components/push-request-popup.tsx:205
 msgid "Review sign-in"
 msgstr "Review sign-in"
 
@@ -521,6 +521,14 @@ msgstr "Share anonymous reports"
 #: src/components/onboarding-sequence/step-actions.tsx:120
 msgid "Sign-in requests may go unnoticed"
 msgstr "Sign-in requests may go unnoticed"
+
+#: src/components/app-intent-handler.tsx:67
+msgid "Sign-in response needs attention"
+msgstr "Sign-in response needs attention"
+
+#: src/components/app-intent-handler.tsx:67
+msgid "Sign-in response sent"
+msgstr "Sign-in response sent"
 
 #: src/components/token-detail/token-overview-content.tsx:168
 msgid "Status"
@@ -637,3 +645,7 @@ msgstr "Your feedback was submitted successfully."
 #: src/hooks/use-handle-token-uri.ts:36
 msgid "Your image did not contain a QR code."
 msgstr "Your image did not contain a QR code."
+
+#: src/components/app-intent-handler.tsx:68
+msgid "Your response was sent to the server."
+msgstr "Your response was sent to the server."

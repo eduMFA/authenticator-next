@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:273
+#: src/components/push-request-popup.tsx:281
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
@@ -51,7 +51,7 @@ msgstr "Anonyme Berichte"
 msgid "Appearance"
 msgstr "Darstellung"
 
-#: src/components/push-request-popup.tsx:284
+#: src/components/push-request-popup.tsx:292
 msgid "Approve"
 msgstr "Freigeben"
 
@@ -134,7 +134,7 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/components/push-request-popup.tsx:279
+#: src/components/push-request-popup.tsx:287
 msgid "Deny"
 msgstr "Ablehnen"
 
@@ -367,7 +367,7 @@ msgstr "Benachrichtigungen sind deaktiviert"
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
-#: src/components/push-request-popup.tsx:262
+#: src/components/push-request-popup.tsx:270
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
@@ -462,7 +462,7 @@ msgstr "Rollout erneut versuchen"
 msgid "Review eduMFA Push"
 msgstr "eduMFA Push bewerten"
 
-#: src/components/push-request-popup.tsx:197
+#: src/components/push-request-popup.tsx:205
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 
@@ -521,6 +521,14 @@ msgstr "Anonyme Berichte teilen"
 #: src/components/onboarding-sequence/step-actions.tsx:120
 msgid "Sign-in requests may go unnoticed"
 msgstr "Anmeldeanfragen können unbemerkt bleiben"
+
+#: src/components/app-intent-handler.tsx:67
+msgid "Sign-in response needs attention"
+msgstr "Die Anmeldeantwort muss überprüft werden"
+
+#: src/components/app-intent-handler.tsx:67
+msgid "Sign-in response sent"
+msgstr "Anmeldeantwort gesendet"
 
 #: src/components/token-detail/token-overview-content.tsx:168
 msgid "Status"
@@ -637,3 +645,7 @@ msgstr "Dein Feedback wurde erfolgreich übermittelt."
 #: src/hooks/use-handle-token-uri.ts:36
 msgid "Your image did not contain a QR code."
 msgstr "Dein Bild enthielt keinen QR-Code."
+
+#: src/components/app-intent-handler.tsx:68
+msgid "Your response was sent to the server."
+msgstr "Deine Antwort wurde an den Server gesendet."

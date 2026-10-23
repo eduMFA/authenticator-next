@@ -66,6 +66,14 @@ export function PushRequestPopup({
 
       setIsAnimatingOut(true);
       setTimeout(() => {
+        // A shortcut may have claimed this request during the dismissal animation.
+        if (
+          usePushRequestStore.getState().getPushRequestById(currentRequest.id)
+            ?.status !== PushRequestStatus.Pending
+        ) {
+          setIsAnimatingOut(false);
+          return;
+        }
         const updatedRequest = { ...currentRequest, status };
         updatePushRequestStatus(updatedRequest.id, status);
         onAction(updatedRequest);

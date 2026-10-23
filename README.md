@@ -38,6 +38,66 @@ Open the installed development app on your device, Android emulator, or iOS simu
 
 You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Siri and Shortcuts
+
+iOS exposes **List Push Tokens**, **Open Push Tokens**, **Open Push Token**,
+**Pair Push Token**, **List Sign-in Requests**, **Approve Sign-in Request**, and **Deny Sign-in Request** in
+Shortcuts. Example Siri phrases are “List push tokens in eduMFA Push”, “Open
+[token label] in eduMFA Push”, and “Pair a push token in eduMFA Push”. These actions
+require device authentication. Listing returns token entities from the last
+synced catalog without opening the app, so another Shortcut step can choose one
+and pass it to **Open Push Token**. Open the app once after installation to populate
+the catalog.
+
+Approval and denial require choosing a specific, unexpired sign-in request and
+confirming its details. They open the app to submit the response using its existing
+signing service; the one-way bridge cannot return JavaScript results to Siri or a
+later Shortcut step. The native dialog describes the handoff, and the app displays
+the actual result. Challenge selection uses the last synced pending requests;
+open the app to fetch requests that have not yet been synced. **List Sign-in Requests**
+returns the unexpired cached challenge entities for use in another Shortcut step.
+
+Response attempts are persisted before submission. Successful responses commit
+the request status and invocation receipt in one storage snapshot before removing
+the invocation. A replay retries acknowledgement without sending again. A failed
+or interrupted attempt with an unknown server outcome requires manual review in
+the app instead of automatic resubmission. Expired, deleted, handled, or malformed
+requests are rejected. The existing two-minute request lifetime applies.
+
+Swift declarations live in `app-intents/` and compile into the app target through
+Expo inline modules. The root mounts one invocation consumer after onboarding,
+token and request storage hydration, and navigation readiness. Failed navigation or queue
+removal remains pending for the next invocation or app launch. Invalid/deleted
+token references and unsupported actions are logged and discarded.
+
+The Shortcuts token catalog contains only stable IDs, labels, and issuers, and
+updates when tokens are added, renamed, or deleted. Credentials, callback URLs,
+and keys are never published. Challenge catalogs contain display text and expiry
+times, without nonces, signatures, or callback URLs. No Spotlight indexing or intent donations are used.
+Android, web, and binaries without the native module skip the integration.
+
+After changing native declarations or phrases, regenerate and rebuild the native
+iOS app using the development commands above. Expo Go and OTA JavaScript updates
+cannot install these declarations. Test each action from Shortcuts and Siri with
+the app running and after terminating it; check onboarding on a fresh install,
+token rename/deletion, removal of the last token, multiple challenges, both decisions,
+confirmation cancellation, expiry during confirmation, and an interrupted submission. Native compilation and
+on-device validation are required to verify Swift and Apple's metadata extraction.
+
+To verify the JavaScript submission path over real HTTP against the local Postman
+test double (RSA signing is mocked):
+
+```bash
+postman simulation run postman/simulations/app-intents.sim.yaml --port 4900 --no-history
+# In another terminal:
+APP_INTENTS_SIMULATION_URL=http://127.0.0.1:4900/edumfa bun run test --runInBand tests/challenge-intents-http.test.ts
+```
+
+The mock validates the existing client's POST payload and supplies 200/500
+responses. It was authored from `src/services/push-auth.ts`; an owner-provided mock
+could not be retrieved because the Postman CLI was signed out. These checks cover
+local transport and state handling, not a live eduMFA server or native execution.
+
 ## Tests
 
 ```bash

@@ -14,6 +14,14 @@ export interface PushAuthResponse {
   error?: Error;
 }
 
+const activeResponses = new Map<
+  string,
+  {
+    status: PushRequestStatus;
+    result: Promise<PushAuthResponse>;
+  }
+>();
+
 /**
  * Sign a push authentication message with the token's private key
  */
@@ -74,6 +82,29 @@ async function sendPushAuthToServer(
  * Handle a push authentication request by signing and sending the response
  */
 export async function handlePushAuthRequest(
+  request: PushRequest,
+  token: PushToken,
+): Promise<PushAuthResponse> {
+  const key = JSON.stringify([token.id, request.nonce]);
+  const active = activeResponses.get(key);
+  if (active) {
+    return active.status === request.status
+      ? active.result
+      : {
+          success: false,
+          error: new Error("A response to this request is already being sent"),
+        };
+  }
+  const result = sendPushAuthResponse(request, token);
+  activeResponses.set(key, { status: request.status, result });
+  try {
+    return await result;
+  } finally {
+    activeResponses.delete(key);
+  }
+}
+
+async function sendPushAuthResponse(
   request: PushRequest,
   token: PushToken,
 ): Promise<PushAuthResponse> {

@@ -1,3 +1,4 @@
+import { AppIntentHandler } from "@/components/app-intent-handler";
 import { NotificationHandler } from "@/components/notification-handler";
 import { OnboardingSequence } from "@/components/onboarding-sequence";
 import { ThemedText } from "@/components/themed-text";
@@ -280,6 +281,7 @@ function RootLayoutContent() {
         />
       </Stack>
       <NotificationHandler />
+      <AppIntentHandler />
     </>
   );
 }

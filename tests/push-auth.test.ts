@@ -8,7 +8,7 @@ import {
   playNotificationWarningHaptic,
 } from "@/utils/haptics";
 import { PushRequestStatus } from "@/types/push-request";
-import { token, request, response } from "./fixtures";
+import { token, request, response, deferred } from "./fixtures";
 
 jest.mock("@/utils/rsa", () => ({ signMessage: jest.fn() }));
 jest.mock("@/utils/haptics", () => ({
@@ -83,4 +83,23 @@ test("matches serial and handles unknown tokens", () => {
     findTokenForPushRequest(request, [{ ...token, id: "other" }, token]),
   ).toBe(token);
   expect(findTokenForPushRequest(request, [])).toBeUndefined();
+});
+
+test("shares identical in-flight responses and rejects a concurrent conflicting decision", async () => {
+  const pending = deferred<Response>();
+  fetchMock.mockReturnValueOnce(pending.promise);
+  const accepted = { ...request, status: PushRequestStatus.Accepted };
+  const first = handlePushAuthRequest(accepted, token);
+  const replay = handlePushAuthRequest(accepted, token);
+  const conflict = await handlePushAuthRequest(
+    { ...request, status: PushRequestStatus.Declined },
+    token,
+  );
+  expect(conflict.success).toBe(false);
+  pending.resolve(response());
+  expect(await first).toEqual({ success: true });
+  expect(await replay).toEqual({ success: true });
+  expect(fetchMock).toHaveBeenCalledTimes(1);
+  await handlePushAuthRequest(accepted, token);
+  expect(fetchMock).toHaveBeenCalledTimes(2);
 });

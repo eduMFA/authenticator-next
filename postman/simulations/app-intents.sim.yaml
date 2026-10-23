@@ -1,0 +1,5 @@
+simulation: app-intent-responses
+routing: path
+mocks:
+  - routeKey: edumfa
+    path: ../mocks/push-response/default.js

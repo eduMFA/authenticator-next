@@ -1,3 +1,4 @@
+import { PUSH_REQUEST_MAX_AGE_MS } from "@/constants/push-request";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -6,6 +7,12 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 type PushRequestState = {
   pushRequests: PushRequest[];
+  intentResponses: Record<string, IntentResponse>;
+  saveIntentResponse: (
+    invocationId: string,
+    response: IntentResponse,
+    status: PushRequestStatus,
+  ) => Promise<void>;
   clearPushRequests: () => void;
   addPushRequest: (request: PushRequest) => boolean;
   updatePushRequestStatus: (id: string, status: PushRequestStatus) => void;
@@ -16,12 +23,33 @@ type PushRequestState = {
   clearExpiredPushRequests: (maxAgeMs?: number) => void;
 };
 
-const DEFAULT_MAX_AGE_MS = 2 * 60 * 1000; // 2 minutes
+export type IntentResponse = {
+  requestId: string;
+  approve: boolean;
+  state: "submitting" | "completed" | "uncertain";
+};
 
 export const usePushRequestStore = create(
   persist<PushRequestState>(
     (set, get) => ({
       pushRequests: [],
+      intentResponses: {},
+
+      saveIntentResponse: async (invocationId, response, status) => {
+        // Zustand persist returns its storage write from set. Await it before sending
+        // a response or acknowledging an invocation. Both records share one snapshot.
+        await set((state) => ({
+          intentResponses: {
+            ...state.intentResponses,
+            [invocationId]: response,
+          },
+          pushRequests: state.pushRequests.map((request) =>
+            request.id === response.requestId
+              ? { ...request, status }
+              : request,
+          ),
+        }));
+      },
 
       clearPushRequests: () => set({ pushRequests: [] }),
 
@@ -67,7 +95,9 @@ export const usePushRequestStore = create(
         );
       },
 
-      clearExpiredPushRequests: (maxAgeMs: number = DEFAULT_MAX_AGE_MS) => {
+      clearExpiredPushRequests: (
+        maxAgeMs: number = PUSH_REQUEST_MAX_AGE_MS,
+      ) => {
         const now = Date.now();
         const existingRequests = get().pushRequests;
         // Mark expired pending requests as expired instead of removing

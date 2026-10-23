@@ -46,3 +46,7 @@ yarn-error.*
 
 # Test coverage
 /coverage/
+# @generated expo skills start
+.agents/skills/expo-app-intents
+.claude/skills/expo-app-intents
+# @generated expo skills end

@@ -21,7 +21,10 @@
         "com.apple.developer.usernotifications.time-sensitive": true
       },
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification", "fetch"]
+        "UIBackgroundModes": [
+          "remote-notification",
+          "fetch"
+        ]
       },
       "googleServicesFile": "./GoogleService-Info.plist"
     },
@@ -76,8 +79,14 @@
         "expo-localization",
         {
           "supportedLocales": {
-            "ios": ["en", "de"],
-            "android": ["en", "de"]
+            "ios": [
+              "en",
+              "de"
+            ],
+            "android": [
+              "en",
+              "de"
+            ]
           }
         }
       ],
@@ -93,11 +102,17 @@
             "useFrameworks": "dynamic"
           }
         }
-      ]
+      ],
+      "expo-app-intents"
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true
+      "reactCompiler": true,
+      "inlineModules": {
+        "watchedDirectories": [
+          "app-intents"
+        ]
+      }
     },
     "extra": {
       "eas": {
