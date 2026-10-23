@@ -861,356 +861,356 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "4.4.7"
   },
   {
-    "id": "@firebase/ai@2.14.0",
+    "id": "@firebase/ai@3.0.0",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/ai",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "2.14.0"
+    "version": "3.0.0"
   },
   {
-    "id": "@firebase/analytics@0.10.23",
+    "id": "@firebase/analytics@0.10.25",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/analytics",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.10.23"
+    "version": "0.10.25"
   },
   {
-    "id": "@firebase/analytics-compat@0.2.29",
+    "id": "@firebase/analytics-compat@0.2.31",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/analytics-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.2.29"
+    "version": "0.2.31"
   },
   {
-    "id": "@firebase/analytics-types@0.8.4",
+    "id": "@firebase/analytics-types@0.8.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/analytics-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.8.4"
+    "version": "0.8.5"
   },
   {
-    "id": "@firebase/app@0.16.0",
+    "id": "@firebase/app@0.16.3",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/app",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.16.0"
+    "version": "0.16.3"
   },
   {
-    "id": "@firebase/app-check@0.13.0",
+    "id": "@firebase/app-check@0.13.1",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/app-check",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.13.0"
+    "version": "0.13.1"
   },
   {
-    "id": "@firebase/app-check-compat@0.4.6",
+    "id": "@firebase/app-check-compat@0.4.7",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/app-check-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.4.6"
+    "version": "0.4.7"
   },
   {
-    "id": "@firebase/app-check-interop-types@0.3.4",
+    "id": "@firebase/app-check-interop-types@0.3.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/app-check-interop-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.3.4"
+    "version": "0.3.5"
   },
   {
-    "id": "@firebase/app-check-types@0.5.4",
+    "id": "@firebase/app-check-types@0.5.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/app-check-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.5.4"
+    "version": "0.5.5"
   },
   {
-    "id": "@firebase/app-compat@0.5.16",
+    "id": "@firebase/app-compat@0.5.19",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/app-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.5.16"
+    "version": "0.5.19"
   },
   {
-    "id": "@firebase/app-types@0.9.5",
+    "id": "@firebase/app-types@0.9.6",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/app-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.9.5"
+    "version": "0.9.6"
   },
   {
-    "id": "@firebase/auth@1.13.4",
+    "id": "@firebase/auth@1.13.7",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/auth",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "1.13.4"
+    "version": "1.13.7"
   },
   {
-    "id": "@firebase/auth-compat@0.6.9",
+    "id": "@firebase/auth-compat@0.6.12",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/auth-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.6.9"
+    "version": "0.6.12"
   },
   {
-    "id": "@firebase/auth-interop-types@0.2.5",
+    "id": "@firebase/auth-interop-types@0.2.6",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/auth-interop-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.2.5"
+    "version": "0.2.6"
   },
   {
-    "id": "@firebase/auth-types@0.13.1",
+    "id": "@firebase/auth-types@0.13.2",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/auth-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.13.1"
+    "version": "0.13.2"
   },
   {
-    "id": "@firebase/component@0.7.4",
+    "id": "@firebase/component@0.7.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/component",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.7.4"
+    "version": "0.7.5"
   },
   {
-    "id": "@firebase/data-connect@0.7.3",
+    "id": "@firebase/data-connect@0.7.4",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/data-connect",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.7.3"
+    "version": "0.7.4"
   },
   {
-    "id": "@firebase/database@1.1.4",
+    "id": "@firebase/database@1.1.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/database",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "1.1.4"
+    "version": "1.1.5"
   },
   {
-    "id": "@firebase/database-compat@2.1.6",
+    "id": "@firebase/database-compat@2.1.7",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/database-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "2.1.6"
+    "version": "2.1.7"
   },
   {
-    "id": "@firebase/database-types@1.0.21",
+    "id": "@firebase/database-types@1.0.22",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/database-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "1.0.21"
+    "version": "1.0.22"
   },
   {
-    "id": "@firebase/firestore@4.17.0",
+    "id": "@firebase/firestore@4.18.0",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/firestore",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "4.17.0"
+    "version": "4.18.0"
   },
   {
-    "id": "@firebase/firestore-compat@0.4.12",
+    "id": "@firebase/firestore-compat@0.4.15",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/firestore-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.4.12"
+    "version": "0.4.15"
   },
   {
-    "id": "@firebase/firestore-types@3.0.4",
+    "id": "@firebase/firestore-types@3.0.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/firestore-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "3.0.4"
+    "version": "3.0.5"
   },
   {
-    "id": "@firebase/functions@0.13.6",
+    "id": "@firebase/functions@0.14.0",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/functions",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.13.6"
+    "version": "0.14.0"
   },
   {
-    "id": "@firebase/functions-compat@0.4.6",
+    "id": "@firebase/functions-compat@0.5.0",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/functions-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.4.6"
+    "version": "0.5.0"
   },
   {
-    "id": "@firebase/functions-types@0.6.4",
+    "id": "@firebase/functions-types@0.6.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/functions-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.6.4"
+    "version": "0.6.5"
   },
   {
-    "id": "@firebase/installations@0.6.23",
+    "id": "@firebase/installations@0.6.24",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/installations",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.6.23"
+    "version": "0.6.24"
   },
   {
-    "id": "@firebase/installations-compat@0.2.23",
+    "id": "@firebase/installations-compat@0.2.24",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/installations-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.2.23"
+    "version": "0.2.24"
   },
   {
-    "id": "@firebase/installations-types@0.5.4",
+    "id": "@firebase/installations-types@0.5.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/installations-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.5.4"
+    "version": "0.5.5"
   },
   {
-    "id": "@firebase/logger@0.5.1",
+    "id": "@firebase/logger@0.5.2",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/logger",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.5.1"
+    "version": "0.5.2"
   },
   {
-    "id": "@firebase/messaging@0.13.1",
+    "id": "@firebase/messaging@0.13.3",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/messaging",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.13.1"
+    "version": "0.13.3"
   },
   {
-    "id": "@firebase/messaging-compat@0.2.28",
+    "id": "@firebase/messaging-compat@0.2.30",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/messaging-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.2.28"
+    "version": "0.2.30"
   },
   {
-    "id": "@firebase/messaging-interop-types@0.2.5",
+    "id": "@firebase/messaging-interop-types@0.2.6",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/messaging-interop-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.2.5"
+    "version": "0.2.6"
   },
   {
-    "id": "@firebase/performance@0.7.13",
+    "id": "@firebase/performance@0.7.14",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/performance",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.7.13"
+    "version": "0.7.14"
   },
   {
-    "id": "@firebase/performance-compat@0.2.26",
+    "id": "@firebase/performance-compat@0.2.27",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/performance-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.2.26"
+    "version": "0.2.27"
   },
   {
-    "id": "@firebase/performance-types@0.2.4",
+    "id": "@firebase/performance-types@0.2.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/performance-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.2.4"
+    "version": "0.2.5"
   },
   {
-    "id": "@firebase/remote-config@0.9.1",
+    "id": "@firebase/remote-config@0.9.3",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/remote-config",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.9.1"
+    "version": "0.9.3"
   },
   {
-    "id": "@firebase/remote-config-compat@0.2.28",
+    "id": "@firebase/remote-config-compat@0.2.30",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/remote-config-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.2.28"
+    "version": "0.2.30"
   },
   {
-    "id": "@firebase/remote-config-types@0.5.1",
+    "id": "@firebase/remote-config-types@0.5.2",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/remote-config-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.5.1"
+    "version": "0.5.2"
   },
   {
-    "id": "@firebase/storage@0.14.4",
+    "id": "@firebase/storage@0.14.6",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/storage",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.14.4"
+    "version": "0.14.6"
   },
   {
-    "id": "@firebase/storage-compat@0.4.4",
+    "id": "@firebase/storage-compat@0.4.6",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/storage-compat",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.4.4"
+    "version": "0.4.6"
   },
   {
-    "id": "@firebase/storage-types@0.8.4",
+    "id": "@firebase/storage-types@0.8.5",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/storage-types",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "0.8.4"
+    "version": "0.8.5"
   },
   {
-    "id": "@firebase/util@1.15.2",
+    "id": "@firebase/util@1.15.3",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/util",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "1.15.2"
+    "version": "1.15.3"
   },
   {
-    "id": "@firebase/webchannel-wrapper@1.0.6",
+    "id": "@firebase/webchannel-wrapper@1.0.7",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "@firebase/webchannel-wrapper",
     "url": "https://github.com/firebase/firebase-js-sdk",
-    "version": "1.0.6"
+    "version": "1.0.7"
   },
   {
     "id": "@formatjs/bigdecimal@0.2.7",
@@ -1629,20 +1629,20 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "2.2.0"
   },
   {
-    "id": "@react-native-firebase/app@26.4.0",
+    "id": "@react-native-firebase/app@27.0.0",
     "license": "Apache-2.0",
     "licenseText": "Apache-2.0 License\n------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io>\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this library except in compliance with the License.\n\nYou may obtain a copy of the Apache-2.0 License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n\nCreative Commons Attribution 3.0 License\n----------------------------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io>\n\nDocumentation and other instructional materials provided for this project\n(including on a separate documentation repository or it's documentation website) are\nlicensed under the Creative Commons Attribution 3.0 License. Code samples/blocks\ncontained therein are licensed under the Apache License, Version 2.0 (the \"License\"), as above.\n\nYou may obtain a copy of the Creative Commons Attribution 3.0 License at\n\n    https://creativecommons.org/licenses/by/3.0/",
     "name": "@react-native-firebase/app",
     "url": "https://rnfirebase.io",
-    "version": "26.4.0"
+    "version": "27.0.0"
   },
   {
-    "id": "@react-native-firebase/messaging@26.4.0",
+    "id": "@react-native-firebase/messaging@27.0.0",
     "license": "Apache-2.0",
     "licenseText": "Apache-2.0 License\n------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io> & Contributors\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this library except in compliance with the License.\n\nYou may obtain a copy of the Apache-2.0 License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n\n\nCreative Commons Attribution 3.0 License\n----------------------------------------\n\nCopyright (c) 2016-present Invertase Limited <oss@invertase.io> & Contributors\n\nDocumentation and other instructional materials provided for this project\n(including on a separate documentation repository or it's documentation website) are\nlicensed under the Creative Commons Attribution 3.0 License. Code samples/blocks\ncontained therein are licensed under the Apache License, Version 2.0 (the \"License\"), as above.\n\nYou may obtain a copy of the Creative Commons Attribution 3.0 License at\n\n    https://creativecommons.org/licenses/by/3.0/",
     "name": "@react-native-firebase/messaging",
     "url": "https://rnfirebase.io",
-    "version": "26.4.0"
+    "version": "27.0.0"
   },
   {
     "id": "@react-native-masked-view/masked-view@0.3.2",
@@ -3013,12 +3013,12 @@ export const OPEN_SOURCE_LICENSES = [
     "version": "5.0.0"
   },
   {
-    "id": "firebase@12.17.1",
+    "id": "firebase@13.0.0",
     "license": "Apache-2.0",
     "licenseText": "This package declares the Apache-2.0 license. The full license text was not included in its installed package distribution.",
     "name": "firebase",
     "url": "https://firebase.google.com/",
-    "version": "12.17.1"
+    "version": "13.0.0"
   },
   {
     "id": "flow-enums-runtime@0.0.6",
