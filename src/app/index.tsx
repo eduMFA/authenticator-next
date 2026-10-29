@@ -407,6 +407,14 @@ export default function Tokens() {
           onPress: devMenu.spawnSamplePushRequest,
         },
         {
+          androidIcon: NotificationAddSymbol,
+          disabled: devMenu.tokenActionDisabled,
+          iosIcon: "checkmark.shield",
+          key: "push-challenge-spawn",
+          label: "Spawn Challenge",
+          onPress: devMenu.spawnSampleChallenge,
+        },
+        {
           androidIcon: ClearAllSymbol,
           destructive: true,
           iosIcon: "clear.fill",

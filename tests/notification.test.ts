@@ -222,7 +222,7 @@ test.each(["android", "ios"] as const)(
       expect.objectContaining({
         identifier: "ACCEPT",
         options: {
-          opensAppToForeground: false,
+          opensAppToForeground: true,
           isAuthenticationRequired: true,
         },
       }),
@@ -277,4 +277,18 @@ test("cancels one or all notifications", async () => {
   await cancelAllNotifications();
   expect(one).toHaveBeenCalledWith("notification");
   expect(all).toHaveBeenCalledTimes(1);
+});
+
+test("preserves number choices from Firebase and notification taps", () => {
+  const data = {
+    ...message.data,
+    challenge_type: "number" as const,
+    challenge_choices: "17,42,86",
+  };
+  expect(parsePushRequest({ ...message, data })?.challenge_choices).toBe(
+    "17,42,86",
+  );
+  expect(
+    parsePushRequestFromNotificationData(data, "numbered")?.challenge_choices,
+  ).toBe("17,42,86");
 });

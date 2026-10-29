@@ -9,8 +9,9 @@ import type {
   NotificationResponseData,
   PushRequestHandler,
 } from "@/types/notification";
-import type { PushRequest, PushRequestData } from "@/types/push-request";
+import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
+import { validatePushRequestData } from "@/utils/push-request";
 import { i18n } from "@lingui/core";
 import { t } from "@lingui/core/macro";
 import type { RemoteMessage } from "@react-native-firebase/messaging";
@@ -22,6 +23,7 @@ import {
 import * as Notifications from "expo-notifications";
 import { AndroidImportance, IosAuthorizationStatus } from "expo-notifications";
 import { Platform } from "react-native";
+export { validatePushRequestData } from "@/utils/push-request";
 
 export function isNotificationPermissionEnabled(
   settings: Notifications.NotificationPermissionsStatus | null,
@@ -61,7 +63,7 @@ export async function setupNotificationCategories() {
         identifier: NOTIFICATION_ACTION_ACCEPT,
         buttonTitle: i18n._(t`Accept`),
         options: {
-          opensAppToForeground: false,
+          opensAppToForeground: true,
           isAuthenticationRequired: true,
         },
       },
@@ -74,29 +76,6 @@ export async function setupNotificationCategories() {
         },
       },
     ],
-  );
-}
-
-/**
- * Validates that the notification data contains all required fields for a push authentication request
- */
-export function validatePushRequestData(
-  data: unknown,
-): data is PushRequestData {
-  if (!data || typeof data !== "object") {
-    return false;
-  }
-
-  const d = data as Record<string, unknown>;
-
-  return (
-    typeof d.nonce === "string" &&
-    typeof d.question === "string" &&
-    typeof d.serial === "string" &&
-    typeof d.signature === "string" &&
-    typeof d.sslverify === "string" &&
-    typeof d.title === "string" &&
-    typeof d.url === "string"
   );
 }
 
@@ -120,6 +99,12 @@ export function parsePushRequest(message: RemoteMessage): PushRequest | null {
     id: messageId || `${data.nonce}-${Date.now()}`, // Fallback id if messageId is missing
     status: PushRequestStatus.Pending,
     sentAt: sentTime || Date.now(),
+    ...(data.challenge_choices
+      ? {
+          challenge_type: data.challenge_type,
+          challenge_choices: data.challenge_choices,
+        }
+      : {}),
     nonce: data.nonce,
     question: data.question,
     serial: data.serial,
@@ -146,6 +131,12 @@ export function parsePushRequestFromNotificationData(
     id: fallbackId,
     status: PushRequestStatus.Pending,
     sentAt,
+    ...(data.challenge_choices
+      ? {
+          challenge_type: data.challenge_type,
+          challenge_choices: data.challenge_choices,
+        }
+      : {}),
     nonce: data.nonce,
     question: data.question,
     serial: data.serial,

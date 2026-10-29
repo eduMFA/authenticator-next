@@ -7,23 +7,18 @@ import type {
   ChallengePollingResult,
   TokenChallengePollingResult,
 } from "@/types/challenge-polling";
-import type { PushRequest } from "@/types/push-request";
+import type { PushRequest, PushRequestData } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import { base32ToBase64, base64ToBase32 } from "@/utils/crypto";
-import { buildPushRequestSignedData } from "@/utils/push-request";
+import {
+  validatePushRequestData,
+  buildPushRequestSignedData,
+} from "@/utils/push-request";
 import { signMessage, verifyMessage } from "@/utils/rsa";
 
-interface ChallengeResponse {
-  nonce: string;
-  question: string;
-  serial: string;
-  signature: string;
-  sslverify: string;
-  title: string;
-  url: string;
-}
+type ChallengeResponse = PushRequestData;
 
 /**
  * Generate an ISO 8601 timestamp for the polling request
@@ -55,6 +50,7 @@ async function parseChallengeResponse(
   data: ChallengeResponse,
   token: PushToken,
 ): Promise<PushRequest | null> {
+  if (!validatePushRequestData(data)) return null;
   // Verify the signature from the server using the token's server public key
   if (token.serverPublicKey) {
     const signedData = buildPushRequestSignedData(data);
@@ -78,6 +74,12 @@ async function parseChallengeResponse(
     id: `poll-${data.nonce}-${Date.now()}`,
     status: PushRequestStatus.Pending,
     sentAt: Date.now(),
+    ...(data.challenge_choices
+      ? {
+          challenge_type: data.challenge_type,
+          challenge_choices: data.challenge_choices,
+        }
+      : {}),
     nonce: data.nonce,
     question: data.question,
     serial: data.serial,

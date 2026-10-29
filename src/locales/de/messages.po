@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:267
+#: src/components/push-request-popup.tsx:367
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
@@ -21,17 +21,17 @@ msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 msgid "About"
 msgstr "Über"
 
-#: src/utils/notification.ts:62
+#: src/utils/notification.ts:64
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:590
-#: src/app/index.tsx:653
-#: src/app/index.tsx:655
+#: src/app/index.tsx:598
+#: src/app/index.tsx:661
+#: src/app/index.tsx:663
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:625
+#: src/app/index.tsx:633
 msgid "Add your first eduMFA Push token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA Push-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -47,7 +47,7 @@ msgstr "Anonyme Berichte"
 msgid "Appearance"
 msgstr "Darstellung"
 
-#: src/components/push-request-popup.tsx:278
+#: src/components/push-request-popup.tsx:347
 msgid "Approve"
 msgstr "Freigeben"
 
@@ -83,9 +83,21 @@ msgstr "Kamerazugriff ist deaktiviert"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: src/components/push-request-popup.tsx:412
+msgid "Challenge failed"
+msgstr "Prüfung fehlgeschlagen"
+
+#: src/components/push-request-popup.tsx:418
+msgid "Challenge matched. You can continue on your other screen."
+msgstr "Prüfung erfolgreich. Du kannst auf deinem anderen Bildschirm fortfahren."
+
 #: src/app/settings/index.tsx:121
 msgid "Change the app language in system settings"
 msgstr "App-Sprache in den Systemeinstellungen ändern"
+
+#: src/components/push-request-popup.tsx:424
+msgid "Check your connection and try again."
+msgstr "Überprüfe deine Verbindung und versuche es erneut."
 
 #: src/components/onboarding-sequence.tsx:128
 msgid "Choose whether to share anonymous crash and error reports."
@@ -107,6 +119,10 @@ msgstr "Kontakt (optional)"
 msgid "Continue"
 msgstr "Weiter"
 
+#: src/components/push-request-popup.tsx:331
+#~ msgid "Could not send your response. Please try again."
+#~ msgstr "Deine Antwort konnte nicht gesendet werden. Bitte versuche es erneut."
+
 #: src/app/settings/index.tsx:179
 #: src/app/settings/index.tsx:185
 msgid "Crash and error reports"
@@ -116,7 +132,7 @@ msgstr "Absturz- und Fehlerberichte"
 msgid "Dark"
 msgstr "Dunkel"
 
-#: src/utils/notification.ts:70
+#: src/utils/notification.ts:72
 msgid "Decline"
 msgstr "Ablehnen"
 
@@ -130,7 +146,7 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/components/push-request-popup.tsx:273
+#: src/components/push-request-popup.tsx:341
 msgid "Deny"
 msgstr "Ablehnen"
 
@@ -148,6 +164,7 @@ msgstr "Anonyme Berichte nicht teilen"
 
 #: src/components/feedback-form.android.tsx:80
 #: src/components/feedback-form.ios.tsx:55
+#: src/components/push-request-popup.tsx:469
 msgid "Done"
 msgstr "Fertig"
 
@@ -177,7 +194,7 @@ msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:763
+#: src/app/index.tsx:771
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -251,7 +268,7 @@ msgstr "Loslegen"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: src/app/index.tsx:762
+#: src/app/index.tsx:770
 #: src/components/onboarding-sequence/step-actions.tsx:75
 msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
 msgstr "Google Play-Dienste sind nicht verfügbar, daher können Anfragen nicht automatisch eingehen. Ziehe die Token-Liste nach unten, um nach ausstehenden Anfragen zu suchen."
@@ -317,6 +334,10 @@ msgstr "Hell"
 msgid "Logs provide more context and help us find the cause of the issue."
 msgstr "Protokolle liefern mehr Kontext und helfen uns, die Ursache des Problems zu finden."
 
+#: src/components/push-request-popup.tsx:285
+msgid "Match your sign-in"
+msgstr "Anmeldung bestätigen"
+
 #: src/components/feedback-form.android.tsx:185
 #: src/components/feedback-form.ios.tsx:139
 msgid "Name (optional)"
@@ -335,11 +356,11 @@ msgstr "Keine Anmeldeanfrage verpassen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:716
+#: src/app/index.tsx:724
 msgid "No tokens found"
 msgstr "Keine Token gefunden"
 
-#: src/app/index.tsx:617
+#: src/app/index.tsx:625
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
@@ -351,7 +372,7 @@ msgstr "Nicht jetzt"
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:758
+#: src/app/index.tsx:766
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
@@ -359,7 +380,11 @@ msgstr "Benachrichtigungen sind deaktiviert"
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
-#: src/components/push-request-popup.tsx:257
+#: src/components/push-request-popup.tsx:329
+#~ msgid "Number matched. Sign-in approved."
+#~ msgstr "Die Zahl stimmt überein. Anmeldung genehmigt."
+
+#: src/components/push-request-popup.tsx:359
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
@@ -413,7 +438,7 @@ msgstr "Datenschutzerklärung"
 msgid "Project website"
 msgstr "Projektwebsite"
 
-#: src/app/index.tsx:757
+#: src/app/index.tsx:765
 #: src/components/onboarding-sequence/step-actions.tsx:79
 msgid "Pull to refresh for requests"
 msgstr "Nach unten ziehen, um Anfragen abzurufen"
@@ -427,7 +452,7 @@ msgstr "QR-Code-Scanner"
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:779
+#: src/app/index.tsx:787
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -438,6 +463,10 @@ msgstr "Öffentlicher Schlüssel wird registriert"
 #: src/components/token-detail/token-detail-utils.ts:83
 msgid "Registration failed"
 msgstr "Registrierung fehlgeschlagen"
+
+#: src/components/push-request-popup.tsx:415
+msgid "Response not sent"
+msgstr "Antwort nicht gesendet"
 
 #: src/components/token-detail/token-detail-utils.ts:87
 msgid "Response parsing failed"
@@ -454,7 +483,7 @@ msgstr "Rollout erneut versuchen"
 msgid "Review eduMFA Push"
 msgstr "eduMFA Push bewerten"
 
-#: src/components/push-request-popup.tsx:196
+#: src/components/push-request-popup.tsx:286
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 
@@ -475,10 +504,14 @@ msgstr "Speichern"
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:451
-#: src/app/index.tsx:522
+#: src/app/index.tsx:459
+#: src/app/index.tsx:530
 msgid "Search tokens"
 msgstr "Token suchen"
+
+#: src/components/push-request-popup.tsx:294
+msgid "Select the number shown on your sign-in screen."
+msgstr "Wähle die Zahl aus, die auf deinem Anmeldebildschirm angezeigt wird."
 
 #: src/app/settings/index.tsx:177
 msgid "Send anonymized crash and error diagnostics"
@@ -489,6 +522,10 @@ msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
 #: src/components/feedback-form.ios.tsx:80
 msgid "Send feedback"
 msgstr "Feedback senden"
+
+#: src/components/push-request-popup.tsx:366
+#~ msgid "Sending response…"
+#~ msgstr "Antwort wird gesendet…"
 
 #: src/components/token-detail/token-overview-content.tsx:169
 msgid "Serial"
@@ -510,6 +547,22 @@ msgstr "Einstellungen"
 msgid "Share anonymous reports"
 msgstr "Anonyme Berichte teilen"
 
+#: src/components/push-request-popup.tsx:410
+msgid "Sign-in approved"
+msgstr "Anmeldung genehmigt"
+
+#: src/components/push-request-popup.tsx:330
+#~ msgid "Sign-in approved."
+#~ msgstr "Anmeldung genehmigt."
+
+#: src/components/push-request-popup.tsx:414
+msgid "Sign-in denied"
+msgstr "Anmeldung abgelehnt"
+
+#: src/components/push-request-popup.tsx:327
+#~ msgid "Sign-in denied."
+#~ msgstr "Anmeldung abgelehnt."
+
 #: src/components/onboarding-sequence/step-actions.tsx:120
 msgid "Sign-in requests may go unnoticed"
 msgstr "Anmeldeanfragen können unbemerkt bleiben"
@@ -523,6 +576,10 @@ msgstr "Status"
 msgid "Submit feedback"
 msgstr "Feedback senden"
 
+#: src/components/push-request-popup.tsx:348
+#~ msgid "Tap the number shown on your sign-in screen."
+#~ msgstr "Tippe auf die Zahl, die auf deinem Anmeldebildschirm angezeigt wird."
+
 #: src/components/feedback-form.android.tsx:74
 #: src/components/feedback-form.ios.tsx:51
 msgid "Thank you for your feedback"
@@ -531,6 +588,10 @@ msgstr "Vielen Dank für dein Feedback"
 #: src/components/token-detail/token-detail-utils.ts:49
 msgid "The device could not create the RSA key pair required for this token. Retry rollout and keep the app open while it runs."
 msgstr "Das Gerät konnte das für diesen Token erforderliche RSA-Schlüsselpaar nicht erstellen. Versuche den Rollout erneut und lasse die App währenddessen geöffnet."
+
+#: src/components/push-request-popup.tsx:324
+#~ msgid "The number did not match. Sign in again."
+#~ msgstr "Die Zahl stimmt nicht überein. Melde dich erneut an."
 
 #: src/hooks/use-handle-token-uri.ts:51
 msgid "The provided QR code isn't a valid eduMFA token."
@@ -552,6 +613,10 @@ msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualis
 msgid "Theme"
 msgstr "Erscheinungsbild"
 
+#: src/components/push-request-popup.tsx:423
+msgid "This sign-in request was blocked."
+msgstr "Diese Anmeldeanfrage wurde blockiert."
+
 #: src/components/token-detail/token-detail-utils.ts:21
 msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
 msgstr "Dieses Token konnte nicht aktualisiert werden, weil der Push-Dienst nicht erreichbar war. Prüfe deine Verbindung oder versuche es später erneut."
@@ -572,7 +637,11 @@ msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Pu
 msgid "Token"
 msgstr "Token"
 
-#: src/app/index.tsx:723
+#: src/components/push-request-popup.tsx:469
+msgid "Try again"
+msgstr "Erneut versuchen"
+
+#: src/app/index.tsx:731
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
 
@@ -587,6 +656,10 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 #: src/components/token-add/upload-qr-code-button.tsx:80
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
+
+#: src/components/push-request-popup.tsx:336
+msgid "Verifying your response…"
+msgstr "Antwort wird überprüft…"
 
 #: src/app/settings/license.tsx:51
 msgid "Version {itemVersion} · {itemLicense}"
@@ -609,9 +682,17 @@ msgstr "Willkommen bei <0/>"
 msgid "What would you like us to know?"
 msgstr "Was möchtest du uns mitteilen?"
 
+#: src/components/push-request-popup.tsx:419
+msgid "You can continue on your other screen."
+msgstr "Du kannst auf deinem anderen Bildschirm fortfahren."
+
 #: src/components/onboarding-sequence/step-actions.tsx:97
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "Du kannst jetzt Anmeldeanfragen empfangen und freigeben."
+
+#: src/components/push-request-popup.tsx:421
+msgid "Your answer did not match. Start a new sign-in to try again."
+msgstr "Deine Antwort stimmt nicht überein. Starte eine neue Anmeldung, um es erneut zu versuchen."
 
 #: src/components/onboarding-sequence.tsx:126
 msgid "Your choice"
