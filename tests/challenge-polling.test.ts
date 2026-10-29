@@ -159,3 +159,46 @@ test("successful aggregate has no error", async () => {
     await pollAllChallenges([{ ...token, rolloutState: State.Completed }]),
   ).toMatchObject({ success: true, error: undefined });
 });
+
+test("verifies and preserves the number choices when polling", async () => {
+  fetchMock.mockResolvedValue(
+    response(200, {
+      result: {
+        value: [
+          {
+            ...request,
+            challenge_type: "number" as const,
+            challenge_choices: "17,42,86",
+          },
+        ],
+      },
+    }),
+  );
+  const result = await pollChallengesForToken({
+    ...token,
+    serverPublicKey: "server-key",
+  });
+  expect(result.challenges[0].challenge_choices).toBe("17,42,86");
+  expect(verifyMessage).toHaveBeenCalledWith(
+    "nonce|https://example.org/push|serial|Sign in?|Login|1|number|17,42,86",
+    "Zg==",
+    "server-key",
+  );
+});
+
+test("rejects malformed polled number choices", async () => {
+  fetchMock.mockResolvedValue(
+    response(200, {
+      result: {
+        value: [
+          {
+            ...request,
+            challenge_type: "number" as const,
+            challenge_choices: "17,17,86",
+          },
+        ],
+      },
+    }),
+  );
+  expect((await pollChallengesForToken(token)).challenges).toEqual([]);
+});

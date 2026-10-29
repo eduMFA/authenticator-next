@@ -1,7 +1,8 @@
-export type PushRequest = {
-  id: string;
-  status: PushRequestStatus;
-  sentAt: number;
+export type PushChallengeType = "number";
+
+export type PushRequestData = {
+  challenge_type?: PushChallengeType;
+  challenge_choices?: string;
   nonce: string;
   question: string;
   serial: string;
@@ -11,14 +12,11 @@ export type PushRequest = {
   url: string;
 };
 
-export type PushRequestData = {
-  nonce: string;
-  question: string;
-  serial: string;
-  signature: string;
-  sslverify: string;
-  title: string;
-  url: string;
+export type PushRequest = PushRequestData & {
+  id: string;
+  status: PushRequestStatus;
+  sentAt: number;
+  challenge_response?: string;
 };
 
 export enum PushRequestStatus {
@@ -26,4 +24,5 @@ export enum PushRequestStatus {
   Accepted = "accepted",
   Declined = "declined",
   Expired = "expired",
+  ChallengeMismatch = "challenge_mismatch",
 }

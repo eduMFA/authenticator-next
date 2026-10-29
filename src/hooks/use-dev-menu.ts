@@ -110,7 +110,7 @@ export function useDevMenu() {
     );
   };
 
-  const spawnSamplePushRequest = () => {
+  const spawnSamplePushRequest = (withChallenge = false) => {
     if (!token) {
       return;
     }
@@ -121,7 +121,12 @@ export function useDevMenu() {
       status: PushRequestStatus.Pending,
       sentAt: Date.now(),
       nonce: `${id}-nonce`,
-      question: "Do you want to approve this sample sign-in?",
+      question: withChallenge
+        ? "Sign-in code: 42"
+        : "Do you want to approve this sample sign-in?",
+      ...(withChallenge
+        ? { challenge_type: "number" as const, challenge_choices: "17,42,86" }
+        : {}),
       serial: token.id,
       signature: "sample-signature",
       sslverify: token.sslVerify.toString(),
@@ -138,7 +143,8 @@ export function useDevMenu() {
     demoRolloutFailure,
     demoRolloutSuccess,
     rolloutFirstToken,
-    spawnSamplePushRequest,
+    spawnSamplePushRequest: () => spawnSamplePushRequest(),
+    spawnSampleChallenge: () => spawnSamplePushRequest(true),
     spawnSampleTokens,
     tokenActionDisabled,
     resetOnboarding,

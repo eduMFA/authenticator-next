@@ -21,7 +21,11 @@ const fetchMock = jest.fn<
 >();
 beforeEach(() => {
   globalThis.fetch = fetchMock;
-  fetchMock.mockReset().mockResolvedValue(response());
+  fetchMock
+    .mockReset()
+    .mockResolvedValue(
+      response(200, { result: { status: true, value: true } }),
+    );
   jest.mocked(signMessage).mockReset().mockResolvedValue("Zg==");
 });
 
@@ -83,4 +87,74 @@ test("matches serial and handles unknown tokens", () => {
     findTokenForPushRequest(request, [{ ...token, id: "other" }, token]),
   ).toBe(token);
   expect(findTokenForPushRequest(request, [])).toBeUndefined();
+});
+
+test("binds the selected number to the signature and request", async () => {
+  const numbered = {
+    ...request,
+    challenge_type: "number" as const,
+    challenge_choices: "17,42,86",
+    challenge_response: "42",
+  };
+  await expect(handlePushAuthRequest(numbered, token)).resolves.toEqual({
+    success: true,
+  });
+  expect(signMessage).toHaveBeenCalledWith(
+    "nonce|serial|number|42",
+    token.id,
+    "SHA256",
+  );
+  expect(JSON.parse(fetchMock.mock.calls[0][1]?.body as string)).toMatchObject({
+    challenge_response: "42",
+  });
+});
+
+test.each([undefined, "99"])(
+  "does not approve without a valid selection: %s",
+  async (challenge_response) => {
+    expect(
+      (
+        await handlePushAuthRequest(
+          {
+            ...request,
+            challenge_type: "number" as const,
+            challenge_choices: "17,42,86",
+            challenge_response,
+          },
+          token,
+        )
+      ).success,
+    ).toBe(false);
+    expect(fetchMock).not.toHaveBeenCalled();
+  },
+);
+
+test("reports a signed answer mismatch even on HTTP 200", async () => {
+  fetchMock.mockResolvedValue(
+    response(200, {
+      result: { status: true, value: false },
+      detail: { challenge_status: "challenge_mismatch" },
+    }),
+  );
+  expect(
+    await handlePushAuthRequest(
+      {
+        ...request,
+        challenge_type: "number" as const,
+        challenge_choices: "17,42,86",
+        challenge_response: "17",
+      },
+      token,
+    ),
+  ).toMatchObject({ success: false, challengeMatched: false });
+  expect(playNotificationSuccessHaptic).not.toHaveBeenCalled();
+});
+
+test.each([
+  {},
+  { result: { status: true, value: false } },
+  { result: { status: false, value: true } },
+])("fails closed for a rejected or malformed result: %j", async (body) => {
+  fetchMock.mockResolvedValue(response(200, body));
+  expect((await handlePushAuthRequest(request, token)).success).toBe(false);
 });

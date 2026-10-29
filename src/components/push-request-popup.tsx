@@ -1,4 +1,5 @@
 import { Radii, Spacing, Typography } from "@/constants/theme";
+import type { PushAuthResponse } from "@/services/push-auth";
 import { useTheme } from "@/hooks/use-theme";
 import { usePushRequestStore } from "@/stores/push-request";
 import { useTokenStore } from "@/stores/token";
@@ -7,8 +8,16 @@ import { PushRequestStatus } from "@/types/push-request";
 import { playImpactLightHaptic, playImpactMediumHaptic } from "@/utils/haptics";
 import { useLingui } from "@lingui/react/macro";
 import { BlurView } from "expo-blur";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { SymbolView } from "expo-symbols";
 import {
+  type ComponentProps,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  ActivityIndicator,
   Modal,
   Pressable,
   ScrollView,
@@ -21,6 +30,7 @@ import Animated, {
   Easing,
   FadeIn,
   FadeOut,
+  LinearTransition,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -34,48 +44,83 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type PushRequestPopupProps = {
   requests: PushRequest[];
-  onAction: (request: PushRequest) => void;
+  onAction: (request: PushRequest) => Promise<PushAuthResponse>;
 };
 
 export function PushRequestPopup({
   requests,
   onAction,
 }: PushRequestPopupProps) {
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
-  const colorScheme = useColorScheme();
-  const { updatePushRequestStatus } = usePushRequestStore();
   const pendingRequests = requests.filter(
     (request) => request.status === PushRequestStatus.Pending,
   );
   const currentRequest = pendingRequests[0];
+  if (!currentRequest) return null;
+  return (
+    <PushRequestSession
+      key={currentRequest.id}
+      currentRequest={currentRequest}
+      totalPending={pendingRequests.length}
+      onAction={onAction}
+    />
+  );
+}
+
+function PushRequestSession({
+  currentRequest,
+  totalPending,
+  onAction,
+}: {
+  currentRequest: PushRequest;
+  totalPending: number;
+  onAction: PushRequestPopupProps["onAction"];
+}) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<PushAuthResponse>();
+  const [submittedStatus, setSubmittedStatus] = useState(
+    PushRequestStatus.Accepted,
+  );
+  const colorScheme = useColorScheme();
+  const { updatePushRequestStatus } = usePushRequestStore();
+
+  const dismissFeedback = useCallback(() => {
+    if (feedback?.success || feedback?.challengeMatched === false) {
+      updatePushRequestStatus(
+        currentRequest.id,
+        feedback.challengeMatched === false
+          ? PushRequestStatus.ChallengeMismatch
+          : submittedStatus,
+      );
+    }
+    setFeedback(undefined);
+  }, [currentRequest, feedback, submittedStatus, updatePushRequestStatus]);
 
   const handleAction = useCallback(
-    (action: "accept" | "decline") => {
-      if (!currentRequest || isAnimatingOut) return;
-
+    async (action: "accept" | "decline", challengeResponse?: string) => {
+      if (isSubmitting || feedback) return;
       const status =
         action === "accept"
           ? PushRequestStatus.Accepted
           : PushRequestStatus.Declined;
-
-      if (action === "accept") {
-        playImpactMediumHaptic();
-      } else {
-        playImpactLightHaptic();
+      if (action === "accept") playImpactMediumHaptic();
+      else playImpactLightHaptic();
+      setIsSubmitting(true);
+      setSubmittedStatus(status);
+      try {
+        const result = await onAction({
+          ...currentRequest,
+          status,
+          challenge_response: challengeResponse,
+        });
+        setFeedback(result);
+      } catch {
+        setFeedback({ success: false });
+      } finally {
+        setIsSubmitting(false);
       }
-
-      setIsAnimatingOut(true);
-      setTimeout(() => {
-        const updatedRequest = { ...currentRequest, status };
-        updatePushRequestStatus(updatedRequest.id, status);
-        onAction(updatedRequest);
-        setIsAnimatingOut(false);
-      }, 200);
     },
-    [currentRequest, isAnimatingOut, onAction, updatePushRequestStatus],
+    [currentRequest, feedback, isSubmitting, onAction],
   );
-
-  if (!currentRequest) return null;
 
   return (
     <Modal
@@ -83,7 +128,10 @@ export function PushRequestPopup({
       transparent
       animationType="none"
       statusBarTranslucent
-      onRequestClose={() => handleAction("decline")}
+      onRequestClose={() => {
+        if (feedback) dismissFeedback();
+        else void handleAction("decline");
+      }}
     >
       <View style={styles.container}>
         <AnimatedBlurView
@@ -94,10 +142,14 @@ export function PushRequestPopup({
           exiting={FadeOut.duration(200)}
         />
         <PopupCard
+          key={currentRequest.id}
           request={currentRequest}
-          totalPending={pendingRequests.length}
+          totalPending={totalPending}
           onAction={handleAction}
-          isAnimatingOut={isAnimatingOut}
+          isSubmitting={isSubmitting}
+          feedback={feedback}
+          submittedStatus={submittedStatus}
+          onDismiss={dismissFeedback}
         />
       </View>
     </Modal>
@@ -107,18 +159,25 @@ export function PushRequestPopup({
 type PopupCardProps = {
   request: PushRequest;
   totalPending: number;
-  onAction: (action: "accept" | "decline") => void;
-  isAnimatingOut: boolean;
+  onAction: (action: "accept" | "decline", challengeResponse?: string) => void;
+  feedback?: PushAuthResponse;
+  submittedStatus: PushRequestStatus;
+  onDismiss: () => void;
+  isSubmitting: boolean;
 };
 
 function PopupCard({
   request,
   totalPending,
   onAction,
-  isAnimatingOut,
+  isSubmitting,
+  feedback,
+  submittedStatus,
+  onDismiss,
 }: PopupCardProps) {
   const { t } = useLingui();
   const theme = useTheme();
+  const [selectedChoice, setSelectedChoice] = useState<string>();
   const { width, height } = useWindowDimensions();
   const token = useTokenStore((state) =>
     state.tokens.find((candidate) => candidate.id === request.serial),
@@ -171,6 +230,7 @@ function PopupCard({
         },
         animatedStyle,
       ]}
+      layout={LinearTransition.duration(220)}
       entering={FadeIn.duration(240)}
       exiting={FadeOut.duration(200)}
     >
@@ -179,108 +239,239 @@ function PopupCard({
         bounces={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <TokenImage
-          imageUrl={token?.imageUrl}
-          label={organizationName}
-          size="medium"
-          animated
-          style={styles.organizationLogo}
-        />
-
-        <View style={styles.heading}>
-          <ThemedText
-            fontSize={Typography.fontSize24}
-            fontWeight="bold"
-            style={styles.centeredText}
+        {feedback ? (
+          <PushRequestResult
+            feedback={feedback}
+            declined={submittedStatus === PushRequestStatus.Declined}
+            hasChallenge={Boolean(request.challenge_type)}
+            organizationName={organizationName}
+            onDismiss={onDismiss}
+          />
+        ) : (
+          <Animated.View
+            key="review"
+            entering={FadeIn.duration(180)}
+            style={styles.reviewContent}
           >
-            {t`Review sign-in`}
-          </ThemedText>
-          {organizationName ? (
+            <View style={styles.organization}>
+              <TokenImage
+                imageUrl={token?.imageUrl}
+                label={organizationName}
+                size="small"
+                style={styles.organizationLogo}
+              />
+              <View style={styles.organizationText}>
+                <ThemedText
+                  fontSize={Typography.fontSize14}
+                  fontWeight="semiBold"
+                >
+                  {organizationName ?? service}
+                </ThemedText>
+                <ThemedText
+                  fontSize={Typography.fontSize12}
+                  themeColor="textSecondary"
+                >
+                  {context.join(" · ")}
+                </ThemedText>
+              </View>
+            </View>
+            <View style={styles.heading}>
+              <ThemedText
+                fontSize={Typography.fontSize28}
+                fontWeight="bold"
+                style={styles.centeredText}
+              >
+                {request.challenge_type
+                  ? t`Match your sign-in`
+                  : t`Review sign-in`}
+              </ThemedText>
+              <ThemedText
+                fontSize={Typography.fontSize16}
+                themeColor="textSecondary"
+                style={styles.centeredText}
+              >
+                {request.challenge_type
+                  ? t`Select the number shown on your sign-in screen.`
+                  : request.question}
+              </ThemedText>
+            </View>
+            {request.challenge_type === "number" ? (
+              <>
+                <View style={styles.buttonContainer}>
+                  {request.challenge_choices?.split(",").map((choice) => (
+                    <ActionButton
+                      key={choice}
+                      label={choice}
+                      choice
+                      variant={
+                        isSubmitting && selectedChoice === choice
+                          ? "primary"
+                          : "default"
+                      }
+                      onPress={() => {
+                        setSelectedChoice(choice);
+                        onAction("accept", choice);
+                      }}
+                      disabled={isSubmitting}
+                    />
+                  ))}
+                </View>
+                {request.question ? (
+                  <ThemedText
+                    fontSize={Typography.fontSize14}
+                    themeColor="textSecondary"
+                    style={styles.centeredText}
+                  >
+                    {request.question}
+                  </ThemedText>
+                ) : null}
+              </>
+            ) : null}
+            {isSubmitting ? (
+              <View style={styles.loading} accessibilityRole="alert">
+                <ActivityIndicator color={theme.branding} />
+                <ThemedText
+                  fontSize={Typography.fontSize14}
+                  themeColor="textSecondary"
+                >{t`Verifying your response…`}</ThemedText>
+              </View>
+            ) : null}
+            <View style={styles.buttonContainer}>
+              <ActionButton
+                label={t`Deny`}
+                onPress={() => onAction("decline")}
+                disabled={isSubmitting}
+              />
+              {!request.challenge_type ? (
+                <ActionButton
+                  label={t`Approve`}
+                  variant="primary"
+                  onPress={() => onAction("accept")}
+                  disabled={isSubmitting}
+                />
+              ) : null}
+            </View>
             <ThemedText
-              fontSize={Typography.fontSize14}
+              fontSize={Typography.fontSize12}
               themeColor="textSecondary"
               style={styles.centeredText}
             >
-              {organizationName}
+              {t`Only approve if you started this sign-in. If you are unsure, deny it.`}
             </ThemedText>
-          ) : null}
-        </View>
-
-        {request.title || request.question || context.length > 0 ? (
-          <View
-            style={[
-              styles.requestMessage,
-              {
-                backgroundColor: theme.backgroundSecondary,
-                borderColor: theme.border,
-              },
-            ]}
-          >
-            {request.title ? (
-              <ThemedText
-                fontSize={Typography.fontSize16}
-                fontWeight="semiBold"
-              >
-                {request.title}
-              </ThemedText>
-            ) : null}
-            {request.question ? (
-              <ThemedText
-                fontSize={Typography.fontSize14}
-                themeColor="textSecondary"
-              >
-                {request.question}
-              </ThemedText>
-            ) : null}
-            {context.length > 0 ? (
+            {totalPending > 1 ? (
               <ThemedText
                 fontSize={Typography.fontSize12}
                 themeColor="textSecondary"
-                numberOfLines={2}
+                style={styles.centeredText}
               >
-                {context.join(" · ")}
+                {t`${totalPending} requests are waiting. Review each one separately.`}
               </ThemedText>
             ) : null}
-          </View>
-        ) : null}
-
-        <View
-          style={[
-            styles.guidance,
-            {
-              backgroundColor: theme.dangerBackground,
-              borderColor: theme.dangerBar,
-            },
-          ]}
-        >
-          <ThemedText fontSize={Typography.fontSize14}>
-            {t`Only approve if you started this sign-in. If you are unsure, deny it.`}
-          </ThemedText>
-        </View>
-
-        {totalPending > 1 ? (
-          <ThemedText
-            fontSize={Typography.fontSize12}
-            themeColor="textSecondary"
-            style={styles.centeredText}
-          >
-            {t`${totalPending} requests are waiting. Review each one separately.`}
-          </ThemedText>
-        ) : null}
-
-        <View style={styles.buttonContainer}>
-          <ActionButton
-            label={t`Deny`}
-            onPress={() => onAction("decline")}
-            disabled={isAnimatingOut}
-          />
-          <ActionButton
-            label={t`Approve`}
-            onPress={() => onAction("accept")}
-            disabled={isAnimatingOut}
-          />
-        </View>
+          </Animated.View>
+        )}
       </ScrollView>
+    </Animated.View>
+  );
+}
+
+function PushRequestResult({
+  feedback,
+  declined,
+  hasChallenge,
+  organizationName,
+  onDismiss,
+}: {
+  feedback: PushAuthResponse;
+  declined: boolean;
+  hasChallenge: boolean;
+  organizationName?: string;
+  onDismiss: () => void;
+}) {
+  const { t } = useLingui();
+  const theme = useTheme();
+  const mismatch = feedback.challengeMatched === false;
+  const approved = feedback.success && !declined;
+  const terminal = feedback.success || mismatch;
+  const accent = approved
+    ? theme.successBar
+    : mismatch
+      ? theme.errorBar
+      : declined && feedback.success
+        ? theme.neutralBar
+        : theme.dangerBar;
+  const background = approved
+    ? theme.successBackground
+    : mismatch
+      ? theme.errorBackground
+      : declined && feedback.success
+        ? theme.neutralBackground
+        : theme.dangerBackground;
+  const title = approved
+    ? t`Sign-in approved`
+    : mismatch
+      ? t`Challenge failed`
+      : feedback.success
+        ? t`Sign-in denied`
+        : t`Response not sent`;
+  const description = approved
+    ? hasChallenge
+      ? t`Challenge matched. You can continue on your other screen.`
+      : t`You can continue on your other screen.`
+    : mismatch
+      ? t`Your answer did not match. Start a new sign-in to try again.`
+      : feedback.success
+        ? t`This sign-in request was blocked.`
+        : t`Check your connection and try again.`;
+  const icon: ComponentProps<typeof SymbolView>["name"] = approved
+    ? { ios: "checkmark" as const, android: "check" }
+    : terminal
+      ? { ios: "xmark" as const, android: "close" }
+      : { ios: "wifi.exclamationmark" as const, android: "wifi_off" };
+
+  return (
+    <Animated.View
+      key="result"
+      entering={FadeIn.duration(220)}
+      style={styles.result}
+      accessibilityLiveRegion="polite"
+    >
+      <View style={[styles.resultIcon, { backgroundColor: background }]}>
+        <SymbolView name={icon} size={52} tintColor={accent} />
+      </View>
+      <View style={styles.resultCopy}>
+        <ThemedText
+          accessibilityRole="header"
+          fontSize={Typography.fontSize28}
+          fontWeight="bold"
+          style={styles.centeredText}
+        >
+          {title}
+        </ThemedText>
+        <ThemedText
+          fontSize={Typography.fontSize16}
+          themeColor="textSecondary"
+          style={styles.resultDescription}
+        >
+          {description}
+        </ThemedText>
+      </View>
+      {organizationName ? (
+        <ThemedText
+          fontSize={Typography.fontSize14}
+          themeColor="textSecondary"
+          style={styles.centeredText}
+        >
+          {organizationName}
+        </ThemedText>
+      ) : null}
+      <View style={styles.buttonContainer}>
+        <ActionButton
+          label={terminal ? t`Done` : t`Try again`}
+          variant="primary"
+          onPress={onDismiss}
+          disabled={false}
+        />
+      </View>
     </Animated.View>
   );
 }
@@ -299,10 +490,14 @@ function ActionButton({
   label,
   onPress,
   disabled,
+  choice = false,
+  variant = "default",
 }: {
   label: string;
   onPress: () => void;
   disabled: boolean;
+  choice?: boolean;
+  variant?: "default" | "primary";
 }) {
   const theme = useTheme();
   const pressScale = useSharedValue(1);
@@ -316,9 +511,10 @@ function ActionButton({
       accessibilityLabel={label}
       style={[
         styles.button,
+        choice && styles.choice,
         {
-          backgroundColor: theme.fill,
-          borderColor: theme.border,
+          backgroundColor: variant === "primary" ? theme.branding : theme.fill,
+          borderColor: variant === "primary" ? theme.branding : theme.border,
         },
         animatedStyle,
         disabled && styles.buttonDisabled,
@@ -329,7 +525,8 @@ function ActionButton({
       disabled={disabled}
     >
       <ThemedText
-        fontSize={Typography.fontSize16}
+        fontSize={choice ? Typography.fontSize32 : Typography.fontSize16}
+        themeColor={variant === "primary" ? "textOnBranding" : "text"}
         fontWeight="semiBold"
         style={styles.centeredText}
       >
@@ -361,25 +558,37 @@ const styles = StyleSheet.create({
   centeredText: {
     textAlign: "center",
   },
+  choice: {
+    borderRadius: Radii.xl,
+    minHeight: 84,
+    paddingHorizontal: Spacing.xs,
+  },
   container: {
     ...StyleSheet.absoluteFill,
     alignItems: "center",
     justifyContent: "center",
     padding: Spacing.xl,
   },
-  guidance: {
-    borderCurve: "continuous",
-    borderLeftWidth: 3,
-    borderRadius: Radii.md,
-    gap: Spacing.xs,
-    padding: Spacing.md,
-  },
   heading: {
-    gap: Spacing.xs,
+    gap: Spacing.md,
+  },
+  loading: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: Spacing.sm,
+    justifyContent: "center",
+  },
+  organization: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: Spacing.md,
   },
   organizationLogo: {
-    alignSelf: "center",
     marginRight: 0,
+  },
+  organizationText: {
+    flex: 1,
+    gap: Spacing.xs,
   },
   popup: {
     borderCurve: "continuous",
@@ -388,15 +597,29 @@ const styles = StyleSheet.create({
     boxShadow: "0 12px 36px rgba(0, 0, 0, 0.24)",
     overflow: "hidden",
   },
-  requestMessage: {
-    borderCurve: "continuous",
-    borderRadius: Radii.lg,
-    borderWidth: 1,
-    gap: Spacing.sm,
-    padding: Spacing.lg,
+  result: {
+    gap: Spacing.xl,
+    paddingVertical: Spacing.md,
+  },
+  resultCopy: {
+    gap: Spacing.md,
+  },
+  resultDescription: {
+    lineHeight: 24,
+    textAlign: "center",
+  },
+  resultIcon: {
+    alignItems: "center",
+    alignSelf: "center",
+    borderRadius: 56,
+    height: 112,
+    justifyContent: "center",
+    width: 112,
+  },
+  reviewContent: {
+    gap: Spacing.xl,
   },
   scrollContent: {
-    gap: Spacing.lg,
-    padding: Spacing.lg,
+    padding: Spacing.xl,
   },
 });

@@ -3,6 +3,7 @@ import { useToken } from "@/hooks/use-token";
 import {
   findTokenForPushRequest,
   handlePushAuthRequest,
+  type PushAuthResponse,
 } from "@/services/push-auth";
 import { usePushRequestStore } from "@/stores/push-request";
 import type { PushRequest } from "@/types/push-request";
@@ -19,15 +20,30 @@ export function NotificationHandler() {
   const { pushRequests, updatePushRequestStatus } = usePushRequestStore();
 
   const handleRequest = useCallback(
-    async (request: PushRequest): Promise<boolean> => {
+    async (request: PushRequest): Promise<PushAuthResponse> => {
+      if (
+        __DEV__ &&
+        request.id.startsWith("sample-push-request-") &&
+        request.signature === "sample-signature"
+      ) {
+        if (
+          request.status === PushRequestStatus.Declined ||
+          !request.challenge_choices
+        )
+          return { success: true };
+        return {
+          success: request.challenge_response === "42",
+          challengeMatched: request.challenge_response === "42",
+        };
+      }
       const token = findTokenForPushRequest(request, tokens);
       if (!token) {
         console.log("Token not found for push request:", request.serial);
-        return false;
+        return { success: false };
       }
 
       const result = await handlePushAuthRequest(request, token);
-      return result.success;
+      return result;
     },
     [tokens],
   );
@@ -36,7 +52,7 @@ export function NotificationHandler() {
     console.log("User action:", action, pushRequest);
 
     // Handle the user's response from notification quick actions
-    if (action === "ACCEPT") {
+    if (action === "ACCEPT" && !pushRequest.challenge_choices) {
       console.log("User accepted the push authentication");
       updatePushRequestStatus(pushRequest.id, PushRequestStatus.Accepted);
       void handleRequest({
