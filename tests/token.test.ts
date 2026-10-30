@@ -29,6 +29,14 @@ describe("enrollment URI parsing", () => {
       enrollmentStartedAt: expect.any(Number),
     });
   });
+  test.each<Record<string, string>>([
+    { image: "https://example.org/image" },
+    { imageUri: "https://example.org/image" },
+    { image: "invalid" },
+    { imageUri: "invalid" },
+  ])("ignores enrollment URI image metadata %p", (params) => {
+    expect(parseTokenFromUri(uri(params))).not.toHaveProperty("imageUrl");
+  });
   test("parses defaults and issuer from path", () => {
     expect(parseTokenFromUri(uri())).toMatchObject({
       id: "serial",
@@ -47,7 +55,6 @@ describe("enrollment URI parsing", () => {
             ttl: "42",
             sslverify: "0",
             pin: "True",
-            imageUri: "https://example.org/image",
             issuer: "School",
           },
           "Jane%20Doe",
@@ -59,7 +66,6 @@ describe("enrollment URI parsing", () => {
       ttl: 42,
       sslVerify: false,
       pin: true,
-      imageUrl: "https://example.org/image",
     });
     expect(
       parseTokenFromUri(uri({ sslverify: "1", pin: "False" }, "Account")).pin,
@@ -74,11 +80,10 @@ describe("enrollment URI parsing", () => {
       );
     },
   );
-  test.each<Record<string, string>>([
-    { url: "invalid" },
-    { imageUri: "invalid" },
-  ])("rejects invalid nested URLs %p", (params) => {
-    expect(() => parseTokenFromUri(uri(params))).toThrow(InvalidUrlError);
+  test("rejects invalid callback URLs", () => {
+    expect(() => parseTokenFromUri(uri({ url: "invalid" }))).toThrow(
+      InvalidUrlError,
+    );
   });
   test.each(["", "bad", "3"])("rejects unsupported version %s", (v) => {
     expect(() => parseTokenFromUri(uri({ v }))).toThrow(
