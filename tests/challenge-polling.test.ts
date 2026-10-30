@@ -159,3 +159,37 @@ test("successful aggregate has no error", async () => {
     await pollAllChallenges([{ ...token, rolloutState: State.Completed }]),
   ).toMatchObject({ success: true, error: undefined });
 });
+
+test.each(["https://example.org/token.png", null, ""])(
+  "refreshes token image without pending challenges: %p",
+  async (image) => {
+    fetchMock.mockResolvedValue(
+      response(200, { result: { value: [] }, detail: { image } }),
+    );
+    const imageUrl = image || null;
+    await expect(pollChallengesForToken(token)).resolves.toEqual({
+      success: true,
+      challenges: [],
+      imageUrl,
+    });
+    const result = await pollAllChallenges([
+      { ...token, rolloutState: State.Completed },
+    ]);
+    expect(result.tokenResults).toMatchObject([
+      { tokenId: token.id, success: true, imageUrl },
+    ]);
+  },
+);
+
+test.each([undefined, 123, {}, "invalid", "file:///tmp/image.png"])(
+  "preserves existing image for missing or invalid metadata: %p",
+  async (image) => {
+    fetchMock.mockResolvedValue(
+      response(200, { result: { value: [request] }, detail: { image } }),
+    );
+    const result = await pollChallengesForToken(token);
+    expect(result.success).toBe(true);
+    expect(result.challenges).toHaveLength(1);
+    expect(result).not.toHaveProperty("imageUrl");
+  },
+);

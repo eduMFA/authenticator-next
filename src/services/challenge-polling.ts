@@ -1,3 +1,4 @@
+import { parseImageUrl } from "@/utils/token-image";
 import { SIGN_ALGORITHM } from "@/constants/auth";
 import {
   ChallengePollingNetworkError,
@@ -23,6 +24,11 @@ interface ChallengeResponse {
   sslverify: string;
   title: string;
   url: string;
+}
+
+interface ChallengePollingResponse {
+  result?: { value?: ChallengeResponse[] };
+  detail?: { image?: unknown };
 }
 
 /**
@@ -144,7 +150,8 @@ export async function pollChallengesForToken(
       };
     }
 
-    const data = await response.json();
+    const data: ChallengePollingResponse | null = await response.json();
+    const imageUrl = parseImageUrl(data?.detail?.image);
 
     const challenges: PushRequest[] = [];
     for (const challengeData of data?.result?.value || []) {
@@ -155,7 +162,11 @@ export async function pollChallengesForToken(
     }
 
     console.log(`Found ${challenges.length} challenges for token ${token.id}`);
-    return { success: true, challenges };
+    return {
+      success: true,
+      challenges,
+      ...(imageUrl !== undefined ? { imageUrl } : {}),
+    };
   } catch (error) {
     console.error(`Error polling challenges for token ${token.id}:`, error);
     return {
@@ -203,6 +214,9 @@ export async function pollAllChallenges(
       tokenResults.push({
         tokenId: token.id,
         success: result.value.success,
+        ...(result.value.imageUrl !== undefined
+          ? { imageUrl: result.value.imageUrl }
+          : {}),
         error: result.value.error,
       });
     } else {
