@@ -162,6 +162,7 @@ export async function performTokenRollout(
     updateState(id, {
       rolloutState: PushTokenRolloutState.Completed,
       serverPublicKey,
+      registeredFcmToken: fbToken,
     });
 
     return { success: true, serverPublicKey };

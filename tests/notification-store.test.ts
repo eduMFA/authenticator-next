@@ -120,6 +120,15 @@ test("refreshes permissions and requests display permission explicitly", async (
     },
   });
 });
+test("refreshing registration subscribes to subsequent FCM token changes", async () => {
+  await useNotificationStore.getState().checkPermissions();
+  expect(onTokenRefresh).toHaveBeenCalledTimes(1);
+  const refresh = jest.mocked(onTokenRefresh).mock.calls[0][1];
+  refresh("refreshed-after-registration");
+  expect(useNotificationStore.getState().fcmToken).toBe(
+    "refreshed-after-registration",
+  );
+});
 test("handles initialization and permission errors", async () => {
   jest
     .mocked(Notifications.getPermissionsAsync)

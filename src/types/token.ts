@@ -7,6 +7,7 @@ export type PushToken = {
   ttl: number;
   enrollmentCredential: string;
   enrollmentStartedAt?: number;
+  registeredFcmToken?: string;
   sslVerify: boolean;
   imageUrl?: string;
   pin?: boolean;

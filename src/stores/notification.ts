@@ -145,6 +145,8 @@ export const useNotificationStore = create<NotificationStore>((set, get) => ({
       const { capability: pushCapability, token } = await getPushRegistration();
 
       set({ fcmToken: token, permissionStatus: settings, pushCapability });
+      if (token)
+        subscribeToTokenRefresh((newToken) => set({ fcmToken: newToken }));
 
       return settings;
     } catch (error) {

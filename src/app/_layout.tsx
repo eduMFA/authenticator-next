@@ -8,6 +8,8 @@ import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore } from "@/stores/settings";
 import { useTokenStore } from "@/stores/token";
+import { useNotificationStore } from "@/stores/notification";
+import { syncFcmRegistration } from "@/services/fcm-registration";
 import { activateCurrentLocale } from "@/utils/locale";
 import { withSentryRoot } from "@/utils/sentry";
 import { isTokenEnrollmentUri } from "@/utils/token";
@@ -63,8 +65,20 @@ function RootLayoutContent() {
   );
   const hasHydratedSettings = useSettingsStore((state) => state.hasHydrated);
   const themePreference = useSettingsStore((state) => state.themePreference);
+  const fcmToken = useNotificationStore((state) => state.fcmToken);
+  const tokens = useTokenStore((state) => state.tokens);
   const handleTokenUri = useHandleTokenUri();
   const { pollChallenges } = useChallengePolling();
+
+  useEffect(() => {
+    if (!hasCompletedOnboarding) return;
+    void syncFcmRegistration(
+      () => useTokenStore.getState().tokens,
+      fcmToken,
+      useTokenStore.getState().updateToken,
+      () => useNotificationStore.getState().fcmToken === fcmToken,
+    );
+  }, [hasCompletedOnboarding, fcmToken, tokens]);
 
   useEffect(() => {
     Appearance.setColorScheme(

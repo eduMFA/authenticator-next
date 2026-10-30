@@ -3,6 +3,8 @@ import {
   ChallengePollingServerError,
 } from "@/errors/challenge-polling";
 import { pollAllChallenges } from "@/services/challenge-polling";
+import { syncFcmRegistration } from "@/services/fcm-registration";
+import { useNotificationStore } from "@/stores/notification";
 import { usePushRequestStore } from "@/stores/push-request";
 import { useTokenStore } from "@/stores/token";
 import {
@@ -62,6 +64,13 @@ export function useChallengePolling(): UseChallengePollingResult {
     setError(null);
 
     try {
+      const fcmToken = useNotificationStore.getState().fcmToken;
+      void syncFcmRegistration(
+        () => useTokenStore.getState().tokens,
+        fcmToken,
+        updateToken,
+        () => useNotificationStore.getState().fcmToken === fcmToken,
+      );
       console.log(`Starting challenge polling for ${tokens.length} tokens`);
       const result = await pollAllChallenges(tokens);
       const refreshTimestamp = Date.now();

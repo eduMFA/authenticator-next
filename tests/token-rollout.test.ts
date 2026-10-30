@@ -54,6 +54,11 @@ test("enrolls token with ordered state updates and stripped public key", async (
     serverPublicKey: "serverkey",
   });
   expect(generateRsaKeyPair).toHaveBeenCalledWith("serial", 4096);
+  expect(updateState).toHaveBeenLastCalledWith(token.id, {
+    rolloutState: State.Completed,
+    serverPublicKey: "serverkey",
+    registeredFcmToken: "fcm",
+  });
   expect(
     updateState.mock.calls.flatMap(([, fields]) =>
       fields.rolloutState === undefined ? [] : [fields.rolloutState],
