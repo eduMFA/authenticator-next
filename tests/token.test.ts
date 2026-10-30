@@ -18,6 +18,17 @@ function uri(params: Record<string, string> = {}, label = "Issuer:Account") {
 }
 
 describe("enrollment URI parsing", () => {
+  test.each(["", "-1", "0", "NaN", "12minutes", "Infinity"])(
+    "rejects invalid enrollment TTL %s",
+    (ttl) => {
+      expect(() => parseTokenFromUri(uri({ ttl }))).toThrow(InvalidUrlError);
+    },
+  );
+  test("tracks when the QR was scanned", () => {
+    expect(parseTokenFromUri(uri())).toMatchObject({
+      enrollmentStartedAt: expect.any(Number),
+    });
+  });
   test("parses defaults and issuer from path", () => {
     expect(parseTokenFromUri(uri())).toMatchObject({
       id: "serial",

@@ -1,4 +1,6 @@
 import { KEY_SIZE } from "@/constants/auth";
+import { i18n } from "@lingui/core";
+import { msg } from "@lingui/core/macro";
 import { useNotificationStore } from "@/stores/notification";
 import type {
   RolloutResult,
@@ -104,6 +106,18 @@ export async function performTokenRollout(
   let currentStep: PushTokenRolloutState = PushTokenRolloutState.Pending;
 
   try {
+    const enrollmentStartedAt = token.enrollmentStartedAt ?? Date.now();
+    if (token.enrollmentStartedAt === undefined)
+      updateState(id, { enrollmentStartedAt });
+    const checkEnrollmentExpiry = () => {
+      if (Date.now() >= enrollmentStartedAt + token.ttl * 60_000) {
+        currentStep = PushTokenRolloutState.SendRSAPublicKey;
+        throw new Error(
+          i18n._(msg`Enrollment expired. Scan a new enrollment QR code.`),
+        );
+      }
+    };
+    checkEnrollmentExpiry();
     const fbToken = await useNotificationStore.getState().getFcmToken();
     if (!fbToken) {
       throw new Error("Failed to retrieve FCM token");
@@ -114,6 +128,7 @@ export async function performTokenRollout(
     currentStep = PushTokenRolloutState.RSAKeyGeneration;
     updateState(id, { rolloutState: currentStep });
     const pubkey = await generateRSAKeys(id);
+    checkEnrollmentExpiry();
 
     // Step 2: Send public key to server
     currentStep = PushTokenRolloutState.SendRSAPublicKey;

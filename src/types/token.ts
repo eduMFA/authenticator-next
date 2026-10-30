@@ -6,6 +6,7 @@ export type PushToken = {
   callbackUrl: string;
   ttl: number;
   enrollmentCredential: string;
+  enrollmentStartedAt?: number;
   sslVerify: boolean;
   imageUrl?: string;
   pin?: boolean;

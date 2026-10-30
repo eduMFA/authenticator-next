@@ -40,11 +40,12 @@ const parseTokenV1 = (url: URL) => {
   }
 
   const ttlParam = url.searchParams.get("ttl");
-  try {
-    pushToken["ttl"] = ttlParam ? parseInt(ttlParam, 10) : DEFAULT_TOKEN_TTL;
-  } catch {
+  const ttl = ttlParam === null ? DEFAULT_TOKEN_TTL : Number(ttlParam);
+  if (!Number.isFinite(ttl) || ttl <= 0) {
     throw new InvalidUrlError(`Invalid ttl: ${ttlParam}`);
   }
+  pushToken.ttl = ttl;
+  pushToken.enrollmentStartedAt = Date.now();
 
   const enrollmentCredentialParam = url.searchParams.get(
     "enrollment_credential",

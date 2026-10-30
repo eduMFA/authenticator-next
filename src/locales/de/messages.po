@@ -185,6 +185,10 @@ msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Ge
 msgid "Enrolled"
 msgstr "Registriert"
 
+#: src/services/token-rollout.ts:116
+msgid "Enrollment expired. Scan a new enrollment QR code."
+msgstr "Die Registrierung ist abgelaufen. Scanne einen neuen Registrierungs-QR-Code."
+
 #: src/components/token-detail/token-detail-utils.ts:60
 msgid "Enrollment response failed"
 msgstr "Registrierungsantwort fehlgeschlagen"

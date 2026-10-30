@@ -9,6 +9,9 @@ import { generateRsaKeyPair, deleteRsaKeyPair } from "@/utils/rsa";
 import { PushTokenRolloutState as State } from "@/types/token";
 import type { RolloutStateUpdater } from "@/types/token-rollout";
 import { deferred, token, response } from "./fixtures";
+import { i18n } from "@lingui/core";
+import { messages as englishMessages } from "@/locales/en/messages";
+import { messages as germanMessages } from "@/locales/de/messages";
 
 jest.mock("@/stores/notification", () => ({
   useNotificationStore: { getState: jest.fn() },
@@ -27,6 +30,7 @@ const updateState = jest.fn<
   Parameters<RolloutStateUpdater>
 >();
 beforeEach(() => {
+  i18n.loadAndActivate({ locale: "en", messages: englishMessages });
   globalThis.fetch = fetchMock;
   fetchMock
     .mockReset()
@@ -51,7 +55,9 @@ test("enrolls token with ordered state updates and stripped public key", async (
   });
   expect(generateRsaKeyPair).toHaveBeenCalledWith("serial", 4096);
   expect(
-    updateState.mock.calls.map(([, fields]) => fields.rolloutState),
+    updateState.mock.calls.flatMap(([, fields]) =>
+      fields.rolloutState === undefined ? [] : [fields.rolloutState],
+    ),
   ).toEqual([
     State.RSAKeyGeneration,
     State.SendRSAPublicKey,
@@ -111,6 +117,56 @@ test("handles missing FCM token before key generation", async () => {
   });
   expect(generateRsaKeyPair).not.toHaveBeenCalled();
   expect(isTokenRollingOut(token.id)).toBe(false);
+});
+test("rejects expired enrollment without generating keys or contacting the server", async () => {
+  expect(
+    await performTokenRollout(
+      { ...token, enrollmentStartedAt: Date.now() - token.ttl * 60_000 },
+      updateState,
+    ),
+  ).toMatchObject({
+    success: false,
+    failedState: State.SendRSAPublicKeyFailed,
+  });
+  expect(generateRsaKeyPair).not.toHaveBeenCalled();
+  expect(fetchMock).not.toHaveBeenCalled();
+});
+test.each([
+  {
+    locale: "en",
+    messages: englishMessages,
+    expected: "Enrollment expired. Scan a new enrollment QR code.",
+  },
+  {
+    locale: "de",
+    messages: germanMessages,
+    expected:
+      "Die Registrierung ist abgelaufen. Scanne einen neuen Registrierungs-QR-Code.",
+  },
+])(
+  "reports enrollment expiry in $locale",
+  async ({ locale, messages, expected }) => {
+    i18n.loadAndActivate({ locale, messages });
+    const result = await performTokenRollout(
+      { ...token, enrollmentStartedAt: Date.now() - token.ttl * 60_000 },
+      updateState,
+    );
+    expect(result.error?.message).toBe(expected);
+  },
+);
+test("checks expiry again after slow key generation", async () => {
+  const now = Date.now();
+  jest.mocked(generateRsaKeyPair).mockImplementation(async () => {
+    jest.spyOn(Date, "now").mockReturnValue(now + token.ttl * 60_000);
+    return { publicKey: "key" };
+  });
+  expect(
+    await performTokenRollout(
+      { ...token, enrollmentStartedAt: now },
+      updateState,
+    ),
+  ).toMatchObject({ success: false });
+  expect(fetchMock).not.toHaveBeenCalled();
 });
 test.each([new Error("key failure"), "key failure"])(
   "maps key generation failure %p",

@@ -185,6 +185,10 @@ msgstr "Enable notifications to receive push approval requests on this device."
 msgid "Enrolled"
 msgstr "Enrolled"
 
+#: src/services/token-rollout.ts:116
+msgid "Enrollment expired. Scan a new enrollment QR code."
+msgstr "Enrollment expired. Scan a new enrollment QR code."
+
 #: src/components/token-detail/token-detail-utils.ts:60
 msgid "Enrollment response failed"
 msgstr "Enrollment response failed"
