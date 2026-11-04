@@ -66,7 +66,7 @@
     "zustand": "^5.0.16"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
+    "@babel/core": "^8.0.0",
     "@lingui/babel-plugin-lingui-macro": "^6.10.1",
     "@lingui/cli": "^6.10.1",
     "@lingui/metro-transformer": "^6.10.1",
