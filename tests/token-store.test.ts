@@ -1,10 +1,12 @@
 import { useTokenStore } from "@/stores/token";
+import { usePushRequestStore } from "@/stores/push-request";
+import { PushRequestStatus } from "@/types/push-request";
 import {
   isTokenRollingOut,
   performTokenRollout,
   startPendingRollouts,
 } from "@/services/token-rollout";
-import { token } from "./fixtures";
+import { request, token } from "./fixtures";
 
 jest.mock("@/services/token-rollout", () => ({
   isTokenRollingOut: jest.fn(),
@@ -37,6 +39,25 @@ test("adds unique tokens, updates only matching token, and removes tokens", () =
   expect(useTokenStore.getState().tokens.map((entry) => entry.id)).toEqual([
     "other",
   ]);
+});
+test("removing a token deletes its stored push requests of every status", async () => {
+  const { addToken, removeToken } = useTokenStore.getState();
+  const { addPushRequest, clearPushRequests } = usePushRequestStore.getState();
+  clearPushRequests();
+  addToken(token);
+  addToken({ ...token, id: "other" });
+
+  for (const status of Object.values(PushRequestStatus)) {
+    addPushRequest({ ...request, id: status, nonce: status, status });
+  }
+  const otherRequest = { ...request, serial: "other" };
+  addPushRequest(otherRequest);
+
+  removeToken(token.id);
+
+  expect(usePushRequestStore.getState().pushRequests).toEqual([otherRequest]);
+  await usePushRequestStore.persist.rehydrate();
+  expect(usePushRequestStore.getState().pushRequests).toEqual([otherRequest]);
 });
 test("delegates rollout and propagates errors", async () => {
   const store = useTokenStore.getState();

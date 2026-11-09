@@ -74,8 +74,14 @@ export function useChallengePolling(): UseChallengePollingResult {
       console.log(`Starting challenge polling for ${tokens.length} tokens`);
       const result = await pollAllChallenges(tokens);
       const refreshTimestamp = Date.now();
+      const currentTokenIds = new Set(
+        useTokenStore.getState().tokens.map((token) => token.id),
+      );
 
       for (const tokenResult of result.tokenResults ?? []) {
+        if (!currentTokenIds.has(tokenResult.tokenId)) {
+          continue;
+        }
         updateToken(tokenResult.tokenId, {
           lastRefreshResult: {
             status: tokenResult.success
@@ -96,7 +102,10 @@ export function useChallengePolling(): UseChallengePollingResult {
       // Add new challenges to the store (deduplication is handled by the store)
       let addedCount = 0;
       for (const challenge of result.challenges) {
-        if (addPushRequest(challenge)) {
+        if (
+          currentTokenIds.has(challenge.serial) &&
+          addPushRequest(challenge)
+        ) {
           addedCount++;
         }
       }

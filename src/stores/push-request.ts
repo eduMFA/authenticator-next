@@ -10,6 +10,7 @@ type PushRequestState = {
   addPushRequest: (request: PushRequest) => boolean;
   updatePushRequestStatus: (id: string, status: PushRequestStatus) => void;
   removePushRequest: (id: string) => void;
+  removePushRequestsForToken: (tokenId: string) => void;
   getPushRequestById: (id: string) => PushRequest | undefined;
   getPushRequestByNonce: (nonce: string) => PushRequest | undefined;
   getPendingPushRequests: () => PushRequest[];
@@ -51,6 +52,14 @@ export const usePushRequestStore = create(
         const existingRequests = get().pushRequests;
         const updatedRequests = existingRequests.filter((r) => r.id !== id);
         set({ pushRequests: updatedRequests });
+      },
+
+      removePushRequestsForToken: (tokenId: string) => {
+        set(({ pushRequests }) => ({
+          pushRequests: pushRequests.filter(
+            (request) => request.serial !== tokenId,
+          ),
+        }));
       },
 
       getPushRequestById: (id: string) => {

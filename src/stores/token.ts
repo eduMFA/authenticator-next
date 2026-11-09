@@ -3,6 +3,7 @@ import {
   performTokenRollout,
   startPendingRollouts as startPendingRolloutsService,
 } from "@/services/token-rollout";
+import { usePushRequestStore } from "@/stores/push-request";
 import type { PushToken } from "@/types/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
@@ -47,6 +48,7 @@ export const useTokenStore = create(
         const existingTokens = get().tokens;
         const updatedTokens = existingTokens.filter((t) => t.id !== id);
         set({ tokens: updatedTokens });
+        usePushRequestStore.getState().removePushRequestsForToken(id);
       },
 
       isRollingOut: (id: string) => {

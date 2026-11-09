@@ -1,5 +1,6 @@
 import { useNotificationStore } from "@/stores/notification";
 import { usePushRequestStore } from "@/stores/push-request";
+import { useTokenStore } from "@/stores/token";
 import type {
   NotificationAction,
   NotificationResponseData,
@@ -20,7 +21,6 @@ import { verifyMessage } from "@/utils/rsa";
 import * as Notifications from "expo-notifications";
 import { useCallback, useEffect } from "react";
 import { useChallengePolling } from "./use-challenge-polling";
-import { useToken } from "./use-token";
 
 export type { NotificationAction } from "@/types/notification";
 
@@ -66,7 +66,6 @@ export function useNotificationStatus() {
 }
 
 export function useNotifications(onAction?: NotificationActionHandler) {
-  const { tokens } = useToken();
   const notificationStatus = useNotificationStatus();
   const { pollChallenges } = useChallengePolling();
 
@@ -77,7 +76,9 @@ export function useNotifications(onAction?: NotificationActionHandler) {
     async (pushRequest: PushRequest) => {
       console.log("Received push request:", pushRequest.id);
 
-      const token = tokens.find((t) => t.id === pushRequest.serial);
+      const token = useTokenStore
+        .getState()
+        .tokens.find((t) => t.id === pushRequest.serial);
 
       if (!token?.serverPublicKey) {
         console.warn(
@@ -108,9 +109,14 @@ export function useNotifications(onAction?: NotificationActionHandler) {
         return;
       }
 
-      addPushRequest(pushRequest);
+      const currentToken = useTokenStore
+        .getState()
+        .tokens.find((t) => t.id === pushRequest.serial);
+      if (currentToken?.serverPublicKey === token.serverPublicKey) {
+        addPushRequest(pushRequest);
+      }
     },
-    [addPushRequest, tokens],
+    [addPushRequest],
   );
 
   const handleNotificationAction = useCallback(
