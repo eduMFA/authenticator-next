@@ -8,25 +8,22 @@ import {
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 
-const parseTokenV1 = (url: URL) => {
-  const pushToken: Partial<PushToken> = {};
-
-  const { label, issuer } = parseLabelAndIssuer(url);
-  pushToken["label"] = label;
-  pushToken["issuer"] = issuer;
+const parseEnrollmentFields = (
+  url: URL,
+  credentialKey: "enrollment_credential" | "enrollmentCredential",
+) => {
 
   const serialParam = url.searchParams.get("serial");
   if (!serialParam) {
     throw new InvalidUrlError("No serial parameter provided.");
   }
-  pushToken["id"] = serialParam;
-
   const callbackUrlParam = url.searchParams.get("url");
   if (!callbackUrlParam) {
     throw new InvalidUrlError("No callback URL parameter provided.");
   }
+  let callbackUrl: string;
   try {
-    pushToken["callbackUrl"] = new URL(callbackUrlParam).toString();
+    callbackUrl = new URL(callbackUrlParam).toString();
   } catch {
     throw new InvalidUrlError("The provided callback URL is invalid.");
   }
@@ -36,46 +33,47 @@ const parseTokenV1 = (url: URL) => {
   if (!Number.isFinite(ttl) || ttl <= 0) {
     throw new InvalidUrlError(`Invalid ttl: ${ttlParam}`);
   }
-  pushToken.ttl = ttl;
-  pushToken.enrollmentStartedAt = Date.now();
-
-  const enrollmentCredentialParam = url.searchParams.get(
-    "enrollment_credential",
-  );
-  if (!enrollmentCredentialParam) {
-    throw new InvalidUrlError("No enrollment_credential parameter provided.");
+  const enrollmentCredential = url.searchParams.get(credentialKey);
+  if (!enrollmentCredential) {
+    throw new InvalidUrlError(`No ${credentialKey} parameter provided.`);
   }
-  pushToken["enrollmentCredential"] = enrollmentCredentialParam;
 
+  return {
+    id: serialParam,
+    callbackUrl,
+    ttl,
+    enrollmentCredential,
+    enrollmentStartedAt: Date.now(),
+  };
+};
+
+const parseTokenV1 = (url: URL) => {
+  const { label, issuer } = parseLabelAndIssuer(url);
   const sslVerifyParam = url.searchParams.get("sslverify");
-  pushToken["sslVerify"] = sslVerifyParam ? sslVerifyParam === "1" : true;
 
-  const pinParam = url.searchParams.get("pin");
-  if (pinParam === "True") {
-    pushToken["pin"] = true;
-  }
-
-  return pushToken;
+  return {
+    ...parseEnrollmentFields(url, "enrollment_credential"),
+    label,
+    issuer,
+    sslVerify: sslVerifyParam ? sslVerifyParam === "1" : true,
+    ...(url.searchParams.get("pin") === "True" && { pin: true }),
+  };
 };
 
 const parseTokenV2 = (url: URL) => {
-  const pushToken: Partial<PushToken> = {};
-
-  const serialParam = url.searchParams.get("serial");
-  if (!serialParam) {
-    throw new InvalidUrlError("No serial parameter provided.");
-  }
-  pushToken["id"] = serialParam;
-
   const label = decodeURIComponent(url.pathname.substring(1));
   if (!label) {
     throw new InvalidUrlError("No label provided in the URL path.");
   }
-  pushToken["label"] = label;
-
-  // TODO: Finish v2 implementation when v2 is specified
-
-  return pushToken;
+  return {
+    ...parseEnrollmentFields(url, "enrollmentCredential"),
+    label,
+    issuer: url.searchParams.get("issuer") || undefined,
+    sslVerify: true,
+    ...(url.searchParams.get("requireDeviceAuth") === "true" && {
+      requireDeviceAuth: true,
+    }),
+  };
 };
 
 export const getTokenVersionParseFunction = {
@@ -143,7 +141,7 @@ export function parseTokenFromUri(uri: string): PushToken {
     version,
     rolloutState: PushTokenRolloutState.Pending,
     ...parseFunction(url),
-  } as PushToken;
+  };
 }
 
 export const parseLabelAndIssuer = (uri: URL) => {
