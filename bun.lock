@@ -9,7 +9,7 @@
         "@expo/material-symbols": "^0.1.1",
         "@expo/ui": "~58.0.27",
         "@formatjs/intl-locale": "^5.4.3",
-        "@formatjs/intl-pluralrules": "^6.4.0",
+        "@formatjs/intl-pluralrules": "^7.0.0",
         "@lingui/core": "^6.12.0",
         "@lingui/react": "^6.12.0",
         "@react-native-async-storage/async-storage": "^2.2.0",
@@ -443,7 +443,7 @@
 
     "@firebase/webchannel-wrapper": ["@firebase/webchannel-wrapper@1.0.7", "", {}, "sha512-phBFwieDLvkZGYN9CE9ZFNEIoBVksprzsnCzQejCmCHtgwCXReeuRpoEGN9C4EbhONztv8NRV1tau6Rb9pONwQ=="],
 
-    "@formatjs/bigdecimal": ["@formatjs/bigdecimal@0.2.7", "", {}, "sha512-B4+XY/e4u5v261r3a37Kq2ax91gPZSKGyVpx8X5dygAggLlUz+6MeBpmAhaBFGB8WQ4JB1qD+QtKHk9aJkEb9Q=="],
+    "@formatjs/bigdecimal": ["@formatjs/bigdecimal@0.2.10", "", {}, "sha512-npIs6UARNOg5amJY5UOVsd6HUQQfzYjet0sa0SWIqzsnVhxLSpaIx2DjoIVrr/vqmjURjvroeW6dItjfy3Uf8A=="],
 
     "@formatjs/fast-memoize": ["@formatjs/fast-memoize@3.1.7", "", {}, "sha512-zXfhLpvA6T7+efdt9JLbBwZ00tT7NsBMDVnDu8rpHeNNv8KfRZAMo2gkG0k9lK/Nzc//3kJ9pImsfuJxk3KhUA=="],
 
@@ -451,9 +451,9 @@
 
     "@formatjs/intl-locale": ["@formatjs/intl-locale@5.4.3", "", { "dependencies": { "@formatjs/intl-getcanonicallocales": "3.3.1", "@formatjs/intl-supportedvaluesof": "3.0.1" } }, "sha512-YdxSbfDifRIew7mukcwITPlhkomfHCcSzzbjEJqOGbod4wrfdUN7SmiZQU2Lr8zs/q/15ntZsthJ8NsW3P30mA=="],
 
-    "@formatjs/intl-localematcher": ["@formatjs/intl-localematcher@0.10.0", "", { "dependencies": { "@formatjs/fast-memoize": "3.1.7" } }, "sha512-OvfBelurObm02D1+4BsuHSt3Xkn49RZPo7uJXt/1Z0dNET3EN39kY1rKMV3kG0tn0p4gyGWrcFx9HyeF07cq5g=="],
+    "@formatjs/intl-localematcher": ["@formatjs/intl-localematcher@0.10.1", "", { "dependencies": { "@formatjs/fast-memoize": "3.1.7" } }, "sha512-gBqglQK9rXuHsLmM8wzTMBy4Xo4d0jamirIVKuEL8F1rwbskWdpMA1kZarSkny+uvr5q/K6GSzE0Rcq1wZLl3g=="],
 
-    "@formatjs/intl-pluralrules": ["@formatjs/intl-pluralrules@6.4.0", "", { "dependencies": { "@formatjs/bigdecimal": "0.2.7", "@formatjs/intl-localematcher": "0.10.0" } }, "sha512-dPsgM2WeLIRPzH8wqv9mnq2sdnAeyz7n7gqv/JSK6jFVvJEEZIyZX0XalFZsuuNQ8U2CQQ5RxCy0h9U/nirJIQ=="],
+    "@formatjs/intl-pluralrules": ["@formatjs/intl-pluralrules@7.0.4", "", { "dependencies": { "@formatjs/bigdecimal": "0.2.10", "@formatjs/intl-localematcher": "0.10.1" } }, "sha512-EeQ8YUs1QOpYLUiNHkHfR1rsOMtQUBQXEQwR9WmJRWfzvVXeYZ7vBeMARtlb2KuHUgdmfXjoin5oNn68hjyrEQ=="],
 
     "@formatjs/intl-supportedvaluesof": ["@formatjs/intl-supportedvaluesof@3.0.1", "", { "dependencies": { "@formatjs/fast-memoize": "3.1.7" } }, "sha512-+9TU+8tqsUqobFzQJEvfQ8Yukt1PYgL5WxYi/yW+hWVNx422wEo/TlVRLvIfdYqlVS048jfyu8piNagfhOV+2A=="],
 
