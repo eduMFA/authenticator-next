@@ -3,11 +3,12 @@ import { SETTINGS_LINKS } from "@/constants/settings";
 import { Spacing } from "@/constants/theme";
 import { useFeedbackForm } from "@/hooks/use-feedback-form";
 import ArrowDropDownSymbol from "@expo/material-symbols/arrow_drop_down.xml";
+import CheckSymbol from "@expo/material-symbols/check.xml";
 import CloseSymbol from "@expo/material-symbols/close.xml";
 import {
   Button,
-  DropdownMenuItem,
-  ExposedDropdownMenu,
+  DropdownMenuGroup,
+  DropdownMenuPopup,
   ExposedDropdownMenuBox,
   Host,
   Icon,
@@ -15,9 +16,11 @@ import {
   LazyColumn,
   OutlinedTextField,
   Row,
+  SelectableDropdownMenuItem,
   Spacer,
   Switch,
   Text,
+  useMaterialColors,
   useNativeState,
 } from "@expo/ui/jetpack-compose";
 import {
@@ -26,12 +29,14 @@ import {
   fillMaxWidth,
   imePadding,
   menuAnchor,
+  onSizeChanged,
   weight,
+  width,
 } from "@expo/ui/jetpack-compose/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import * as Linking from "expo-linking";
 import { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, useColorScheme } from "react-native";
 
 const FULL_WIDTH = [fillMaxWidth()];
 const textStyles = {
@@ -47,6 +52,19 @@ export function FeedbackForm({
   showCloseButton = false,
 }: FeedbackFormProps) {
   const { t } = useLingui();
+  const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
+  const {
+    onSecondaryContainer,
+    onSurface,
+    secondaryContainer,
+    surfaceContainerHigh,
+  } = useMaterialColors({ colorScheme });
+  const feedbackTypeItemColors = {
+    textColor: onSurface,
+    selectedContainerColor: secondaryContainer,
+    selectedTextColor: onSecondaryContainer,
+    selectedLeadingIconColor: onSecondaryContainer,
+  };
   const form = useFeedbackForm();
   const selectedFeedbackType =
     form.feedbackTypes.find((option) => option.value === form.feedbackType) ??
@@ -54,9 +72,14 @@ export function FeedbackForm({
   const feedbackTypeLabel = useNativeState(selectedFeedbackType.label);
   const [isFeedbackTypeMenuExpanded, setIsFeedbackTypeMenuExpanded] =
     useState(false);
+  const [feedbackTypeMenuWidth, setFeedbackTypeMenuWidth] = useState(0);
 
   return (
-    <Host style={styles.host} useViewportSizeMeasurement>
+    <Host
+      colorScheme={colorScheme}
+      style={styles.host}
+      useViewportSizeMeasurement
+    >
       <LazyColumn
         contentPadding={{
           bottom: Spacing.xl,
@@ -102,7 +125,10 @@ export function FeedbackForm({
             <Text style={textStyles.sectionTitle}>{t`Feedback details`}</Text>
             <ExposedDropdownMenuBox
               expanded={isFeedbackTypeMenuExpanded}
-              modifiers={FULL_WIDTH}
+              modifiers={[
+                fillMaxWidth(),
+                onSizeChanged(({ width }) => setFeedbackTypeMenuWidth(width)),
+              ]}
               onExpandedChange={setIsFeedbackTypeMenuExpanded}
             >
               <OutlinedTextField
@@ -122,25 +148,40 @@ export function FeedbackForm({
                   />
                 </OutlinedTextField.TrailingIcon>
               </OutlinedTextField>
-              <ExposedDropdownMenu
+              <DropdownMenuPopup
                 expanded={isFeedbackTypeMenuExpanded}
                 onDismissRequest={() => setIsFeedbackTypeMenuExpanded(false)}
               >
-                {form.feedbackTypes.map((option) => (
-                  <DropdownMenuItem
-                    key={option.value}
-                    onClick={() => {
-                      form.setFeedbackType(option.value);
-                      feedbackTypeLabel.set(option.label);
-                      setIsFeedbackTypeMenuExpanded(false);
-                    }}
-                  >
-                    <DropdownMenuItem.Text>
-                      <Text>{option.label}</Text>
-                    </DropdownMenuItem.Text>
-                  </DropdownMenuItem>
-                ))}
-              </ExposedDropdownMenu>
+                <DropdownMenuGroup
+                  containerColor={surfaceContainerHigh}
+                  modifiers={
+                    feedbackTypeMenuWidth
+                      ? [width(feedbackTypeMenuWidth)]
+                      : undefined
+                  }
+                >
+                  {form.feedbackTypes.map((option, index) => (
+                    <SelectableDropdownMenuItem
+                      key={option.value}
+                      colors={feedbackTypeItemColors}
+                      selected={option.value === selectedFeedbackType.value}
+                      shapes={{ index, count: form.feedbackTypes.length }}
+                      onClick={() => {
+                        form.setFeedbackType(option.value);
+                        feedbackTypeLabel.set(option.label);
+                        setIsFeedbackTypeMenuExpanded(false);
+                      }}
+                    >
+                      <SelectableDropdownMenuItem.Text>
+                        <Text>{option.label}</Text>
+                      </SelectableDropdownMenuItem.Text>
+                      <SelectableDropdownMenuItem.SelectedLeadingIcon>
+                        <Icon source={CheckSymbol} size={24} />
+                      </SelectableDropdownMenuItem.SelectedLeadingIcon>
+                    </SelectableDropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </DropdownMenuPopup>
             </ExposedDropdownMenuBox>
 
             <OutlinedTextField

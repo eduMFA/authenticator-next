@@ -1,10 +1,12 @@
 import {
-  DropdownMenu,
+  Box,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuPopup,
   Host,
   Icon,
-  Spacer,
   Text,
+  useMaterialColors,
 } from "@expo/ui/jetpack-compose";
 import { size as composeSize } from "@expo/ui/jetpack-compose/modifiers";
 import {
@@ -12,9 +14,8 @@ import {
   TOKEN_ACTION_MENU_ICON_SIZE,
   TOKEN_ACTION_MENU_ICONS,
 } from "@/constants/token-actions";
-import { useTheme } from "@/hooks/use-theme";
 import type { TokenActionsMenuProps } from "@/types/token-actions";
-import { StyleSheet } from "react-native";
+import { StyleSheet, useColorScheme } from "react-native";
 
 export function TokenActionsMenu({
   actions,
@@ -22,36 +23,37 @@ export function TokenActionsMenu({
   expanded,
   onDismissRequest,
 }: TokenActionsMenuProps) {
-  const theme = useTheme();
+  const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
+  const { error, surfaceContainerHigh } = useMaterialColors({ colorScheme });
 
   return (
     <Host
+      colorScheme={colorScheme}
       pointerEvents={expanded ? "auto" : "none"}
       style={[styles.host, { left: anchor.x, top: anchor.y }]}
     >
-      <DropdownMenu expanded={expanded} onDismissRequest={onDismissRequest}>
-        <DropdownMenu.Trigger>
-          <Spacer
-            modifiers={[
-              composeSize(
-                TOKEN_ACTION_MENU_ANCHOR_SIZE,
-                TOKEN_ACTION_MENU_ANCHOR_SIZE,
-              ),
-            ]}
-          />
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Items>
-          {actions.map((action) => {
-            const iconTint = action.destructive
-              ? theme.error
-              : theme.textSecondary;
-
-            return (
+      <Box
+        modifiers={[
+          composeSize(
+            TOKEN_ACTION_MENU_ANCHOR_SIZE,
+            TOKEN_ACTION_MENU_ANCHOR_SIZE,
+          ),
+        ]}
+      >
+        <DropdownMenuPopup
+          expanded={expanded}
+          onDismissRequest={onDismissRequest}
+        >
+          <DropdownMenuGroup containerColor={surfaceContainerHigh}>
+            {actions.map((action, index) => (
               <DropdownMenuItem
                 key={action.key}
                 enabled={!action.disabled}
+                shape={{ index, count: actions.length }}
                 elementColors={
-                  action.destructive ? { textColor: theme.error } : undefined
+                  action.destructive
+                    ? { textColor: error, leadingIconColor: error }
+                    : undefined
                 }
                 onClick={() => {
                   onDismissRequest();
@@ -65,14 +67,13 @@ export function TokenActionsMenu({
                   <Icon
                     source={TOKEN_ACTION_MENU_ICONS[action.key]}
                     size={TOKEN_ACTION_MENU_ICON_SIZE}
-                    tint={iconTint}
                   />
                 </DropdownMenuItem.LeadingIcon>
               </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenu.Items>
-      </DropdownMenu>
+            ))}
+          </DropdownMenuGroup>
+        </DropdownMenuPopup>
+      </Box>
     </Host>
   );
 }
