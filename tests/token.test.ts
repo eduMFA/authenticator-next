@@ -100,10 +100,37 @@ describe("enrollment URI parsing", () => {
     );
   });
   test("parses v2 labels and requires label and serial", () => {
-    expect(parseTokenFromUri(uri({ v: "2" }, "Jane%20Doe"))).toMatchObject({
+    const token = parseTokenFromUri(
+      uri(
+        {
+          v: "2",
+          enrollmentCredential: "v2-credential",
+          issuer: "School",
+          ttl: "42",
+          requireDeviceAuth: "true",
+          sslverify: "0",
+          image: "https://example.org/image",
+        },
+        "Jane%20Doe",
+      ),
+    );
+    expect(token).toMatchObject({
       label: "Jane Doe",
       version: 2,
+      id: "serial",
+      callbackUrl: "https://example.org/push",
+      enrollmentCredential: "v2-credential",
+      enrollmentStartedAt: expect.any(Number),
+      issuer: "School",
+      ttl: 42,
+      sslVerify: true,
+      requireDeviceAuth: true,
     });
+    expect(token).not.toHaveProperty("imageUrl");
+    expect(token).not.toHaveProperty("pin");
+    expect(() => parseTokenFromUri(uri({ v: "2" }))).toThrow(
+      "No enrollmentCredential parameter provided.",
+    );
     expect(() => parseTokenFromUri(uri({ v: "2", serial: "" }))).toThrow(
       InvalidUrlError,
     );
