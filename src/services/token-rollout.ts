@@ -51,16 +51,6 @@ async function sendPublicKeyToServer(
   publicKey: string,
   fcmToken: string,
 ): Promise<Response> {
-  console.log(
-    `Sending public key to server for token ${token.id} at ${token.callbackUrl} with payload:`,
-    {
-      enrollment_credential: token.enrollmentCredential,
-      serial: token.id,
-      fbtoken: fcmToken,
-      pubkey: publicKey,
-    },
-  );
-
   const response = await fetch(token.callbackUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -122,7 +112,6 @@ export async function performTokenRollout(
     if (!fbToken) {
       throw new Error("Failed to retrieve FCM token");
     }
-    console.log(`Retrieved FCM token for token ${id}: ${fbToken}`);
 
     // Step 1: Generate RSA key pair
     currentStep = PushTokenRolloutState.RSAKeyGeneration;
