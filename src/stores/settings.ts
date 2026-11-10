@@ -29,7 +29,6 @@ type PersistedSettings = Pick<
   SettingsState,
   | "crashReportsEnabled"
   | "hapticsEnabled"
-  | "hapticsEnabled"
   | "hasCompletedOnboarding"
   | "themePreference"
 >;

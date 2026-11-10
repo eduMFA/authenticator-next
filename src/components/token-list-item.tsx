@@ -249,15 +249,16 @@ const TokenListItemContent = memo(function TokenListItemContent({
                 </View>
               ) : null}
             </View>
-            {token.issuer && (
+            {token.issuer ? (
               <ThemedText
                 fontSize={Typography.fontSize14}
                 fontWeight="medium"
                 themeColor="textSecondary"
+                numberOfLines={1}
               >
                 {token.issuer}
               </ThemedText>
-            )}
+            ) : null}
           </View>
         </View>
       </BlurTargetView>

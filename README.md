@@ -2,6 +2,10 @@
 
 This app is the client-side implementation of eduMFA's [`edupush` token type](https://edumfa.readthedocs.io/en/latest/tokens/tokentypes/edupush.html). It enrolls push tokens and lets users approve or deny sign-in requests from their eduMFA server.
 
+## Enrollment TTL
+
+Enrollment TTL is measured from scanning the QR; the QR does not contain the backend's creation timestamp. Previously saved pending tokens start their local enrollment timer on their first rollout after upgrading.
+
 ## Get started
 
 1. Install dependencies
