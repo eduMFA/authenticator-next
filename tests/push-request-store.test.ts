@@ -60,6 +60,18 @@ test("expires pending requests at age boundary while preserving recent and handl
   expect(store.getPendingPushRequests()).toEqual([]);
   expect(usePushRequestStore.getState().pushRequests).toHaveLength(3);
 });
+test("keeps dismissed requests out of the popup queue when received again", () => {
+  const store = usePushRequestStore.getState();
+  store.addPushRequest(request);
+  store.addPushRequest({ ...request, id: "next", nonce: "next" });
+
+  store.updatePushRequestStatus(request.id, Status.Dismissed);
+
+  expect(store.addPushRequest({ ...request, id: "polled" })).toBe(false);
+  expect(store.getPendingPushRequests().map((entry) => entry.id)).toEqual([
+    "next",
+  ]);
+});
 test("persists requests and restores them on hydration", async () => {
   usePushRequestStore.getState().addPushRequest(request);
   // Bypass the action to simulate loss of in-memory state without writing storage.

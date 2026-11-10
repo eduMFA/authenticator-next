@@ -7,7 +7,9 @@ import {
 import { usePushRequestStore } from "@/stores/push-request";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
+import { Alert } from "react-native";
+import { useLingui } from "@lingui/react/macro";
 import { PushRequestPopup } from "./push-request-popup";
 
 /**
@@ -15,45 +17,53 @@ import { PushRequestPopup } from "./push-request-popup";
  * Supports queuing multiple requests and animates between them.
  */
 export function NotificationHandler() {
+  const { t } = useLingui();
   const { tokens } = useToken();
   const { pushRequests, updatePushRequestStatus } = usePushRequestStore();
+  const responding = useRef(new Set<string>());
 
   const handleRequest = useCallback(
-    async (request: PushRequest): Promise<boolean> => {
-      const token = findTokenForPushRequest(request, tokens);
-      if (!token) {
-        console.log("Token not found for push request:", request.serial);
-        return false;
+    async (request: PushRequest) => {
+      const { getPushRequestById } = usePushRequestStore.getState();
+      if (
+        responding.current.has(request.id) ||
+        getPushRequestById(request.id)?.status !== PushRequestStatus.Pending
+      ) {
+        return;
       }
 
-      const result = await handlePushAuthRequest(request, token);
-      return result.success;
+      responding.current.add(request.id);
+      try {
+        const token = findTokenForPushRequest(request, tokens);
+        const result = token && (await handlePushAuthRequest(request, token));
+        if (result?.success) {
+          updatePushRequestStatus(request.id, request.status);
+        } else if (
+          getPushRequestById(request.id)?.status === PushRequestStatus.Pending
+        ) {
+          updatePushRequestStatus(request.id, PushRequestStatus.Dismissed);
+          Alert.alert(
+            t`Response failed`,
+            t`We couldn’t confirm your response. Check your connection, then start a new sign-in.`,
+          );
+        }
+      } finally {
+        responding.current.delete(request.id);
+      }
     },
-    [tokens],
+    [t, tokens, updatePushRequestStatus],
   );
 
   useNotifications(async (action, pushRequest) => {
     console.log("User action:", action, pushRequest);
 
-    // Handle the user's response from notification quick actions
-    if (action === "ACCEPT") {
-      console.log("User accepted the push authentication");
-      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Accepted);
-      void handleRequest({
-        ...pushRequest,
-        status: PushRequestStatus.Accepted,
-      });
-    } else if (action === "DECLINE") {
-      console.log("User declined the push authentication");
-      updatePushRequestStatus(pushRequest.id, PushRequestStatus.Declined);
-      void handleRequest({
-        ...pushRequest,
-        status: PushRequestStatus.Declined,
-      });
-    } else if (action === "TAP") {
-      console.log("User tapped the notification");
-      // Navigate to the appropriate screen or let the popup handle it
-    }
+    if (action === "TAP") return;
+
+    const status =
+      action === "ACCEPT"
+        ? PushRequestStatus.Accepted
+        : PushRequestStatus.Declined;
+    await handleRequest({ ...pushRequest, status });
   });
 
   return <PushRequestPopup requests={pushRequests} onAction={handleRequest} />;

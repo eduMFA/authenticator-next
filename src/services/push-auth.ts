@@ -9,6 +9,9 @@ import {
 } from "@/utils/haptics";
 import { signMessage } from "@/utils/rsa";
 
+const responding = new Set<string>();
+const PUSH_RESPONSE_TIMEOUT_MS = 10_000;
+
 export interface PushAuthResponse {
   success: boolean;
   error?: Error;
@@ -53,11 +56,13 @@ async function sendPushAuthToServer(
   serial: string,
   signature: string,
   isDeclined: boolean,
+  signal: AbortSignal,
   _sslVerify: boolean = true,
 ): Promise<Response> {
   // TODO: Implement SSL verification toggle based on token settings
   const response = await fetch(callbackUrl, {
     method: "POST",
+    signal,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       nonce,
@@ -78,7 +83,17 @@ export async function handlePushAuthRequest(
   token: PushToken,
 ): Promise<PushAuthResponse> {
   const isDeclined = request.status === PushRequestStatus.Declined;
+  const responseId = `${token.id}|${request.nonce}`;
+  if (request.serial !== token.id || responding.has(responseId)) {
+    return {
+      success: false,
+      error: new Error("Invalid or duplicate response."),
+    };
+  }
+  responding.add(responseId);
 
+  const controller = new AbortController();
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   try {
     // Build and sign the message
     const message = buildSignatureMessage(
@@ -91,12 +106,14 @@ export async function handlePushAuthRequest(
     const signature = await signPushAuthMessage(message, token.id);
 
     // Send to server
+    timeout = setTimeout(() => controller.abort(), PUSH_RESPONSE_TIMEOUT_MS);
     const response = await sendPushAuthToServer(
       token.callbackUrl,
       request.nonce,
       token.id,
       signature,
       isDeclined,
+      controller.signal,
       token.sslVerify,
     );
 
@@ -112,6 +129,15 @@ export async function handlePushAuthRequest(
       };
     }
 
+    const body: { result?: { status?: boolean; value?: boolean } } =
+      await response.json();
+    if (body.result?.status !== true || body.result.value !== true) {
+      return {
+        success: false,
+        error: new Error("The server did not accept this response."),
+      };
+    }
+
     // Provide haptic feedback
     if (isDeclined) {
       playNotificationWarningHaptic();
@@ -122,10 +148,19 @@ export async function handlePushAuthRequest(
     return { success: true };
   } catch (error) {
     console.error("Push auth handling failed:", error);
+    if (controller.signal.aborted) {
+      return {
+        success: false,
+        error: new Error("The server did not respond in time."),
+      };
+    }
     return {
       success: false,
       error: error instanceof Error ? error : new Error(String(error)),
     };
+  } finally {
+    clearTimeout(timeout);
+    responding.delete(responseId);
   }
 }
 

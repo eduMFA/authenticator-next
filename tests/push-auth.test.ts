@@ -21,8 +21,20 @@ const fetchMock = jest.fn<
 >();
 beforeEach(() => {
   globalThis.fetch = fetchMock;
-  fetchMock.mockReset().mockResolvedValue(response());
+  fetchMock
+    .mockReset()
+    .mockResolvedValue(
+      response(200, { result: { status: true, value: true } }),
+    );
   jest.mocked(signMessage).mockReset().mockResolvedValue("Zg==");
+});
+
+test("does not treat HTTP 200 with a rejected signature as approval", async () => {
+  fetchMock.mockResolvedValue(
+    response(200, { result: { status: true, value: false } }),
+  );
+  expect((await handlePushAuthRequest(request, token)).success).toBe(false);
+  expect(playNotificationSuccessHaptic).not.toHaveBeenCalled();
 });
 
 test.each([PushRequestStatus.Accepted, PushRequestStatus.Declined])(
@@ -39,6 +51,7 @@ test.each([PushRequestStatus.Accepted, PushRequestStatus.Declined])(
     );
     expect(fetchMock).toHaveBeenCalledWith(token.callbackUrl, {
       method: "POST",
+      signal: expect.any(AbortSignal),
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         nonce: "nonce",
@@ -77,6 +90,31 @@ test("does not submit if signing fails", async () => {
   jest.mocked(signMessage).mockRejectedValue(new Error("key unavailable"));
   expect((await handlePushAuthRequest(request, token)).success).toBe(false);
   expect(fetchMock).not.toHaveBeenCalled();
+});
+test("aborts an unresponsive server and allows a later response attempt", async () => {
+  jest.useFakeTimers();
+  try {
+    fetchMock.mockImplementationOnce((_url, options) => {
+      const signal = options?.signal;
+      if (!signal) throw new Error("Missing abort signal");
+      return new Promise((_resolve, reject) => {
+        signal.addEventListener("abort", () => reject(new Error("Aborted")));
+      });
+    });
+
+    const pendingResponse = handlePushAuthRequest(request, token);
+    await jest.advanceTimersByTimeAsync(10_000);
+    await expect(pendingResponse).resolves.toEqual({
+      success: false,
+      error: new Error("The server did not respond in time."),
+    });
+    expect(playNotificationSuccessHaptic).not.toHaveBeenCalled();
+    await expect(handlePushAuthRequest(request, token)).resolves.toEqual({
+      success: true,
+    });
+  } finally {
+    jest.useRealTimers();
+  }
 });
 test("matches serial and handles unknown tokens", () => {
   expect(

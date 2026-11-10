@@ -34,24 +34,32 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type PushRequestPopupProps = {
   requests: PushRequest[];
-  onAction: (request: PushRequest) => void;
+  onAction: (request: PushRequest) => Promise<void>;
 };
 
 export function PushRequestPopup({
   requests,
   onAction,
 }: PushRequestPopupProps) {
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+  const [submittingRequestId, setSubmittingRequestId] = useState<string | null>(
+    null,
+  );
   const colorScheme = useColorScheme();
   const { updatePushRequestStatus } = usePushRequestStore();
   const pendingRequests = requests.filter(
     (request) => request.status === PushRequestStatus.Pending,
   );
   const currentRequest = pendingRequests[0];
+  const isSubmitting = submittingRequestId === currentRequest?.id;
+
+  const handleDismiss = useCallback(() => {
+    if (!currentRequest) return;
+    updatePushRequestStatus(currentRequest.id, PushRequestStatus.Dismissed);
+  }, [currentRequest, updatePushRequestStatus]);
 
   const handleAction = useCallback(
-    (action: "accept" | "decline") => {
-      if (!currentRequest || isAnimatingOut) return;
+    async (action: "accept" | "decline") => {
+      if (!currentRequest || isSubmitting) return;
 
       const status =
         action === "accept"
@@ -64,15 +72,14 @@ export function PushRequestPopup({
         playImpactLightHaptic();
       }
 
-      setIsAnimatingOut(true);
-      setTimeout(() => {
-        const updatedRequest = { ...currentRequest, status };
-        updatePushRequestStatus(updatedRequest.id, status);
-        onAction(updatedRequest);
-        setIsAnimatingOut(false);
-      }, 200);
+      setSubmittingRequestId(currentRequest.id);
+      try {
+        await onAction({ ...currentRequest, status });
+      } finally {
+        setSubmittingRequestId((id) => (id === currentRequest.id ? null : id));
+      }
     },
-    [currentRequest, isAnimatingOut, onAction, updatePushRequestStatus],
+    [currentRequest, isSubmitting, onAction],
   );
 
   if (!currentRequest) return null;
@@ -83,7 +90,7 @@ export function PushRequestPopup({
       transparent
       animationType="none"
       statusBarTranslucent
-      onRequestClose={() => handleAction("decline")}
+      onRequestClose={handleDismiss}
     >
       <View style={styles.container}>
         <AnimatedBlurView
@@ -97,7 +104,7 @@ export function PushRequestPopup({
           request={currentRequest}
           totalPending={pendingRequests.length}
           onAction={handleAction}
-          isAnimatingOut={isAnimatingOut}
+          isSubmitting={isSubmitting}
         />
       </View>
     </Modal>
@@ -108,14 +115,14 @@ type PopupCardProps = {
   request: PushRequest;
   totalPending: number;
   onAction: (action: "accept" | "decline") => void;
-  isAnimatingOut: boolean;
+  isSubmitting: boolean;
 };
 
 function PopupCard({
   request,
   totalPending,
   onAction,
-  isAnimatingOut,
+  isSubmitting,
 }: PopupCardProps) {
   const { t } = useLingui();
   const theme = useTheme();
@@ -272,12 +279,12 @@ function PopupCard({
           <ActionButton
             label={t`Deny`}
             onPress={() => onAction("decline")}
-            disabled={isAnimatingOut}
+            disabled={isSubmitting}
           />
           <ActionButton
             label={t`Approve`}
             onPress={() => onAction("accept")}
-            disabled={isAnimatingOut}
+            disabled={isSubmitting}
           />
         </View>
       </ScrollView>

@@ -25,5 +25,6 @@ export enum PushRequestStatus {
   Pending = "pending",
   Accepted = "accepted",
   Declined = "declined",
+  Dismissed = "dismissed",
   Expired = "expired",
 }

@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:267
+#: src/components/push-request-popup.tsx:274
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
@@ -47,7 +47,7 @@ msgstr "Anonyme Berichte"
 msgid "Appearance"
 msgstr "Darstellung"
 
-#: src/components/push-request-popup.tsx:278
+#: src/components/push-request-popup.tsx:285
 msgid "Approve"
 msgstr "Freigeben"
 
@@ -63,7 +63,7 @@ msgstr "Automatisch"
 msgid "Bug report"
 msgstr "Fehlerbericht"
 
-#: src/components/feedback-form.android.tsx:213
+#: src/components/feedback-form.android.tsx:254
 msgid "By sending feedback, you agree to the processing of your data under our"
 msgstr "Mit dem Senden des Feedbacks akzeptierst du die Verarbeitung deiner Daten gemäß unserer"
 
@@ -91,12 +91,12 @@ msgstr "App-Sprache in den Systemeinstellungen ändern"
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
 
-#: src/components/feedback-form.android.tsx:95
+#: src/components/feedback-form.android.tsx:118
 #: src/components/feedback-form.ios.tsx:84
 msgid "Close"
 msgstr "Schließen"
 
-#: src/components/feedback-form.android.tsx:174
+#: src/components/feedback-form.android.tsx:215
 #: src/components/feedback-form.ios.tsx:130
 msgid "Contact (optional)"
 msgstr "Kontakt (optional)"
@@ -130,7 +130,7 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/components/push-request-popup.tsx:273
+#: src/components/push-request-popup.tsx:280
 msgid "Deny"
 msgstr "Ablehnen"
 
@@ -146,7 +146,7 @@ msgstr "Schließen"
 msgid "Don't share anonymous reports"
 msgstr "Anonyme Berichte nicht teilen"
 
-#: src/components/feedback-form.android.tsx:80
+#: src/components/feedback-form.android.tsx:103
 #: src/components/feedback-form.ios.tsx:55
 msgid "Done"
 msgstr "Fertig"
@@ -164,7 +164,7 @@ msgstr "Token bearbeiten"
 msgid "eduMFA Push uses {licenseCount} open-source packages. Package details are generated from the installed production dependency graph."
 msgstr "eduMFA Push verwendet {licenseCount} Open-Source-Pakete. Die Paketdetails werden aus den installierten Produktionsabhängigkeiten generiert."
 
-#: src/components/feedback-form.android.tsx:199
+#: src/components/feedback-form.android.tsx:240
 #: src/components/feedback-form.ios.tsx:147
 msgid "Email (optional)"
 msgstr "E-Mail (optional)"
@@ -219,13 +219,13 @@ msgstr "Feedback"
 msgid "Feedback could not be sent. Please try again."
 msgstr "Feedback konnte nicht gesendet werden. Bitte versuche es erneut."
 
-#: src/components/feedback-form.android.tsx:102
+#: src/components/feedback-form.android.tsx:125
 #: src/components/feedback-form.ios.tsx:91
 msgid "Feedback details"
 msgstr "Feedback-Details"
 
-#: src/components/feedback-form.android.tsx:115
-#: src/components/feedback-form.android.tsx:119
+#: src/components/feedback-form.android.tsx:141
+#: src/components/feedback-form.android.tsx:145
 #: src/components/feedback-form.ios.tsx:96
 msgid "Feedback type"
 msgstr "Feedback-Typ"
@@ -273,7 +273,7 @@ msgstr "Teile Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern
 msgid "Help improve the app"
 msgstr "Hilf, die App zu verbessern"
 
-#: src/components/feedback-form.android.tsx:165
+#: src/components/feedback-form.android.tsx:206
 #: src/components/feedback-form.ios.tsx:124
 msgid "Include logs"
 msgstr "Protokolle einschließen"
@@ -316,17 +316,17 @@ msgstr "Lizenzinformationen sind nicht verfügbar."
 msgid "Light"
 msgstr "Hell"
 
-#: src/components/feedback-form.android.tsx:172
+#: src/components/feedback-form.android.tsx:213
 #: src/components/feedback-form.ios.tsx:125
 msgid "Logs provide more context and help us find the cause of the issue."
 msgstr "Protokolle liefern mehr Kontext und helfen uns, die Ursache des Problems zu finden."
 
-#: src/components/feedback-form.android.tsx:185
+#: src/components/feedback-form.android.tsx:226
 #: src/components/feedback-form.ios.tsx:139
 msgid "Name (optional)"
 msgstr "Name (optional)"
 
-#: src/components/feedback-form.android.tsx:176
+#: src/components/feedback-form.android.tsx:217
 #: src/components/feedback-form.ios.tsx:133
 msgid "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
 msgstr "Name und E-Mail-Adresse sind optional. Sie ermöglichen es uns, dich bei Rückfragen zu deinem Feedback zu kontaktieren."
@@ -363,7 +363,7 @@ msgstr "Benachrichtigungen sind deaktiviert"
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
 
-#: src/components/push-request-popup.tsx:257
+#: src/components/push-request-popup.tsx:264
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
@@ -409,7 +409,7 @@ msgid "Privacy"
 msgstr "Datenschutz"
 
 #: src/app/settings/index.tsx:149
-#: src/components/feedback-form.android.tsx:214
+#: src/components/feedback-form.android.tsx:255
 msgid "Privacy policy"
 msgstr "Datenschutzerklärung"
 
@@ -443,6 +443,10 @@ msgstr "Öffentlicher Schlüssel wird registriert"
 msgid "Registration failed"
 msgstr "Registrierung fehlgeschlagen"
 
+#: src/components/notification-handler.tsx:46
+msgid "Response failed"
+msgstr "Antwort fehlgeschlagen"
+
 #: src/components/token-detail/token-detail-utils.ts:87
 msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
@@ -458,7 +462,7 @@ msgstr "Rollout erneut versuchen"
 msgid "Review eduMFA Push"
 msgstr "eduMFA Push bewerten"
 
-#: src/components/push-request-popup.tsx:196
+#: src/components/push-request-popup.tsx:203
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 
@@ -489,7 +493,7 @@ msgid "Send anonymized crash and error diagnostics"
 msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
 
 #: src/app/settings/feedback.tsx:23
-#: src/components/feedback-form.android.tsx:91
+#: src/components/feedback-form.android.tsx:114
 #: src/components/feedback-form.ios.tsx:80
 msgid "Send feedback"
 msgstr "Feedback senden"
@@ -522,12 +526,12 @@ msgstr "Anmeldeanfragen können unbemerkt bleiben"
 msgid "Status"
 msgstr "Status"
 
-#: src/components/feedback-form.android.tsx:217
+#: src/components/feedback-form.android.tsx:258
 #: src/components/feedback-form.ios.tsx:191
 msgid "Submit feedback"
 msgstr "Feedback senden"
 
-#: src/components/feedback-form.android.tsx:74
+#: src/components/feedback-form.android.tsx:97
 #: src/components/feedback-form.ios.tsx:51
 msgid "Thank you for your feedback"
 msgstr "Vielen Dank für dein Feedback"
@@ -576,6 +580,10 @@ msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Pu
 msgid "Token"
 msgstr "Token"
 
+#: src/components/notification-handler.tsx:34
+#~ msgid "Try again."
+#~ msgstr "Versuche es erneut."
+
 #: src/app/index.tsx:723
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
@@ -596,6 +604,10 @@ msgstr "QR-Code hochladen"
 msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
 
+#: src/components/notification-handler.tsx:47
+msgid "We couldn’t confirm your response. Check your connection, then start a new sign-in."
+msgstr "Wir konnten deine Antwort nicht bestätigen. Prüfe deine Verbindung und starte dann eine neue Anmeldung."
+
 #: src/app/settings/index.tsx:164
 msgid "Website"
 msgstr "Webseite"
@@ -608,7 +620,7 @@ msgstr "Willkommen"
 msgid "Welcome to <0/>"
 msgstr "Willkommen bei <0/>"
 
-#: src/components/feedback-form.android.tsx:155
+#: src/components/feedback-form.android.tsx:196
 #: src/components/feedback-form.ios.tsx:111
 msgid "What would you like us to know?"
 msgstr "Was möchtest du uns mitteilen?"
@@ -621,7 +633,7 @@ msgstr "Du kannst jetzt Anmeldeanfragen empfangen und freigeben."
 msgid "Your choice"
 msgstr "Deine Wahl"
 
-#: src/components/feedback-form.android.tsx:77
+#: src/components/feedback-form.android.tsx:100
 #: src/components/feedback-form.ios.tsx:53
 msgid "Your feedback was submitted successfully."
 msgstr "Dein Feedback wurde erfolgreich übermittelt."
