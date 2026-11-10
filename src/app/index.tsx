@@ -89,8 +89,13 @@ export default function Tokens() {
   const { isPolling, pollChallenges } = useChallengePolling();
   const {
     hasPermission: hasNotificationPermission,
+    permissionStatus: notificationPermissionStatus,
     isInitialized: isNotificationInitialized,
+    needsPermissionRequest,
     pushCapability,
+    registrationStatus,
+    checkPermissions,
+    requestPermissions,
   } = useNotificationStatus();
   const [isManualRefreshPolling, setIsManualRefreshPolling] = useState(false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -139,10 +144,26 @@ export default function Tokens() {
   const searchQuery = searchText.toLowerCase();
   const emptyStateButtonWidth = Math.min(320, width - Spacing.xl * 2);
   const showToolbarAddButton = tokens.length > 0;
+  const pushUnavailable =
+    pushCapability !== null && pushCapability !== "supported";
+  const notificationPermissionDenied =
+    notificationPermissionStatus !== null && !hasNotificationPermission;
+  const showRegistrationFailure =
+    !notificationPermissionDenied && registrationStatus === "failed";
+  const canRequestPermission =
+    needsPermissionRequest &&
+    notificationPermissionStatus?.canAskAgain !== false;
   const showNotificationNotice =
     isNotificationInitialized &&
-    (!hasNotificationPermission ||
-      pushCapability === "google-play-services-unavailable");
+    !pushUnavailable &&
+    (canRequestPermission ||
+      notificationPermissionDenied ||
+      showRegistrationFailure);
+  const handleRequestNotificationPermission = useCallback(() => {
+    requestPermissions().catch((error: unknown) => {
+      console.warn("Could not request notification permission.", error);
+    });
+  }, [requestPermissions]);
   const handleOpenNotificationSettings = useCallback(() => {
     Linking.openSettings().catch((error: unknown) => {
       if (__DEV__) {
@@ -745,27 +766,33 @@ export default function Tokens() {
             showNotificationNotice && !searchQuery && !isSearchFocused ? (
               <View style={styles.notificationNotice}>
                 <Pressable
-                  disabled={
-                    pushCapability === "google-play-services-unavailable"
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    showRegistrationFailure
+                      ? t`Try again`
+                      : canRequestPermission
+                        ? t`Enable notifications`
+                        : t`Open notification settings`
                   }
-                  onPress={handleOpenNotificationSettings}
+                  onPress={
+                    showRegistrationFailure
+                      ? () => void checkPermissions()
+                      : canRequestPermission
+                        ? handleRequestNotificationPermission
+                        : handleOpenNotificationSettings
+                  }
                 >
                   <StatusCard
                     variant="danger"
                     title={
-                      pushCapability === "google-play-services-unavailable"
-                        ? t`Pull to refresh for requests`
+                      showRegistrationFailure
+                        ? t`Notifications aren't ready yet`
                         : t`Notifications are disabled`
                     }
                     description={
-                      pushCapability === "google-play-services-unavailable"
-                        ? t`Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests.`
+                      showRegistrationFailure
+                        ? t`Notifications couldn't be set up. Check your connection and device settings, then tap to try again. You can still open the app to check for requests.`
                         : t`Enable notifications to receive push approval requests on this device.`
-                    }
-                    icon={
-                      pushCapability === "google-play-services-unavailable"
-                        ? { ios: "arrow.down.circle.fill", android: "refresh" }
-                        : undefined
                     }
                   />
                 </Pressable>

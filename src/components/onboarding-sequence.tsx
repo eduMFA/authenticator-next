@@ -75,10 +75,11 @@ export function OnboardingSequence() {
   const { t } = useLingui();
   const {
     checkPermissions: checkNotificationPermission,
-    getFcmToken,
     hasPermission: hasNotificationPermission,
+    needsPermissionRequest,
     permissionStatus: notificationPermissionStatus,
     pushCapability,
+    registrationStatus,
     requestPermissions: requestNotificationPermission,
   } = useNotificationStatus();
   const completeOnboarding = useSettingsStore(
@@ -101,6 +102,8 @@ export function OnboardingSequence() {
     (width - Spacing.xl * 4) / VISUAL_CONTENT_WIDTH,
   );
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
+  const pushUnavailable =
+    pushCapability !== null && pushCapability !== "supported";
   const steps = useMemo<OnboardingStep[]>(
     () => [
       {
@@ -117,8 +120,12 @@ export function OnboardingSequence() {
       {
         id: "notifications",
         kicker: t`Notifications`,
-        title: t`Never miss a sign-in request`,
-        body: t`Get notified when a sign-in needs your approval.`,
+        title: pushUnavailable
+          ? t`Approve sign-ins in the app`
+          : t`Never miss a sign-in request`,
+        body: pushUnavailable
+          ? t`You can still approve sign-ins on this device, even without push notifications.`
+          : t`Get notified when a sign-in needs your approval.`,
         accent: onboardingStepAccents[1],
       },
       {
@@ -129,7 +136,7 @@ export function OnboardingSequence() {
         accent: onboardingStepAccents[2],
       },
     ],
-    [t],
+    [t, pushUnavailable],
   );
   const stepAccentColors = useMemo(
     () => steps.map((item) => item.accent[colorScheme]),
@@ -140,6 +147,7 @@ export function OnboardingSequence() {
   const screenProgress = useSharedValue(0);
   const shouldBlockNotificationAdvance =
     stepIndex === 1 &&
+    (pushCapability === null || pushCapability === "supported") &&
     isNotificationPermissionPending(notificationPermissionStatus);
   const slideDistance = width + ONBOARDING_PANEL_GAP;
 
@@ -170,11 +178,10 @@ export function OnboardingSequence() {
 
     try {
       await checkNotificationPermission();
-      await getFcmToken();
     } finally {
       setIsCheckingPermission(false);
     }
-  }, [checkNotificationPermission, getFcmToken, stepIndex]);
+  }, [checkNotificationPermission, stepIndex]);
 
   const panResponder = useMemo(
     () =>
@@ -315,7 +322,6 @@ export function OnboardingSequence() {
 
     try {
       const result = await requestNotificationPermission();
-      await getFcmToken();
 
       if (isNotificationPermissionEnabled(result)) {
         playHaptic((presets) => presets.System.notificationSuccess());
@@ -330,7 +336,7 @@ export function OnboardingSequence() {
     } finally {
       setIsRequestingPermission(false);
     }
-  }, [getFcmToken, requestNotificationPermission]);
+  }, [requestNotificationPermission]);
 
   const handleOpenNotificationSettings = useCallback(() => {
     playHaptic((presets) => presets.System.impactMedium());
@@ -355,14 +361,17 @@ export function OnboardingSequence() {
           accentColor={contentAccentColor}
           isCheckingPermission={isCheckingPermission}
           isRequestingPermission={isRequestingPermission}
+          needsPermissionRequest={needsPermissionRequest}
           onContinue={handleContinue}
           onEnableNotifications={handleEnableNotifications}
           onOpenSettings={handleOpenNotificationSettings}
+          onRetryRegistration={() => void refreshNotificationStatus()}
           onSkip={handleSkipNotifications}
           hasNotificationPermission={hasNotificationPermission}
           permissionStatus={notificationPermissionStatus}
           scale={layoutScale}
           pushCapability={pushCapability}
+          registrationStatus={registrationStatus}
           textColor={textColor}
         />
       );
@@ -465,6 +474,7 @@ export function OnboardingSequence() {
                             <VisualCardContent
                               accentColor={contentAccentColor}
                               index={contentStepIndex}
+                              pushUnavailable={pushUnavailable}
                             />
                           )}
                         </View>

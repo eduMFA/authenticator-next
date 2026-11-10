@@ -4,7 +4,6 @@ import { ThemedText } from "@/components/themed-text";
 import { Typography, useInterFonts } from "@/constants/theme";
 import { useChallengePolling } from "@/hooks/use-challenge-polling";
 import { useHandleTokenUri } from "@/hooks/use-handle-token-uri";
-import { useNotificationStatus } from "@/hooks/use-notifications";
 import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore } from "@/stores/settings";
 import { useTokenStore } from "@/stores/token";
@@ -55,8 +54,12 @@ function RootLayoutContent() {
   const colorScheme = (useColorScheme() ?? "light") as "light" | "dark";
   const appState = useRef(AppState.currentState);
   const handledUrlsRef = useRef<Set<string>>(new Set());
-  const { checkPermissions, initialize: initializeNotifications } =
-    useNotificationStatus();
+  const checkPermissions = useNotificationStore(
+    (state) => state.checkPermissions,
+  );
+  const initializeNotifications = useNotificationStore(
+    (state) => state.initialize,
+  );
   const startPendingRollouts = useTokenStore(
     (state) => state.startPendingRollouts,
   );
@@ -91,18 +94,14 @@ function RootLayoutContent() {
   const statusBarStyle =
     colorScheme === "dark" ? "light-content" : "dark-content";
 
-  // Initialize notifications once at app startup, then start pending rollouts and poll for challenges
   useEffect(() => {
     if (!hasCompletedOnboarding) {
       return;
     }
 
-    initializeNotifications().then(() => {
-      // Start pending rollouts after notifications are initialized
-      startPendingRollouts();
-      // Poll for any pending challenges when the app opens
-      pollChallenges();
-    });
+    void initializeNotifications();
+    startPendingRollouts();
+    void pollChallenges();
   }, [
     hasCompletedOnboarding,
     initializeNotifications,

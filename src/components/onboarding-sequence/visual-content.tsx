@@ -9,6 +9,7 @@ const logoSource = require("../../../assets/app-icons/edumfa.icon/Assets/logo.sv
 type VisualCardContentProps = {
   accentColor: string;
   index: number;
+  pushUnavailable?: boolean;
 };
 
 type WelcomeVisualContentProps = {
@@ -31,6 +32,7 @@ export function WelcomeVisualContent({ logoColor }: WelcomeVisualContentProps) {
 export function VisualCardContent({
   accentColor,
   index,
+  pushUnavailable = false,
 }: VisualCardContentProps) {
   const accentStyle = useMemo(
     () => ({ backgroundColor: accentColor }),
@@ -49,7 +51,11 @@ export function VisualCardContent({
           <View style={[styles.notificationBanner, borderStyle]}>
             <View style={[styles.notificationIconPlate, accentStyle]}>
               <SymbolView
-                name={{ ios: "bell.fill", android: "notifications" }}
+                name={
+                  pushUnavailable
+                    ? { ios: "arrow.clockwise", android: "refresh" }
+                    : { ios: "bell.fill", android: "notifications" }
+                }
                 size={22}
                 tintColor={StaticColors.white}
               />

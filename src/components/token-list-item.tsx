@@ -23,6 +23,7 @@ import {
 
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
+import { useTokenPollOnly } from "@/hooks/use-token-poll-only";
 import { useLingui } from "@lingui/react/macro";
 import Animated, {
   Easing,
@@ -36,6 +37,7 @@ import Animated, {
 import { TokenActionsMenu } from "./token-actions-menu";
 import { ThemedText } from "./themed-text";
 import { TokenImage } from "./token-image";
+import { PollOnlyIcon } from "./poll-only-icon";
 
 // Animation timing configuration
 const PROGRESS_ANIMATION_DURATION = 500;
@@ -64,6 +66,8 @@ export const TokenListItem = memo(function TokenListItem({
   isRolloutFinished,
   token,
 }: TokenListItemProps) {
+  const { t } = useLingui();
+  const pollOnly = useTokenPollOnly(token);
   const [actionsMenuAnchor, setActionsMenuAnchor] =
     useState<TokenActionsMenuAnchor | null>(null);
   const [isActionsMenuExpanded, setIsActionsMenuExpanded] = useState(false);
@@ -109,12 +113,17 @@ export const TokenListItem = memo(function TokenListItem({
               token.issuer ? `${token.label}, ${token.issuer}` : token.label
             }
             accessibilityRole="button"
+            accessibilityHint={
+              pollOnly
+                ? t`Poll only. Open the app or pull down to check for requests.`
+                : undefined
+            }
             disabled={!isRolloutFinished}
             onLayout={updateActionsMenuAnchor}
             onLongPress={Platform.OS === "android" ? openActionsMenu : () => {}}
             style={styles.tokenCard}
           >
-            <TokenListItemContent token={token} />
+            <TokenListItemContent token={token} pollOnly={pollOnly} />
           </Pressable>
         </Link.Trigger>
         {Platform.OS === "ios" ? (
@@ -147,8 +156,10 @@ export const TokenListItem = memo(function TokenListItem({
 
 const TokenListItemContent = memo(function TokenListItemContent({
   token,
+  pollOnly,
 }: {
   token: PushToken;
+  pollOnly: boolean;
 }) {
   const { t } = useLingui();
   const theme = useTheme();
@@ -231,6 +242,11 @@ const TokenListItemContent = memo(function TokenListItemContent({
               >
                 {token.label}
               </ThemedText>
+              {pollOnly ? (
+                <View style={styles.pollOnlyIcon}>
+                  <PollOnlyIcon />
+                </View>
+              ) : null}
               {isRefreshFailed ? (
                 <View
                   accessibilityLabel={t`Refresh failed`}
@@ -288,6 +304,9 @@ const TokenListItemContent = memo(function TokenListItemContent({
 });
 
 const styles = StyleSheet.create({
+  pollOnlyIcon: {
+    marginLeft: Spacing.xs,
+  },
   progressBar: {
     flex: 1,
     opacity: 0.6,

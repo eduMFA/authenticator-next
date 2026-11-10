@@ -25,13 +25,13 @@ msgstr "About"
 msgid "Accept"
 msgstr "Accept"
 
-#: src/app/index.tsx:590
-#: src/app/index.tsx:653
-#: src/app/index.tsx:655
+#: src/app/index.tsx:611
+#: src/app/index.tsx:674
+#: src/app/index.tsx:676
 msgid "Add token"
 msgstr "Add token"
 
-#: src/app/index.tsx:625
+#: src/app/index.tsx:646
 msgid "Add your first eduMFA Push token to approve sign-ins securely from this device."
 msgstr "Add your first eduMFA Push token to approve sign-ins securely from this device."
 
@@ -39,7 +39,7 @@ msgstr "Add your first eduMFA Push token to approve sign-ins securely from this 
 msgid "Allow camera access"
 msgstr "Allow camera access"
 
-#: src/components/onboarding-sequence/step-actions.tsx:177
+#: src/components/onboarding-sequence/step-actions.tsx:250
 msgid "Anonymous reports"
 msgstr "Anonymous reports"
 
@@ -50,6 +50,10 @@ msgstr "Appearance"
 #: src/components/push-request-popup.tsx:285
 msgid "Approve"
 msgstr "Approve"
+
+#: src/components/onboarding-sequence.tsx:124
+msgid "Approve sign-ins in the app"
+msgstr "Approve sign-ins in the app"
 
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
@@ -87,7 +91,11 @@ msgstr "Cancel"
 msgid "Change the app language in system settings"
 msgstr "Change the app language in system settings"
 
-#: src/components/onboarding-sequence.tsx:128
+#: src/components/onboarding-sequence/step-actions.tsx:96
+msgid "Check requests in the app"
+msgstr "Check requests in the app"
+
+#: src/components/onboarding-sequence.tsx:135
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Choose whether to share anonymous crash and error reports."
 
@@ -101,8 +109,8 @@ msgstr "Close"
 msgid "Contact (optional)"
 msgstr "Contact (optional)"
 
-#: src/components/onboarding-sequence/step-actions.tsx:85
-#: src/components/onboarding-sequence/step-actions.tsx:106
+#: src/components/onboarding-sequence/step-actions.tsx:103
+#: src/components/onboarding-sequence/step-actions.tsx:173
 #: src/components/token-add/camera-permission-splash.tsx:64
 msgid "Continue"
 msgstr "Continue"
@@ -120,7 +128,7 @@ msgstr "Dark"
 msgid "Decline"
 msgstr "Decline"
 
-#: src/app/index.tsx:301
+#: src/app/index.tsx:322
 #: src/app/token/[tokenId].tsx:200
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -134,7 +142,7 @@ msgstr "Delete token"
 msgid "Deny"
 msgstr "Deny"
 
-#: src/components/token-detail/token-overview-content.tsx:165
+#: src/components/token-detail/token-overview-content.tsx:168
 msgid "Details"
 msgstr "Details"
 
@@ -142,7 +150,7 @@ msgstr "Details"
 msgid "Dismiss"
 msgstr "Dismiss"
 
-#: src/components/onboarding-sequence/step-actions.tsx:184
+#: src/components/onboarding-sequence/step-actions.tsx:257
 msgid "Don't share anonymous reports"
 msgstr "Don't share anonymous reports"
 
@@ -151,7 +159,7 @@ msgstr "Don't share anonymous reports"
 msgid "Done"
 msgstr "Done"
 
-#: src/app/index.tsx:287
+#: src/app/index.tsx:308
 #: src/app/token/[tokenId].tsx:192
 msgid "Edit"
 msgstr "Edit"
@@ -173,11 +181,12 @@ msgstr "Email (optional)"
 msgid "Enable camera access in Settings to scan QR codes."
 msgstr "Enable camera access in Settings to scan QR codes."
 
-#: src/components/onboarding-sequence/step-actions.tsx:147
+#: src/app/index.tsx:774
+#: src/components/onboarding-sequence/step-actions.tsx:214
 msgid "Enable notifications"
 msgstr "Enable notifications"
 
-#: src/app/index.tsx:763
+#: src/app/index.tsx:795
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Enable notifications to receive push approval requests on this device."
 
@@ -185,7 +194,7 @@ msgstr "Enable notifications to receive push approval requests on this device."
 msgid "Enrolled"
 msgstr "Enrolled"
 
-#: src/services/token-rollout.ts:116
+#: src/services/token-rollout.ts:106
 msgid "Enrollment expired. Scan a new enrollment QR code."
 msgstr "Enrollment expired. Scan a new enrollment QR code."
 
@@ -243,11 +252,11 @@ msgstr "General"
 msgid "Generating keys"
 msgstr "Generating keys"
 
-#: src/components/onboarding-sequence.tsx:121
+#: src/components/onboarding-sequence.tsx:128
 msgid "Get notified when a sign-in needs your approval."
 msgstr "Get notified when a sign-in needs your approval."
 
-#: src/components/onboarding-sequence.tsx:385
+#: src/components/onboarding-sequence.tsx:394
 msgid "Get started"
 msgstr "Get started"
 
@@ -255,21 +264,16 @@ msgstr "Get started"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: src/app/index.tsx:762
-#: src/components/onboarding-sequence/step-actions.tsx:75
-msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
-msgstr "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
-
 #: src/app/settings/index.tsx:108
 #: src/app/settings/index.tsx:114
 msgid "Haptics"
 msgstr "Haptics"
 
-#: src/components/onboarding-sequence/step-actions.tsx:173
+#: src/components/onboarding-sequence/step-actions.tsx:246
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 msgstr "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 
-#: src/components/onboarding-sequence.tsx:127
+#: src/components/onboarding-sequence.tsx:134
 msgid "Help improve the app"
 msgstr "Help improve the app"
 
@@ -278,7 +282,7 @@ msgstr "Help improve the app"
 msgid "Include logs"
 msgstr "Include logs"
 
-#: src/components/onboarding-sequence.tsx:114
+#: src/components/onboarding-sequence.tsx:117
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 msgstr "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 
@@ -300,7 +304,7 @@ msgstr "Label required"
 msgid "Language"
 msgstr "Language"
 
-#: src/components/token-detail/token-overview-content.tsx:157
+#: src/components/token-detail/token-overview-content.tsx:160
 msgid "Last failed"
 msgstr "Last failed"
 
@@ -331,7 +335,7 @@ msgstr "Name (optional)"
 msgid "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
 msgstr "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
 
-#: src/components/onboarding-sequence.tsx:120
+#: src/components/onboarding-sequence.tsx:125
 msgid "Never miss a sign-in request"
 msgstr "Never miss a sign-in request"
 
@@ -339,35 +343,52 @@ msgstr "Never miss a sign-in request"
 msgid "No QR code found"
 msgstr "No QR code found"
 
-#: src/app/index.tsx:716
+#: src/app/index.tsx:737
 msgid "No tokens found"
 msgstr "No tokens found"
 
-#: src/app/index.tsx:617
+#: src/app/index.tsx:638
 msgid "No tokens yet"
 msgstr "No tokens yet"
 
-#: src/components/onboarding-sequence/step-actions.tsx:133
+#: src/components/onboarding-sequence/step-actions.tsx:124
+#: src/components/onboarding-sequence/step-actions.tsx:152
+#: src/components/onboarding-sequence/step-actions.tsx:200
+#: src/components/onboarding-sequence/step-actions.tsx:220
 msgid "Not now"
 msgstr "Not now"
 
-#: src/components/onboarding-sequence.tsx:119
+#: src/components/onboarding-sequence.tsx:122
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/app/index.tsx:758
+#: src/app/index.tsx:790
 msgid "Notifications are disabled"
 msgstr "Notifications are disabled"
 
-#: src/components/onboarding-sequence/step-actions.tsx:99
+#: src/components/onboarding-sequence/step-actions.tsx:166
 msgid "Notifications are enabled"
 msgstr "Notifications are enabled"
+
+#: src/app/index.tsx:789
+#: src/components/onboarding-sequence/step-actions.tsx:136
+msgid "Notifications aren't ready yet"
+msgstr "Notifications aren't ready yet"
+
+#: src/app/index.tsx:794
+msgid "Notifications couldn't be set up. Check your connection and device settings, then tap to try again. You can still open the app to check for requests."
+msgstr "Notifications couldn't be set up. Check your connection and device settings, then tap to try again. You can still open the app to check for requests."
+
+#: src/components/onboarding-sequence/step-actions.tsx:137
+msgid "Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests."
+msgstr "Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests."
 
 #: src/components/push-request-popup.tsx:264
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Only approve if you started this sign-in. If you are unsure, deny it."
 
-#: src/components/onboarding-sequence/step-actions.tsx:127
+#: src/app/index.tsx:775
+#: src/components/onboarding-sequence/step-actions.tsx:194
 msgid "Open notification settings"
 msgstr "Open notification settings"
 
@@ -404,6 +425,15 @@ msgstr "Place the QR code inside the frame"
 msgid "Please describe your feedback."
 msgstr "Please describe your feedback."
 
+#: src/components/poll-only-icon.tsx:13
+#: src/components/token-detail/token-overview-content.tsx:186
+msgid "Poll only"
+msgstr "Poll only"
+
+#: src/components/token-list-item.tsx:118
+msgid "Poll only. Open the app or pull down to check for requests."
+msgstr "Poll only. Open the app or pull down to check for requests."
+
 #: src/app/settings/index.tsx:175
 msgid "Privacy"
 msgstr "Privacy"
@@ -417,21 +447,16 @@ msgstr "Privacy policy"
 msgid "Project website"
 msgstr "Project website"
 
-#: src/app/index.tsx:757
-#: src/components/onboarding-sequence/step-actions.tsx:79
-msgid "Pull to refresh for requests"
-msgstr "Pull to refresh for requests"
-
 #: src/components/token-add/upload-qr-code-button.tsx:70
 msgid "QR code scanner"
 msgstr "QR code scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:128
-#: src/components/token-list-item.tsx:236
+#: src/components/token-detail/token-overview-content.tsx:131
+#: src/components/token-list-item.tsx:252
 msgid "Refresh failed"
 msgstr "Refresh failed"
 
-#: src/app/index.tsx:779
+#: src/app/index.tsx:806
 msgid "Refreshing..."
 msgstr "Refreshing..."
 
@@ -443,6 +468,14 @@ msgstr "Registering public key"
 msgid "Registration failed"
 msgstr "Registration failed"
 
+#: src/components/token-detail/token-overview-content.tsx:178
+msgid "Request delivery"
+msgstr "Request delivery"
+
+#: src/components/token-detail/token-overview-content.tsx:194
+msgid "Requests are checked when you open the app or refresh the token list."
+msgstr "Requests are checked when you open the app or refresh the token list."
+
 #: src/components/notification-handler.tsx:46
 msgid "Response failed"
 msgstr "Response failed"
@@ -451,10 +484,10 @@ msgstr "Response failed"
 msgid "Response parsing failed"
 msgstr "Response parsing failed"
 
-#: src/app/index.tsx:281
-#: src/components/token-detail/token-overview-content.tsx:105
-#: src/components/token-detail/token-overview-content.tsx:115
-#: src/components/token-detail/token-overview-content.tsx:117
+#: src/app/index.tsx:302
+#: src/components/token-detail/token-overview-content.tsx:108
+#: src/components/token-detail/token-overview-content.tsx:118
+#: src/components/token-detail/token-overview-content.tsx:120
 msgid "Retry Rollout"
 msgstr "Retry Rollout"
 
@@ -466,14 +499,18 @@ msgstr "Review eduMFA Push"
 msgid "Review sign-in"
 msgstr "Review sign-in"
 
-#: src/components/token-list-item.tsx:213
+#: src/components/token-list-item.tsx:224
 msgid "Rolling out..."
 msgstr "Rolling out..."
 
 #: src/components/token-detail/token-detail-utils.ts:65
-#: src/components/token-list-item.tsx:213
+#: src/components/token-list-item.tsx:224
 msgid "Rollout Failed"
 msgstr "Rollout Failed"
+
+#: src/components/onboarding-sequence/step-actions.tsx:95
+msgid "Running in the iOS simulator"
+msgstr "Running in the iOS simulator"
 
 #: src/app/token/[tokenId].tsx:185
 msgid "Save"
@@ -483,8 +520,8 @@ msgstr "Save"
 msgid "Search Authenticator Apps"
 msgstr "Search Authenticator Apps"
 
-#: src/app/index.tsx:451
-#: src/app/index.tsx:522
+#: src/app/index.tsx:472
+#: src/app/index.tsx:543
 msgid "Search tokens"
 msgstr "Search tokens"
 
@@ -498,11 +535,11 @@ msgstr "Send anonymized crash and error diagnostics"
 msgid "Send feedback"
 msgstr "Send feedback"
 
-#: src/components/token-detail/token-overview-content.tsx:169
+#: src/components/token-detail/token-overview-content.tsx:198
 msgid "Serial"
 msgstr "Serial"
 
-#: src/components/token-detail/token-overview-content.tsx:140
+#: src/components/token-detail/token-overview-content.tsx:143
 msgid "Server message"
 msgstr "Server message"
 
@@ -510,19 +547,23 @@ msgstr "Server message"
 msgid "Server registration failed"
 msgstr "Server registration failed"
 
+#: src/components/onboarding-sequence/step-actions.tsx:117
+msgid "Setting up notifications…"
+msgstr "Setting up notifications…"
+
 #: src/app/settings/index.tsx:201
 msgid "Settings"
 msgstr "Settings"
 
-#: src/components/onboarding-sequence/step-actions.tsx:191
+#: src/components/onboarding-sequence/step-actions.tsx:264
 msgid "Share anonymous reports"
 msgstr "Share anonymous reports"
 
-#: src/components/onboarding-sequence/step-actions.tsx:120
+#: src/components/onboarding-sequence/step-actions.tsx:187
 msgid "Sign-in requests may go unnoticed"
 msgstr "Sign-in requests may go unnoticed"
 
-#: src/components/token-detail/token-overview-content.tsx:168
+#: src/components/token-detail/token-overview-content.tsx:171
 msgid "Status"
 msgstr "Status"
 
@@ -560,6 +601,10 @@ msgstr "The token version is not supported by this app. Please update the app to
 msgid "Theme"
 msgstr "Theme"
 
+#: src/components/onboarding-sequence/step-actions.tsx:88
+msgid "This device can't receive push notifications. Open eduMFA Push when signing in, or pull down to check for requests."
+msgstr "This device can't receive push notifications. Open eduMFA Push when signing in, or pull down to check for requests."
+
 #: src/components/token-detail/token-detail-utils.ts:21
 msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
 msgstr "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
@@ -580,15 +625,20 @@ msgstr "This token did not finish enrollment and cannot receive push requests un
 msgid "Token"
 msgstr "Token"
 
-#: src/components/notification-handler.tsx:34
+#: src/app/index.tsx:772
+#: src/components/onboarding-sequence/step-actions.tsx:145
+msgid "Try again"
+msgstr "Try again"
+
+#: src/components/notification-handler.tsx:38
 #~ msgid "Try again."
 #~ msgstr "Try again."
 
-#: src/app/index.tsx:723
+#: src/app/index.tsx:744
 msgid "Try another token name, issuer, or serial number."
 msgstr "Try another token name, issuer, or serial number."
 
-#: src/components/onboarding-sequence/step-actions.tsx:118
+#: src/components/onboarding-sequence/step-actions.tsx:185
 msgid "Turn on notifications in Settings so you can respond when a request arrives."
 msgstr "Turn on notifications in Settings so you can respond when a request arrives."
 
@@ -599,6 +649,10 @@ msgstr "Update the display name for this token."
 #: src/components/token-add/upload-qr-code-button.tsx:80
 msgid "Upload QR Code"
 msgstr "Upload QR Code"
+
+#: src/components/onboarding-sequence/step-actions.tsx:87
+msgid "Use a physical iOS device to test push notifications. You can still open the app to check for requests in the simulator."
+msgstr "Use a physical iOS device to test push notifications. You can still open the app to check for requests in the simulator."
 
 #: src/app/settings/license.tsx:51
 msgid "Version {itemVersion} · {itemLicense}"
@@ -612,11 +666,11 @@ msgstr "We couldn’t confirm your response. Check your connection, then start a
 msgid "Website"
 msgstr "Website"
 
-#: src/components/onboarding-sequence.tsx:108
+#: src/components/onboarding-sequence.tsx:111
 msgid "Welcome"
 msgstr "Welcome"
 
-#: src/components/onboarding-sequence.tsx:110
+#: src/components/onboarding-sequence.tsx:113
 msgid "Welcome to <0/>"
 msgstr "Welcome to <0/>"
 
@@ -625,11 +679,15 @@ msgstr "Welcome to <0/>"
 msgid "What would you like us to know?"
 msgstr "What would you like us to know?"
 
-#: src/components/onboarding-sequence/step-actions.tsx:97
+#: src/components/onboarding-sequence.tsx:127
+msgid "You can still approve sign-ins on this device, even without push notifications."
+msgstr "You can still approve sign-ins on this device, even without push notifications."
+
+#: src/components/onboarding-sequence/step-actions.tsx:164
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "You’re ready to receive and approve sign-in requests."
 
-#: src/components/onboarding-sequence.tsx:126
+#: src/components/onboarding-sequence.tsx:133
 msgid "Your choice"
 msgstr "Your choice"
 

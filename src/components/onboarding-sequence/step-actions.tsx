@@ -1,7 +1,10 @@
 import { StatusCard } from "@/components/status-card";
 import { ONBOARDING_MAX_FONT_SIZE_MULTIPLIER } from "@/constants/onboarding";
 import { Spacing } from "@/constants/theme";
-import type { PushNotificationCapability } from "@/types/notification";
+import type {
+  PushNotificationCapability,
+  PushRegistrationStatus,
+} from "@/types/notification";
 import { isNotificationPermissionPending } from "@/utils/notification";
 import { useLingui } from "@lingui/react/macro";
 import * as Notifications from "expo-notifications";
@@ -40,12 +43,15 @@ type NotificationStepActionsProps = {
   hasNotificationPermission: boolean;
   isCheckingPermission: boolean;
   isRequestingPermission: boolean;
+  needsPermissionRequest: boolean;
   onContinue: () => void;
   onEnableNotifications: () => void;
   onOpenSettings: () => void;
+  onRetryRegistration: () => void;
   onSkip: () => void;
   permissionStatus: Notifications.NotificationPermissionsStatus | null;
   pushCapability: PushNotificationCapability | null;
+  registrationStatus: PushRegistrationStatus;
   scale: number;
   textColor: ColorValue;
 };
@@ -55,29 +61,41 @@ export function NotificationStepActions({
   hasNotificationPermission: hasNotificationsEnabled,
   isCheckingPermission,
   isRequestingPermission,
+  needsPermissionRequest,
   onContinue,
   onEnableNotifications,
   onOpenSettings,
+  onRetryRegistration,
   onSkip,
   permissionStatus,
   pushCapability,
+  registrationStatus,
   scale,
   textColor,
 }: NotificationStepActionsProps) {
   const { t } = useLingui();
   const hasNotificationDecision =
+    !needsPermissionRequest &&
     !isNotificationPermissionPending(permissionStatus);
 
-  if (pushCapability === "google-play-services-unavailable") {
+  if (pushCapability !== null && pushCapability !== "supported") {
     return (
       <View style={styles.buttonStack}>
         <StatusCard
-          description={t`Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests.`}
+          description={
+            pushCapability === "ios-simulator"
+              ? t`Use a physical iOS device to test push notifications. You can still open the app to check for requests in the simulator.`
+              : t`This device can't receive push notifications. Open eduMFA Push when signing in, or pull down to check for requests.`
+          }
           icon={{ ios: "arrow.down.circle.fill", android: "refresh" }}
           maxFontSizeMultiplier={ONBOARDING_MAX_FONT_SIZE_MULTIPLIER}
           scale={scale}
-          title={t`Pull to refresh for requests`}
-          variant="danger"
+          title={
+            pushCapability === "ios-simulator"
+              ? t`Running in the iOS simulator`
+              : t`Check requests in the app`
+          }
+          variant="neutral"
         />
         <ActionButton
           accentColor={accentColor}
@@ -90,7 +108,56 @@ export function NotificationStepActions({
     );
   }
 
-  if (hasNotificationsEnabled) {
+  if (registrationStatus === "pending" && hasNotificationsEnabled) {
+    return (
+      <View style={styles.buttonStack}>
+        <ActionButton
+          accentColor={accentColor}
+          icon={{ ios: "arrow.clockwise", android: "refresh" }}
+          label={t`Setting up notifications…`}
+          onPress={onRetryRegistration}
+          isLoading
+          scale={scale}
+        />
+        <TextButton
+          color={textColor}
+          label={t`Not now`}
+          onPress={onSkip}
+          scale={scale}
+        />
+      </View>
+    );
+  }
+
+  if (registrationStatus === "failed" && hasNotificationsEnabled) {
+    return (
+      <View style={styles.buttonStack}>
+        <StatusCard
+          title={t`Notifications aren't ready yet`}
+          description={t`Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests.`}
+          variant="danger"
+          scale={scale}
+          maxFontSizeMultiplier={ONBOARDING_MAX_FONT_SIZE_MULTIPLIER}
+        />
+        <ActionButton
+          accentColor={accentColor}
+          icon={{ ios: "arrow.clockwise", android: "refresh" }}
+          label={t`Try again`}
+          onPress={onRetryRegistration}
+          isLoading={isCheckingPermission}
+          scale={scale}
+        />
+        <TextButton
+          color={textColor}
+          label={t`Not now`}
+          onPress={onSkip}
+          scale={scale}
+        />
+      </View>
+    );
+  }
+
+  if (hasNotificationsEnabled && !needsPermissionRequest) {
     return (
       <View style={styles.buttonStack}>
         <StatusCard
@@ -146,6 +213,12 @@ export function NotificationStepActions({
         isLoading={isRequestingPermission || isCheckingPermission}
         label={t`Enable notifications`}
         onPress={onEnableNotifications}
+        scale={scale}
+      />
+      <TextButton
+        color={textColor}
+        label={t`Not now`}
+        onPress={onSkip}
         scale={scale}
       />
     </View>

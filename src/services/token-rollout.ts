@@ -108,10 +108,8 @@ export async function performTokenRollout(
       }
     };
     checkEnrollmentExpiry();
-    const fbToken = await useNotificationStore.getState().getFcmToken();
-    if (!fbToken) {
-      throw new Error("Failed to retrieve FCM token");
-    }
+    // The backend requires the field, but accepts an empty Firebase token.
+    const fbToken = (await useNotificationStore.getState().getFcmToken()) ?? "";
 
     // Step 1: Generate RSA key pair
     currentStep = PushTokenRolloutState.RSAKeyGeneration;

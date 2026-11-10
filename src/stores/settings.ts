@@ -10,6 +10,7 @@ type SettingsState = {
   crashReportsEnabled: boolean;
   hapticsEnabled: boolean;
   hasCompletedOnboarding: boolean;
+  hasRequestedNotificationPermissions: boolean;
   hasHydrated: boolean;
   themePreference: ThemePreference;
 };
@@ -30,6 +31,7 @@ type PersistedSettings = Pick<
   | "crashReportsEnabled"
   | "hapticsEnabled"
   | "hasCompletedOnboarding"
+  | "hasRequestedNotificationPermissions"
   | "themePreference"
 >;
 
@@ -39,6 +41,7 @@ export const useSettingsStore = create<SettingsStore>()(
       crashReportsEnabled: false,
       hapticsEnabled: true,
       hasCompletedOnboarding: false,
+      hasRequestedNotificationPermissions: false,
       hasHydrated: false,
       themePreference: "automatic",
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),
@@ -61,6 +64,8 @@ export const useSettingsStore = create<SettingsStore>()(
         crashReportsEnabled: state.crashReportsEnabled,
         hapticsEnabled: state.hapticsEnabled,
         hasCompletedOnboarding: state.hasCompletedOnboarding,
+        hasRequestedNotificationPermissions:
+          state.hasRequestedNotificationPermissions,
         themePreference: state.themePreference,
       }),
       onRehydrateStorage: () => (state) => {

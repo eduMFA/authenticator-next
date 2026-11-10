@@ -2,6 +2,16 @@
 
 This app is the client-side implementation of eduMFA's [`edupush` token type](https://edumfa.readthedocs.io/en/latest/tokens/tokentypes/edupush.html). It enrolls push tokens and lets users approve or deny sign-in requests from their eduMFA server.
 
+## Automatic fallback and server policies
+
+Firebase Cloud Messaging registration starts after the user requests notification permission. The app remembers that request across launches and also recognizes existing system permission decisions. Until registration, tokens can enroll with an empty Firebase token and retrieve requests by opening the app or pulling to refresh. Android devices without Google Play Services continue to use polling.
+
+Device support, notification permission, and push registration are tracked separately. Missing, disabled, or invalid Play Services enables the poll-only indicator. Push registration remains retryable while Play Services is updating or needs an update. The iOS simulator is handled separately.
+
+For a deployment without Firebase, configure the backend enrollment policies `edupush_firebase_configuration = poll only` and `edupush_registration_url = https://your-server/ttype/edupush`. The authentication policy `edupush_allow_polling` must permit polling (`allow`, the default, or `token` with `polling_allowed` enabled). The backend controls its delivery mode independently of the device's push capability.
+
+The app sends signed updates when the FCM token changes.
+
 ## Enrollment TTL
 
 Enrollment TTL is measured from scanning the QR; the QR does not contain the backend's creation timestamp. Previously saved pending tokens start their local enrollment timer on their first rollout after upgrading.

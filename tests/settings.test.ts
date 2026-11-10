@@ -12,6 +12,7 @@ beforeEach(async () => {
     crashReportsEnabled: false,
     hapticsEnabled: true,
     hasCompletedOnboarding: false,
+    hasRequestedNotificationPermissions: false,
     hasHydrated: true,
     themePreference: "automatic",
   });
@@ -41,12 +42,14 @@ test("applies crash reporting consent and haptic preference", () => {
 test("rehydration restores preferences and initializes integrations", async () => {
   useSettingsStore.getState().setCrashReportsEnabled(true);
   useSettingsStore.getState().setHapticsEnabled(false);
+  useSettingsStore.setState({ hasRequestedNotificationPermissions: true });
   const storage = useSettingsStore.persist.getOptions().storage;
   const snapshot = await storage?.getItem("settings-storage");
   expect(snapshot?.state).toEqual({
     crashReportsEnabled: true,
     hapticsEnabled: false,
     hasCompletedOnboarding: false,
+    hasRequestedNotificationPermissions: true,
     themePreference: "automatic",
   });
   await useSettingsStore.persist.rehydrate();

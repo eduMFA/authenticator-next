@@ -25,13 +25,13 @@ msgstr "Über"
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: src/app/index.tsx:590
-#: src/app/index.tsx:653
-#: src/app/index.tsx:655
+#: src/app/index.tsx:611
+#: src/app/index.tsx:674
+#: src/app/index.tsx:676
 msgid "Add token"
 msgstr "Token hinzufügen"
 
-#: src/app/index.tsx:625
+#: src/app/index.tsx:646
 msgid "Add your first eduMFA Push token to approve sign-ins securely from this device."
 msgstr "Füge deinen ersten eduMFA Push-Token hinzu, um Anmeldungen sicher von diesem Gerät aus zu genehmigen."
 
@@ -39,7 +39,7 @@ msgstr "Füge deinen ersten eduMFA Push-Token hinzu, um Anmeldungen sicher von d
 msgid "Allow camera access"
 msgstr "Kamerazugriff erlauben"
 
-#: src/components/onboarding-sequence/step-actions.tsx:177
+#: src/components/onboarding-sequence/step-actions.tsx:250
 msgid "Anonymous reports"
 msgstr "Anonyme Berichte"
 
@@ -50,6 +50,10 @@ msgstr "Darstellung"
 #: src/components/push-request-popup.tsx:285
 msgid "Approve"
 msgstr "Freigeben"
+
+#: src/components/onboarding-sequence.tsx:124
+msgid "Approve sign-ins in the app"
+msgstr "Anmeldungen in der App freigeben"
 
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
@@ -87,7 +91,11 @@ msgstr "Abbrechen"
 msgid "Change the app language in system settings"
 msgstr "App-Sprache in den Systemeinstellungen ändern"
 
-#: src/components/onboarding-sequence.tsx:128
+#: src/components/onboarding-sequence/step-actions.tsx:96
+msgid "Check requests in the app"
+msgstr "Anfragen in der App abrufen"
+
+#: src/components/onboarding-sequence.tsx:135
 msgid "Choose whether to share anonymous crash and error reports."
 msgstr "Wähle, ob du anonymisierte Absturz- und Fehlerberichte teilen möchtest."
 
@@ -101,8 +109,8 @@ msgstr "Schließen"
 msgid "Contact (optional)"
 msgstr "Kontakt (optional)"
 
-#: src/components/onboarding-sequence/step-actions.tsx:85
-#: src/components/onboarding-sequence/step-actions.tsx:106
+#: src/components/onboarding-sequence/step-actions.tsx:103
+#: src/components/onboarding-sequence/step-actions.tsx:173
 #: src/components/token-add/camera-permission-splash.tsx:64
 msgid "Continue"
 msgstr "Weiter"
@@ -120,7 +128,7 @@ msgstr "Dunkel"
 msgid "Decline"
 msgstr "Ablehnen"
 
-#: src/app/index.tsx:301
+#: src/app/index.tsx:322
 #: src/app/token/[tokenId].tsx:200
 #: src/hooks/use-delete-token-confirmation.ts:22
 msgid "Delete"
@@ -134,7 +142,7 @@ msgstr "Token löschen"
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: src/components/token-detail/token-overview-content.tsx:165
+#: src/components/token-detail/token-overview-content.tsx:168
 msgid "Details"
 msgstr "Details"
 
@@ -142,7 +150,7 @@ msgstr "Details"
 msgid "Dismiss"
 msgstr "Schließen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:184
+#: src/components/onboarding-sequence/step-actions.tsx:257
 msgid "Don't share anonymous reports"
 msgstr "Anonyme Berichte nicht teilen"
 
@@ -151,7 +159,7 @@ msgstr "Anonyme Berichte nicht teilen"
 msgid "Done"
 msgstr "Fertig"
 
-#: src/app/index.tsx:287
+#: src/app/index.tsx:308
 #: src/app/token/[tokenId].tsx:192
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -173,11 +181,12 @@ msgstr "E-Mail (optional)"
 msgid "Enable camera access in Settings to scan QR codes."
 msgstr "Aktiviere den Kamerazugriff in den Einstellungen, um QR-Codes zu scannen."
 
-#: src/components/onboarding-sequence/step-actions.tsx:147
+#: src/app/index.tsx:774
+#: src/components/onboarding-sequence/step-actions.tsx:214
 msgid "Enable notifications"
 msgstr "Benachrichtigungen aktivieren"
 
-#: src/app/index.tsx:763
+#: src/app/index.tsx:795
 msgid "Enable notifications to receive push approval requests on this device."
 msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Gerät zu empfangen."
 
@@ -185,7 +194,7 @@ msgstr "Aktiviere Benachrichtigungen, um Push-Genehmigungsanfragen auf diesem Ge
 msgid "Enrolled"
 msgstr "Registriert"
 
-#: src/services/token-rollout.ts:116
+#: src/services/token-rollout.ts:106
 msgid "Enrollment expired. Scan a new enrollment QR code."
 msgstr "Die Registrierung ist abgelaufen. Scanne einen neuen Registrierungs-QR-Code."
 
@@ -243,11 +252,11 @@ msgstr "Allgemein"
 msgid "Generating keys"
 msgstr "Schlüssel werden generiert"
 
-#: src/components/onboarding-sequence.tsx:121
+#: src/components/onboarding-sequence.tsx:128
 msgid "Get notified when a sign-in needs your approval."
 msgstr "Lass dich benachrichtigen, wenn eine Anmeldung deine Genehmigung erfordert."
 
-#: src/components/onboarding-sequence.tsx:385
+#: src/components/onboarding-sequence.tsx:394
 msgid "Get started"
 msgstr "Loslegen"
 
@@ -255,21 +264,16 @@ msgstr "Loslegen"
 msgid "GitHub"
 msgstr "GitHub"
 
-#: src/app/index.tsx:762
-#: src/components/onboarding-sequence/step-actions.tsx:75
-msgid "Google Play services are unavailable, so requests cannot arrive automatically. Pull down on the token list to check for pending requests."
-msgstr "Google Play-Dienste sind nicht verfügbar, daher können Anfragen nicht automatisch eingehen. Ziehe die Token-Liste nach unten, um nach ausstehenden Anfragen zu suchen."
-
 #: src/app/settings/index.tsx:108
 #: src/app/settings/index.tsx:114
 msgid "Haptics"
 msgstr "Haptik"
 
-#: src/components/onboarding-sequence/step-actions.tsx:173
+#: src/components/onboarding-sequence/step-actions.tsx:246
 msgid "Help improve reliability by sharing crash and error reports. They never include token secrets, passwords, or institution names."
 msgstr "Teile Absturz- und Fehlerberichte, um die Zuverlässigkeit zu verbessern. Sie enthalten niemals Token-Geheimnisse, Passwörter oder Namen von Einrichtungen."
 
-#: src/components/onboarding-sequence.tsx:127
+#: src/components/onboarding-sequence.tsx:134
 msgid "Help improve the app"
 msgstr "Hilf, die App zu verbessern"
 
@@ -278,7 +282,7 @@ msgstr "Hilf, die App zu verbessern"
 msgid "Include logs"
 msgstr "Protokolle einschließen"
 
-#: src/components/onboarding-sequence.tsx:114
+#: src/components/onboarding-sequence.tsx:117
 msgid "Keep your authentication tokens in one place and approve sign-ins securely from this device."
 msgstr "Bewahre deine Authentifizierungs-Token an einem Ort auf und genehmige Anmeldungen sicher von diesem Gerät aus."
 
@@ -300,7 +304,7 @@ msgstr "Bezeichnung erforderlich"
 msgid "Language"
 msgstr "Sprache"
 
-#: src/components/token-detail/token-overview-content.tsx:157
+#: src/components/token-detail/token-overview-content.tsx:160
 msgid "Last failed"
 msgstr "Zuletzt fehlgeschlagen"
 
@@ -331,7 +335,7 @@ msgstr "Name (optional)"
 msgid "Name and email are optional. They allow us to contact you with follow-up questions about your feedback."
 msgstr "Name und E-Mail-Adresse sind optional. Sie ermöglichen es uns, dich bei Rückfragen zu deinem Feedback zu kontaktieren."
 
-#: src/components/onboarding-sequence.tsx:120
+#: src/components/onboarding-sequence.tsx:125
 msgid "Never miss a sign-in request"
 msgstr "Keine Anmeldeanfrage verpassen"
 
@@ -339,35 +343,52 @@ msgstr "Keine Anmeldeanfrage verpassen"
 msgid "No QR code found"
 msgstr "Kein QR-Code gefunden"
 
-#: src/app/index.tsx:716
+#: src/app/index.tsx:737
 msgid "No tokens found"
 msgstr "Keine Token gefunden"
 
-#: src/app/index.tsx:617
+#: src/app/index.tsx:638
 msgid "No tokens yet"
 msgstr "Noch keine Token vorhanden"
 
-#: src/components/onboarding-sequence/step-actions.tsx:133
+#: src/components/onboarding-sequence/step-actions.tsx:124
+#: src/components/onboarding-sequence/step-actions.tsx:152
+#: src/components/onboarding-sequence/step-actions.tsx:200
+#: src/components/onboarding-sequence/step-actions.tsx:220
 msgid "Not now"
 msgstr "Nicht jetzt"
 
-#: src/components/onboarding-sequence.tsx:119
+#: src/components/onboarding-sequence.tsx:122
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
-#: src/app/index.tsx:758
+#: src/app/index.tsx:790
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen sind deaktiviert"
 
-#: src/components/onboarding-sequence/step-actions.tsx:99
+#: src/components/onboarding-sequence/step-actions.tsx:166
 msgid "Notifications are enabled"
 msgstr "Benachrichtigungen sind aktiviert"
+
+#: src/app/index.tsx:789
+#: src/components/onboarding-sequence/step-actions.tsx:136
+msgid "Notifications aren't ready yet"
+msgstr "Mitteilungen sind noch nicht bereit"
+
+#: src/app/index.tsx:794
+msgid "Notifications couldn't be set up. Check your connection and device settings, then tap to try again. You can still open the app to check for requests."
+msgstr "Mitteilungen konnten nicht eingerichtet werden. Prüfe deine Verbindung und Geräteeinstellungen und tippe hier, um es erneut zu versuchen. Du kannst weiterhin die App öffnen, um nach Anfragen zu suchen."
+
+#: src/components/onboarding-sequence/step-actions.tsx:137
+msgid "Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests."
+msgstr "Mitteilungen konnten nicht eingerichtet werden. Prüfe deine Verbindung und Geräteeinstellungen und versuche es erneut. Du kannst weiterhin die App öffnen, um nach Anfragen zu suchen."
 
 #: src/components/push-request-popup.tsx:264
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
-#: src/components/onboarding-sequence/step-actions.tsx:127
+#: src/app/index.tsx:775
+#: src/components/onboarding-sequence/step-actions.tsx:194
 msgid "Open notification settings"
 msgstr "Benachrichtigungseinstellungen öffnen"
 
@@ -404,6 +425,15 @@ msgstr "Platziere den QR-Code im Rahmen"
 msgid "Please describe your feedback."
 msgstr "Bitte beschreibe dein Feedback."
 
+#: src/components/poll-only-icon.tsx:13
+#: src/components/token-detail/token-overview-content.tsx:186
+msgid "Poll only"
+msgstr "Nur Abruf"
+
+#: src/components/token-list-item.tsx:118
+msgid "Poll only. Open the app or pull down to check for requests."
+msgstr "Nur Abruf. Öffne die App oder ziehe nach unten, um nach Anfragen zu suchen."
+
 #: src/app/settings/index.tsx:175
 msgid "Privacy"
 msgstr "Datenschutz"
@@ -417,21 +447,16 @@ msgstr "Datenschutzerklärung"
 msgid "Project website"
 msgstr "Projektwebsite"
 
-#: src/app/index.tsx:757
-#: src/components/onboarding-sequence/step-actions.tsx:79
-msgid "Pull to refresh for requests"
-msgstr "Nach unten ziehen, um Anfragen abzurufen"
-
 #: src/components/token-add/upload-qr-code-button.tsx:70
 msgid "QR code scanner"
 msgstr "QR-Code-Scanner"
 
-#: src/components/token-detail/token-overview-content.tsx:128
-#: src/components/token-list-item.tsx:236
+#: src/components/token-detail/token-overview-content.tsx:131
+#: src/components/token-list-item.tsx:252
 msgid "Refresh failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: src/app/index.tsx:779
+#: src/app/index.tsx:806
 msgid "Refreshing..."
 msgstr "Aktualisiere..."
 
@@ -443,6 +468,14 @@ msgstr "Öffentlicher Schlüssel wird registriert"
 msgid "Registration failed"
 msgstr "Registrierung fehlgeschlagen"
 
+#: src/components/token-detail/token-overview-content.tsx:178
+msgid "Request delivery"
+msgstr "Zustellung von Anfragen"
+
+#: src/components/token-detail/token-overview-content.tsx:194
+msgid "Requests are checked when you open the app or refresh the token list."
+msgstr "Anfragen werden beim Öffnen der App oder Aktualisieren der Token-Liste abgerufen."
+
 #: src/components/notification-handler.tsx:46
 msgid "Response failed"
 msgstr "Antwort fehlgeschlagen"
@@ -451,10 +484,10 @@ msgstr "Antwort fehlgeschlagen"
 msgid "Response parsing failed"
 msgstr "Antwortverarbeitung fehlgeschlagen"
 
-#: src/app/index.tsx:281
-#: src/components/token-detail/token-overview-content.tsx:105
-#: src/components/token-detail/token-overview-content.tsx:115
-#: src/components/token-detail/token-overview-content.tsx:117
+#: src/app/index.tsx:302
+#: src/components/token-detail/token-overview-content.tsx:108
+#: src/components/token-detail/token-overview-content.tsx:118
+#: src/components/token-detail/token-overview-content.tsx:120
 msgid "Retry Rollout"
 msgstr "Rollout erneut versuchen"
 
@@ -466,14 +499,18 @@ msgstr "eduMFA Push bewerten"
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 
-#: src/components/token-list-item.tsx:213
+#: src/components/token-list-item.tsx:224
 msgid "Rolling out..."
 msgstr "Rollout läuft..."
 
 #: src/components/token-detail/token-detail-utils.ts:65
-#: src/components/token-list-item.tsx:213
+#: src/components/token-list-item.tsx:224
 msgid "Rollout Failed"
 msgstr "Rollout fehlgeschlagen"
+
+#: src/components/onboarding-sequence/step-actions.tsx:95
+msgid "Running in the iOS simulator"
+msgstr "Im iOS-Simulator ausgeführt"
 
 #: src/app/token/[tokenId].tsx:185
 msgid "Save"
@@ -483,8 +520,8 @@ msgstr "Speichern"
 msgid "Search Authenticator Apps"
 msgstr "Authenticator-Apps suchen"
 
-#: src/app/index.tsx:451
-#: src/app/index.tsx:522
+#: src/app/index.tsx:472
+#: src/app/index.tsx:543
 msgid "Search tokens"
 msgstr "Token suchen"
 
@@ -498,11 +535,11 @@ msgstr "Anonymisierte Absturz- und Fehlerdiagnosen senden"
 msgid "Send feedback"
 msgstr "Feedback senden"
 
-#: src/components/token-detail/token-overview-content.tsx:169
+#: src/components/token-detail/token-overview-content.tsx:198
 msgid "Serial"
 msgstr "Seriennummer"
 
-#: src/components/token-detail/token-overview-content.tsx:140
+#: src/components/token-detail/token-overview-content.tsx:143
 msgid "Server message"
 msgstr "Servernachricht"
 
@@ -510,19 +547,23 @@ msgstr "Servernachricht"
 msgid "Server registration failed"
 msgstr "Serverregistrierung fehlgeschlagen"
 
+#: src/components/onboarding-sequence/step-actions.tsx:117
+msgid "Setting up notifications…"
+msgstr "Mitteilungen werden eingerichtet…"
+
 #: src/app/settings/index.tsx:201
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:191
+#: src/components/onboarding-sequence/step-actions.tsx:264
 msgid "Share anonymous reports"
 msgstr "Anonyme Berichte teilen"
 
-#: src/components/onboarding-sequence/step-actions.tsx:120
+#: src/components/onboarding-sequence/step-actions.tsx:187
 msgid "Sign-in requests may go unnoticed"
 msgstr "Anmeldeanfragen können unbemerkt bleiben"
 
-#: src/components/token-detail/token-overview-content.tsx:168
+#: src/components/token-detail/token-overview-content.tsx:171
 msgid "Status"
 msgstr "Status"
 
@@ -560,6 +601,10 @@ msgstr "Die Token-Version wird von dieser App nicht unterstützt. Bitte aktualis
 msgid "Theme"
 msgstr "Erscheinungsbild"
 
+#: src/components/onboarding-sequence/step-actions.tsx:88
+msgid "This device can't receive push notifications. Open eduMFA Push when signing in, or pull down to check for requests."
+msgstr "Dieses Gerät kann keine Push-Mitteilungen empfangen. Öffne eduMFA Push beim Anmelden oder ziehe zum Abrufen von Anfragen nach unten."
+
 #: src/components/token-detail/token-detail-utils.ts:21
 msgid "This token could not be refreshed because the push service could not be reached. Check your connection or try again later."
 msgstr "Dieses Token konnte nicht aktualisiert werden, weil der Push-Dienst nicht erreichbar war. Prüfe deine Verbindung oder versuche es später erneut."
@@ -580,15 +625,20 @@ msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Pu
 msgid "Token"
 msgstr "Token"
 
-#: src/components/notification-handler.tsx:34
+#: src/app/index.tsx:772
+#: src/components/onboarding-sequence/step-actions.tsx:145
+msgid "Try again"
+msgstr "Erneut versuchen"
+
+#: src/components/notification-handler.tsx:38
 #~ msgid "Try again."
 #~ msgstr "Versuche es erneut."
 
-#: src/app/index.tsx:723
+#: src/app/index.tsx:744
 msgid "Try another token name, issuer, or serial number."
 msgstr "Versuche einen anderen Token-Namen, Aussteller oder eine andere Seriennummer."
 
-#: src/components/onboarding-sequence/step-actions.tsx:118
+#: src/components/onboarding-sequence/step-actions.tsx:185
 msgid "Turn on notifications in Settings so you can respond when a request arrives."
 msgstr "Aktiviere Benachrichtigungen in den Einstellungen, damit du reagieren kannst, sobald eine Anfrage eingeht."
 
@@ -599,6 +649,10 @@ msgstr "Aktualisiere den Anzeigenamen für diesen Token."
 #: src/components/token-add/upload-qr-code-button.tsx:80
 msgid "Upload QR Code"
 msgstr "QR-Code hochladen"
+
+#: src/components/onboarding-sequence/step-actions.tsx:87
+msgid "Use a physical iOS device to test push notifications. You can still open the app to check for requests in the simulator."
+msgstr "Verwende ein echtes iOS-Gerät, um Push-Mitteilungen zu testen. Im Simulator kannst du weiterhin die App öffnen, um nach Anfragen zu suchen."
 
 #: src/app/settings/license.tsx:51
 msgid "Version {itemVersion} · {itemLicense}"
@@ -612,11 +666,11 @@ msgstr "Wir konnten deine Antwort nicht bestätigen. Prüfe deine Verbindung und
 msgid "Website"
 msgstr "Webseite"
 
-#: src/components/onboarding-sequence.tsx:108
+#: src/components/onboarding-sequence.tsx:111
 msgid "Welcome"
 msgstr "Willkommen"
 
-#: src/components/onboarding-sequence.tsx:110
+#: src/components/onboarding-sequence.tsx:113
 msgid "Welcome to <0/>"
 msgstr "Willkommen bei <0/>"
 
@@ -625,11 +679,15 @@ msgstr "Willkommen bei <0/>"
 msgid "What would you like us to know?"
 msgstr "Was möchtest du uns mitteilen?"
 
-#: src/components/onboarding-sequence/step-actions.tsx:97
+#: src/components/onboarding-sequence.tsx:127
+msgid "You can still approve sign-ins on this device, even without push notifications."
+msgstr "Du kannst Anmeldungen auf diesem Gerät auch ohne Push-Mitteilungen freigeben."
+
+#: src/components/onboarding-sequence/step-actions.tsx:164
 msgid "You’re ready to receive and approve sign-in requests."
 msgstr "Du kannst jetzt Anmeldeanfragen empfangen und freigeben."
 
-#: src/components/onboarding-sequence.tsx:126
+#: src/components/onboarding-sequence.tsx:133
 msgid "Your choice"
 msgstr "Deine Wahl"
 

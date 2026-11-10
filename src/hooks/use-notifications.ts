@@ -39,6 +39,9 @@ export function useNotificationStatus() {
     (state) => state.permissionStatus,
   );
   const pushCapability = useNotificationStore((state) => state.pushCapability);
+  const registrationStatus = useNotificationStore(
+    (state) => state.registrationStatus,
+  );
   const initialize = useNotificationStore((state) => state.initialize);
   const checkPermissions = useNotificationStore(
     (state) => state.checkPermissions,
@@ -49,6 +52,7 @@ export function useNotificationStatus() {
   );
   const reset = useNotificationStore((state) => state.reset);
   const hasPermission = isNotificationPermissionEnabled(permissionStatus);
+  const needsPermissionRequest = isInitialized && registrationStatus === "idle";
 
   return {
     checkPermissions,
@@ -58,8 +62,10 @@ export function useNotificationStatus() {
     initialize,
     isInitialized,
     isInitializing,
+    needsPermissionRequest,
     permissionStatus,
     pushCapability,
+    registrationStatus,
     requestPermissions,
     reset,
   };
@@ -67,6 +73,7 @@ export function useNotificationStatus() {
 
 export function useNotifications(onAction?: NotificationActionHandler) {
   const notificationStatus = useNotificationStatus();
+  const canReceivePush = notificationStatus.fcmToken !== null;
   const { pollChallenges } = useChallengePolling();
 
   const { addPushRequest, getPushRequestByNonce, getPushRequestById } =
@@ -171,14 +178,18 @@ export function useNotifications(onAction?: NotificationActionHandler) {
 
   useEffect(() => {
     // Listen for foreground messages
-    const unsubscribeMessage = addMessageListener((pushRequest) => {
-      void handlePushRequest(pushRequest);
-    });
+    const unsubscribeMessage = canReceivePush
+      ? addMessageListener((pushRequest) => {
+          void handlePushRequest(pushRequest);
+        })
+      : () => {};
 
     // Set up background message handler
-    addBackgroundMessageHandler((pushRequest) => {
-      void handlePushRequest(pushRequest);
-    });
+    if (canReceivePush) {
+      addBackgroundMessageHandler((pushRequest) => {
+        void handlePushRequest(pushRequest);
+      });
+    }
 
     const handleNotificationResponse = (
       response: Notifications.NotificationResponse,
@@ -216,7 +227,7 @@ export function useNotifications(onAction?: NotificationActionHandler) {
       unsubscribeMessage();
       responseSubscription.remove();
     };
-  }, [handleNotificationAction, handlePushRequest]);
+  }, [canReceivePush, handleNotificationAction, handlePushRequest]);
 
   return {
     ...notificationStatus,

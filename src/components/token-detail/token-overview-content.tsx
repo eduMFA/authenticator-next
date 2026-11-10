@@ -2,8 +2,10 @@ import { StatusCard } from "@/components/status-card";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { TokenImage } from "@/components/token-image";
+import { PollOnlyIcon } from "@/components/poll-only-icon";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
+import { useTokenPollOnly } from "@/hooks/use-token-poll-only";
 import {
   PushTokenRefreshStatus,
   PushTokenRolloutState,
@@ -48,6 +50,7 @@ export function TokenOverviewContent({
 }) {
   const { i18n, t } = useLingui();
   const theme = useTheme();
+  const pollOnly = useTokenPollOnly(token);
   const isRolloutFailed = PushTokenRolloutState.isFailed(token.rolloutState);
   const rolloutFailureDetails = getRolloutFailureDetails(token.rolloutState);
   const rolloutStateLabel = getRolloutStateLabel(token.rolloutState);
@@ -166,6 +169,32 @@ export function TokenOverviewContent({
         </ThemedText>
         <ThemedView type="backgroundSecondary" style={styles.detailsCard}>
           <DetailRow label={t`Status`} value={i18n._(rolloutStateLabel)} />
+          {pollOnly ? (
+            <View style={styles.detailRow}>
+              <ThemedText
+                themeColor="textSecondary"
+                fontSize={Typography.fontSize14}
+              >
+                {t`Request delivery`}
+              </ThemedText>
+              <View style={styles.deliveryValue}>
+                <PollOnlyIcon />
+                <ThemedText
+                  fontSize={Typography.fontSize16}
+                  fontWeight="semiBold"
+                >
+                  {t`Poll only`}
+                </ThemedText>
+              </View>
+              <ThemedText
+                themeColor="textSecondary"
+                fontSize={Typography.fontSize14}
+                style={styles.deliveryDescription}
+              >
+                {t`Requests are checked when you open the app or refresh the token list.`}
+              </ThemedText>
+            </View>
+          ) : null}
           <DetailRow label={t`Serial`} value={token.id} />
         </ThemedView>
       </View>
@@ -174,6 +203,14 @@ export function TokenOverviewContent({
 }
 
 const styles = StyleSheet.create({
+  deliveryDescription: {
+    lineHeight: 20,
+  },
+  deliveryValue: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: Spacing.xs,
+  },
   detailRow: {
     gap: Spacing.xs,
     paddingVertical: Spacing.md,

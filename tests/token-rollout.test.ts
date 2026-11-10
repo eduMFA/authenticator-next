@@ -113,14 +113,17 @@ test("prevents concurrent enrollment and releases lock afterwards", async () => 
   await pending;
   expect(isTokenRollingOut(token.id)).toBe(false);
 });
-test("handles missing FCM token before key generation", async () => {
+test("enrolls without Google services by sending an empty FCM field", async () => {
   getFcmToken.mockResolvedValue(null);
   expect(await performTokenRollout(token, updateState)).toMatchObject({
-    success: false,
-    error: new Error("Failed to retrieve FCM token"),
-    failedState: undefined,
+    success: true,
   });
-  expect(generateRsaKeyPair).not.toHaveBeenCalled();
+  const body: unknown = JSON.parse(String(fetchMock.mock.calls[0][1]?.body));
+  expect(body).toMatchObject({ fbtoken: "" });
+  expect(updateState).toHaveBeenLastCalledWith(
+    token.id,
+    expect.objectContaining({ registeredFcmToken: "" }),
+  );
   expect(isTokenRollingOut(token.id)).toBe(false);
 });
 test("rejects expired enrollment without generating keys or contacting the server", async () => {
