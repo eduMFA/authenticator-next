@@ -107,14 +107,7 @@ export default function AddToken() {
     });
   }, []);
 
-  const content = shouldShowPermissionSplash ? (
-    <CameraPermissionSplash
-      disabled={isRequestingPermission}
-      onContinue={() => {
-        void handleRequestPermission();
-      }}
-    />
-  ) : (
+  const content = (
     <SafeAreaView edges={["bottom", "left", "right"]} style={styles.safeArea}>
       <View
         style={[
@@ -136,10 +129,19 @@ export default function AddToken() {
           </ThemedText>
         </View>
         <View style={styles.scanner}>
-          <QRCodeScanner
-            permission={permission}
-            onQRCodeScanned={handleQRCodeScanned}
-          />
+          {shouldShowPermissionSplash ? (
+            <CameraPermissionSplash
+              disabled={isRequestingPermission}
+              onContinue={() => {
+                void handleRequestPermission();
+              }}
+            />
+          ) : (
+            <QRCodeScanner
+              permission={permission}
+              onQRCodeScanned={handleQRCodeScanned}
+            />
+          )}
         </View>
         <View style={[styles.splitter, { gap: Spacing.lg * layoutScale }]}>
           <View
