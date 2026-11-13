@@ -634,6 +634,10 @@ msgstr "This token did not finish enrollment and cannot receive push requests un
 msgid "Token"
 msgstr "Token"
 
+#: src/components/token-detail/token-overview-content.tsx:199
+msgid "Token version"
+msgstr "Token version"
+
 #: src/app/index.tsx:765
 #: src/components/onboarding-sequence/step-actions.tsx:145
 msgid "Try again"

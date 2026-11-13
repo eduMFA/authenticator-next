@@ -634,6 +634,10 @@ msgstr "Dieses Token hat die Registrierung nicht abgeschlossen und kann keine Pu
 msgid "Token"
 msgstr "Token"
 
+#: src/components/token-detail/token-overview-content.tsx:199
+msgid "Token version"
+msgstr "Token-Version"
+
 #: src/app/index.tsx:765
 #: src/components/onboarding-sequence/step-actions.tsx:145
 msgid "Try again"

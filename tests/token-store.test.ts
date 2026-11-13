@@ -6,6 +6,7 @@ import {
   performTokenRollout,
   startPendingRollouts,
 } from "@/services/token-rollout";
+import { parseTokenFromUri } from "@/utils/token";
 import { request, token } from "./fixtures";
 
 jest.mock("@/services/token-rollout", () => ({
@@ -95,4 +96,24 @@ test("starts pending rollouts after rehydration", async () => {
     .getOptions()
     .storage?.getItem("token-storage");
   expect(Object.keys(snapshot?.state ?? {})).toEqual(["tokens"]);
+});
+
+test("persists the version from each enrollment URI", async () => {
+  const { addToken } = useTokenStore.getState();
+
+  for (const version of [1, 2]) {
+    const params = new URLSearchParams({
+      v: String(version),
+      serial: `serial-${version}`,
+      url: token.callbackUrl,
+      enrollment_credential: token.enrollmentCredential,
+      enrollmentCredential: token.enrollmentCredential,
+    });
+    addToken(parseTokenFromUri(`edumfa-push://token/Account?${params}`));
+  }
+
+  await useTokenStore.persist.rehydrate();
+  expect(useTokenStore.getState().tokens.map(({ version }) => version)).toEqual([
+    1, 2,
+  ]);
 });

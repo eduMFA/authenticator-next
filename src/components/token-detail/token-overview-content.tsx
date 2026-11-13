@@ -196,6 +196,7 @@ export function TokenOverviewContent({
             </View>
           ) : null}
           <DetailRow label={t`Serial`} value={token.id} />
+          <DetailRow label={t`Token version`} value={String(token.version)} />
         </ThemedView>
       </View>
     </>
