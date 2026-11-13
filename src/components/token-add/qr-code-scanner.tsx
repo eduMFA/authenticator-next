@@ -1,7 +1,7 @@
 import { StaticColors } from "@/constants/theme";
+import { openAppSettings } from "@/utils/open-links";
 import * as Camera from "expo-camera";
 import { CameraView } from "expo-camera";
-import * as Linking from "expo-linking";
 import { useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { CameraPermissionDenied } from "./camera-permission-denied";
@@ -26,13 +26,7 @@ export default function QRCodeScanner({ onQRCodeScanned, permission }: Props) {
   };
 
   if (!permission?.granted) {
-    return (
-      <CameraPermissionDenied
-        onOpenSettings={() => {
-          void Linking.openSettings();
-        }}
-      />
-    );
+    return <CameraPermissionDenied onOpenSettings={openAppSettings} />;
   }
 
   return (

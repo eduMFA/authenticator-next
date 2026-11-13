@@ -5,11 +5,15 @@ import { SETTINGS_LINKS } from "@/constants/settings";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore, type ThemePreference } from "@/stores/settings";
+import {
+  openAppSettings,
+  openExternalLink,
+  openWebLink,
+} from "@/utils/open-links";
 import { Host, Switch } from "@expo/ui";
 import { accessibilityLabel } from "@expo/ui/swift-ui/modifiers";
 import { useLingui } from "@lingui/react/macro";
 import * as Application from "expo-application";
-import * as Linking from "expo-linking";
 import { Stack, useRouter } from "expo-router";
 import {
   Platform,
@@ -20,10 +24,6 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-function openUrl(url: string): void {
-  void Linking.openURL(url);
-}
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -121,7 +121,7 @@ export default function SettingsScreen() {
             detail={t`Change the app language in system settings`}
             icon={{ android: "language", ios: "globe" }}
             label={t`Language`}
-            onPress={() => void Linking.openSettings()}
+            onPress={openAppSettings}
           />
         </Section>
 
@@ -136,7 +136,7 @@ export default function SettingsScreen() {
             icon={{ android: "star", ios: "star" }}
             label={t`Review eduMFA Push`}
             onPress={() =>
-              openUrl(
+              openExternalLink(
                 Platform.OS === "ios"
                   ? SETTINGS_LINKS.reviewIos
                   : SETTINGS_LINKS.reviewAndroid,
@@ -147,7 +147,7 @@ export default function SettingsScreen() {
           <SettingsRow
             icon={{ android: "privacy_tip", ios: "hand.raised" }}
             label={t`Privacy policy`}
-            onPress={() => openUrl(SETTINGS_LINKS.privacy)}
+            onPress={() => openWebLink(SETTINGS_LINKS.privacy)}
           />
           <Divider />
           <SettingsRow
@@ -156,13 +156,13 @@ export default function SettingsScreen() {
               ios: "chevron.left.forwardslash.chevron.right",
             }}
             label={t`GitHub`}
-            onPress={() => openUrl(SETTINGS_LINKS.github)}
+            onPress={() => openWebLink(SETTINGS_LINKS.github)}
           />
           <Divider />
           <SettingsRow
             icon={{ android: "public", ios: "safari" }}
             label={t`Website`}
-            onPress={() => openUrl(SETTINGS_LINKS.website)}
+            onPress={() => openWebLink(SETTINGS_LINKS.website)}
           />
           <Divider />
           <SettingsRow

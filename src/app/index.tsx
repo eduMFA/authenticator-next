@@ -25,6 +25,7 @@ import {
   getRefreshHapticRippleIndex,
   playImpactSoftHaptic,
 } from "@/utils/haptics";
+import { openAppSettings } from "@/utils/open-links";
 import AddSymbol from "@expo/material-symbols/add.xml";
 import AddCircleSymbol from "@expo/material-symbols/add_circle.xml";
 import CancelSymbol from "@expo/material-symbols/cancel.xml";
@@ -51,7 +52,6 @@ import { imePadding, padding } from "@expo/ui/jetpack-compose/modifiers";
 import { buttonStyle, controlSize } from "@expo/ui/swift-ui/modifiers";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
-import * as Linking from "expo-linking";
 import {
   Stack,
   useIsFocused,
@@ -164,13 +164,6 @@ export default function Tokens() {
       console.warn("Could not request notification permission.", error);
     });
   }, [requestPermissions]);
-  const handleOpenNotificationSettings = useCallback(() => {
-    Linking.openSettings().catch((error: unknown) => {
-      if (__DEV__) {
-        console.warn("Could not open notification settings:", error);
-      }
-    });
-  }, []);
   const stackHeaderStyle = useMemo(
     () => ({
       backgroundColor: isLiquidGlassAvailable()
@@ -779,7 +772,7 @@ export default function Tokens() {
                       ? () => void checkPermissions()
                       : canRequestPermission
                         ? handleRequestNotificationPermission
-                        : handleOpenNotificationSettings
+                        : openAppSettings
                   }
                 >
                   <StatusCard

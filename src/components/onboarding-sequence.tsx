@@ -22,12 +22,12 @@ import {
   isNotificationPermissionEnabled,
   isNotificationPermissionPending,
 } from "@/utils/notification";
+import { openAppSettings } from "@/utils/open-links";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AppState,
   BackHandler,
-  Linking,
   PanResponder,
   StyleSheet,
   Text,
@@ -340,11 +340,7 @@ export function OnboardingSequence() {
 
   const handleOpenNotificationSettings = useCallback(() => {
     playHaptic((presets) => presets.System.impactMedium());
-    Linking.openSettings().catch((error: unknown) => {
-      if (__DEV__) {
-        console.warn("Could not open notification settings:", error);
-      }
-    });
+    void openAppSettings();
   }, []);
 
   const handleSkipNotifications = useCallback(() => {

@@ -2,6 +2,7 @@ import type { FeedbackFormProps } from "@/components/feedback-form.types";
 import { SETTINGS_LINKS } from "@/constants/settings";
 import { Spacing } from "@/constants/theme";
 import { useFeedbackForm } from "@/hooks/use-feedback-form";
+import { openExternalLink } from "@/utils/open-links";
 import ArrowDropDownSymbol from "@expo/material-symbols/arrow_drop_down.xml";
 import CheckSymbol from "@expo/material-symbols/check.xml";
 import CloseSymbol from "@expo/material-symbols/close.xml";
@@ -34,7 +35,6 @@ import {
   width,
 } from "@expo/ui/jetpack-compose/modifiers";
 import { useLingui } from "@lingui/react/macro";
-import * as Linking from "expo-linking";
 import { useState } from "react";
 import { StyleSheet, useColorScheme } from "react-native";
 
@@ -247,7 +247,7 @@ export function FeedbackForm({
             </OutlinedTextField>
             <Text
               modifiers={[
-                clickable(() => void Linking.openURL(SETTINGS_LINKS.privacy)),
+                clickable(() => openExternalLink(SETTINGS_LINKS.privacy)),
               ]}
               style={textStyles.caption}
             >

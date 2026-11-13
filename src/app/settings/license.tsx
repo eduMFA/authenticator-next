@@ -1,8 +1,8 @@
 import { ThemedText } from "@/components/themed-text";
 import { Spacing, Typography } from "@/constants/theme";
 import { OPEN_SOURCE_LICENSES } from "@/generated/open-source-licenses";
+import { openWebLink } from "@/utils/open-links";
 import { Trans, useLingui } from "@lingui/react/macro";
-import * as Linking from "expo-linking";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { Pressable, ScrollView, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -55,7 +55,7 @@ export default function LicenseScreen() {
         {item.url ? (
           <Pressable
             accessibilityRole="link"
-            onPress={() => void Linking.openURL(item.url)}
+            onPress={() => openWebLink(item.url)}
           >
             <ThemedText style={styles.link} themeColor="branding">
               <Trans>Project website</Trans>

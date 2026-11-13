@@ -1,6 +1,8 @@
 import type { FeedbackFormProps } from "@/components/feedback-form.types";
+import { SETTINGS_LINKS } from "@/constants/settings";
 import { Spacing } from "@/constants/theme";
 import { useFeedbackForm } from "@/hooks/use-feedback-form";
+import { openWebLink } from "@/utils/open-links";
 import {
   Button,
   Form,
@@ -168,7 +170,6 @@ export function FeedbackForm({
               ]}
             >
               <Text
-                markdownEnabled
                 modifiers={[
                   font({ textStyle: "footnote" }),
                   foregroundStyle({
@@ -177,8 +178,16 @@ export function FeedbackForm({
                   }),
                 ]}
               >
-                {t`By sending feedback, you agree to the processing of your data under our [Privacy policy](https://edumfa.io/app-privacy).`}
+                {t`By sending feedback, you agree to the processing of your data under our privacy policy.`}
               </Text>
+              <Button
+                onPress={() => openWebLink(SETTINGS_LINKS.privacy)}
+                modifiers={[buttonStyle("borderless")]}
+              >
+                <Text modifiers={[font({ textStyle: "footnote" })]}>
+                  {t`Privacy policy`}
+                </Text>
+              </Button>
               <Button
                 modifiers={[
                   buttonStyle("glassProminent"),
