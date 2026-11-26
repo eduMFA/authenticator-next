@@ -9,7 +9,7 @@
         "@expo/material-symbols": "^0.1.1",
         "@expo/ui": "~58.0.29",
         "@formatjs/intl-locale": "^5.5.1",
-        "@formatjs/intl-pluralrules": "^6.4.0",
+        "@formatjs/intl-pluralrules": "^7.0.0",
         "@lingui/core": "^6.12.0",
         "@lingui/react": "^6.12.0",
         "@react-native-async-storage/async-storage": "^2.2.0",
@@ -444,7 +444,7 @@
 
     "@firebase/webchannel-wrapper": ["@firebase/webchannel-wrapper@1.0.7", "", {}, "sha512-phBFwieDLvkZGYN9CE9ZFNEIoBVksprzsnCzQejCmCHtgwCXReeuRpoEGN9C4EbhONztv8NRV1tau6Rb9pONwQ=="],
 
-    "@formatjs/bigdecimal": ["@formatjs/bigdecimal@0.2.7", "", {}, "sha512-B4+XY/e4u5v261r3a37Kq2ax91gPZSKGyVpx8X5dygAggLlUz+6MeBpmAhaBFGB8WQ4JB1qD+QtKHk9aJkEb9Q=="],
+    "@formatjs/bigdecimal": ["@formatjs/bigdecimal@0.2.12", "", {}, "sha512-KSFLj/KBZfanDW3BpMytGLrZFB8gGvxbtJkB2NBkw3SW0nR8Yno2Ea2s62vCFaJ4GHfGMWDoXfBxzpfKwOfgAg=="],
 
     "@formatjs/fast-memoize": ["@formatjs/fast-memoize@3.1.8", "", {}, "sha512-Y9YFFfeBDkAWmLWD3LVNHbHlyELsP2lYRNoY6+QhtPh1/ujCiX5QYBzAqe0cWdkCxKVezHLt0qjWz1veEUV7UA=="],
 
@@ -452,9 +452,9 @@
 
     "@formatjs/intl-locale": ["@formatjs/intl-locale@5.5.1", "", { "dependencies": { "@formatjs/intl-getcanonicallocales": "3.4.1", "@formatjs/intl-supportedvaluesof": "3.1.1" } }, "sha512-5cdwxJot7X9yESqkx492vB9DVrJLzgjAptPUvx7EO+NIROZp2LvdFKtSzoLJhXmcrI/NfmxRR+z5D+PAKudXyw=="],
 
-    "@formatjs/intl-localematcher": ["@formatjs/intl-localematcher@0.10.0", "", { "dependencies": { "@formatjs/fast-memoize": "3.1.7" } }, "sha512-OvfBelurObm02D1+4BsuHSt3Xkn49RZPo7uJXt/1Z0dNET3EN39kY1rKMV3kG0tn0p4gyGWrcFx9HyeF07cq5g=="],
+    "@formatjs/intl-localematcher": ["@formatjs/intl-localematcher@0.10.3", "", { "dependencies": { "@formatjs/fast-memoize": "3.1.8" } }, "sha512-qHGNMjYbewa1uteT7VFPot2+q9glcBMVRQhmQNXgNYia35Arzln7vJ4Zyj6ktm6POzRc3SW/CTAhhSnMQSFvJg=="],
 
-    "@formatjs/intl-pluralrules": ["@formatjs/intl-pluralrules@6.4.0", "", { "dependencies": { "@formatjs/bigdecimal": "0.2.7", "@formatjs/intl-localematcher": "0.10.0" } }, "sha512-dPsgM2WeLIRPzH8wqv9mnq2sdnAeyz7n7gqv/JSK6jFVvJEEZIyZX0XalFZsuuNQ8U2CQQ5RxCy0h9U/nirJIQ=="],
+    "@formatjs/intl-pluralrules": ["@formatjs/intl-pluralrules@7.1.2", "", { "dependencies": { "@formatjs/bigdecimal": "0.2.12", "@formatjs/intl-localematcher": "0.10.3" } }, "sha512-ZsLZvUmRH1eZWqiYEj5/e7rtlIBUddSo4u73itGeetxFqbxYCE7nOBcHMH49HgGfmoMSXHW5NWQ7eGfFoM2hhg=="],
 
     "@formatjs/intl-supportedvaluesof": ["@formatjs/intl-supportedvaluesof@3.1.1", "", { "dependencies": { "@formatjs/fast-memoize": "3.1.8" } }, "sha512-LrpJ/SBLVTBTiw+3Y18n5fp3+pO/Fl07LaTHRbk3ZKRW04xljE0xqtpq5ZBvGWhsgzLqNVVrqQsPDlLDLVYK6g=="],
 
@@ -2279,8 +2279,6 @@
     "@expo/plist/xmlbuilder": ["xmlbuilder@15.1.1", "", {}, "sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg=="],
 
     "@expo/prebuild-config/semver": ["semver@7.8.6", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-9lpSSU4Mly3mrtruwLs1eLK6+gzbzqeBFwRNjIjE+9LuDpWdYctrQlQ3ej1Ilgi7gknpsTRnPoLP8DpCHqHIJw=="],
-
-    "@formatjs/intl-localematcher/@formatjs/fast-memoize": ["@formatjs/fast-memoize@3.1.7", "", {}, "sha512-zXfhLpvA6T7+efdt9JLbBwZ00tT7NsBMDVnDu8rpHeNNv8KfRZAMo2gkG0k9lK/Nzc//3kJ9pImsfuJxk3KhUA=="],
 
     "@isaacs/cliui/string-width": ["string-width@5.1.2", "", { "dependencies": { "eastasianwidth": "^0.2.0", "emoji-regex": "^9.2.2", "strip-ansi": "^7.0.1" } }, "sha512-HnLOCR3vjcY8beoNLtcjZ5/nxn2afmME6lhrDrebokqMap+XbeW8n9TXpPDOqdGK5qcI3oT0GKTW6wC7EMiVqA=="],
 
