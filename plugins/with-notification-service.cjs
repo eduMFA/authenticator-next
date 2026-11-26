@@ -20,7 +20,59 @@ const sources = [
   ["modules/edumfa-rsa/ios/EduMfaRsaCrypto.swift", "EduMfaRsaCrypto.swift"],
 ];
 
+const previewTarget = "EduMfaNotificationPreview";
+const targets = [
+  {
+    name: targetName,
+    suffix: "NotificationService",
+    sources,
+    extension: {
+      NSExtensionPointIdentifier: "com.apple.usernotifications.service",
+      NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).NotificationService",
+    },
+  },
+  {
+    name: previewTarget,
+    suffix: "NotificationPreview",
+    sources: [
+      [
+        "modules/edumfa-notifications/preview/NotificationViewController.swift",
+        "NotificationViewController.swift",
+      ],
+      [
+        "modules/edumfa-notifications/preview/NotificationPreview.swift",
+        "NotificationPreview.swift",
+      ],
+      [
+        "modules/edumfa-notifications/ios/EduMfaNotificationJournal.swift",
+        "PreviewJournal.swift",
+      ],
+      ["modules/edumfa-rsa/ios/EduMfaRsaCrypto.swift", "PreviewCrypto.swift"],
+    ],
+    resources: ["NotificationPreview.xcstrings"],
+    extension: {
+      NSExtensionPointIdentifier:
+        "com.apple.usernotifications.content-extension",
+      NSExtensionPrincipalClass:
+        "$(PRODUCT_MODULE_NAME).NotificationViewController",
+      NSExtensionAttributes: {
+        UNNotificationExtensionCategory: "PUSH_AUTHENTICATION",
+        UNNotificationExtensionInitialContentSizeRatio: 0.6,
+        UNNotificationExtensionDefaultContentHidden: true,
+      },
+    },
+  },
+];
+
 async function configureProject(project, config, projectRoot, iosRoot) {
+  for (const target of targets) {
+    await configureTarget(project, config, projectRoot, iosRoot, target);
+  }
+}
+
+async function configureTarget(project, config, projectRoot, iosRoot, spec) {
+  const targetName = spec.name;
+  const sources = spec.sources;
   const bundle = config.ios.bundleIdentifier;
   const group = `group.${bundle}.notifications`;
   const folder = path.join(iosRoot, targetName);
@@ -34,19 +86,20 @@ async function configureProject(project, config, projectRoot, iosRoot) {
   await fs.writeFile(
     path.join(folder, "Info.plist"),
     plist.build({
-      CFBundleDisplayName: "eduMFA notification service",
+      CFBundleDisplayName:
+        spec.suffix === "NotificationService"
+          ? "eduMFA notification service"
+          : "eduMFA notification preview",
       CFBundleExecutable: "$(EXECUTABLE_NAME)",
       CFBundleIdentifier: "$(PRODUCT_BUNDLE_IDENTIFIER)",
       CFBundleInfoDictionaryVersion: "6.0",
+      CFBundleDevelopmentRegion: "en",
       CFBundleName: "$(PRODUCT_NAME)",
       CFBundlePackageType: "XPC!",
       CFBundleShortVersionString: "$(MARKETING_VERSION)",
       CFBundleVersion: "$(CURRENT_PROJECT_VERSION)",
       EduMfaNotificationAppGroup: group,
-      NSExtension: {
-        NSExtensionPointIdentifier: "com.apple.usernotifications.service",
-        NSExtensionPrincipalClass: "$(PRODUCT_MODULE_NAME).NotificationService",
-      },
+      NSExtension: spec.extension,
     }),
   );
   await fs.writeFile(
@@ -70,7 +123,7 @@ async function configureProject(project, config, projectRoot, iosRoot) {
       targetName,
       "app_extension",
       targetName,
-      `${bundle}.NotificationService`,
+      `${bundle}.${spec.suffix}`,
     );
     target = [added.uuid, added.pbxNativeTarget];
     project.addBuildPhase([], "PBXSourcesBuildPhase", "Sources", added.uuid);
@@ -80,6 +133,14 @@ async function configureProject(project, config, projectRoot, iosRoot) {
       "Frameworks",
       added.uuid,
     );
+    if (spec.resources?.length) {
+      project.addBuildPhase(
+        [],
+        "PBXResourcesBuildPhase",
+        "Resources",
+        added.uuid,
+      );
+    }
   }
   const [targetId, nativeTarget] = target;
   let sourceGroup = project.findPBXGroupKey({ name: targetName });
@@ -95,6 +156,23 @@ async function configureProject(project, config, projectRoot, iosRoot) {
     const members = project.getPBXGroupByKey(sourceGroup).children;
     if (!members.some((member) => member.comment === filename)) {
       project.addSourceFile(filename, { target: targetId }, sourceGroup);
+    }
+  }
+  for (const filename of spec.resources ?? []) {
+    await fs.copyFile(
+      path.join(projectRoot, "modules/edumfa-notifications/preview", filename),
+      path.join(folder, filename),
+    );
+    if (
+      !project
+        .getPBXGroupByKey(sourceGroup)
+        .children.some((member) => member.comment === filename)
+    ) {
+      project.addResourceFile(
+        filename,
+        { target: targetId, lastKnownFileType: "text.json.xcstrings" },
+        sourceGroup,
+      );
     }
   }
   const configurations = project.pbxXCBuildConfigurationSection();
@@ -130,10 +208,35 @@ async function configureProject(project, config, projectRoot, iosRoot) {
         hostSettings.DEVELOPMENT_TEAM ?? config.ios.appleTeamId ?? '""',
       INFOPLIST_FILE: `"${targetName}/Info.plist"`,
       IPHONEOS_DEPLOYMENT_TARGET: "16.4",
-      PRODUCT_BUNDLE_IDENTIFIER: `"${bundle}.NotificationService"`,
+      PRODUCT_BUNDLE_IDENTIFIER: `"${bundle}.${spec.suffix}"`,
       SWIFT_VERSION: "5.0",
       TARGETED_DEVICE_FAMILY: '"1,2"',
     });
+    if (spec.name === previewTarget) {
+      // The extension host discovers its context class dynamically. Importing
+      // only the protocol lets the linker strip UserNotificationsUI, causing
+      // a launch-time crash before the view controller receives a notification.
+      configuration.buildSettings.OTHER_LDFLAGS = [
+        '"$(inherited)"',
+        '"-Wl,-needed_framework,UserNotificationsUI"',
+      ];
+    }
+  }
+  // node-xcode embeds additional extensions in the first Copy Files phase but
+  // still creates an empty phase for each target. Keep one populated phase.
+  const phases = project.hash.project.objects.PBXCopyFilesBuildPhase;
+  for (const [key, phase] of Object.entries(phases)) {
+    if (
+      !key.endsWith("_comment") &&
+      Number(phase.dstSubfolderSpec) === 13 &&
+      phase.files.length === 0
+    ) {
+      host.buildPhases = host.buildPhases.filter(
+        (reference) => reference.value !== key,
+      );
+      delete phases[key];
+      delete phases[`${key}_comment`];
+    }
   }
   // addTarget embeds the .appex and adds the host dependency. Sign the embedded
   // product too, rather than copying it without the required signing attribute.
@@ -169,13 +272,14 @@ module.exports = function withNotificationService(config) {
   const ios = (((eas.build ??= {}).experimental ??= {}).ios ??= {});
   ios.appExtensions = [
     ...(ios.appExtensions ?? []).filter(
-      (extension) => extension.targetName !== targetName,
+      (extension) =>
+        !targets.some((target) => target.name === extension.targetName),
     ),
-    {
-      targetName,
-      bundleIdentifier: `${bundle}.NotificationService`,
+    ...targets.map((target) => ({
+      targetName: target.name,
+      bundleIdentifier: `${bundle}.${target.suffix}`,
       entitlements: { "com.apple.security.application-groups": [group] },
-    },
+    })),
   ];
   return withXcodeProject(config, async (result) => {
     await configureProject(

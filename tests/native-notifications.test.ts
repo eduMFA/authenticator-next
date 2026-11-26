@@ -44,6 +44,8 @@ test("copies only enrolled public configuration and reconciles well-formed nativ
         callbackUrl: token.callbackUrl,
         serverPublicKey: "key",
         version: token.version,
+        label: token.label,
+        ...(token.issuer && { issuer: token.issuer }),
       },
     ],
     requests: [request],

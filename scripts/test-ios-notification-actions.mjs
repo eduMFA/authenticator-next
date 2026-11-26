@@ -12,6 +12,7 @@ try {
     "modules/edumfa-rsa/ios/EduMfaRsaCrypto.swift",
     "modules/edumfa-notifications/ios/EduMfaNotificationJournal.swift",
     "modules/edumfa-notifications/ios/EduMfaNotificationActions.swift",
+    "modules/edumfa-notifications/preview/NotificationPreview.swift",
     "tests/native-notification-actions.swift",
   ];
   const sources = await Promise.all(

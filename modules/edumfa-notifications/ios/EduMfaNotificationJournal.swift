@@ -8,6 +8,8 @@ struct NotificationToken: Codable, Sendable {
   let serverPublicKey: String
   var version: Int? = nil
   var requireDeviceAuth: Bool? = nil
+  var label: String? = nil
+  var issuer: String? = nil
 }
 
 struct NotificationPushRequest: Codable, Sendable {

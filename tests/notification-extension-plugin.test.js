@@ -63,7 +63,7 @@ test("creates one embedded, signed service target with shared App Group and curr
     const [targetId, target] = targets[0];
     expect(target.productType).toBe('"com.apple.product-type.app-extension"');
     expect(serialized.getFirstTarget().firstTarget.dependencies).toHaveLength(
-      1,
+      2,
     );
     const phases = serialized.hash.project.objects.PBXSourcesBuildPhase;
     const sourcePhase = target.buildPhases
@@ -87,7 +87,7 @@ test("creates one embedded, signed service target with shared App Group and curr
     ).filter(([key]) => !key.endsWith("_comment"));
     expect(copies).toHaveLength(1);
     expect(copies[0][1].dstSubfolderSpec).toBe(13);
-    expect(copies[0][1].files).toHaveLength(1);
+    expect(copies[0][1].files).toHaveLength(2);
     const product =
       serialized.pbxBuildFileSection()[copies[0][1].files[0].value];
     expect(product.settings.ATTRIBUTES).toContain("CodeSignOnCopy");
@@ -121,6 +121,76 @@ test("creates one embedded, signed service target with shared App Group and curr
       ),
     );
     expect(targetId).toBeTruthy();
+    const previews = Object.entries(serialized.pbxNativeTargetSection()).filter(
+      ([key, target]) =>
+        !key.endsWith("_comment") &&
+        target.name === '"EduMfaNotificationPreview"',
+    );
+    expect(previews).toHaveLength(1);
+    const preview = previews[0][1];
+    const previewConfigurations =
+      serialized.pbxXCConfigurationList()[preview.buildConfigurationList];
+    for (const reference of previewConfigurations.buildConfigurations) {
+      expect(
+        serialized.pbxXCBuildConfigurationSection()[reference.value]
+          .buildSettings.OTHER_LDFLAGS,
+      ).toContain('"-Wl,-needed_framework,UserNotificationsUI"');
+    }
+    const previewSources = preview.buildPhases
+      .map((phase) => phases[phase.value])
+      .find(Boolean);
+    expect(previewSources.files).toHaveLength(4);
+    const resources = serialized.hash.project.objects.PBXResourcesBuildPhase;
+    const previewResources = preview.buildPhases
+      .map((phase) => resources[phase.value])
+      .find(Boolean);
+    expect(previewResources.files).toHaveLength(1);
+    const resource =
+      serialized.pbxBuildFileSection()[previewResources.files[0].value];
+    expect(
+      serialized
+        .pbxFileReferenceSection()
+        [resource.fileRef].lastKnownFileType.replaceAll('"', ""),
+    ).toBe("text.json.xcstrings");
+    const previewFolder = path.join(root, "EduMfaNotificationPreview");
+    expect(
+      plist.parse(
+        await fs.readFile(path.join(previewFolder, "Info.plist"), "utf8"),
+      ),
+    ).toMatchObject({
+      EduMfaNotificationAppGroup: "group.io.edumfa.app.notifications",
+      NSExtension: {
+        NSExtensionPointIdentifier:
+          "com.apple.usernotifications.content-extension",
+        NSExtensionPrincipalClass:
+          "$(PRODUCT_MODULE_NAME).NotificationViewController",
+        NSExtensionAttributes: {
+          UNNotificationExtensionCategory: "PUSH_AUTHENTICATION",
+          UNNotificationExtensionDefaultContentHidden: true,
+        },
+      },
+    });
+    expect(
+      await fs.readFile(
+        path.join(previewFolder, "PreviewJournal.swift"),
+        "utf8",
+      ),
+    ).toBe(
+      await fs.readFile(
+        "modules/edumfa-notifications/ios/EduMfaNotificationJournal.swift",
+        "utf8",
+      ),
+    );
+    const catalogue = JSON.parse(
+      await fs.readFile(
+        path.join(previewFolder, "NotificationPreview.xcstrings"),
+        "utf8",
+      ),
+    );
+    expect(catalogue.sourceLanguage).toBe("en");
+    expect(catalogue.strings["Expired"].localizations.de.stringUnit.value).toBe(
+      "Abgelaufen",
+    );
   } finally {
     await fs.rm(root, { recursive: true, force: true });
   }
@@ -150,7 +220,7 @@ test("declares EAS extension credentials and app entitlements without duplicatin
   config = plugin(config);
   config = plugin(config);
   const extensions = config.extra.eas.build.experimental.ios.appExtensions;
-  expect(extensions).toHaveLength(2);
+  expect(extensions).toHaveLength(3);
   expect(extensions[1]).toMatchObject({
     targetName: "EduMfaNotificationService",
     bundleIdentifier: "io.edumfa.app.NotificationService",
@@ -161,4 +231,8 @@ test("declares EAS extension credentials and app entitlements without duplicatin
     },
   });
   expect(config.extra.eas.projectId).toBe("project");
+  expect(extensions[2]).toMatchObject({
+    targetName: "EduMfaNotificationPreview",
+    bundleIdentifier: "io.edumfa.app.NotificationPreview",
+  });
 });

@@ -280,4 +280,28 @@ for value in [true, false] {
   try expect(try JSONDecoder().decode(NotificationServerResponse.self, from: data).accepted == value,
              "HTTP 200 without server acceptance must not complete a request")
 }
+let previewToken = NotificationToken(
+  id: "serial", callbackUrl: tokens[0].callbackUrl, serverPublicKey: "key",
+  label: "Work account", issuer: "Work"
+)
+var previewState = NotificationJournalState(tokens: [previewToken])
+let previewRequest = sampleRequest(nonce: "preview")
+let preview = try NotificationPreview.make(request: previewRequest, state: previewState, verify: { _, _ in true })
+try expect(preview?.question == previewRequest.question && preview?.title == previewRequest.title, "Preview lost signed request text")
+try expect(preview?.account == "Work account", "Preview lost enrolled account label")
+try expect(preview?.service == "registered.example", "Preview trusted the incoming callback URL")
+try expect(try NotificationPreview.make(request: previewRequest, state: previewState, verify: { _, _ in false }) == nil,
+           "Unverified request got a trusted preview")
+try expect(try NotificationPreview.make(request: previewRequest, state: NotificationJournalState(), verify: { _, _ in true }) == nil,
+           "Unknown enrollment got a trusted preview")
+var answeredPreview = previewRequest
+answeredPreview.status = "declined"
+previewState.entries[answeredPreview.key] = NotificationJournalEntry(request: answeredPreview, isNative: true)
+try expect(try NotificationPreview.make(request: previewRequest, state: previewState, verify: { _, _ in true })?.status == "declined",
+           "Preview resurrected an answered challenge")
+answeredPreview.status = "pending"
+answeredPreview.sentAt = Date().timeIntervalSince1970 * 1000 - 120_001
+previewState.entries[answeredPreview.key] = NotificationJournalEntry(request: answeredPreview, isNative: true)
+try expect(try NotificationPreview.make(request: previewRequest, state: previewState, verify: { _, _ in true })?.status == "expired",
+           "Preview reset expiry using a newer delivery date")
 print("Native notification action regression tests passed")
