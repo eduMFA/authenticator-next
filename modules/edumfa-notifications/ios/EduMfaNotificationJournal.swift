@@ -6,6 +6,8 @@ struct NotificationToken: Codable, Sendable {
   let id: String
   let callbackUrl: String
   let serverPublicKey: String
+  var version: Int? = nil
+  var requireDeviceAuth: Bool? = nil
 }
 
 struct NotificationPushRequest: Codable, Sendable {
@@ -39,7 +41,7 @@ struct NotificationPushRequest: Codable, Sendable {
 }
 
 enum NotificationActionError: Error {
-  case invalidAction, invalidSignature, unknownToken, expired, invalidCallback, server(Int), keychain(OSStatus)
+  case invalidAction, invalidSignature, unknownToken, expired, invalidCallback, rejected, authenticationRequired, server(Int), keychain(OSStatus)
 }
 
 // RFC 4648, matching the backend's padded Base32 signatures.

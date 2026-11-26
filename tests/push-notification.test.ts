@@ -46,7 +46,7 @@ function response(
   return {
     actionIdentifier,
     notification: {
-      date: Date.now(),
+      date: Platform.OS === "ios" ? Date.now() / 1000 : Date.now(),
       request: {
         identifier: `notification-${sequence++}`,
         trigger: null,
@@ -57,6 +57,7 @@ function response(
           data: { ...request },
           sound: null,
           categoryIdentifier: "PUSH_AUTHENTICATION",
+          threadIdentifier: null,
         },
       },
     },
@@ -179,7 +180,7 @@ test("iOS submits through the native handler and reconciles its authoritative re
   const declined = {
     ...request,
     id: notification.notification.request.identifier,
-    sentAt: notification.notification.date,
+    sentAt: notification.notification.date * 1000,
     status: PushRequestStatus.Declined,
   };
   jest

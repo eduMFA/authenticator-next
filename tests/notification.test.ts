@@ -1,6 +1,11 @@
 import { i18n } from "@lingui/core";
 import { messages } from "@/locales/en/messages";
 import * as Notifications from "expo-notifications";
+import {
+  IosAlertStyle,
+  IosAllowsPreviews,
+  IosAuthorizationStatus,
+} from "expo-notifications";
 import { Platform } from "react-native";
 import {
   getMessaging,
@@ -67,8 +72,8 @@ function permission(
             allowsDisplayInNotificationCenter: true,
             allowsDisplayOnLockScreen: true,
             allowsDisplayInCarPlay: false,
-            alertStyle: Notifications.IosAlertStyle.BANNER,
-            allowsPreviews: Notifications.IosAllowsPreviews.ALWAYS,
+            alertStyle: IosAlertStyle.BANNER,
+            allowsPreviews: IosAllowsPreviews.ALWAYS,
             providesAppNotificationSettings: true,
             allowsCriticalAlerts: false,
             allowsAnnouncements: false,
@@ -118,7 +123,7 @@ test("permission flags include provisional iOS permission", () => {
       permission(
         Notifications.PermissionStatus.UNDETERMINED,
         false,
-        Notifications.IosAuthorizationStatus.PROVISIONAL,
+        IosAuthorizationStatus.PROVISIONAL,
       ),
     ),
   ).toBe(true);

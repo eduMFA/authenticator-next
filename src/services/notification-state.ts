@@ -25,6 +25,7 @@ export function synchronizeNotificationState(): Promise<void> {
     )
       store.clearExpiredPushRequests();
 
+    if (Platform.OS !== "ios" && Platform.OS !== "android") return;
     if (Platform.OS === "ios") {
       const results = await synchronizeNativeNotifications(
         tokens,

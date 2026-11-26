@@ -1,6 +1,19 @@
 import Foundation
 import Security
 import EduMfaRsa
+import LocalAuthentication
+#if canImport(UIKit)
+import UIKit
+#endif
+
+struct NotificationServerResponse: Decodable {
+  struct Result: Decodable {
+    let status: Bool
+    let value: Bool
+  }
+  let result: Result
+  var accepted: Bool { result.status && result.value }
+}
 
 enum NotificationTokenVault {
   private static var query: [String: Any] {
@@ -42,6 +55,7 @@ actor EduMfaNotificationActions {
   typealias Verify = @Sendable (NotificationPushRequest, NotificationToken) throws -> Bool
   typealias Sign = @Sendable (String, String) throws -> String
   typealias Send = @Sendable (URLRequest) async throws -> Int
+  typealias Authenticate = @Sendable () async throws -> Void
 
   private var tokens: [NotificationToken] = []
   private var journal: [String: NotificationJournalEntry] = [:]
@@ -51,6 +65,7 @@ actor EduMfaNotificationActions {
   private let verify: Verify
   private let sign: Sign
   private let send: Send
+  private let authenticate: Authenticate
 
   init(
     defaults: UserDefaults = .standard,
@@ -67,14 +82,29 @@ actor EduMfaNotificationActions {
     sign: @escaping Sign = { message, alias in
       try EduMfaRsaCrypto().sign(message: message, keyAlias: alias, algorithm: "SHA256")
     },
+    authenticate: @escaping Authenticate = {
+      let context = LAContext()
+      #if canImport(UIKit)
+      context.interactionNotAllowed = await MainActor.run { UIApplication.shared.applicationState != .active }
+      #endif
+      guard try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Approve sign-in request") else {
+        throw NotificationActionError.authenticationRequired
+      }
+    },
     send: @escaping Send = { request in
       let configuration = URLSessionConfiguration.ephemeral
       configuration.timeoutIntervalForRequest = 15
       configuration.timeoutIntervalForResource = 20
       let session = URLSession(configuration: configuration)
       defer { session.finishTasksAndInvalidate() }
-      let (_, response) = try await session.data(for: request)
-      return (response as? HTTPURLResponse)?.statusCode ?? 0
+      let (data, response) = try await session.data(for: request)
+      let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+      if status == 200 {
+        guard try JSONDecoder().decode(NotificationServerResponse.self, from: data).accepted else {
+          throw NotificationActionError.rejected
+        }
+      }
+      return status
     }
   ) {
     self.store = store ?? NotificationJournalStore(
@@ -85,6 +115,7 @@ actor EduMfaNotificationActions {
     self.verify = verify
     self.sign = sign
     self.send = send
+    self.authenticate = authenticate
     if let state = try? self.store.read() {
       journal = state.entries
       tokens = state.tokens
@@ -188,16 +219,30 @@ actor EduMfaNotificationActions {
             ["https", "http"].contains(callback.scheme?.lowercased() ?? ""),
             callback.host != nil else { throw NotificationActionError.invalidCallback }
       let declined = action == "DECLINE"
-      let message = "\(request.nonce)|\(request.serial)" + (declined ? "|decline" : "")
+      if !declined && token.requireDeviceAuth == true { try await authenticate() }
+      let isV2 = token.version == 2
+      let message = isV2
+        ? String(decoding: try JSONSerialization.data(
+            withJSONObject: ["respond_to_challenge", request.serial, request.nonce, declined],
+            options: [.withoutEscapingSlashes]
+          ), as: UTF8.self)
+        : "\(request.nonce)|\(request.serial)" + (declined ? "|decline" : "")
       let signature = try sign(message, request.serial)
       guard let signatureData = Data(base64Encoded: signature) else { throw NotificationActionError.invalidSignature }
       var submission = URLRequest(url: callback)
       submission.httpMethod = "POST"
       submission.setValue("application/json", forHTTPHeaderField: "Content-Type")
-      submission.httpBody = try JSONSerialization.data(withJSONObject: [
+      var payload: [String: Any] = [
         "nonce": request.nonce, "serial": request.serial,
-        "signature": NotificationBase32.encode(signatureData), "decline": declined ? 1 : 0
-      ])
+        "signature": NotificationBase32.encode(signatureData)
+      ]
+      if isV2 {
+        payload["operation"] = "respond_to_challenge"
+        payload["decline"] = declined
+      } else {
+        payload["decline"] = declined ? 1 : 0
+      }
+      submission.httpBody = try JSONSerialization.data(withJSONObject: payload)
       let status = try await send(submission)
       guard status == 200 else { throw NotificationActionError.server(status) }
       request.status = declined ? "declined" : "accepted"

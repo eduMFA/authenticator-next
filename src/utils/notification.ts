@@ -52,7 +52,7 @@ export async function setupNotificationCategories() {
       PUSH_AUTHENTICATION_CHANNEL,
       {
         name: "Push Authentication",
-        importance: Notifications.AndroidImportance.HIGH,
+        importance: AndroidImportance.HIGH,
       },
     );
   }

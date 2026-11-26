@@ -39,7 +39,12 @@ test("copies only enrolled public configuration and reconciles well-formed nativ
   ).toEqual([request]);
   expect(JSON.parse(native.synchronize.mock.calls[0][0] as string)).toEqual({
     tokens: [
-      { id: token.id, callbackUrl: token.callbackUrl, serverPublicKey: "key" },
+      {
+        id: token.id,
+        callbackUrl: token.callbackUrl,
+        serverPublicKey: "key",
+        version: token.version,
+      },
     ],
     requests: [request],
   });

@@ -248,4 +248,36 @@ appDefaults.set(try JSONEncoder().encode([savedEntry]), forKey: "eduMFA.notifica
 let migratingApp = NotificationJournalStore(defaults: appDefaults, directory: migrationFolder)
 try migratingApp.transaction { state in state.tokens = tokens }
 try expect(try emptyExtension.read().entries[completed.key]?.request.status == "accepted", "Extension-first startup lost legacy completion")
+// Preserve V2 canonical signing and device-authentication requirements when
+// the native notification path replaces the newer JavaScript submission path.
+let v2Defaults = UserDefaults(suiteName: suite + ".v2")!
+defer { v2Defaults.removePersistentDomain(forName: suite + ".v2") }
+let v2Transport = TestTransport()
+let v2 = EduMfaNotificationActions(
+  defaults: v2Defaults, usesKeychain: false, verify: { _, _ in true },
+  sign: { message, _ in Data(message.utf8).base64EncodedString() },
+  authenticate: { throw NotificationActionError.authenticationRequired },
+  send: { try await v2Transport.respond($0) }
+)
+let protectedToken = NotificationToken(
+  id: "serial", callbackUrl: tokens[0].callbackUrl, serverPublicKey: "key",
+  version: 2, requireDeviceAuth: true
+)
+_ = try await v2.synchronize(NotificationSnapshot(tokens: [protectedToken], requests: []))
+let protectedRequest = sampleRequest(nonce: "protected")
+try expect(!(await v2.submit(protectedRequest, action: "ACCEPT")), "Device authentication was bypassed")
+try expect(await v2Transport.requests.isEmpty, "Unauthenticated approval reached the server")
+try expect(await v2.knownRequest(protectedRequest.key)?.status == "pending", "Authentication cancellation was not retryable")
+try expect(await v2.submit(protectedRequest, action: "DECLINE"), "Decline incorrectly required device authentication")
+let v2Submission = await v2Transport.requests[0]
+let v2Body = try JSONSerialization.jsonObject(with: v2Submission.httpBody!) as! [String: Any]
+try expect(v2Body["operation"] as? String == "respond_to_challenge", "V2 operation missing")
+try expect(v2Body["decline"] as? Bool == true, "V2 decline must be a boolean")
+let canonical = String(decoding: try NotificationBase32.decode(v2Body["signature"] as! String), as: UTF8.self)
+try expect(canonical == "[\"respond_to_challenge\",\"serial\",\"protected\",true]", "V2 canonical signature changed")
+for value in [true, false] {
+  let data = try JSONSerialization.data(withJSONObject: ["result": ["status": true, "value": value]])
+  try expect(try JSONDecoder().decode(NotificationServerResponse.self, from: data).accepted == value,
+             "HTTP 200 without server acceptance must not complete a request")
+}
 print("Native notification action regression tests passed")

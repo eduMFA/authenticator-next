@@ -45,6 +45,7 @@ function delivered(
         data: { nonce, serial },
         sound: null,
         categoryIdentifier: category,
+        threadIdentifier: null,
       },
     },
   };

@@ -23,11 +23,21 @@ export async function synchronizeNativeNotifications(
     JSON.stringify({
       tokens: tokens
         .filter((token) => token.serverPublicKey)
-        .map(({ id, callbackUrl, serverPublicKey }) => ({
-          id,
-          callbackUrl,
-          serverPublicKey,
-        })),
+        .map(
+          ({
+            id,
+            callbackUrl,
+            serverPublicKey,
+            version,
+            requireDeviceAuth,
+          }) => ({
+            id,
+            callbackUrl,
+            serverPublicKey,
+            version,
+            requireDeviceAuth,
+          }),
+        ),
       requests,
     }),
   );
