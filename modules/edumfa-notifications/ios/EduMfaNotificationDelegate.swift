@@ -25,7 +25,9 @@ final class EduMfaNotificationDelegate: NSObject, UNUserNotificationCenterDelega
       }
       return
     }
-    Task {
+    // UIKit's response completion must run on the main thread, including when
+    // parsing fails or the asynchronous action finishes on another executor.
+    Task { @MainActor in
       defer { completionHandler() }
       guard let request = try? NotificationPushRequest.from(
         userInfo: response.notification.request.content.userInfo,
