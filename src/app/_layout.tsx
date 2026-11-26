@@ -8,6 +8,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { useSettingsStore } from "@/stores/settings";
 import { useTokenStore } from "@/stores/token";
 import { useNotificationStore } from "@/stores/notification";
+import { upgradeEligibleEduPushTokens } from "@/services/edupush-upgrade";
 import { syncFcmRegistration } from "@/services/fcm-registration";
 import { activateCurrentLocale } from "@/utils/locale";
 import { withSentryRoot } from "@/utils/sentry";
@@ -84,6 +85,12 @@ function RootLayoutContent() {
   }, [hasCompletedOnboarding, fcmToken, tokens]);
 
   useEffect(() => {
+    if (hasCompletedOnboarding && tokens.length > 0) {
+      void upgradeEligibleEduPushTokens();
+    }
+  }, [hasCompletedOnboarding, tokens]);
+
+  useEffect(() => {
     Appearance.setColorScheme(
       themePreference === "automatic" ? "unspecified" : themePreference,
     );
@@ -115,12 +122,12 @@ function RootLayoutContent() {
     }
 
     const subscription = AppState.addEventListener("change", (nextAppState) => {
-      const wasInactive =
-        appState.current === "inactive" || appState.current === "background";
+      const wasInactive = appState.current !== "active";
       if (wasInactive && nextAppState === "active") {
         activateCurrentLocale();
         checkPermissions();
         pollChallenges();
+        void upgradeEligibleEduPushTokens();
       }
 
       appState.current = nextAppState;

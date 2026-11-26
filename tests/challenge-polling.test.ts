@@ -67,6 +67,46 @@ test("supports tokens without server public key", async () => {
   expect((await pollChallengesForToken(token)).challenges).toHaveLength(1);
   expect(verifyMessage).not.toHaveBeenCalled();
 });
+test("returns an authenticated upgrade advertisement even with no pending challenges", async () => {
+  fetchMock.mockResolvedValue(
+    response(200, {
+      result: { status: true, value: [] },
+      detail: { available_upgrade: { target_version: 2 } },
+    }),
+  );
+  const result = await pollAllChallenges([
+    { ...token, rolloutState: State.Completed },
+  ]);
+  expect(result.challenges).toEqual([]);
+  expect(result.tokenResults).toEqual([
+    { tokenId: token.id, success: true, tokenUpdate: { availableUpgrade: 2 } },
+  ]);
+});
+test.each([
+  [undefined, {}],
+  [null, { imageUrl: undefined }],
+  [
+    "https://example.org/image.png",
+    { imageUrl: "https://example.org/image.png" },
+  ],
+])(
+  "reads V2 token updates on empty polls with image %p",
+  async (image, tokenUpdate) => {
+    fetchMock.mockResolvedValue(
+      response(200, {
+        result: { status: true, value: [] },
+        detail: { token_update: { image } },
+      }),
+    );
+    await expect(
+      pollChallengesForToken({ ...token, version: 2 }),
+    ).resolves.toStrictEqual({
+      success: true,
+      challenges: [],
+      tokenUpdate,
+    });
+  },
+);
 test.each([204, 404])("treats %s as no challenges", async (status) => {
   fetchMock.mockResolvedValue(response(status));
   await expect(pollChallengesForToken(token)).resolves.toEqual({
@@ -139,7 +179,9 @@ test("returns empty aggregate when no completed tokens exist", async () => {
 });
 test("aggregates completed tokens and reports partial failures", async () => {
   fetchMock
-    .mockResolvedValueOnce(response(200, { result: { value: [request] } }))
+    .mockResolvedValueOnce(
+      response(200, { result: { value: [{ ...request, serial: "first" }] } }),
+    )
     .mockRejectedValueOnce(new Error("offline"));
   const result = await pollAllChallenges([
     token,

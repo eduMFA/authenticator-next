@@ -8,25 +8,18 @@ import {
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 
-const parseTokenV1 = (url: URL) => {
-  const pushToken: Partial<PushToken> = {};
-
-  const { label, issuer } = parseLabelAndIssuer(url);
-  pushToken["label"] = label;
-  pushToken["issuer"] = issuer;
-
+const parseEnrollmentFields = (url: URL) => {
   const serialParam = url.searchParams.get("serial");
   if (!serialParam) {
     throw new InvalidUrlError("No serial parameter provided.");
   }
-  pushToken["id"] = serialParam;
-
   const callbackUrlParam = url.searchParams.get("url");
   if (!callbackUrlParam) {
     throw new InvalidUrlError("No callback URL parameter provided.");
   }
+  let callbackUrl: string;
   try {
-    pushToken["callbackUrl"] = new URL(callbackUrlParam).toString();
+    callbackUrl = new URL(callbackUrlParam).toString();
   } catch {
     throw new InvalidUrlError("The provided callback URL is invalid.");
   }
@@ -36,46 +29,51 @@ const parseTokenV1 = (url: URL) => {
   if (!Number.isFinite(ttl) || ttl <= 0) {
     throw new InvalidUrlError(`Invalid ttl: ${ttlParam}`);
   }
-  pushToken.ttl = ttl;
-  pushToken.enrollmentStartedAt = Date.now();
-
-  const enrollmentCredentialParam = url.searchParams.get(
-    "enrollment_credential",
-  );
-  if (!enrollmentCredentialParam) {
+  const enrollmentCredential = url.searchParams.get("enrollment_credential");
+  if (!enrollmentCredential) {
     throw new InvalidUrlError("No enrollment_credential parameter provided.");
   }
-  pushToken["enrollmentCredential"] = enrollmentCredentialParam;
 
+  return {
+    id: serialParam,
+    callbackUrl,
+    ttl,
+    enrollmentCredential,
+    enrollmentStartedAt: Date.now(),
+  };
+};
+
+const parseTokenV1 = (url: URL) => {
+  const { label, issuer } = parseLabelAndIssuer(url);
   const sslVerifyParam = url.searchParams.get("sslverify");
-  pushToken["sslVerify"] = sslVerifyParam ? sslVerifyParam === "1" : true;
 
-  const pinParam = url.searchParams.get("pin");
-  if (pinParam === "True") {
-    pushToken["pin"] = true;
-  }
-
-  return pushToken;
+  return {
+    ...parseEnrollmentFields(url),
+    label,
+    issuer,
+    sslVerify: sslVerifyParam ? sslVerifyParam === "1" : true,
+    ...(url.searchParams.get("pin") === "True" && { pin: true }),
+  };
 };
 
 const parseTokenV2 = (url: URL) => {
-  const pushToken: Partial<PushToken> = {};
-
-  const serialParam = url.searchParams.get("serial");
-  if (!serialParam) {
-    throw new InvalidUrlError("No serial parameter provided.");
-  }
-  pushToken["id"] = serialParam;
-
   const label = decodeURIComponent(url.pathname.substring(1));
   if (!label) {
     throw new InvalidUrlError("No label provided in the URL path.");
   }
-  pushToken["label"] = label;
-
-  // TODO: Finish v2 implementation when v2 is specified
-
-  return pushToken;
+  const enrollment = parseEnrollmentFields(url);
+  if (new URL(enrollment.callbackUrl).protocol !== "https:") {
+    throw new InvalidUrlError("eduPush V2 requires an HTTPS callback URL.");
+  }
+  return {
+    ...enrollment,
+    label,
+    issuer: url.searchParams.get("issuer") || undefined,
+    sslVerify: true,
+    ...(url.searchParams.get("require_device_auth") === "true" && {
+      requireDeviceAuth: true,
+    }),
+  };
 };
 
 export const getTokenVersionParseFunction = {
@@ -143,7 +141,7 @@ export function parseTokenFromUri(uri: string): PushToken {
     version,
     rolloutState: PushTokenRolloutState.Pending,
     ...parseFunction(url),
-  } as PushToken;
+  };
 }
 
 export const parseLabelAndIssuer = (uri: URL) => {
@@ -166,8 +164,29 @@ export const parseIssuer = (uri: URL) => {
   return undefined;
 };
 
+export function parseTokenUpdate(image: unknown): Partial<PushToken> {
+  if (image === null) return { imageUrl: undefined };
+  if (typeof image !== "string") return {};
+  const url = URL.parse(image);
+  return url?.protocol === "https:" ? { imageUrl: url.href } : {};
+}
+
 export const parseTokenResponse = async (response: Response) => {
-  const data = await response.json();
-  const key = data.detail.public_key.replaceAll("\n", "");
-  return key;
+  const data: {
+    result?: { status?: boolean; value?: boolean };
+    detail?: { public_key?: unknown; token_update?: { image?: unknown } };
+  } = await response.json();
+  const key = data?.detail?.public_key;
+  if (
+    data?.result?.status === false ||
+    data?.result?.value === false ||
+    typeof key !== "string" ||
+    !key.trim()
+  ) {
+    throw new Error("The server did not return an enrollment public key.");
+  }
+  return {
+    serverPublicKey: key.replaceAll("\n", ""),
+    ...parseTokenUpdate(data.detail?.token_update?.image),
+  };
 };

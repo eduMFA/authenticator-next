@@ -10,6 +10,7 @@ import type {
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import { stripPemArmor } from "@/utils/crypto";
+import { requireDeviceAuthentication } from "@/utils/device-auth";
 import { deleteRsaKeyPair, generateRsaKeyPair } from "@/utils/rsa";
 import { parseTokenResponse } from "@/utils/token";
 
@@ -35,15 +36,6 @@ export function isTokenRollingOut(id: string): boolean {
 }
 
 /**
- * Generate RSA key pair for a token
- */
-async function generateRSAKeys(tokenId: string): Promise<string> {
-  const { publicKey: pubkey } = await generateRsaKeyPair(tokenId, KEY_SIZE);
-  console.log(`Generated RSA keys for token ${tokenId}. Public key:`, pubkey);
-  return pubkey;
-}
-
-/**
  * Send public key to server during token rollout
  */
 async function sendPublicKeyToServer(
@@ -51,10 +43,13 @@ async function sendPublicKeyToServer(
   publicKey: string,
   fcmToken: string,
 ): Promise<Response> {
+  // The compatibility payload permits an empty Firebase destination for poll-only tokens.
   const response = await fetch(token.callbackUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      ...(token.version === 2 &&
+        fcmToken && { operation: "complete_enrollment" }),
       enrollment_credential: token.enrollmentCredential,
       serial: token.id,
       fbtoken: fcmToken,
@@ -108,13 +103,17 @@ export async function performTokenRollout(
       }
     };
     checkEnrollmentExpiry();
-    // The backend requires the field, but accepts an empty Firebase token.
     const fbToken = (await useNotificationStore.getState().getFcmToken()) ?? "";
+    if (token.version === 2 && token.requireDeviceAuth) {
+      currentStep = PushTokenRolloutState.SendRSAPublicKey;
+      await requireDeviceAuthentication();
+      checkEnrollmentExpiry();
+    }
 
     // Step 1: Generate RSA key pair
     currentStep = PushTokenRolloutState.RSAKeyGeneration;
     updateState(id, { rolloutState: currentStep });
-    const pubkey = await generateRSAKeys(id);
+    const { publicKey: pubkey } = await generateRsaKeyPair(id, KEY_SIZE);
     checkEnrollmentExpiry();
 
     // Step 2: Send public key to server
@@ -128,7 +127,7 @@ export async function performTokenRollout(
 
     if (!response.ok) {
       console.error(
-        `Server responded with status ${response.status} for token ${id}: ${await response.text()}`,
+        `Enrollment failed for token ${id} with HTTP status ${response.status}.`,
       );
       updateState(id, {
         rolloutState: PushTokenRolloutState.SendRSAPublicKeyFailed,
@@ -145,14 +144,14 @@ export async function performTokenRollout(
     currentStep = PushTokenRolloutState.ParsingResponse;
     updateState(id, { rolloutState: currentStep });
 
-    const serverPublicKey = await parseTokenResponse(response);
+    const enrolledToken = await parseTokenResponse(response);
     updateState(id, {
       rolloutState: PushTokenRolloutState.Completed,
-      serverPublicKey,
+      ...enrolledToken,
       registeredFcmToken: fbToken,
     });
 
-    return { success: true, serverPublicKey };
+    return { success: true, serverPublicKey: enrolledToken.serverPublicKey };
   } catch (error) {
     console.error(`Rollout failed for token ${id}:`, error);
 

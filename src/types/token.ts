@@ -11,6 +11,8 @@ export type PushToken = {
   sslVerify: boolean;
   imageUrl?: string;
   pin?: boolean;
+  requireDeviceAuth?: boolean;
+  availableUpgrade?: 2;
   rolloutState: PushTokenRolloutState;
   publicKey?: string;
   serverPublicKey?: string;

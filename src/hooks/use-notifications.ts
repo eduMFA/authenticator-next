@@ -1,14 +1,12 @@
+import { verifyIncomingPushRequest } from "@/services/push-delivery";
 import { useNotificationStore } from "@/stores/notification";
 import { usePushRequestStore } from "@/stores/push-request";
-import { useTokenStore } from "@/stores/token";
 import type {
   NotificationAction,
   NotificationResponseData,
 } from "@/types/notification";
 import type { PushRequest } from "@/types/push-request";
-import { base32ToBase64 } from "@/utils/crypto";
 import {
-  addBackgroundMessageHandler,
   addMessageListener,
   getNotificationAction,
   getNotificationResponseData,
@@ -16,10 +14,9 @@ import {
   isNotificationPermissionEnabled,
   parsePushRequestFromNotificationData,
 } from "@/utils/notification";
-import { buildPushRequestSignedData } from "@/utils/push-request";
-import { verifyMessage } from "@/utils/rsa";
 import * as Notifications from "expo-notifications";
 import { useCallback, useEffect } from "react";
+import { Platform } from "react-native";
 import { useChallengePolling } from "./use-challenge-polling";
 
 export type { NotificationAction } from "@/types/notification";
@@ -81,45 +78,7 @@ export function useNotifications(onAction?: NotificationActionHandler) {
 
   const handlePushRequest = useCallback(
     async (pushRequest: PushRequest) => {
-      console.log("Received push request:", pushRequest.id);
-
-      const token = useTokenStore
-        .getState()
-        .tokens.find((t) => t.id === pushRequest.serial);
-
-      if (!token?.serverPublicKey) {
-        console.warn(
-          "Server public key not found for token serial:",
-          pushRequest.serial,
-        );
-        return;
-      }
-
-      const signedData = buildPushRequestSignedData(pushRequest);
-      let isValid = false;
-      try {
-        isValid = await verifyMessage(
-          signedData,
-          base32ToBase64(pushRequest.signature),
-          token.serverPublicKey,
-        );
-      } catch (error) {
-        console.error("Error verifying push request signature:", error);
-        return;
-      }
-
-      if (!isValid) {
-        console.warn(
-          "Signature verification failed for push request:",
-          pushRequest.id,
-        );
-        return;
-      }
-
-      const currentToken = useTokenStore
-        .getState()
-        .tokens.find((t) => t.id === pushRequest.serial);
-      if (currentToken?.serverPublicKey === token.serverPublicKey) {
+      if (await verifyIncomingPushRequest(pushRequest)) {
         addPushRequest(pushRequest);
       }
     },
@@ -127,32 +86,37 @@ export function useNotifications(onAction?: NotificationActionHandler) {
   );
 
   const handleNotificationAction = useCallback(
-    async (action: NotificationAction, data: NotificationResponseData) => {
+    async (
+      action: NotificationAction,
+      data: NotificationResponseData,
+      sentAt: number,
+    ) => {
       // Try to find the push request by id or nonce
       const pushRequestId = data.pushRequestId;
       const nonce = data.nonce;
 
-      await pollChallenges();
-
-      let pushRequest: PushRequest | undefined;
-
-      if (pushRequestId) {
-        pushRequest = getPushRequestById(pushRequestId);
+      if (!usePushRequestStore.persist.hasHydrated()) {
+        await usePushRequestStore.persist.rehydrate();
       }
 
-      if (!pushRequest && nonce) {
-        pushRequest = getPushRequestByNonce(nonce);
-      }
+      const findRequest = () =>
+        (pushRequestId ? getPushRequestById(pushRequestId) : undefined) ??
+        (nonce ? getPushRequestByNonce(nonce) : undefined);
+      let pushRequest = findRequest();
 
       if (!pushRequest) {
         const parsedPushRequest = parsePushRequestFromNotificationData(
           data,
           pushRequestId ?? nonce ?? `notification-${Date.now()}`,
+          sentAt,
         );
 
         if (parsedPushRequest) {
           await handlePushRequest(parsedPushRequest);
-          pushRequest = getPushRequestByNonce(parsedPushRequest.nonce);
+          pushRequest = findRequest();
+        } else {
+          await pollChallenges();
+          pushRequest = findRequest();
         }
       }
 
@@ -179,17 +143,8 @@ export function useNotifications(onAction?: NotificationActionHandler) {
   useEffect(() => {
     // Listen for foreground messages
     const unsubscribeMessage = canReceivePush
-      ? addMessageListener((pushRequest) => {
-          void handlePushRequest(pushRequest);
-        })
+      ? addMessageListener(handlePushRequest)
       : () => {};
-
-    // Set up background message handler
-    if (canReceivePush) {
-      addBackgroundMessageHandler((pushRequest) => {
-        void handlePushRequest(pushRequest);
-      });
-    }
 
     const handleNotificationResponse = (
       response: Notifications.NotificationResponse,
@@ -207,8 +162,12 @@ export function useNotifications(onAction?: NotificationActionHandler) {
       handledNotificationResponseKeys.add(responseKey);
 
       const data = getNotificationResponseData(response);
-      console.debug("Notification response received:", { action, data });
-      void handleNotificationAction(action, data);
+      const { date } = response.notification;
+      void handleNotificationAction(
+        action,
+        data,
+        Platform.OS === "ios" ? date * 1000 : date,
+      );
     };
 
     // Listen for notification responses (taps and action button presses)

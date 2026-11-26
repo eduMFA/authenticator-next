@@ -64,6 +64,24 @@ test("retries rejected updates and keeps the previous registration until success
   expect(tokens[0].registeredFcmToken).toBe("new");
 });
 
+test("signs the V2 Firebase update with the exact timestamp from its body", async () => {
+  tokens[0].version = 2;
+  await syncFcmRegistration(getTokens, "new", updateState);
+  const body = JSON.parse(String(fetchMock.mock.calls[0][1]?.body));
+  expect(body).toMatchObject({
+    operation: "update_firebase_token",
+    serial: token.id,
+    new_fb_token: "new",
+    timestamp: expect.any(String),
+    signature: "MY======",
+  });
+  expect(signMessage).toHaveBeenCalledWith(
+    JSON.stringify(["update_firebase_token", token.id, "new", body.timestamp]),
+    token.id,
+    "SHA256",
+  );
+});
+
 test("does not update incomplete enrollment or erase registration when FCM is unavailable", async () => {
   await syncFcmRegistration(getTokens, null, updateState);
   tokens[0].rolloutState = State.Pending;

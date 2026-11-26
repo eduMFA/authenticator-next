@@ -292,10 +292,7 @@ const TokenListItemContent = memo(function TokenListItemContent({
             blurTarget={blurTargetRef}
             blurMethod="dimezisBlurView"
           />
-          <Animated.View
-            style={[styles.progressBar, animatedStyles]}
-            exiting={FadeOut}
-          />
+          <Animated.View style={[styles.progressBar, animatedStyles]} />
           <ThemedText style={styles.progressText}>{progressText}</ThemedText>
         </Animated.View>
       )}

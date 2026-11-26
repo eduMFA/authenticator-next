@@ -61,7 +61,7 @@ export async function setupNotificationCategories() {
         identifier: NOTIFICATION_ACTION_ACCEPT,
         buttonTitle: i18n._(t`Accept`),
         options: {
-          opensAppToForeground: false,
+          opensAppToForeground: true,
           isAuthenticationRequired: true,
         },
       },
@@ -69,7 +69,7 @@ export async function setupNotificationCategories() {
         identifier: NOTIFICATION_ACTION_DECLINE,
         buttonTitle: i18n._(t`Decline`),
         options: {
-          opensAppToForeground: false,
+          opensAppToForeground: true,
           isDestructive: true,
         },
       },
@@ -202,7 +202,7 @@ export function addMessageListener(handler: PushRequestHandler) {
 
     const pushRequest = parsePushRequest(message);
     if (pushRequest) {
-      handler(pushRequest);
+      await handler(pushRequest);
     }
   });
 }
@@ -212,11 +212,11 @@ export function addMessageListener(handler: PushRequestHandler) {
  */
 export function addBackgroundMessageHandler(handler: PushRequestHandler) {
   setBackgroundMessageHandler(getMessaging(), async (message) => {
-    console.log("Background message received:", message);
+    if (message.notification) return;
 
     const pushRequest = parsePushRequest(message);
     if (pushRequest) {
-      handler(pushRequest);
+      await handler(pushRequest);
     }
   });
 }

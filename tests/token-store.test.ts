@@ -1,6 +1,7 @@
 import { useTokenStore } from "@/stores/token";
 import { usePushRequestStore } from "@/stores/push-request";
 import { PushRequestStatus } from "@/types/push-request";
+import { PushTokenRolloutState } from "@/types/token";
 import {
   isTokenRollingOut,
   performTokenRollout,
@@ -107,13 +108,25 @@ test("persists the version from each enrollment URI", async () => {
       serial: `serial-${version}`,
       url: token.callbackUrl,
       enrollment_credential: token.enrollmentCredential,
-      enrollmentCredential: token.enrollmentCredential,
     });
     addToken(parseTokenFromUri(`edumfa-push://token/Account?${params}`));
   }
 
   await useTokenStore.persist.rehydrate();
-  expect(useTokenStore.getState().tokens.map(({ version }) => version)).toEqual([
-    1, 2,
+  expect(useTokenStore.getState().tokens.map(({ version }) => version)).toEqual(
+    [1, 2],
+  );
+});
+
+test("restores a rollout saved in the removed registration state as pending", async () => {
+  useTokenStore.getState().addToken({
+    ...token,
+    rolloutState: 8 as PushTokenRolloutState,
+  });
+
+  await useTokenStore.persist.rehydrate();
+
+  expect(useTokenStore.getState().tokens).toEqual([
+    { ...token, rolloutState: PushTokenRolloutState.Pending },
   ]);
 });

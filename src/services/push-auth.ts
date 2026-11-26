@@ -4,6 +4,11 @@ import { PushRequestStatus } from "@/types/push-request";
 import type { PushToken } from "@/types/token";
 import { base64ToBase32 } from "@/utils/crypto";
 import {
+  DeviceAuthenticationError,
+  requireDeviceAuthentication,
+} from "@/utils/device-auth";
+import { signEduPushV2Operation } from "@/utils/edupush-v2";
+import {
   playNotificationSuccessHaptic,
   playNotificationWarningHaptic,
 } from "@/utils/haptics";
@@ -14,6 +19,7 @@ const PUSH_RESPONSE_TIMEOUT_MS = 10_000;
 
 export interface PushAuthResponse {
   success: boolean;
+  deviceAuthenticationRequired?: boolean;
   error?: Error;
 }
 
@@ -25,7 +31,6 @@ async function signPushAuthMessage(
   tokenId: string,
 ): Promise<string> {
   const signatureBase64 = await signMessage(message, tokenId, SIGN_ALGORITHM);
-  console.debug("Generated Base 64 signature:", signatureBase64);
   // Convert base64 signature to base32 as required by the API
   const signature = base64ToBase32(signatureBase64);
   return signature;
@@ -57,7 +62,7 @@ async function sendPushAuthToServer(
   signature: string,
   isDeclined: boolean,
   signal: AbortSignal,
-  _sslVerify: boolean = true,
+  isV2: boolean,
 ): Promise<Response> {
   // TODO: Implement SSL verification toggle based on token settings
   const response = await fetch(callbackUrl, {
@@ -65,10 +70,11 @@ async function sendPushAuthToServer(
     signal,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      ...(isV2 && { operation: "respond_to_challenge" }),
       nonce,
       serial,
       signature,
-      decline: isDeclined ? 1 : 0,
+      decline: isV2 ? isDeclined : isDeclined ? 1 : 0,
     }),
   });
 
@@ -95,15 +101,21 @@ export async function handlePushAuthRequest(
   const controller = new AbortController();
   let timeout: ReturnType<typeof setTimeout> | undefined;
   try {
-    // Build and sign the message
-    const message = buildSignatureMessage(
-      request.nonce,
-      request.serial,
-      isDeclined,
-    );
-    console.debug("Signing message:", message);
-
-    const signature = await signPushAuthMessage(message, token.id);
+    const isV2 = token.version === 2;
+    if (!isDeclined && token.requireDeviceAuth) {
+      await requireDeviceAuthentication();
+    }
+    const signature = isV2
+      ? await signEduPushV2Operation(
+          "respond_to_challenge",
+          token.id,
+          request.nonce,
+          isDeclined,
+        )
+      : await signPushAuthMessage(
+          buildSignatureMessage(request.nonce, token.id, isDeclined),
+          token.id,
+        );
 
     // Send to server
     timeout = setTimeout(() => controller.abort(), PUSH_RESPONSE_TIMEOUT_MS);
@@ -114,7 +126,7 @@ export async function handlePushAuthRequest(
       signature,
       isDeclined,
       controller.signal,
-      token.sslVerify,
+      isV2,
     );
 
     if (response.status !== 200) {
@@ -147,6 +159,9 @@ export async function handlePushAuthRequest(
 
     return { success: true };
   } catch (error) {
+    if (error instanceof DeviceAuthenticationError) {
+      return { success: false, deviceAuthenticationRequired: true, error };
+    }
     console.error("Push auth handling failed:", error);
     if (controller.signal.aborted) {
       return {

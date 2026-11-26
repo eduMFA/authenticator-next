@@ -14,6 +14,7 @@ import { PushTokenRolloutState } from "@/types/token";
 import { base32ToBase64, base64ToBase32 } from "@/utils/crypto";
 import { buildPushRequestSignedData } from "@/utils/push-request";
 import { signMessage, verifyMessage } from "@/utils/rsa";
+import { parseTokenUpdate } from "@/utils/token";
 
 interface ChallengeResponse {
   nonce: string;
@@ -55,6 +56,12 @@ async function parseChallengeResponse(
   data: ChallengeResponse,
   token: PushToken,
 ): Promise<PushRequest | null> {
+  if (
+    data.serial !== token.id ||
+    (token.version === 2 && !token.serverPublicKey)
+  ) {
+    return null;
+  }
   // Verify the signature from the server using the token's server public key
   if (token.serverPublicKey) {
     const signedData = buildPushRequestSignedData(data);
@@ -144,10 +151,19 @@ export async function pollChallengesForToken(
       };
     }
 
-    const data = await response.json();
+    const data: {
+      result?: { status?: boolean; value?: ChallengeResponse[] };
+      detail?: {
+        available_upgrade?: { target_version?: unknown };
+        token_update?: { image?: unknown };
+      };
+    } | null = await response.json();
+    if (data?.result?.status === false) {
+      throw new Error("The server rejected challenge polling.");
+    }
 
     const challenges: PushRequest[] = [];
-    for (const challengeData of data?.result?.value || []) {
+    for (const challengeData of data?.result?.value ?? []) {
       const pushRequest = await parseChallengeResponse(challengeData, token);
       if (pushRequest) {
         challenges.push(pushRequest);
@@ -155,7 +171,18 @@ export async function pollChallengesForToken(
     }
 
     console.log(`Found ${challenges.length} challenges for token ${token.id}`);
-    return { success: true, challenges };
+    const tokenUpdate =
+      data?.result?.status === true && Array.isArray(data.result.value)
+        ? token.version === 2
+          ? parseTokenUpdate(data.detail?.token_update?.image)
+          : {
+              availableUpgrade:
+                data.detail?.available_upgrade?.target_version === 2
+                  ? (2 as const)
+                  : undefined,
+            }
+        : undefined;
+    return { success: true, challenges, ...(tokenUpdate && { tokenUpdate }) };
   } catch (error) {
     console.error(`Error polling challenges for token ${token.id}:`, error);
     return {
@@ -204,6 +231,9 @@ export async function pollAllChallenges(
         tokenId: token.id,
         success: result.value.success,
         error: result.value.error,
+        ...(result.value.tokenUpdate && {
+          tokenUpdate: result.value.tokenUpdate,
+        }),
       });
     } else {
       const error =

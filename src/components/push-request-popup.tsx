@@ -131,18 +131,15 @@ function PopupCard({
     state.tokens.find((candidate) => candidate.id === request.serial),
   );
   const scale = useSharedValue(0.96);
-  const opacity = useSharedValue(0);
 
   useEffect(() => {
     scale.value = withTiming(1, {
       duration: 280,
       easing: Easing.out(Easing.quad),
     });
-    opacity.value = withTiming(1, { duration: 240 });
-  }, [opacity, scale]);
+  }, [scale]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
     transform: [{ scale: scale.value }],
   }));
   const service = getServiceName(request.url);
