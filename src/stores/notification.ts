@@ -8,11 +8,11 @@ import { setupNotificationCategories } from "@/utils/notification";
 import { i18n } from "@lingui/core";
 import { getUtils } from "@react-native-firebase/app";
 import {
+  getAPNSToken,
   getMessaging,
   getToken,
-  isDeviceRegisteredForRemoteMessages,
   onTokenRefresh,
-  registerDeviceForRemoteMessages,
+  setAPNSToken,
 } from "@react-native-firebase/messaging";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
@@ -52,6 +52,28 @@ const initialState: NotificationState = {
 const GOOGLE_PLAY_SERVICES_MISSING = 1;
 const GOOGLE_PLAY_SERVICES_DISABLED = 3;
 const GOOGLE_PLAY_SERVICES_INVALID = 9;
+const APNS_REGISTRATION_TIMEOUT_MS = 5_000;
+
+async function requestApnsToken(): Promise<string> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const token = await Promise.race([
+      Notifications.getDevicePushTokenAsync(),
+      new Promise<never>((_, reject) => {
+        timeout = setTimeout(
+          () => reject(new Error("APNs device registration timed out.")),
+          APNS_REGISTRATION_TIMEOUT_MS,
+        );
+      }),
+    ]);
+    if (token.type !== "ios" || !token.data) {
+      throw new Error("APNs did not return a device token.");
+    }
+    return token.data;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 async function getPushCapability(): Promise<{
   capability: PushNotificationCapability | null;
@@ -188,11 +210,17 @@ export const useNotificationStore = create<
               await prepareNotificationCategories();
               if (refreshPromise !== refresh) return null;
               const messaging = getMessaging();
-              if (
-                Platform.OS === "ios" &&
-                !isDeviceRegisteredForRemoteMessages(messaging)
-              ) {
-                await registerDeviceForRemoteMessages(messaging);
+              if (Platform.OS === "ios") {
+                // UIKit can report registration before Firebase has the APNs token.
+                const firebaseApnsToken = await getAPNSToken(messaging).catch(
+                  () => null,
+                );
+                if (refreshPromise !== refresh) return null;
+                if (!firebaseApnsToken) {
+                  const apnsToken = await requestApnsToken();
+                  if (refreshPromise !== refresh) return null;
+                  await setAPNSToken(messaging, apnsToken);
+                }
               }
               if (refreshPromise !== refresh) return null;
               const token = await getToken(messaging);

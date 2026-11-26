@@ -4,10 +4,11 @@ import { useSettingsStore } from "@/stores/settings";
 import { setupNotificationCategories } from "@/utils/notification";
 import { getUtils, type Utils } from "@react-native-firebase/app";
 import {
+  getAPNSToken,
   getMessaging,
   getToken,
   onTokenRefresh,
-  registerDeviceForRemoteMessages,
+  setAPNSToken,
 } from "@react-native-firebase/messaging";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
@@ -26,11 +27,11 @@ jest.mock("@react-native-firebase/app", () => ({
   })),
 }));
 jest.mock("@react-native-firebase/messaging", () => ({
+  getAPNSToken: jest.fn(),
   getMessaging: jest.fn(() => "messaging"),
   getToken: jest.fn(),
-  isDeviceRegisteredForRemoteMessages: jest.fn(() => false),
   onTokenRefresh: jest.fn(),
-  registerDeviceForRemoteMessages: jest.fn(),
+  setAPNSToken: jest.fn(),
 }));
 const mockGetPlayServicesStatus = jest.fn<
   Promise<Utils.PlayServicesAvailability>,
@@ -61,6 +62,15 @@ beforeEach(async () => {
   jest.replaceProperty(Platform, "OS", "android");
   jest.replaceProperty(Device, "isDevice", true);
   jest.mocked(getToken).mockReset().mockResolvedValue("fcm");
+  jest.mocked(getAPNSToken).mockReset().mockResolvedValue(null);
+  jest.mocked(setAPNSToken).mockReset().mockResolvedValue(undefined);
+  jest
+    .mocked(Notifications.getDevicePushTokenAsync)
+    .mockReset()
+    .mockResolvedValue({
+      type: "ios",
+      data: "aabb",
+    });
   jest.mocked(setupNotificationCategories).mockResolvedValue(undefined);
   mockGetPlayServicesStatus.mockReset().mockResolvedValue(availability(0));
   jest.mocked(onTokenRefresh).mockReturnValue(unsubscribe);
@@ -119,7 +129,7 @@ test("a denied first request unlocks FCM and is remembered across launches", asy
   pendingPermission.resolve(denied);
   expect(await request).toEqual(denied);
   expect(Notifications.requestPermissionsAsync).toHaveBeenCalledTimes(1);
-  expect(registerDeviceForRemoteMessages).toHaveBeenCalledTimes(1);
+  expect(Notifications.getDevicePushTokenAsync).toHaveBeenCalledTimes(1);
   expect(getToken).toHaveBeenCalledTimes(1);
   store.reset();
   await useSettingsStore.persist.rehydrate();
@@ -214,6 +224,55 @@ test("supports physical iOS devices", async () => {
   jest.replaceProperty(Platform, "OS", "ios");
   expect(await useNotificationStore.getState().initialize()).toBe("fcm");
   expect(getUtils).not.toHaveBeenCalled();
+});
+
+test("waits for the APNs callback and gives Firebase its token before requesting FCM", async () => {
+  jest.replaceProperty(Platform, "OS", "ios");
+  jest.mocked(getAPNSToken).mockRejectedValueOnce(new Error("unregistered"));
+  const apns = deferred<Notifications.DevicePushToken>();
+  const apnsStarted = deferred<void>();
+  jest
+    .mocked(Notifications.getDevicePushTokenAsync)
+    .mockImplementationOnce(() => {
+      apnsStarted.resolve();
+      return apns.promise;
+    });
+  const registration = useNotificationStore.getState().initialize();
+  await apnsStarted.promise;
+  expect(getToken).not.toHaveBeenCalled();
+  apns.resolve({ type: "ios", data: "aabb" });
+  await expect(registration).resolves.toBe("fcm");
+  expect(setAPNSToken).toHaveBeenCalledWith("messaging", "aabb");
+  expect(jest.mocked(setAPNSToken).mock.invocationCallOrder[0]).toBeLessThan(
+    jest.mocked(getToken).mock.invocationCallOrder[0],
+  );
+});
+
+test("reuses an APNs token already available to Firebase", async () => {
+  jest.replaceProperty(Platform, "OS", "ios");
+  jest.mocked(getAPNSToken).mockResolvedValueOnce("aabb");
+  expect(await useNotificationStore.getState().initialize()).toBe("fcm");
+  expect(Notifications.getDevicePushTokenAsync).not.toHaveBeenCalled();
+  expect(setAPNSToken).not.toHaveBeenCalled();
+});
+
+test("falls back to polling when APNs stalls and retries at the next refresh", async () => {
+  jest.useFakeTimers();
+  try {
+    jest.replaceProperty(Platform, "OS", "ios");
+    jest
+      .mocked(Notifications.getDevicePushTokenAsync)
+      .mockReturnValueOnce(deferred<Notifications.DevicePushToken>().promise);
+    const store = useNotificationStore.getState();
+    const registration = store.initialize();
+    await jest.advanceTimersByTimeAsync(5_000);
+    await expect(registration).resolves.toBeNull();
+    expect(getToken).not.toHaveBeenCalled();
+    expect(useNotificationStore.getState().registrationStatus).toBe("failed");
+    expect(await store.getFcmToken()).toBe("fcm");
+  } finally {
+    jest.useRealTimers();
+  }
 });
 test("denied notification permission does not make an iPhone unsupported", async () => {
   jest.replaceProperty(Platform, "OS", "ios");

@@ -38,6 +38,7 @@
     "plugins": [
       "expo-font",
       "expo-image",
+      "expo-local-authentication",
       "expo-notifications",
       "expo-router",
       "expo-dev-client",

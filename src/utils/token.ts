@@ -8,11 +8,7 @@ import {
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 
-const parseEnrollmentFields = (
-  url: URL,
-  credentialKey: "enrollment_credential" | "enrollmentCredential",
-) => {
-
+const parseEnrollmentFields = (url: URL) => {
   const serialParam = url.searchParams.get("serial");
   if (!serialParam) {
     throw new InvalidUrlError("No serial parameter provided.");
@@ -33,9 +29,9 @@ const parseEnrollmentFields = (
   if (!Number.isFinite(ttl) || ttl <= 0) {
     throw new InvalidUrlError(`Invalid ttl: ${ttlParam}`);
   }
-  const enrollmentCredential = url.searchParams.get(credentialKey);
+  const enrollmentCredential = url.searchParams.get("enrollment_credential");
   if (!enrollmentCredential) {
-    throw new InvalidUrlError(`No ${credentialKey} parameter provided.`);
+    throw new InvalidUrlError("No enrollment_credential parameter provided.");
   }
 
   return {
@@ -52,7 +48,7 @@ const parseTokenV1 = (url: URL) => {
   const sslVerifyParam = url.searchParams.get("sslverify");
 
   return {
-    ...parseEnrollmentFields(url, "enrollment_credential"),
+    ...parseEnrollmentFields(url),
     label,
     issuer,
     sslVerify: sslVerifyParam ? sslVerifyParam === "1" : true,
@@ -65,12 +61,16 @@ const parseTokenV2 = (url: URL) => {
   if (!label) {
     throw new InvalidUrlError("No label provided in the URL path.");
   }
+  const enrollment = parseEnrollmentFields(url);
+  if (new URL(enrollment.callbackUrl).protocol !== "https:") {
+    throw new InvalidUrlError("eduPush V2 requires an HTTPS callback URL.");
+  }
   return {
-    ...parseEnrollmentFields(url, "enrollmentCredential"),
+    ...enrollment,
     label,
     issuer: url.searchParams.get("issuer") || undefined,
     sslVerify: true,
-    ...(url.searchParams.get("requireDeviceAuth") === "true" && {
+    ...(url.searchParams.get("require_device_auth") === "true" && {
       requireDeviceAuth: true,
     }),
   };
@@ -164,8 +164,29 @@ export const parseIssuer = (uri: URL) => {
   return undefined;
 };
 
+export function parseTokenUpdate(image: unknown): Partial<PushToken> {
+  if (image === null) return { imageUrl: undefined };
+  if (typeof image !== "string") return {};
+  const url = URL.parse(image);
+  return url?.protocol === "https:" ? { imageUrl: url.href } : {};
+}
+
 export const parseTokenResponse = async (response: Response) => {
-  const data = await response.json();
-  const key = data.detail.public_key.replaceAll("\n", "");
-  return key;
+  const data: {
+    result?: { status?: boolean; value?: boolean };
+    detail?: { public_key?: unknown; token_update?: { image?: unknown } };
+  } = await response.json();
+  const key = data?.detail?.public_key;
+  if (
+    data?.result?.status === false ||
+    data?.result?.value === false ||
+    typeof key !== "string" ||
+    !key.trim()
+  ) {
+    throw new Error("The server did not return an enrollment public key.");
+  }
+  return {
+    serverPublicKey: key.replaceAll("\n", ""),
+    ...parseTokenUpdate(data.detail?.token_update?.image),
+  };
 };

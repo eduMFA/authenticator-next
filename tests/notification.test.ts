@@ -222,13 +222,13 @@ test.each(["android", "ios"] as const)(
       expect.objectContaining({
         identifier: "ACCEPT",
         options: {
-          opensAppToForeground: false,
+          opensAppToForeground: true,
           isAuthenticationRequired: true,
         },
       }),
       expect.objectContaining({
         identifier: "DECLINE",
-        options: { opensAppToForeground: false, isDestructive: true },
+        options: { opensAppToForeground: true, isDestructive: true },
       }),
     ]);
   },

@@ -4,15 +4,19 @@ import {
   startPendingRollouts as startPendingRolloutsService,
 } from "@/services/token-rollout";
 import { usePushRequestStore } from "@/stores/push-request";
-import type { PushToken } from "@/types/token";
+import { PushTokenRolloutState, type PushToken } from "@/types/token";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AppState } from "react-native";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type TokenState = {
   tokens: PushToken[];
   addToken: (token: PushToken) => void;
-  updateToken: (id: string, newState: Partial<PushToken>) => void;
+  updateToken: (
+    id: string,
+    newState: Partial<PushToken>,
+  ) => void | Promise<void>;
   removeToken: (id: string) => void;
   rolloutToken: (id: string) => Promise<void>;
   startPendingRollouts: () => void;
@@ -25,7 +29,6 @@ export const useTokenStore = create(
       tokens: [],
 
       addToken: (token: PushToken) => {
-        console.log("Adding token:", token);
         const existingTokens = get().tokens;
         const tokenExists = existingTokens.some((t) => t.id === token.id);
         if (!tokenExists) {
@@ -41,7 +44,7 @@ export const useTokenStore = create(
         const updatedTokens = existingTokens.map((t) =>
           t.id === id ? { ...t, ...newState } : t,
         );
-        set({ tokens: updatedTokens });
+        return set({ tokens: updatedTokens }) as void | Promise<void>;
       },
 
       removeToken: (id: string) => {
@@ -81,10 +84,21 @@ export const useTokenStore = create(
       storage: createJSONStorage(() => AsyncStorage),
       // Don't persist rollout-related functions, only the tokens array
       partialize: (state) => ({ tokens: state.tokens }) as TokenState,
+      merge: (persisted, current) => {
+        const saved = persisted as Pick<TokenState, "tokens"> | undefined;
+        return {
+          ...current,
+          tokens: (saved?.tokens ?? current.tokens).map((token) =>
+            Object.hasOwn(PushTokenRolloutState, token.rolloutState)
+              ? token
+              : { ...token, rolloutState: PushTokenRolloutState.Pending },
+          ),
+        };
+      },
       onRehydrateStorage: () => {
         return (state) => {
           // Start pending rollouts after the store has been rehydrated
-          if (state) {
+          if (state && AppState.currentState !== "background") {
             console.log("Token store rehydrated, starting pending rollouts...");
             // Use setTimeout to ensure the store is fully ready
             setTimeout(() => {

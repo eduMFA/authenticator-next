@@ -14,7 +14,9 @@ export type NotificationResponseData = {
   pushRequestId?: string;
 } & Partial<PushRequestData>;
 
-export type PushRequestHandler = (pushRequest: PushRequest) => void;
+export type PushRequestHandler = (
+  pushRequest: PushRequest,
+) => void | Promise<void>;
 
 export type NotificationActionHandler = (
   actionId: string,

@@ -8,9 +8,14 @@ import {
   playNotificationWarningHaptic,
 } from "@/utils/haptics";
 import { PushRequestStatus } from "@/types/push-request";
+import { authenticateAsync } from "expo-local-authentication";
+import { i18n } from "@lingui/core";
 import { token, request, response } from "./fixtures";
 
 jest.mock("@/utils/rsa", () => ({ signMessage: jest.fn() }));
+jest.mock("expo-local-authentication", () => ({
+  authenticateAsync: jest.fn(),
+}));
 jest.mock("@/utils/haptics", () => ({
   playNotificationSuccessHaptic: jest.fn(),
   playNotificationWarningHaptic: jest.fn(),
@@ -20,6 +25,7 @@ const fetchMock = jest.fn<
   [RequestInfo | URL, RequestInit?]
 >();
 beforeEach(() => {
+  i18n.loadAndActivate({ locale: "en", messages: {} });
   globalThis.fetch = fetchMock;
   fetchMock
     .mockReset()
@@ -35,6 +41,57 @@ test("does not treat HTTP 200 with a rejected signature as approval", async () =
   );
   expect((await handlePushAuthRequest(request, token)).success).toBe(false);
   expect(playNotificationSuccessHaptic).not.toHaveBeenCalled();
+});
+
+test.each([false, true])(
+  "signs the V2 response with decline=%s",
+  async (decline) => {
+    await handlePushAuthRequest(
+      {
+        ...request,
+        status: decline
+          ? PushRequestStatus.Declined
+          : PushRequestStatus.Accepted,
+      },
+      { ...token, version: 2 },
+    );
+    expect(signMessage).toHaveBeenCalledWith(
+      JSON.stringify([
+        "respond_to_challenge",
+        token.id,
+        request.nonce,
+        decline,
+      ]),
+      token.id,
+      "SHA256",
+    );
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1]?.body))).toEqual({
+      operation: "respond_to_challenge",
+      serial: token.id,
+      nonce: request.nonce,
+      decline,
+      signature: "MY======",
+    });
+  },
+);
+
+test("requires device authentication before signing approval", async () => {
+  jest
+    .mocked(authenticateAsync)
+    .mockResolvedValue({ success: false, error: "user_cancel" });
+  const accepted = { ...request, status: PushRequestStatus.Accepted };
+  const protectedToken = { ...token, version: 2, requireDeviceAuth: true };
+  expect(await handlePushAuthRequest(accepted, protectedToken)).toMatchObject({
+    success: false,
+    deviceAuthenticationRequired: true,
+  });
+  expect(signMessage).not.toHaveBeenCalled();
+  expect(fetchMock).not.toHaveBeenCalled();
+
+  jest.mocked(authenticateAsync).mockResolvedValue({ success: true });
+  expect(await handlePushAuthRequest(accepted, protectedToken)).toEqual({
+    success: true,
+  });
 });
 
 test.each([PushRequestStatus.Accepted, PushRequestStatus.Declined])(

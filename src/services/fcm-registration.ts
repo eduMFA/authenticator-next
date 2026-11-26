@@ -3,6 +3,7 @@ import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import type { RolloutStateUpdater, TokenGetter } from "@/types/token-rollout";
 import { base64ToBase32 } from "@/utils/crypto";
+import { signEduPushV2Operation } from "@/utils/edupush-v2";
 import { signMessage } from "@/utils/rsa";
 
 // Serialize updates per token so an older FCM destination cannot win a race.
@@ -14,18 +15,22 @@ async function register(
   isCurrent: () => boolean,
 ): Promise<boolean> {
   const timestamp = new Date().toISOString();
-  const signature = base64ToBase32(
-    await signMessage(
-      `${fcmToken}|${token.id}|${timestamp}`,
-      token.id,
-      SIGN_ALGORITHM,
-    ),
-  );
+  const operation = token.version === 2 ? "update_firebase_token" : undefined;
+  const signature = operation
+    ? await signEduPushV2Operation(operation, token.id, fcmToken, timestamp)
+    : base64ToBase32(
+        await signMessage(
+          `${fcmToken}|${token.id}|${timestamp}`,
+          token.id,
+          SIGN_ALGORITHM,
+        ),
+      );
   if (!isCurrent()) return false;
   const response = await fetch(token.callbackUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
+      ...(operation && { operation }),
       serial: token.id,
       new_fb_token: fcmToken,
       timestamp,

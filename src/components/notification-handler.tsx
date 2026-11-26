@@ -1,10 +1,10 @@
 import { useNotifications } from "@/hooks/use-notifications";
-import { useToken } from "@/hooks/use-token";
 import {
   findTokenForPushRequest,
   handlePushAuthRequest,
 } from "@/services/push-auth";
 import { usePushRequestStore } from "@/stores/push-request";
+import { useTokenStore } from "@/stores/token";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import { useCallback, useRef } from "react";
@@ -18,7 +18,6 @@ import { PushRequestPopup } from "./push-request-popup";
  */
 export function NotificationHandler() {
   const { t } = useLingui();
-  const { tokens } = useToken();
   const { pushRequests, updatePushRequestStatus } = usePushRequestStore();
   const responding = useRef(new Set<string>());
 
@@ -34,10 +33,15 @@ export function NotificationHandler() {
 
       responding.current.add(request.id);
       try {
-        const token = findTokenForPushRequest(request, tokens);
+        const token = findTokenForPushRequest(
+          request,
+          useTokenStore.getState().tokens,
+        );
         const result = token && (await handlePushAuthRequest(request, token));
         if (result?.success) {
           updatePushRequestStatus(request.id, request.status);
+        } else if (result?.deviceAuthenticationRequired) {
+          Alert.alert(t`Device authentication required`, result.error?.message);
         } else if (
           getPushRequestById(request.id)?.status === PushRequestStatus.Pending
         ) {
@@ -51,7 +55,7 @@ export function NotificationHandler() {
         responding.current.delete(request.id);
       }
     },
-    [t, tokens, updatePushRequestStatus],
+    [t, updatePushRequestStatus],
   );
 
   useNotifications(async (action, pushRequest) => {

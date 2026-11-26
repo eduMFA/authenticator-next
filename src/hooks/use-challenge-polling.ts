@@ -79,10 +79,19 @@ export function useChallengePolling(): UseChallengePollingResult {
       );
 
       for (const tokenResult of result.tokenResults ?? []) {
-        if (!currentTokenIds.has(tokenResult.tokenId)) {
+        const currentToken = useTokenStore
+          .getState()
+          .tokens.find(({ id }) => id === tokenResult.tokenId);
+        const polledToken = tokens.find(({ id }) => id === tokenResult.tokenId);
+        if (
+          !currentToken ||
+          currentToken.serverPublicKey !== polledToken?.serverPublicKey
+        ) {
           continue;
         }
         updateToken(tokenResult.tokenId, {
+          ...(currentToken.version === polledToken?.version &&
+            tokenResult.tokenUpdate),
           lastRefreshResult: {
             status: tokenResult.success
               ? PushTokenRefreshStatus.Success

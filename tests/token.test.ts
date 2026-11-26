@@ -104,10 +104,10 @@ describe("enrollment URI parsing", () => {
       uri(
         {
           v: "2",
-          enrollmentCredential: "v2-credential",
+          enrollment_credential: "v2-credential",
           issuer: "School",
           ttl: "42",
-          requireDeviceAuth: "true",
+          require_device_auth: "true",
           sslverify: "0",
           image: "https://example.org/image",
         },
@@ -128,15 +128,20 @@ describe("enrollment URI parsing", () => {
     });
     expect(token).not.toHaveProperty("imageUrl");
     expect(token).not.toHaveProperty("pin");
-    expect(() => parseTokenFromUri(uri({ v: "2" }))).toThrow(
-      "No enrollmentCredential parameter provided.",
-    );
+    expect(() =>
+      parseTokenFromUri(uri({ v: "2", enrollment_credential: "" })),
+    ).toThrow("No enrollment_credential parameter provided.");
     expect(() => parseTokenFromUri(uri({ v: "2", serial: "" }))).toThrow(
       InvalidUrlError,
     );
     expect(() => parseTokenFromUri(uri({ v: "2" }, ""))).toThrow(
       InvalidUrlError,
     );
+    expect(() =>
+      parseTokenFromUri(
+        uri({ v: "2", url: "http://example.org/ttype/edupush" }),
+      ),
+    ).toThrow(InvalidUrlError);
   });
   test.each([
     [uri(), true],
@@ -154,7 +159,7 @@ describe("enrollment URI parsing", () => {
       parseTokenResponse(
         response(200, { detail: { public_key: "abc\ndef\n" } }),
       ),
-    ).resolves.toBe("abcdef");
+    ).resolves.toEqual({ serverPublicKey: "abcdef" });
     await expect(parseTokenResponse(response())).rejects.toThrow();
   });
 });

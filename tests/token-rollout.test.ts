@@ -126,6 +126,40 @@ test("enrolls without Google services by sending an empty FCM field", async () =
   );
   expect(isTokenRollingOut(token.id)).toBe(false);
 });
+test.each(["fcm", null])(
+  "enrolls V2 with Firebase destination %p",
+  async (fcmToken) => {
+    getFcmToken.mockResolvedValue(fcmToken);
+    fetchMock.mockResolvedValue(
+      response(200, {
+        result: { status: true, value: true },
+        detail: {
+          public_key: "server\nkey",
+          token_update: { image: "https://example.org/image.png" },
+        },
+      }),
+    );
+    expect(
+      await performTokenRollout({ ...token, version: 2 }, updateState),
+    ).toMatchObject({
+      success: true,
+    });
+    const body = JSON.parse(String(fetchMock.mock.calls[0][1]?.body));
+    expect(body).toEqual({
+      ...(fcmToken && { operation: "complete_enrollment" }),
+      serial: token.id,
+      enrollment_credential: token.enrollmentCredential,
+      fbtoken: fcmToken ?? "",
+      pubkey: "abc",
+    });
+    expect(updateState).toHaveBeenLastCalledWith(
+      token.id,
+      expect.objectContaining({
+        imageUrl: "https://example.org/image.png",
+      }),
+    );
+  },
+);
 test("rejects expired enrollment without generating keys or contacting the server", async () => {
   expect(
     await performTokenRollout(

@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/push-request-popup.tsx:274
+#: src/components/push-request-popup.tsx:271
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} requests are waiting. Review each one separately."
 
@@ -47,7 +47,7 @@ msgstr "Anonymous reports"
 msgid "Appearance"
 msgstr "Appearance"
 
-#: src/components/push-request-popup.tsx:285
+#: src/components/push-request-popup.tsx:282
 msgid "Approve"
 msgstr "Approve"
 
@@ -58,6 +58,14 @@ msgstr "Approve sign-ins in the app"
 #: src/hooks/use-delete-token-confirmation.ts:18
 msgid "Are you sure you want to delete this token?"
 msgstr "Are you sure you want to delete this token?"
+
+#: src/services/edupush-upgrade.ts:163
+msgid "Authenticate to upgrade your eduPush token"
+msgstr "Authenticate to upgrade your eduPush token"
+
+#: src/utils/device-auth.ts:12
+msgid "Authenticate with your device"
+msgstr "Authenticate with your device"
 
 #: src/app/settings/index.tsx:53
 msgid "Automatic"
@@ -142,13 +150,17 @@ msgstr "Delete"
 msgid "Delete token"
 msgstr "Delete token"
 
-#: src/components/push-request-popup.tsx:280
+#: src/components/push-request-popup.tsx:277
 msgid "Deny"
 msgstr "Deny"
 
 #: src/components/token-detail/token-overview-content.tsx:168
 msgid "Details"
 msgstr "Details"
+
+#: src/components/notification-handler.tsx:44
+msgid "Device authentication required"
+msgstr "Device authentication required"
 
 #: src/hooks/use-handle-token-uri.ts:64
 msgid "Dismiss"
@@ -198,7 +210,7 @@ msgstr "Enable notifications to receive push approval requests on this device."
 msgid "Enrolled"
 msgstr "Enrolled"
 
-#: src/services/token-rollout.ts:106
+#: src/services/token-rollout.ts:101
 msgid "Enrollment expired. Scan a new enrollment QR code."
 msgstr "Enrollment expired. Scan a new enrollment QR code."
 
@@ -387,7 +399,7 @@ msgstr "Notifications couldn't be set up. Check your connection and device setti
 msgid "Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests."
 msgstr "Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests."
 
-#: src/components/push-request-popup.tsx:264
+#: src/components/push-request-popup.tsx:261
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Only approve if you started this sign-in. If you are unsure, deny it."
 
@@ -485,7 +497,7 @@ msgstr "Request delivery"
 msgid "Requests are checked when you open the app or refresh the token list."
 msgstr "Requests are checked when you open the app or refresh the token list."
 
-#: src/components/notification-handler.tsx:46
+#: src/components/notification-handler.tsx:50
 msgid "Response failed"
 msgstr "Response failed"
 
@@ -504,7 +516,7 @@ msgstr "Retry Rollout"
 msgid "Review eduMFA Push"
 msgstr "Review eduMFA Push"
 
-#: src/components/push-request-popup.tsx:203
+#: src/components/push-request-popup.tsx:200
 msgid "Review sign-in"
 msgstr "Review sign-in"
 
@@ -634,7 +646,7 @@ msgstr "This token did not finish enrollment and cannot receive push requests un
 msgid "Token"
 msgstr "Token"
 
-#: src/components/token-detail/token-overview-content.tsx:199
+#: src/components/token-detail/token-overview-content.tsx:200
 msgid "Token version"
 msgstr "Token version"
 
@@ -650,6 +662,10 @@ msgstr "Try another token name, issuer, or serial number."
 #: src/components/onboarding-sequence/step-actions.tsx:185
 msgid "Turn on notifications in Settings so you can respond when a request arrives."
 msgstr "Turn on notifications in Settings so you can respond when a request arrives."
+
+#: src/utils/device-auth.ts:7
+msgid "Unlock your device to continue."
+msgstr "Unlock your device to continue."
 
 #: src/components/token-detail/token-edit-content.tsx:40
 msgid "Update the display name for this token."
@@ -671,7 +687,7 @@ msgstr "Use your camera to scan a QR code."
 msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
 
-#: src/components/notification-handler.tsx:47
+#: src/components/notification-handler.tsx:51
 msgid "We couldn’t confirm your response. Check your connection, then start a new sign-in."
 msgstr "We couldn’t confirm your response. Check your connection, then start a new sign-in."
 
