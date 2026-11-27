@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/push-request-popup.tsx:271
+#: src/components/push-request-popup.tsx:275
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} requests are waiting. Review each one separately."
 
@@ -21,7 +21,7 @@ msgstr "{totalPending} requests are waiting. Review each one separately."
 msgid "About"
 msgstr "About"
 
-#: src/utils/notification.ts:62
+#: src/utils/notification.ts:67
 msgid "Accept"
 msgstr "Accept"
 
@@ -47,7 +47,7 @@ msgstr "Anonymous reports"
 msgid "Appearance"
 msgstr "Appearance"
 
-#: src/components/push-request-popup.tsx:282
+#: src/components/push-request-popup.tsx:286
 msgid "Approve"
 msgstr "Approve"
 
@@ -136,7 +136,7 @@ msgstr "Crash and error reports"
 msgid "Dark"
 msgstr "Dark"
 
-#: src/utils/notification.ts:70
+#: src/utils/notification.ts:75
 msgid "Decline"
 msgstr "Decline"
 
@@ -150,7 +150,7 @@ msgstr "Delete"
 msgid "Delete token"
 msgstr "Delete token"
 
-#: src/components/push-request-popup.tsx:277
+#: src/components/push-request-popup.tsx:281
 msgid "Deny"
 msgstr "Deny"
 
@@ -159,12 +159,16 @@ msgid "Details"
 msgstr "Details"
 
 #: src/components/notification-handler.tsx:44
-msgid "Device authentication required"
-msgstr "Device authentication required"
+#~ msgid "Device authentication required"
+#~ msgstr "Device authentication required"
 
 #: src/hooks/use-handle-token-uri.ts:64
 msgid "Dismiss"
 msgstr "Dismiss"
+
+#: src/utils/push-request.ts:31
+msgid "Do you want to confirm the sign-in?"
+msgstr "Do you want to confirm the sign-in?"
 
 #: src/components/onboarding-sequence/step-actions.tsx:257
 msgid "Don't share anonymous reports"
@@ -399,7 +403,7 @@ msgstr "Notifications couldn't be set up. Check your connection and device setti
 msgid "Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests."
 msgstr "Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests."
 
-#: src/components/push-request-popup.tsx:261
+#: src/components/push-request-popup.tsx:265
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Only approve if you started this sign-in. If you are unsure, deny it."
 
@@ -498,8 +502,8 @@ msgid "Requests are checked when you open the app or refresh the token list."
 msgstr "Requests are checked when you open the app or refresh the token list."
 
 #: src/components/notification-handler.tsx:50
-msgid "Response failed"
-msgstr "Response failed"
+#~ msgid "Response failed"
+#~ msgstr "Response failed"
 
 #: src/components/token-detail/token-detail-utils.ts:87
 msgid "Response parsing failed"
@@ -516,7 +520,7 @@ msgstr "Retry Rollout"
 msgid "Review eduMFA Push"
 msgstr "Review eduMFA Push"
 
-#: src/components/push-request-popup.tsx:200
+#: src/components/push-request-popup.tsx:204
 msgid "Review sign-in"
 msgstr "Review sign-in"
 
@@ -688,8 +692,8 @@ msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
 
 #: src/components/notification-handler.tsx:51
-msgid "We couldn’t confirm your response. Check your connection, then start a new sign-in."
-msgstr "We couldn’t confirm your response. Check your connection, then start a new sign-in."
+#~ msgid "We couldn’t confirm your response. Check your connection, then start a new sign-in."
+#~ msgstr "We couldn’t confirm your response. Check your connection, then start a new sign-in."
 
 #: src/app/settings/index.tsx:164
 msgid "Website"

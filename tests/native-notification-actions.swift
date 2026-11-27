@@ -17,10 +17,10 @@ actor TestTransport {
   func setStatus(_ value: Int) { status = value }
 }
 
-func sampleRequest(nonce: String = "nonce", age: Double = 0) -> NotificationPushRequest {
+func sampleRequest(nonce: String = "nonce", age: Double = 0, question: String? = "Sign in?") -> NotificationPushRequest {
   NotificationPushRequest(
     id: nonce, status: "pending", sentAt: Date().timeIntervalSince1970 * 1000 - age,
-    nonce: nonce, question: "Sign in?", serial: "serial", signature: "MY======",
+    nonce: nonce, question: question, serial: "serial", signature: "MY======",
     sslverify: "1", title: "Login", url: "https://payload.example/push"
   )
 }
@@ -65,7 +65,8 @@ for malformed in ["", "MY", "MZ======", "MY=====A", "my======", "========"] {
 
 let request = sampleRequest()
 _ = try await actions.synchronize(NotificationSnapshot(tokens: tokens, requests: [request]))
-try expect(request.signedData == "nonce|https://payload.example/push|serial|Sign in?|Login|1", "Signature field ordering")
+try expect(try request.signedData(version: nil) == "nonce|https://payload.example/push|serial|Sign in?|Login|1",
+           "V1 signature field ordering")
 // A Watch action and a popup submission share the same native in-flight task.
 async let watch = actions.submit(request, action: "DECLINE")
 async let popup = actions.submit(request, action: "ACCEPT")
@@ -143,6 +144,22 @@ let remote = try NotificationPushRequest.from(
   identifier: "apns", date: Date()
 )
 try expect(remote.nonce == "remote" && remote.id == "apns", "APNs response data not parsed")
+let remoteV2 = try NotificationPushRequest.from(
+  userInfo: ["body": ["nonce": "remote", "serial": "serial", "signature": "MY======",
+                     "sslverify": "1", "title": "Login", "url": tokens[0].callbackUrl]],
+  identifier: "apns-v2", date: Date()
+)
+try expect(remoteV2.question == nil, "V2 APNs data gained an unsigned question")
+try expect(try remoteV2.signedData(version: 2) == "remote|https://registered.example/push|serial|Login|1",
+           "V2 signature must omit the question slot")
+do {
+  _ = try remote.signedData(version: 2)
+  throw TestFailure.assertion("V2 accepted an unsigned question")
+} catch NotificationActionError.invalidSignature {}
+do {
+  _ = try remoteV2.signedData(version: nil)
+  throw TestFailure.assertion("V1 accepted a missing question")
+} catch NotificationActionError.invalidSignature {}
 
 // Clearing an app snapshot removes mirrored requests but preserves background
 // deliveries that JavaScript has not yet recovered.
@@ -264,7 +281,7 @@ let protectedToken = NotificationToken(
   version: 2, requireDeviceAuth: true
 )
 _ = try await v2.synchronize(NotificationSnapshot(tokens: [protectedToken], requests: []))
-let protectedRequest = sampleRequest(nonce: "protected")
+let protectedRequest = sampleRequest(nonce: "protected", question: nil)
 try expect(!(await v2.submit(protectedRequest, action: "ACCEPT")), "Device authentication was bypassed")
 try expect(await v2Transport.requests.isEmpty, "Unauthenticated approval reached the server")
 try expect(await v2.knownRequest(protectedRequest.key)?.status == "pending", "Authentication cancellation was not retryable")
@@ -282,14 +299,24 @@ for value in [true, false] {
 }
 let previewToken = NotificationToken(
   id: "serial", callbackUrl: tokens[0].callbackUrl, serverPublicKey: "key",
-  label: "Work account", issuer: "Work"
+  label: "Work account", issuer: "Work", imageUrl: "https://registered.example/icon.png"
 )
 var previewState = NotificationJournalState(tokens: [previewToken])
 let previewRequest = sampleRequest(nonce: "preview")
 let preview = try NotificationPreview.make(request: previewRequest, state: previewState, verify: { _, _ in true })
 try expect(preview?.question == previewRequest.question && preview?.title == previewRequest.title, "Preview lost signed request text")
 try expect(preview?.account == "Work account", "Preview lost enrolled account label")
+try expect(preview?.imageUrl == previewToken.imageUrl, "Preview lost enrolled token image")
+let halfway = previewRequest.expiresAt.addingTimeInterval(-60)
+let remaining = preview?.countdown(at: halfway)
+try expect(remaining?.seconds == 60 && remaining?.fraction == 0.5, "Countdown did not use the original request lifetime")
+let justBeforeExpiry = preview?.countdown(at: previewRequest.expiresAt.addingTimeInterval(-0.2))
+try expect(justBeforeExpiry?.seconds == 1, "Countdown showed zero before expiry")
+let atExpiry = preview?.countdown(at: previewRequest.expiresAt)
+try expect(atExpiry?.seconds == 0 && atExpiry?.fraction == 0, "Countdown did not end at expiry")
 try expect(preview?.service == "registered.example", "Preview trusted the incoming callback URL")
+let v2Preview = try NotificationPreview.make(request: remoteV2, state: previewState, verify: { _, _ in true })
+try expect(v2Preview?.title == remoteV2.title && v2Preview?.question == nil, "V2 preview must use local text")
 try expect(try NotificationPreview.make(request: previewRequest, state: previewState, verify: { _, _ in false }) == nil,
            "Unverified request got a trusted preview")
 try expect(try NotificationPreview.make(request: previewRequest, state: NotificationJournalState(), verify: { _, _ in true }) == nil,

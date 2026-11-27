@@ -2,11 +2,18 @@ import Foundation
 
 struct NotificationPreview {
   let title: String
-  let question: String
+  let question: String?
   let account: String
+  let imageUrl: String?
   let service: String
   let status: String
   let expiresAt: Date
+
+  func countdown(at date: Date) -> (seconds: Int, fraction: Float) {
+    let lifetime = NotificationPushRequest.lifetime
+    let remaining = min(lifetime, max(0, expiresAt.timeIntervalSince(date)))
+    return (Int(ceil(remaining)), Float(remaining / lifetime))
+  }
 
   static func make(
     request: NotificationPushRequest,
@@ -21,9 +28,10 @@ struct NotificationPreview {
       title: request.title,
       question: request.question,
       account: token.label.flatMap { $0.isEmpty ? nil : $0 } ?? token.id,
+      imageUrl: token.imageUrl,
       service: URL(string: token.callbackUrl)?.host ?? token.issuer ?? "",
       status: status,
-      expiresAt: Date(timeIntervalSince1970: known.sentAt / 1000 + 120)
+      expiresAt: known.expiresAt
     )
   }
 }

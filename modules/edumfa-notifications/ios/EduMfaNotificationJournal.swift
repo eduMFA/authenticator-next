@@ -10,14 +10,17 @@ struct NotificationToken: Codable, Sendable {
   var requireDeviceAuth: Bool? = nil
   var label: String? = nil
   var issuer: String? = nil
+  var imageUrl: String? = nil
 }
 
 struct NotificationPushRequest: Codable, Sendable {
+  static let lifetime: TimeInterval = 120
+
   let id: String
   var status: String
   var sentAt: Double
   let nonce: String
-  let question: String
+  let question: String?
   let serial: String
   let signature: String
   let sslverify: String
@@ -26,14 +29,21 @@ struct NotificationPushRequest: Codable, Sendable {
 
   var key: String { serial + "\u{0}" + nonce }
   var isCompleted: Bool { status == "accepted" || status == "declined" }
-  var isExpired: Bool { Date().timeIntervalSince1970 * 1000 - sentAt >= 120_000 }
-  var signedData: String {
-    "\(nonce)|\(url)|\(serial)|\(question)|\(title)|\(sslverify == "1" ? 1 : 0)"
+  var expiresAt: Date { Date(timeIntervalSince1970: sentAt / 1000 + Self.lifetime) }
+  var isExpired: Bool { Date() >= expiresAt }
+  func signedData(version: Int?) throws -> String {
+    let isV2 = version == 2
+    guard isV2 ? question == nil : question != nil else { throw NotificationActionError.invalidSignature }
+    let signedQuestion = question.map { "\($0)|" } ?? ""
+    return "\(nonce)|\(url)|\(serial)|\(signedQuestion)\(title)|\(sslverify == "1" ? 1 : 0)"
   }
 
   static func from(userInfo: [AnyHashable: Any], identifier: String, date: Date) throws -> Self {
     var data = userInfo["body"] as? [String: Any] ?? userInfo.reduce(into: [String: Any]()) {
       if let key = $1.key as? String { $0[key] = $1.value }
+    }
+    if let question = data["question"], !(question is String) {
+      throw NotificationActionError.invalidSignature
     }
     data["id"] = identifier
     data["status"] = "pending"

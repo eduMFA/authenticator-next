@@ -2,7 +2,9 @@ import {
   PUSH_AUTHENTICATION_CATEGORY,
   PUSH_AUTHENTICATION_CHANNEL,
 } from "@/constants/notification";
+import { useTokenStore } from "@/stores/token";
 import { activateCurrentLocale } from "@/utils/locale";
+import { getPushNotificationContent } from "@/utils/push-request";
 import {
   addBackgroundMessageHandler,
   setupNotificationCategories,
@@ -27,12 +29,13 @@ export function registerBackgroundNotifications(): void {
 
       activateCurrentLocale();
       await setupNotificationCategories();
+      const token = useTokenStore
+        .getState()
+        .tokens.find(({ id }) => id === verified.serial);
       await Notifications.scheduleNotificationAsync({
         identifier: verified.id,
         content: {
-          title: verified.title,
-          body: verified.question,
-          data: { ...verified, pushRequestId: verified.id },
+          ...getPushNotificationContent(verified, token),
           categoryIdentifier: PUSH_AUTHENTICATION_CATEGORY,
           sound: "default",
         },

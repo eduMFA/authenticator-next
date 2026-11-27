@@ -69,7 +69,10 @@ test("creates one embedded, signed service target with shared App Group and curr
     const sourcePhase = target.buildPhases
       .map((phase) => phases[phase.value])
       .find(Boolean);
-    expect(sourcePhase.files).toHaveLength(3);
+    expect(sourcePhase.files).toHaveLength(4);
+    expect(sourcePhase.files.map(({ comment }) => comment)).toContain(
+      "NotificationTokenImage.swift in Sources",
+    );
     const configs = serialized.pbxXCBuildConfigurationSection();
     const list =
       serialized.pbxXCConfigurationList()[target.buildConfigurationList];
@@ -139,7 +142,10 @@ test("creates one embedded, signed service target with shared App Group and curr
     const previewSources = preview.buildPhases
       .map((phase) => phases[phase.value])
       .find(Boolean);
-    expect(previewSources.files).toHaveLength(4);
+    expect(previewSources.files).toHaveLength(5);
+    expect(previewSources.files.map(({ comment }) => comment)).toContain(
+      "PreviewTokenImage.swift in Sources",
+    );
     const resources = serialized.hash.project.objects.PBXResourcesBuildPhase;
     const previewResources = preview.buildPhases
       .map((phase) => resources[phase.value])

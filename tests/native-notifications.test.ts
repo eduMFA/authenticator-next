@@ -31,7 +31,11 @@ test("copies only enrolled public configuration and reconciles well-formed nativ
   expect(
     await synchronizeNativeNotifications(
       [
-        { ...token, serverPublicKey: "key" },
+        {
+          ...token,
+          serverPublicKey: "key",
+          imageUrl: "https://example.org/icon.png",
+        },
         { ...token, id: "not-enrolled" },
       ],
       [request],
@@ -45,6 +49,7 @@ test("copies only enrolled public configuration and reconciles well-formed nativ
         serverPublicKey: "key",
         version: token.version,
         label: token.label,
+        imageUrl: "https://example.org/icon.png",
         ...(token.issuer && { issuer: token.issuer }),
       },
     ],

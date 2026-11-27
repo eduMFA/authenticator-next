@@ -10,8 +10,9 @@ import type {
   NotificationResponseData,
   PushRequestHandler,
 } from "@/types/notification";
-import type { PushRequest, PushRequestData } from "@/types/push-request";
+import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
+import { validatePushRequestData } from "@/utils/push-request";
 import { i18n } from "@lingui/core";
 import { t } from "@lingui/core/macro";
 import type { RemoteMessage } from "@react-native-firebase/messaging";
@@ -82,29 +83,6 @@ export async function setupNotificationCategories() {
 }
 
 /**
- * Validates that the notification data contains all required fields for a push authentication request
- */
-export function validatePushRequestData(
-  data: unknown,
-): data is PushRequestData {
-  if (!data || typeof data !== "object") {
-    return false;
-  }
-
-  const d = data as Record<string, unknown>;
-
-  return (
-    typeof d.nonce === "string" &&
-    typeof d.question === "string" &&
-    typeof d.serial === "string" &&
-    typeof d.signature === "string" &&
-    typeof d.sslverify === "string" &&
-    typeof d.title === "string" &&
-    typeof d.url === "string"
-  );
-}
-
-/**
  * Parses a Firebase message into a PushRequest object
  * Returns null if the message is not a valid push authentication notification
  */
@@ -125,7 +103,7 @@ export function parsePushRequest(message: RemoteMessage): PushRequest | null {
     status: PushRequestStatus.Pending,
     sentAt: sentTime || Date.now(),
     nonce: data.nonce,
-    question: data.question,
+    ...(data.question !== undefined && { question: data.question }),
     serial: data.serial,
     signature: data.signature,
     sslverify: data.sslverify,
@@ -151,7 +129,7 @@ export function parsePushRequestFromNotificationData(
     status: PushRequestStatus.Pending,
     sentAt,
     nonce: data.nonce,
-    question: data.question,
+    ...(data.question !== undefined && { question: data.question }),
     serial: data.serial,
     signature: data.signature,
     sslverify: data.sslverify,

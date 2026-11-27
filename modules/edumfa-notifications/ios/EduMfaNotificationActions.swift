@@ -73,7 +73,7 @@ actor EduMfaNotificationActions {
     store: NotificationJournalStore? = nil,
     verify: @escaping Verify = { request, token in
       try EduMfaRsaCrypto().verify(
-        message: request.signedData,
+        message: request.signedData(version: token.version),
         signatureBase64: NotificationBase32.decode(request.signature).base64EncodedString(),
         publicKey: token.serverPublicKey,
         algorithm: "SHA256"

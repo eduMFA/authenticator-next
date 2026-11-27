@@ -122,6 +122,40 @@ test("reconciles native Watch results on iOS without overwriting completed reque
   expect(Notifications.dismissNotificationAsync).not.toHaveBeenCalled();
 });
 
+test("preserves Android notifications awaiting local ingestion and avoids cancel-all badge resets", async () => {
+  jest.replaceProperty(Platform, "OS", "android");
+  jest
+    .mocked(Notifications.getPresentedNotificationsAsync)
+    .mockResolvedValue([
+      delivered("arriving", request.nonce),
+      delivered("removed", "removed", "deleted-token"),
+    ]);
+
+  await synchronizeNotificationState();
+
+  expect(
+    jest.mocked(Notifications.dismissNotificationAsync).mock.calls,
+  ).toEqual([["removed"]]);
+  expect(Notifications.setBadgeCountAsync).not.toHaveBeenCalled();
+});
+
+test("uses Android requests ingested while reading presented notifications", async () => {
+  jest.replaceProperty(Platform, "OS", "android");
+  jest
+    .mocked(Notifications.getPresentedNotificationsAsync)
+    .mockImplementationOnce(async () => {
+      usePushRequestStore
+        .getState()
+        .addPushRequest({ ...request, sentAt: Date.now() });
+      return [delivered("arriving", request.nonce)];
+    });
+
+  await synchronizeNotificationState();
+
+  expect(Notifications.dismissNotificationAsync).not.toHaveBeenCalled();
+  expect(Notifications.setBadgeCountAsync).toHaveBeenCalledWith(1);
+});
+
 test("recovers from a failed reconciliation and ignores results for removed tokens", async () => {
   jest.replaceProperty(Platform, "OS", "ios");
   jest

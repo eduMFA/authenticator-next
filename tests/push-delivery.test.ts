@@ -1,4 +1,7 @@
-import { presentBackgroundPushRequest } from "@/services/push-delivery";
+import {
+  presentBackgroundPushRequest,
+  verifyIncomingPushRequest,
+} from "@/services/push-delivery";
 import { usePushRequestStore } from "@/stores/push-request";
 import { useTokenStore } from "@/stores/token";
 import { PushTokenRolloutState } from "@/types/token";
@@ -19,7 +22,6 @@ beforeEach(async () => {
     tokens: [
       {
         ...token,
-        version: 2,
         rolloutState: PushTokenRolloutState.Completed,
         serverPublicKey: "server-key",
       },
@@ -41,7 +43,7 @@ test("displays a verified data-only request once and retains the signed action d
   expect(scheduleNotificationAsync).toHaveBeenCalledWith({
     identifier: "push-auth-serial-nonce",
     content: {
-      title: request.title,
+      title: `${request.title} · ${token.label}`,
       body: request.question,
       data: { ...request, pushRequestId: request.id },
       categoryIdentifier: "PUSH_AUTHENTICATION",
@@ -56,4 +58,20 @@ test("discards a request with an invalid signature", async () => {
   await presentBackgroundPushRequest(request);
   expect(scheduleNotificationAsync).not.toHaveBeenCalled();
   expect(usePushRequestStore.getState().pushRequests).toEqual([]);
+});
+
+test("uses the enrolled version to verify V2 data and rejects an injected question", async () => {
+  useTokenStore.getState().updateToken(token.id, { version: 2 });
+  jest.mocked(verifyMessage).mockResolvedValue(true);
+
+  expect(await verifyIncomingPushRequest(request)).toBe(false);
+  expect(verifyMessage).not.toHaveBeenCalled();
+  expect(
+    await verifyIncomingPushRequest({ ...request, question: undefined }),
+  ).toBe(true);
+  expect(verifyMessage).toHaveBeenCalledWith(
+    "nonce|https://example.org/push|serial|Login|1",
+    "Zg==",
+    "server-key",
+  );
 });

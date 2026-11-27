@@ -1,7 +1,7 @@
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import type { PushToken } from "@/types/token";
-import { validatePushRequestData } from "@/utils/notification";
+import { validatePushRequestData } from "@/utils/push-request";
 import { type NativeModule, requireNativeModule } from "expo";
 
 declare class NativeNotificationsModule extends NativeModule<{
@@ -32,6 +32,7 @@ export async function synchronizeNativeNotifications(
             requireDeviceAuth,
             label,
             issuer,
+            imageUrl,
           }) => ({
             id,
             callbackUrl,
@@ -40,6 +41,7 @@ export async function synchronizeNativeNotifications(
             requireDeviceAuth,
             label,
             issuer,
+            imageUrl,
           }),
         ),
       requests,

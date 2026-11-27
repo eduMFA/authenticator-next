@@ -10,7 +10,10 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
   private let accountLabel = UILabel()
   private let serviceLabel = UILabel()
   private let statusLabel = UILabel()
+  private let expiryBar = UIProgressView(progressViewStyle: .default)
+  private let expiryDetailLabel = UILabel()
   private var expiryTimer: Timer?
+  private var imageTask: Task<Void, Never>?
 
   override func loadView() {
     let scroll = UIScrollView()
@@ -30,6 +33,8 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     ])
     icon.tintColor = .systemBlue
     icon.contentMode = .scaleAspectFit
+    icon.layer.cornerRadius = 8
+    icon.clipsToBounds = true
     icon.isAccessibilityElement = false
     NSLayoutConstraint.activate([
       icon.widthAnchor.constraint(equalToConstant: 32),
@@ -46,16 +51,31 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     separator.backgroundColor = .separator
     separator.heightAnchor.constraint(equalToConstant: 1).isActive = true
     stack.addArrangedSubview(separator)
-    for label in [accountLabel, serviceLabel, statusLabel] {
+    for label in [accountLabel, serviceLabel] {
       configure(label, style: .subheadline)
       label.textColor = .secondaryLabel
       stack.addArrangedSubview(label)
     }
+    configure(statusLabel, style: .subheadline)
+    statusLabel.textColor = .secondaryLabel
+    expiryBar.progressTintColor = .systemBlue
+    expiryBar.trackTintColor = .tertiarySystemFill
+    expiryBar.transform = CGAffineTransform(scaleX: 1, y: 2)
+    expiryBar.isAccessibilityElement = false
+    configure(expiryDetailLabel, style: .footnote)
+    expiryDetailLabel.textColor = .secondaryLabel
+    expiryDetailLabel.text = text("Start a new sign-in to get another request.")
+    let statusStack = UIStackView(arrangedSubviews: [statusLabel, expiryBar, expiryDetailLabel])
+    statusStack.axis = .vertical
+    statusStack.spacing = 8
+    stack.addArrangedSubview(statusStack)
   }
 
   func didReceive(_ notification: UNNotification) {
     loadViewIfNeeded()
     expiryTimer?.invalidate()
+    expiryTimer = nil
+    imageTask?.cancel()
     do {
       guard let group = Bundle.main.object(forInfoDictionaryKey: "EduMfaNotificationAppGroup") as? String else {
         showUnavailable()
@@ -68,7 +88,7 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
       let state = try NotificationJournalStore(appGroup: group).read()
       guard let preview = try NotificationPreview.make(request: request, state: state, verify: { request, token in
         try EduMfaRsaCrypto().verify(
-          message: request.signedData,
+          message: request.signedData(version: token.version),
           signatureBase64: NotificationBase32.decode(request.signature).base64EncodedString(),
           publicKey: token.serverPublicKey, algorithm: "SHA256"
         )
@@ -77,32 +97,81 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
         return
       }
       titleLabel.text = preview.title
-      icon.image = UIImage(systemName: "checkmark.shield.fill")
+      let attachmentImage = tokenImage(from: notification.request.content.attachments)
+      icon.image = attachmentImage ?? UIImage(systemName: "checkmark.shield.fill")
+      if attachmentImage == nil, let imageUrl = preview.imageUrl {
+        imageTask = Task { [weak self] in
+          guard let png = try? await NotificationTokenImage.download(imageUrl),
+                !Task.isCancelled, let image = UIImage(data: png) else { return }
+          self?.icon.image = image
+        }
+      }
       icon.tintColor = .systemBlue
       for label in [accountLabel, serviceLabel, statusLabel] { label.isHidden = false }
-      messageLabel.text = preview.question
+      messageLabel.text = preview.question ?? text("Do you want to confirm the sign-in?")
       accountLabel.text = String(format: text("Account: %@"), preview.account)
       serviceLabel.text = String(format: text("Server: %@"), preview.service)
       serviceLabel.isHidden = preview.service.isEmpty
-      let status: String
+      expiryBar.isHidden = true
+      expiryDetailLabel.isHidden = true
+      statusLabel.font = .preferredFont(forTextStyle: .subheadline)
       switch preview.status {
-      case "accepted": status = text("Accepted")
-      case "declined": status = text("Declined")
-      case "expired": status = text("Expired")
-      case "dismissed": status = text("Dismissed")
-      default: status = text("Awaiting your response")
-      }
-      statusLabel.text = status
-      if preview.status == "pending" {
-        expiryTimer = Timer.scheduledTimer(withTimeInterval: max(0.1, preview.expiresAt.timeIntervalSinceNow), repeats: false) { [weak self] _ in
-          guard let self else { return }
-          self.statusLabel.text = self.text("Expired")
-        }
+      case "accepted": statusLabel.text = text("Accepted")
+      case "declined": statusLabel.text = text("Declined")
+      case "expired": showExpired()
+      case "dismissed": statusLabel.text = text("Dismissed")
+      default: startCountdown(preview)
       }
     } catch {
       showUnavailable()
     }
     view.setNeedsLayout()
+  }
+
+  private func startCountdown(_ preview: NotificationPreview) {
+    expiryBar.isHidden = false
+    let font = UIFont.preferredFont(forTextStyle: .subheadline)
+    statusLabel.font = .monospacedDigitSystemFont(ofSize: font.pointSize, weight: .regular)
+    guard updateCountdown(preview) else { return }
+    let timer = Timer(timeInterval: 0.25, repeats: true) { [weak self] timer in
+      guard let self, self.updateCountdown(preview) else {
+        timer.invalidate()
+        return
+      }
+    }
+    expiryTimer = timer
+    RunLoop.main.add(timer, forMode: .common)
+  }
+
+  private func updateCountdown(_ preview: NotificationPreview) -> Bool {
+    let countdown = preview.countdown(at: Date())
+    guard countdown.seconds > 0 else {
+      showExpired()
+      return false
+    }
+    let remaining = Duration.seconds(countdown.seconds).formatted(.time(pattern: .minuteSecond))
+    statusLabel.text = String(format: text("Expires in %@"), remaining)
+    expiryBar.setProgress(countdown.fraction, animated: false)
+    return true
+  }
+
+  private func showExpired() {
+    statusLabel.text = text("Expired")
+    statusLabel.font = .preferredFont(forTextStyle: .subheadline)
+    expiryBar.isHidden = true
+    expiryDetailLabel.isHidden = false
+    view.setNeedsLayout()
+  }
+
+  private func tokenImage(from attachments: [UNNotificationAttachment]) -> UIImage? {
+    guard let attachment = attachments.first(where: { $0.identifier == NotificationTokenImage.attachmentIdentifier }) else {
+      return nil
+    }
+    let url = attachment.url
+    let hasAccess = url.startAccessingSecurityScopedResource()
+    defer { if hasAccess { url.stopAccessingSecurityScopedResource() } }
+    guard let data = try? Data(contentsOf: url) else { return nil }
+    return UIImage(data: data)
   }
 
   override func viewDidLayoutSubviews() {
@@ -122,6 +191,8 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     titleLabel.text = text("Sign-in request")
     messageLabel.text = text("Open eduMFA Push to review this request.")
     for label in [accountLabel, serviceLabel, statusLabel] { label.isHidden = true }
+    expiryBar.isHidden = true
+    expiryDetailLabel.isHidden = true
     view.setNeedsLayout()
   }
 
@@ -135,5 +206,8 @@ final class NotificationViewController: UIViewController, UNNotificationContentE
     NSLocalizedString(key, tableName: "NotificationPreview", bundle: .main, comment: "")
   }
 
-  deinit { expiryTimer?.invalidate() }
+  deinit {
+    expiryTimer?.invalidate()
+    imageTask?.cancel()
+  }
 }

@@ -31,7 +31,7 @@
         "expo-linking": "~58.0.17",
         "expo-local-authentication": "~58.0.3",
         "expo-localization": "~58.0.5",
-        "expo-notifications": "~58.1.9",
+        "expo-notifications": "58.1.9",
         "expo-router": "~58.0.32",
         "expo-splash-screen": "~58.0.14",
         "expo-symbols": "~58.0.5",
@@ -67,6 +67,9 @@
         "typescript": "~6.0.3",
       },
     },
+  },
+  "patchedDependencies": {
+    "expo-notifications@58.1.9": "patches/expo-notifications@58.1.9.patch",
   },
   "packages": {
     "2g": ["2g@1.0.1", "", { "peerDependencies": { "typescript": ">=5.8.0" }, "optionalPeers": ["typescript"], "bin": { "2g": "bin/cli.js" } }, "sha512-+uViadKOS/wwR4pFu5g8TPn3QHpKqoX19JHCnp8k/3cLpImdcXozwvZA6Q/5PeW3AcU8neL8faaMidBcv7o8CA=="],

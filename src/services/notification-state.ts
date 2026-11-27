@@ -47,14 +47,6 @@ export function synchronizeNotificationState(): Promise<void> {
       return;
     }
 
-    const pending = usePushRequestStore
-      .getState()
-      .pushRequests.filter(
-        (request) =>
-          request.status === PushRequestStatus.Pending &&
-          Date.now() - request.sentAt < 120_000 &&
-          tokens.some((token) => token.id === request.serial),
-      );
     for (const notification of await Notifications.getPresentedNotificationsAsync()) {
       if (
         notification.request.content.categoryIdentifier !==
@@ -66,18 +58,42 @@ export function synchronizeNotificationState(): Promise<void> {
         actionIdentifier: Notifications.DEFAULT_ACTION_IDENTIFIER,
       });
       if (!data.nonce || !data.serial) continue;
-      if (
-        !pending.some(
+      // Delivery and verification can overlap reconciliation. An unknown
+      // request is not evidence that its notification should be removed.
+      const currentTokens = useTokenStore.getState().tokens;
+      const known = usePushRequestStore
+        .getState()
+        .pushRequests.find(
           (request) =>
             request.nonce === data.nonce && request.serial === data.serial,
-        )
+        );
+      if (
+        !currentTokens.some((token) => token.id === data.serial) ||
+        (known &&
+          (known.status !== PushRequestStatus.Pending ||
+            Date.now() - known.sentAt >= 120_000))
       ) {
         await Notifications.dismissNotificationAsync(
           notification.request.identifier,
         );
       }
     }
-    await Notifications.setBadgeCountAsync(pending.length);
+    const pending = usePushRequestStore
+      .getState()
+      .pushRequests.filter(
+        (request) =>
+          request.status === PushRequestStatus.Pending &&
+          Date.now() - request.sentAt < 120_000 &&
+          useTokenStore
+            .getState()
+            .tokens.some((token) => token.id === request.serial),
+      );
+    // On Android Expo implements a zero badge by canceling every notification.
+    // Clear resolved notifications individually above; launchers derive their
+    // empty badge from those removals without canceling concurrent arrivals.
+    if (pending.length > 0) {
+      await Notifications.setBadgeCountAsync(pending.length);
+    }
   });
   // A failed attempt must not block future reconciliation or action retries.
   synchronization = next.catch(() => {});

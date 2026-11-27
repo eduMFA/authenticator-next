@@ -5,6 +5,9 @@ import { PushRequestStatus, type PushRequest } from "@/types/push-request";
 import { PushTokenRolloutState, type PushToken } from "@/types/token";
 import { Alert } from "react-native";
 
+const demoTokenImageUrl =
+  "https://www.fu-berlin.de/assets/default2/favicon-12a6f1b0e53f527326498a6bfd4c3abd.ico";
+
 function createSampleTokens(amount: number): PushToken[] {
   const batchId = Date.now();
 
@@ -31,8 +34,17 @@ export function useDevMenu() {
     useToken();
   const { addPushRequest, clearPushRequests } = usePushRequestStore();
   const token = tokens[0];
+  const firstRegisteredToken = tokens.find(
+    (entry) => entry.rolloutState === PushTokenRolloutState.Completed,
+  );
   const tokenActionDisabled = !token;
   const resetOnboarding = useSettingsStore((state) => state.resetOnboarding);
+
+  const applyDemoTokenImage = () => {
+    if (firstRegisteredToken) {
+      updateToken(firstRegisteredToken.id, { imageUrl: demoTokenImageUrl });
+    }
+  };
 
   const updateTokenRolloutState = (
     tokenId: string,
@@ -133,6 +145,7 @@ export function useDevMenu() {
   };
 
   return {
+    applyDemoTokenImage,
     clearAllTokens,
     clearPushRequests,
     demoRolloutFailure,
@@ -141,6 +154,7 @@ export function useDevMenu() {
     spawnSamplePushRequest,
     spawnSampleTokens,
     tokenActionDisabled,
+    tokenImageActionDisabled: !firstRegisteredToken,
     resetOnboarding,
   };
 }

@@ -1,6 +1,23 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "Do you want to confirm the sign-in?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Möchtest du die Anmeldung bestätigen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do you want to confirm the sign-in?"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "Account: %@": {
       "localizations": {
         "de": {
@@ -103,18 +120,35 @@
       },
       "extractionState": "manual"
     },
-    "Awaiting your response": {
+    "Expires in %@": {
       "localizations": {
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wartet auf deine Antwort"
+            "value": "Läuft in %@ ab"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Awaiting your response"
+            "value": "Expires in %@"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Start a new sign-in to get another request.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starte die Anmeldung erneut, um eine neue Anfrage zu erhalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a new sign-in to get another request."
           }
         }
       },

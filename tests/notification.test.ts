@@ -26,8 +26,8 @@ import {
   parsePushRequestFromNotificationData,
   setupForegroundNotificationHandler,
   setupNotificationCategories,
-  validatePushRequestData,
 } from "@/utils/notification";
+import { validatePushRequestData } from "@/utils/push-request";
 import { request } from "./fixtures";
 
 jest.mock("@react-native-firebase/messaging", () => ({
@@ -173,6 +173,20 @@ test("parses Firebase and local notification requests", () => {
   expect(
     parsePushRequestFromNotificationData(request, "fallback")?.sentAt,
   ).toBe(999);
+});
+test("parses V2 messages and notification actions without a question", () => {
+  const data = { ...message.data };
+  delete data.question;
+  const pushed = parsePushRequest({ ...message, data });
+  const fromAction = parsePushRequestFromNotificationData(
+    data,
+    "fallback",
+    456,
+  );
+  expect(pushed).toMatchObject({ ...data, id: "message", sentAt: 123 });
+  expect(fromAction).toMatchObject({ ...data, id: "fallback", sentAt: 456 });
+  expect(pushed).not.toHaveProperty("question");
+  expect(fromAction).not.toHaveProperty("question");
 });
 test("ignores unrelated and malformed messages", () => {
   expect(parsePushRequest({})).toBeNull();

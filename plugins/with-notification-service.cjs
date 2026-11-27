@@ -8,7 +8,10 @@ const path = require("node:path");
 const plist = require("@expo/plist").default;
 
 const targetName = "EduMfaNotificationService";
+const tokenImageSource =
+  "modules/edumfa-notifications/extension/NotificationTokenImage.swift";
 const sources = [
+  [tokenImageSource, "NotificationTokenImage.swift"],
   [
     "modules/edumfa-notifications/extension/NotificationService.swift",
     "NotificationService.swift",
@@ -35,6 +38,7 @@ const targets = [
     name: previewTarget,
     suffix: "NotificationPreview",
     sources: [
+      [tokenImageSource, "PreviewTokenImage.swift"],
       [
         "modules/edumfa-notifications/preview/NotificationViewController.swift",
         "NotificationViewController.swift",
