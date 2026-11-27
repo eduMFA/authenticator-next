@@ -40,6 +40,8 @@
       "expo-image",
       "expo-local-authentication",
       "expo-notifications",
+      "./plugins/with-firebase-notifications.cjs",
+      "./plugins/with-notification-service.cjs",
       "expo-router",
       "expo-dev-client",
       "@react-native-firebase/app",

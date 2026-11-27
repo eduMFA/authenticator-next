@@ -67,6 +67,34 @@ test("supports tokens without server public key", async () => {
   expect((await pollChallengesForToken(token)).challenges).toHaveLength(1);
   expect(verifyMessage).not.toHaveBeenCalled();
 });
+test("verifies V2 polling challenges without a question slot", async () => {
+  const challenge = { ...request, question: undefined };
+  fetchMock.mockResolvedValue(
+    response(200, { result: { status: true, value: [challenge] } }),
+  );
+  const registered = { ...token, version: 2, serverPublicKey: "server-key" };
+  const result = await pollChallengesForToken(registered);
+  expect(result.challenges).toHaveLength(1);
+  expect(result.challenges[0]).not.toHaveProperty("question");
+  expect(verifyMessage).toHaveBeenCalledWith(
+    "nonce|https://example.org/push|serial|Login|1",
+    "Zg==",
+    "server-key",
+  );
+  jest.mocked(verifyMessage).mockResolvedValue(false);
+  expect((await pollChallengesForToken(registered)).challenges).toEqual([]);
+  expect((await pollChallengesForToken(token)).challenges).toEqual([]);
+});
+
+test("rejects an unsigned question added to a V2 polling challenge", async () => {
+  const result = await pollChallengesForToken({
+    ...token,
+    version: 2,
+    serverPublicKey: "server-key",
+  });
+  expect(result.challenges).toEqual([]);
+  expect(verifyMessage).not.toHaveBeenCalled();
+});
 test("returns an authenticated upgrade advertisement even with no pending challenges", async () => {
   fetchMock.mockResolvedValue(
     response(200, {

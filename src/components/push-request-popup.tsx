@@ -1,10 +1,11 @@
+import { usePushRequestStore } from "@/stores/push-request";
 import { Radii, Spacing, Typography } from "@/constants/theme";
 import { useTheme } from "@/hooks/use-theme";
-import { usePushRequestStore } from "@/stores/push-request";
 import { useTokenStore } from "@/stores/token";
 import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
 import { playImpactLightHaptic, playImpactMediumHaptic } from "@/utils/haptics";
+import { getPushRequestBody } from "@/utils/push-request";
 import { useLingui } from "@lingui/react/macro";
 import { BlurView } from "expo-blur";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -34,7 +35,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type PushRequestPopupProps = {
   requests: PushRequest[];
-  onAction: (request: PushRequest) => Promise<void>;
+  onAction: (request: PushRequest) => Promise<boolean>;
 };
 
 export function PushRequestPopup({
@@ -45,7 +46,9 @@ export function PushRequestPopup({
     null,
   );
   const colorScheme = useColorScheme();
-  const { updatePushRequestStatus } = usePushRequestStore();
+  const updatePushRequestStatus = usePushRequestStore(
+    (state) => state.updatePushRequestStatus,
+  );
   const pendingRequests = requests.filter(
     (request) => request.status === PushRequestStatus.Pending,
   );
@@ -143,6 +146,7 @@ function PopupCard({
     transform: [{ scale: scale.value }],
   }));
   const service = getServiceName(request.url);
+  const message = getPushRequestBody(request);
   const receivedAt = useMemo(
     () =>
       new Date(request.sentAt).toLocaleTimeString(undefined, {
@@ -210,7 +214,7 @@ function PopupCard({
           ) : null}
         </View>
 
-        {request.title || request.question || context.length > 0 ? (
+        {request.title || message || context.length > 0 ? (
           <View
             style={[
               styles.requestMessage,
@@ -228,12 +232,12 @@ function PopupCard({
                 {request.title}
               </ThemedText>
             ) : null}
-            {request.question ? (
+            {message ? (
               <ThemedText
                 fontSize={Typography.fontSize14}
                 themeColor="textSecondary"
               >
-                {request.question}
+                {message}
               </ThemedText>
             ) : null}
             {context.length > 0 ? (

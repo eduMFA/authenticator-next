@@ -12,19 +12,12 @@ import { PushRequestStatus } from "@/types/push-request";
 import type { PushToken } from "@/types/token";
 import { PushTokenRolloutState } from "@/types/token";
 import { base32ToBase64, base64ToBase32 } from "@/utils/crypto";
-import { buildPushRequestSignedData } from "@/utils/push-request";
+import {
+  buildPushRequestSignedData,
+  validatePushRequestData,
+} from "@/utils/push-request";
 import { signMessage, verifyMessage } from "@/utils/rsa";
 import { parseTokenUpdate } from "@/utils/token";
-
-interface ChallengeResponse {
-  nonce: string;
-  question: string;
-  serial: string;
-  signature: string;
-  sslverify: string;
-  title: string;
-  url: string;
-}
 
 /**
  * Generate an ISO 8601 timestamp for the polling request
@@ -53,18 +46,20 @@ async function signPollingMessage(
  * Parse challenge response from server into PushRequest
  */
 async function parseChallengeResponse(
-  data: ChallengeResponse,
+  data: unknown,
   token: PushToken,
 ): Promise<PushRequest | null> {
   if (
+    !validatePushRequestData(data) ||
     data.serial !== token.id ||
     (token.version === 2 && !token.serverPublicKey)
   ) {
     return null;
   }
+  const signedData = buildPushRequestSignedData(data, token.version);
+  if (signedData === null) return null;
   // Verify the signature from the server using the token's server public key
   if (token.serverPublicKey) {
-    const signedData = buildPushRequestSignedData(data);
     try {
       const isValid = await verifyMessage(
         signedData,
@@ -86,7 +81,7 @@ async function parseChallengeResponse(
     status: PushRequestStatus.Pending,
     sentAt: Date.now(),
     nonce: data.nonce,
-    question: data.question,
+    ...(data.question !== undefined && { question: data.question }),
     serial: data.serial,
     signature: data.signature,
     sslverify: data.sslverify,
@@ -152,7 +147,7 @@ export async function pollChallengesForToken(
     }
 
     const data: {
-      result?: { status?: boolean; value?: ChallengeResponse[] };
+      result?: { status?: boolean; value?: unknown[] };
       detail?: {
         available_upgrade?: { target_version?: unknown };
         token_update?: { image?: unknown };

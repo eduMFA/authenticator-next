@@ -1,6 +1,11 @@
 import { i18n } from "@lingui/core";
 import { messages } from "@/locales/en/messages";
 import * as Notifications from "expo-notifications";
+import {
+  IosAlertStyle,
+  IosAllowsPreviews,
+  IosAuthorizationStatus,
+} from "expo-notifications";
 import { Platform } from "react-native";
 import {
   getMessaging,
@@ -15,15 +20,14 @@ import {
   cancelNotification,
   getNotificationAction,
   getNotificationResponseData,
-  getNotificationResponseKey,
   isNotificationPermissionEnabled,
   isNotificationPermissionPending,
   parsePushRequest,
   parsePushRequestFromNotificationData,
   setupForegroundNotificationHandler,
   setupNotificationCategories,
-  validatePushRequestData,
 } from "@/utils/notification";
+import { validatePushRequestData } from "@/utils/push-request";
 import { request } from "./fixtures";
 
 jest.mock("@react-native-firebase/messaging", () => ({
@@ -68,8 +72,8 @@ function permission(
             allowsDisplayInNotificationCenter: true,
             allowsDisplayOnLockScreen: true,
             allowsDisplayInCarPlay: false,
-            alertStyle: Notifications.IosAlertStyle.BANNER,
-            allowsPreviews: Notifications.IosAllowsPreviews.ALWAYS,
+            alertStyle: IosAlertStyle.BANNER,
+            allowsPreviews: IosAllowsPreviews.ALWAYS,
             providesAppNotificationSettings: true,
             allowsCriticalAlerts: false,
             allowsAnnouncements: false,
@@ -119,7 +123,7 @@ test("permission flags include provisional iOS permission", () => {
       permission(
         Notifications.PermissionStatus.UNDETERMINED,
         false,
-        Notifications.IosAuthorizationStatus.PROVISIONAL,
+        IosAuthorizationStatus.PROVISIONAL,
       ),
     ),
   ).toBe(true);
@@ -170,6 +174,20 @@ test("parses Firebase and local notification requests", () => {
     parsePushRequestFromNotificationData(request, "fallback")?.sentAt,
   ).toBe(999);
 });
+test("parses V2 messages and notification actions without a question", () => {
+  const data = { ...message.data };
+  delete data.question;
+  const pushed = parsePushRequest({ ...message, data });
+  const fromAction = parsePushRequestFromNotificationData(
+    data,
+    "fallback",
+    456,
+  );
+  expect(pushed).toMatchObject({ ...data, id: "message", sentAt: 123 });
+  expect(fromAction).toMatchObject({ ...data, id: "fallback", sentAt: 456 });
+  expect(pushed).not.toHaveProperty("question");
+  expect(fromAction).not.toHaveProperty("question");
+});
 test("ignores unrelated and malformed messages", () => {
   expect(parsePushRequest({})).toBeNull();
   expect(parsePushRequest({ data: { category: "other" } })).toBeNull();
@@ -193,13 +211,9 @@ test.each([
 ])("maps action %s", (identifier, expected) => {
   expect(getNotificationAction(identifier)).toBe(expected);
 });
-test("extracts response data and identifies responses by action", () => {
+test("extracts response data", () => {
   const response = notificationResponse();
   expect(getNotificationResponseData(response)).toEqual(request);
-  expect(getNotificationResponseKey(response)).toBe("notification:ACCEPT");
-  expect(getNotificationResponseKey(notificationResponse("DECLINE"))).toBe(
-    "notification:DECLINE",
-  );
   response.notification.request.content.data = null as unknown as Record<
     string,
     unknown
@@ -222,13 +236,13 @@ test.each(["android", "ios"] as const)(
       expect.objectContaining({
         identifier: "ACCEPT",
         options: {
-          opensAppToForeground: true,
-          isAuthenticationRequired: true,
+          opensAppToForeground: os !== "ios",
+          isAuthenticationRequired: os !== "ios",
         },
       }),
       expect.objectContaining({
         identifier: "DECLINE",
-        options: { opensAppToForeground: true, isDestructive: true },
+        options: { opensAppToForeground: os !== "ios", isDestructive: true },
       }),
     ]);
   },

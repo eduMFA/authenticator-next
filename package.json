@@ -16,6 +16,7 @@
     "licenses:check": "bun run licenses:generate && git diff --exit-code -- src/generated/open-source-licenses.ts",
     "licenses:generate": "bun scripts/generate-open-source-licenses.mjs",
     "test": "jest",
+    "test:ios-notifications": "bun scripts/test-ios-notification-actions.mjs",
     "lint": "expo lint",
     "clean-ios": "watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache",
     "full-clean-ios": "rm -rf node_modules && bun pm cache rm && bun i && watchman watch-del-all && rm -fr $TMPDIR/haste-map-* && rm -rf $TMPDIR/metro-cache && bunx expo prebuild --clean && bunx expo run:ios --device --no-build-cache",
@@ -50,7 +51,7 @@
     "expo-linking": "~58.0.17",
     "expo-local-authentication": "~58.0.3",
     "expo-localization": "~58.0.5",
-    "expo-notifications": "~58.1.9",
+    "expo-notifications": "58.1.9",
     "expo-router": "~58.0.32",
     "expo-splash-screen": "~58.0.14",
     "expo-symbols": "~58.0.5",
@@ -123,5 +124,8 @@
       "^.+\\.[jt]sx?$": "babel-jest",
       "^.+\\.mjs$": "babel-jest"
     }
+  },
+  "patchedDependencies": {
+    "expo-notifications@58.1.9": "patches/expo-notifications@58.1.9.patch"
   }
 }

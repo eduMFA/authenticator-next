@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: \n"
 "X-Generator: Poedit 3.8\n"
 
-#: src/components/push-request-popup.tsx:271
+#: src/components/push-request-popup.tsx:275
 msgid "{totalPending} requests are waiting. Review each one separately."
 msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 
@@ -21,7 +21,7 @@ msgstr "{totalPending} Anfragen warten. Prüfe jede einzeln."
 msgid "About"
 msgstr "Über"
 
-#: src/utils/notification.ts:62
+#: src/utils/notification.ts:67
 msgid "Accept"
 msgstr "Akzeptieren"
 
@@ -47,7 +47,7 @@ msgstr "Anonyme Berichte"
 msgid "Appearance"
 msgstr "Darstellung"
 
-#: src/components/push-request-popup.tsx:282
+#: src/components/push-request-popup.tsx:286
 msgid "Approve"
 msgstr "Freigeben"
 
@@ -136,7 +136,7 @@ msgstr "Absturz- und Fehlerberichte"
 msgid "Dark"
 msgstr "Dunkel"
 
-#: src/utils/notification.ts:70
+#: src/utils/notification.ts:75
 msgid "Decline"
 msgstr "Ablehnen"
 
@@ -150,7 +150,7 @@ msgstr "Löschen"
 msgid "Delete token"
 msgstr "Token löschen"
 
-#: src/components/push-request-popup.tsx:277
+#: src/components/push-request-popup.tsx:281
 msgid "Deny"
 msgstr "Ablehnen"
 
@@ -159,12 +159,16 @@ msgid "Details"
 msgstr "Details"
 
 #: src/components/notification-handler.tsx:44
-msgid "Device authentication required"
-msgstr "Geräteauthentifizierung erforderlich"
+#~ msgid "Device authentication required"
+#~ msgstr "Geräteauthentifizierung erforderlich"
 
 #: src/hooks/use-handle-token-uri.ts:64
 msgid "Dismiss"
 msgstr "Schließen"
+
+#: src/utils/push-request.ts:31
+msgid "Do you want to confirm the sign-in?"
+msgstr "Möchtest du die Anmeldung bestätigen?"
 
 #: src/components/onboarding-sequence/step-actions.tsx:257
 msgid "Don't share anonymous reports"
@@ -399,7 +403,7 @@ msgstr "Mitteilungen konnten nicht eingerichtet werden. Prüfe deine Verbindung 
 msgid "Notifications couldn't be set up. Check your connection and device settings, then try again. You can still open the app to check for requests."
 msgstr "Mitteilungen konnten nicht eingerichtet werden. Prüfe deine Verbindung und Geräteeinstellungen und versuche es erneut. Du kannst weiterhin die App öffnen, um nach Anfragen zu suchen."
 
-#: src/components/push-request-popup.tsx:261
+#: src/components/push-request-popup.tsx:265
 msgid "Only approve if you started this sign-in. If you are unsure, deny it."
 msgstr "Genehmige die Anmeldung nur, wenn du sie selbst gestartet hast. Lehne sie im Zweifel ab."
 
@@ -498,8 +502,8 @@ msgid "Requests are checked when you open the app or refresh the token list."
 msgstr "Anfragen werden beim Öffnen der App oder Aktualisieren der Token-Liste abgerufen."
 
 #: src/components/notification-handler.tsx:50
-msgid "Response failed"
-msgstr "Antwort fehlgeschlagen"
+#~ msgid "Response failed"
+#~ msgstr "Antwort fehlgeschlagen"
 
 #: src/components/token-detail/token-detail-utils.ts:87
 msgid "Response parsing failed"
@@ -516,7 +520,7 @@ msgstr "Rollout erneut versuchen"
 msgid "Review eduMFA Push"
 msgstr "eduMFA Push bewerten"
 
-#: src/components/push-request-popup.tsx:200
+#: src/components/push-request-popup.tsx:204
 msgid "Review sign-in"
 msgstr "Anmeldung prüfen"
 
@@ -688,8 +692,8 @@ msgid "Version {itemVersion} · {itemLicense}"
 msgstr "Version {itemVersion} · {itemLicense}"
 
 #: src/components/notification-handler.tsx:51
-msgid "We couldn’t confirm your response. Check your connection, then start a new sign-in."
-msgstr "Wir konnten deine Antwort nicht bestätigen. Prüfe deine Verbindung und starte dann eine neue Anmeldung."
+#~ msgid "We couldn’t confirm your response. Check your connection, then start a new sign-in."
+#~ msgstr "Wir konnten deine Antwort nicht bestätigen. Prüfe deine Verbindung und starte dann eine neue Anmeldung."
 
 #: src/app/settings/index.tsx:164
 msgid "Website"

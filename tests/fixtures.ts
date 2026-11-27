@@ -11,7 +11,7 @@ export const token: PushToken = {
   sslVerify: true,
   rolloutState: PushTokenRolloutState.Pending,
 };
-export const request: PushRequest = {
+export const request: PushRequest & { question: string } = {
   id: "request",
   nonce: "nonce",
   serial: token.id,

@@ -33,6 +33,7 @@ import CheckCircleSymbol from "@expo/material-symbols/check_circle.xml";
 import ClearAllSymbol from "@expo/material-symbols/clear_all.xml";
 import CodeSymbol from "@expo/material-symbols/code.xml";
 import DeleteSymbol from "@expo/material-symbols/delete.xml";
+import ImageSymbol from "@expo/material-symbols/image.xml";
 import KeySymbol from "@expo/material-symbols/key.xml";
 import NotificationAddSymbol from "@expo/material-symbols/notification_add.xml";
 import NotificationsSymbol from "@expo/material-symbols/notifications.xml";
@@ -394,6 +395,14 @@ export default function Tokens() {
           key: "tokens-spawn-10",
           label: "Spawn Sample 10",
           onPress: () => devMenu.spawnSampleTokens(10),
+        },
+        {
+          androidIcon: ImageSymbol,
+          disabled: devMenu.tokenImageActionDisabled,
+          iosIcon: "photo",
+          key: "tokens-apply-demo-image",
+          label: "Set First Token Icon",
+          onPress: devMenu.applyDemoTokenImage,
         },
         {
           androidIcon: DeleteSymbol,

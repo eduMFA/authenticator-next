@@ -1,4 +1,5 @@
 import {
+  PUSH_AUTHENTICATION_CHANNEL,
   NOTIFICATION_ACTION_ACCEPT,
   NOTIFICATION_ACTION_DECLINE,
   PUSH_AUTHENTICATION_CATEGORY,
@@ -9,8 +10,9 @@ import type {
   NotificationResponseData,
   PushRequestHandler,
 } from "@/types/notification";
-import type { PushRequest, PushRequestData } from "@/types/push-request";
+import type { PushRequest } from "@/types/push-request";
 import { PushRequestStatus } from "@/types/push-request";
+import { validatePushRequestData } from "@/utils/push-request";
 import { i18n } from "@lingui/core";
 import { t } from "@lingui/core/macro";
 import type { RemoteMessage } from "@react-native-firebase/messaging";
@@ -47,10 +49,13 @@ export function isNotificationPermissionPending(
 export async function setupNotificationCategories() {
   // Create Android notification channel
   if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("push-auth", {
-      name: "Push Authentication",
-      importance: AndroidImportance.HIGH,
-    });
+    await Notifications.setNotificationChannelAsync(
+      PUSH_AUTHENTICATION_CHANNEL,
+      {
+        name: "Push Authentication",
+        importance: AndroidImportance.HIGH,
+      },
+    );
   }
 
   // Set up notification categories with actions for both platforms
@@ -61,42 +66,19 @@ export async function setupNotificationCategories() {
         identifier: NOTIFICATION_ACTION_ACCEPT,
         buttonTitle: i18n._(t`Accept`),
         options: {
-          opensAppToForeground: true,
-          isAuthenticationRequired: true,
+          opensAppToForeground: Platform.OS !== "ios",
+          isAuthenticationRequired: Platform.OS !== "ios",
         },
       },
       {
         identifier: NOTIFICATION_ACTION_DECLINE,
         buttonTitle: i18n._(t`Decline`),
         options: {
-          opensAppToForeground: true,
+          opensAppToForeground: Platform.OS !== "ios",
           isDestructive: true,
         },
       },
     ],
-  );
-}
-
-/**
- * Validates that the notification data contains all required fields for a push authentication request
- */
-export function validatePushRequestData(
-  data: unknown,
-): data is PushRequestData {
-  if (!data || typeof data !== "object") {
-    return false;
-  }
-
-  const d = data as Record<string, unknown>;
-
-  return (
-    typeof d.nonce === "string" &&
-    typeof d.question === "string" &&
-    typeof d.serial === "string" &&
-    typeof d.signature === "string" &&
-    typeof d.sslverify === "string" &&
-    typeof d.title === "string" &&
-    typeof d.url === "string"
   );
 }
 
@@ -121,7 +103,7 @@ export function parsePushRequest(message: RemoteMessage): PushRequest | null {
     status: PushRequestStatus.Pending,
     sentAt: sentTime || Date.now(),
     nonce: data.nonce,
-    question: data.question,
+    ...(data.question !== undefined && { question: data.question }),
     serial: data.serial,
     signature: data.signature,
     sslverify: data.sslverify,
@@ -147,7 +129,7 @@ export function parsePushRequestFromNotificationData(
     status: PushRequestStatus.Pending,
     sentAt,
     nonce: data.nonce,
-    question: data.question,
+    ...(data.question !== undefined && { question: data.question }),
     serial: data.serial,
     signature: data.signature,
     sslverify: data.sslverify,
@@ -183,13 +165,6 @@ export function getNotificationAction(
   }
 
   return null;
-}
-
-export function getNotificationResponseKey(
-  response: Notifications.NotificationResponse,
-): string {
-  const { identifier } = response.notification.request;
-  return `${identifier}:${response.actionIdentifier}`;
 }
 
 /**

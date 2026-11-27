@@ -1,32 +1,19 @@
-import { verifyIncomingPushRequest } from "@/services/push-delivery";
 import { useNotificationStore } from "@/stores/notification";
-import { usePushRequestStore } from "@/stores/push-request";
-import type {
-  NotificationAction,
-  NotificationResponseData,
-} from "@/types/notification";
-import type { PushRequest } from "@/types/push-request";
+import {
+  handleNotificationResponse,
+  receivePushRequest,
+} from "@/services/push-notification";
 import {
   addMessageListener,
-  getNotificationAction,
-  getNotificationResponseData,
-  getNotificationResponseKey,
   isNotificationPermissionEnabled,
-  parsePushRequestFromNotificationData,
 } from "@/utils/notification";
 import * as Notifications from "expo-notifications";
-import { useCallback, useEffect } from "react";
-import { Platform } from "react-native";
-import { useChallengePolling } from "./use-challenge-polling";
-
-export type { NotificationAction } from "@/types/notification";
-
-export type NotificationActionHandler = (
-  action: NotificationAction,
-  pushRequest: PushRequest,
-) => void;
-
-const handledNotificationResponseKeys = new Set<string>();
+import { useEffect } from "react";
+import { AppState, Platform } from "react-native";
+import { usePushRequestStore } from "@/stores/push-request";
+import { useTokenStore } from "@/stores/token";
+import { synchronizeNotificationState } from "@/services/notification-state";
+import { addNativeNotificationListener } from "@/utils/native-notifications";
 
 export function useNotificationStatus() {
   const fcmToken = useNotificationStore((state) => state.fcmToken);
@@ -68,127 +55,66 @@ export function useNotificationStatus() {
   };
 }
 
-export function useNotifications(onAction?: NotificationActionHandler) {
+export function useNotifications() {
   const notificationStatus = useNotificationStatus();
   const canReceivePush = notificationStatus.fcmToken !== null;
-  const { pollChallenges } = useChallengePolling();
-
-  const { addPushRequest, getPushRequestByNonce, getPushRequestById } =
-    usePushRequestStore();
-
-  const handlePushRequest = useCallback(
-    async (pushRequest: PushRequest) => {
-      if (await verifyIncomingPushRequest(pushRequest)) {
-        addPushRequest(pushRequest);
-      }
-    },
-    [addPushRequest],
-  );
-
-  const handleNotificationAction = useCallback(
-    async (
-      action: NotificationAction,
-      data: NotificationResponseData,
-      sentAt: number,
-    ) => {
-      // Try to find the push request by id or nonce
-      const pushRequestId = data.pushRequestId;
-      const nonce = data.nonce;
-
-      if (!usePushRequestStore.persist.hasHydrated()) {
-        await usePushRequestStore.persist.rehydrate();
-      }
-
-      const findRequest = () =>
-        (pushRequestId ? getPushRequestById(pushRequestId) : undefined) ??
-        (nonce ? getPushRequestByNonce(nonce) : undefined);
-      let pushRequest = findRequest();
-
-      if (!pushRequest) {
-        const parsedPushRequest = parsePushRequestFromNotificationData(
-          data,
-          pushRequestId ?? nonce ?? `notification-${Date.now()}`,
-          sentAt,
-        );
-
-        if (parsedPushRequest) {
-          await handlePushRequest(parsedPushRequest);
-          pushRequest = findRequest();
-        } else {
-          await pollChallenges();
-          pushRequest = findRequest();
-        }
-      }
-
-      if (!pushRequest) {
-        console.warn("Could not find push request for notification action", {
-          pushRequestId,
-          nonce,
-        });
-        return;
-      }
-
-      // Call the external handler if provided
-      onAction?.(action, pushRequest);
-    },
-    [
-      getPushRequestById,
-      getPushRequestByNonce,
-      handlePushRequest,
-      pollChallenges,
-      onAction,
-    ],
-  );
 
   useEffect(() => {
-    // Listen for foreground messages
     const unsubscribeMessage = canReceivePush
-      ? addMessageListener(handlePushRequest)
+      ? addMessageListener(async (request) => {
+          try {
+            await receivePushRequest(request);
+          } catch (error) {
+            console.error("Push request verification failed:", error);
+          }
+        })
       : () => {};
-
-    const handleNotificationResponse = (
-      response: Notifications.NotificationResponse,
-    ) => {
-      const action = getNotificationAction(response.actionIdentifier);
-      if (!action) {
-        return;
-      }
-
-      const responseKey = getNotificationResponseKey(response);
-      if (handledNotificationResponseKeys.has(responseKey)) {
-        return;
-      }
-
-      handledNotificationResponseKeys.add(responseKey);
-
-      const data = getNotificationResponseData(response);
-      const { date } = response.notification;
-      void handleNotificationAction(
-        action,
-        data,
-        Platform.OS === "ios" ? date * 1000 : date,
-      );
+    const handleResponse = (response: Notifications.NotificationResponse) => {
+      void handleNotificationResponse(response);
     };
-
-    // Listen for notification responses (taps and action button presses)
     const responseSubscription =
-      Notifications.addNotificationResponseReceivedListener(
-        handleNotificationResponse,
-      );
-
-    // Handle notification that opened the app (when app was killed)
-    const lastResponse = Notifications.getLastNotificationResponse();
-    if (lastResponse) {
-      handleNotificationResponse(lastResponse);
-    }
+      Notifications.addNotificationResponseReceivedListener(handleResponse);
+    const handleLastResponse = () => {
+      const response = Notifications.getLastNotificationResponse();
+      if (response) handleResponse(response);
+    };
+    const reconcile = () => {
+      void synchronizeNotificationState().catch((error: unknown) => {
+        console.error("Notification state reconciliation failed:", error);
+      });
+    };
+    const unsubscribeRequests = usePushRequestStore.subscribe(reconcile);
+    const unsubscribeTokens = useTokenStore.subscribe(reconcile);
+    const unsubscribeNative =
+      Platform.OS === "ios"
+        ? addNativeNotificationListener(reconcile)
+        : () => {};
+    void synchronizeNotificationState()
+      .then(handleLastResponse)
+      .catch((error: unknown) => {
+        console.error("Initial notification reconciliation failed:", error);
+      });
+    const expiryTimer = setInterval(reconcile, 15_000);
+    const appStateSubscription = AppState.addEventListener(
+      "change",
+      (state) => {
+        if (state === "active") {
+          reconcile();
+          handleLastResponse();
+        }
+      },
+    );
 
     return () => {
       unsubscribeMessage();
       responseSubscription.remove();
+      appStateSubscription.remove();
+      unsubscribeRequests();
+      unsubscribeTokens();
+      unsubscribeNative();
+      clearInterval(expiryTimer);
     };
-  }, [canReceivePush, handleNotificationAction, handlePushRequest]);
+  }, [canReceivePush]);
 
-  return {
-    ...notificationStatus,
-  };
+  return notificationStatus;
 }

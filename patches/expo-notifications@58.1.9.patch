@@ -1,0 +1,99 @@
+diff --git a/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/ExpoNotificationBuilder.kt b/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/ExpoNotificationBuilder.kt
+index 769b5522b9e20caba4b4bebd50a7817759be1eff..200995abe0515b8974e91e156462aeb39453fa4e 100644
+--- a/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/ExpoNotificationBuilder.kt
++++ b/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/ExpoNotificationBuilder.kt
+@@ -17,6 +17,7 @@ import expo.modules.notifications.notifications.enums.NotificationPriority
+ import expo.modules.notifications.notifications.interfaces.INotificationContent
+ import expo.modules.notifications.notifications.model.NotificationAction
+ import expo.modules.notifications.notifications.model.NotificationCategory
++import expo.modules.notifications.notifications.model.NotificationContent
+ import expo.modules.notifications.notifications.model.NotificationRequest
+ import expo.modules.notifications.notifications.model.NotificationResponse
+ import expo.modules.notifications.notifications.model.TextInputNotificationAction
+@@ -96,6 +97,12 @@ open class ExpoNotificationBuilder(
+     builder.setPriority(priority)
+ 
+     val content = notificationContent
++    // This URL is local presentation metadata and must stay out of action intents.
++    val tokenIconUrl = if (content is NotificationContent && content.categoryId == "PUSH_AUTHENTICATION") {
++      content.body?.remove("eduMfaTokenImageUrl") as? String
++    } else {
++      null
++    }
+ 
+     builder.setAutoCancel(content.isAutoDismiss)
+     builder.setOngoing(content.isSticky)
+@@ -152,7 +159,10 @@ open class ExpoNotificationBuilder(
+       )
+     )
+ 
+-    if (notificationContent.containsImage()) {
++    val tokenIcon = loadTokenNotificationIcon(tokenIconUrl)
++    if (tokenIcon != null) {
++      builder.setLargeIcon(tokenIcon)
++    } else if (notificationContent.containsImage()) {
+       val bitmap = notificationContent.getImage(context)
+       bitmap?.let { builder.setLargeIcon(it) }
+     } else {
+diff --git a/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/TokenNotificationIcon.kt b/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/TokenNotificationIcon.kt
+new file mode 100644
+index 0000000000000000000000000000000000000000..bfe4bd16d1ae2ad0aaa0e9bac432f9f9b9321a90
+--- /dev/null
++++ b/android/src/main/java/expo/modules/notifications/notifications/presentation/builders/TokenNotificationIcon.kt
+@@ -0,0 +1,56 @@
++package expo.modules.notifications.notifications.presentation.builders
++
++import android.graphics.Bitmap
++import android.graphics.BitmapFactory
++import android.os.SystemClock
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.withContext
++import java.io.ByteArrayOutputStream
++import java.net.URL
++import javax.net.ssl.HttpsURLConnection
++
++private const val MAX_ICON_BYTES = 512 * 1024
++private const val ICON_TIMEOUT_MS = 1500
++
++internal suspend fun loadTokenNotificationIcon(value: String?): Bitmap? {
++  if (value.isNullOrEmpty()) return null
++  return withContext(Dispatchers.IO) {
++    runCatching {
++      val url = URL(value)
++      if (url.protocol != "https" || url.host.isEmpty() || url.userInfo != null) return@runCatching null
++      val connection = url.openConnection() as HttpsURLConnection
++      val deadline = SystemClock.elapsedRealtime() + ICON_TIMEOUT_MS
++      try {
++        connection.instanceFollowRedirects = false
++        connection.connectTimeout = ICON_TIMEOUT_MS
++        connection.readTimeout = ICON_TIMEOUT_MS
++        if (connection.responseCode != 200 || connection.contentLength > MAX_ICON_BYTES) return@runCatching null
++
++        val output = ByteArrayOutputStream()
++        val buffer = ByteArray(8192)
++        connection.inputStream.use { input ->
++          while (true) {
++            val remaining = deadline - SystemClock.elapsedRealtime()
++            if (remaining <= 0) return@runCatching null
++            connection.readTimeout = remaining.toInt()
++            val read = input.read(buffer)
++            if (read == -1) break
++            if (read > MAX_ICON_BYTES - output.size()) return@runCatching null
++            output.write(buffer, 0, read)
++          }
++        }
++        val bytes = output.toByteArray()
++        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
++        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
++        if (bounds.outWidth !in 1..4096 || bounds.outHeight !in 1..4096) return@runCatching null
++        val longestSide = maxOf(bounds.outWidth, bounds.outHeight)
++        val sample = Integer.highestOneBit(maxOf(1, longestSide / 128))
++        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, BitmapFactory.Options().apply {
++          inSampleSize = sample
++        })
++      } finally {
++        connection.disconnect()
++      }
++    }.getOrNull()
++  }
++}

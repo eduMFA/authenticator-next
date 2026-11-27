@@ -1,0 +1,193 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Do you want to confirm the sign-in?": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Möchtest du die Anmeldung bestätigen?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do you want to confirm the sign-in?"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Account: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Konto: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Account: %@"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Server: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server: %@"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Accepted": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bestätigt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accepted"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Declined": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abgelehnt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Declined"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Expired": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abgelaufen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expired"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Dismissed": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verworfen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dismissed"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Expires in %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Läuft in %@ ab"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Expires in %@"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Start a new sign-in to get another request.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starte die Anmeldung erneut, um eine neue Anfrage zu erhalten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start a new sign-in to get another request."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Sign-in request": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anmeldeanfrage"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in request"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Open eduMFA Push to review this request.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne eduMFA Push, um diese Anfrage zu prüfen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open eduMFA Push to review this request."
+          }
+        }
+      },
+      "extractionState": "manual"
+    }
+  },
+  "version": "1.0"
+}
